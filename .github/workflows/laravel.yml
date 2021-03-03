@@ -23,5 +23,5 @@ jobs:
         run: docker exec  picast_web sh -c "composer install"
       - name: Migrate up
         run: docker exec  picast_web sh -c "php artisan migrate"
-      - Test
+      - name: Test
         run: vendor/bin/phpunit
