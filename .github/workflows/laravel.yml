@@ -1,0 +1,27 @@
+# GitHub Action for Laravel with MySQL and Redis
+name: Testing Laravel with MySQL
+on: [push, pull_request]
+jobs:
+  laravel:
+    name: Laravel
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Startup
+        run: docker-compose up -d --remove-orphans
+      - name: Sleep
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '60s'
+      - name: Check docker container
+        run: docker ps
+      - name: Env file
+        run: mv .env.example .env
+      - name: Composer Install
+        run: docker exec  picast_web sh -c "composer install"
+      - name: Fresh DB
+        run: docker exec -uroot -pexample  --database picast < database/picast.sql
+      - name: Migrate up
+        run: docker exec  picast_web sh -c "php artisan migrate"

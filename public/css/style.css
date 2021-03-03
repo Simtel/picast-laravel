@@ -1,0 +1,50 @@
+@charset "UTF-8";
+/*
+ * jQuery File Upload Plugin CSS Example 1.0.1
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2012, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+
+body{
+  padding-top: 60px;
+}
+
+/* GALLERY */
+
+p.error { width: 550px; margin: 50px auto; font-size: 14px; }
+a img {    border: none; }
+#imagewall { width: auto; margin: 0 auto; text-align: left; line-height: 0; font-size: 0; }
+#imagewall img { margin: 1px; }
+#footer { margin-top: 25px; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif; font-size: 11px; font-style: italic; }
+#footer, #footer a { text-decoration: none; color: silver; }
+
+/* LIGHTBOX */
+
+#lbOverlay { position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: #000 url('/gallery.php?symbol=overlay') repeat; }
+#lbCenter, #lbBottomContainer { position: absolute; z-index: 9999; background: #fff; }
+#lbCenter { z-index: 99999; }
+#lbImageContainer img { -moz-box-shadow: 1px 0 5px #000; -webkit-box-shadow: 1px 0 5px #000; box-shadow: 1px 0 5px #000; }
+#lbCenter .lbLoading { background: #fff url('/gallery.php?symbol=loading') no-repeat center; }
+#lbImage { position: absolute; left: 0; top: 0; }
+#lbPrevLink, #lbNextLink { display: block; position: absolute; background: url('/gallery.php?symbol=blank'); z-index: 9999; top: 0; width: 50%; outline: none; }
+#lbPrevLink { left: 0; }
+#lbPrevLink:hover { background: url('/gallery.php?symbol=prev') no-repeat left center; }
+#lbNextLink { right: 0; }
+#lbNextLink:hover { background: url('/gallery.php?symbol=next') right center no-repeat; }
+#lbBottomContainer { -moz-border-radius: 0 0 3px 3px; -webkit-border-radius: 0 0 3px 3px; border-radius: 0 0 3px 3px; }
+#lbBottom { padding: 5px 10px; text-align: left; font: 10px 'Trebuchet MS', Arial, Helvetica, sans-serif; line-height: 10px; color: #000; }
+#lbCloseLink { display: block; float: right; width: 44px; height: 10px; background: url('/gallery.php?symbol=close') no-repeat right top; outline: none; }
+#lbCaption, #lbNumber { display: inline; }
+#lbCaption { padding-right: 0.5em; font-weight: bold; }
+#lbNumber { color: #666; }
+
+html,
+body {
+  height: 100%;
+}
+
