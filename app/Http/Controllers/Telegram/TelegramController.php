@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Personal\Telegram;
+namespace App\Http\Controllers\Telegram;
 
-use App\Models\Images;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Personal\Controller;
+
+use App\Http\Controllers\Controller;
 
 class TelegramController extends Controller
 {

@@ -12,7 +12,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
 use URL;
 
-class ImagesControlleryt extends Controller
+class ImagesController extends Controller
 {
 
 
