@@ -1,9 +1,12 @@
 # GitHub Action for Laravel with MySQL and Redis
 name: Testing Laravel with MySQL
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
 jobs:
-  laravel:
-    name: Laravel
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +36,16 @@ jobs:
       - name: Test
         run: vendor/bin/phpunit
 
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Copy repository contents via scp
         uses: appleboy/scp-action@master
         env:
@@ -42,7 +55,7 @@ jobs:
             KEY: ${{ secrets.SSH_KEY }}
         with:
             source: "."
-            target: "/home/admin/web/armisimtel.ru/public_html"
+            target: ${{ secrets.PUBLISH_DIR }}
 
       - name: Composer Install and Migrate up
         uses: appleboy/ssh-action@master
@@ -51,4 +64,4 @@ jobs:
             USERNAME: ${{ secrets.USERNAME }}
             PORT: ${{ secrets.PORT }}
             KEY: ${{ secrets.SSH_KEY }}
-            script: cd /home/admin/web/armisimtel.ru/public_html && ls -la
+            script: cd ${{ secrets.PUBLISH_DIR }} && composer install && php artisan migrate

@@ -5,8 +5,9 @@ namespace App\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-//use Illuminate\Database\Eloquent\Model;
-use Jenssegers\Mongodb\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 /**
  * Class Whois
@@ -28,15 +29,6 @@ class Whois extends Model
     /**
      * @var string[]
      */
-    protected $fillable = ['title','domain_id','text'];
+    protected array $fillable = ['domain_id', 'text'];
 
-    /**
-     * @var string
-     */
-    protected $connection = 'mongodb';
-
-    public function users()
-    {
-        return $this->belongsTo(User::class);
-    }
 }
