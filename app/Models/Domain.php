@@ -36,7 +36,7 @@ class Domain extends Model
 {
     use HasFactory;
 
-    protected array $fillable = ['name','user_id'];
+    protected  $fillable = ['name','user_id'];
 
     public function users()
     {

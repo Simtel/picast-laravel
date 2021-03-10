@@ -29,6 +29,6 @@ class Whois extends Model
     /**
      * @var string[]
      */
-    protected array $fillable = ['domain_id', 'text'];
+    protected  $fillable = ['domain_id', 'text'];
 
 }
