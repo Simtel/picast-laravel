@@ -27,6 +27,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
     Route::get('/', 'Personal\IndexController@index')->name('personal');
     Route::get('/domains', 'Personal\DomainsController@index')->name('personal\domains');
+    Route::get('/domains/new', 'Personal\DomainsController@create')->name('personal\domains\new');
 });
 
 
