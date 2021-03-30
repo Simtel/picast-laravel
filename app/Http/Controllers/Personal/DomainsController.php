@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use App\Models\Domain;
+use App\Models\Whois;
 use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -72,11 +73,13 @@ class DomainsController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return Response
+     * @return Application|Factory|View|Response
      */
     public function show($id)
     {
-        //
+        $domain = Domain::find($id);
+        $whois = Whois::where('domain_id', $id)->get();
+        return view('personal.domains_show', ['domain' => $domain, 'whois' => $whois]);
     }
 
     /**

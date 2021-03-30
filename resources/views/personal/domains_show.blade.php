@@ -9,26 +9,24 @@
                 <a href="{{route('domains.create')}}" class="btn btn-primary">Добавить</a>
             </div>
         </div>
+        Домен: {{$domain->name}} </br>
+        - {{$domain->created_at}}</br>
+        - {{$domain->expire_at}}</br>
+        - {{$domain->updated_at}}</br>
         <table class="table">
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Адрес</th>
-                <th scope="col">Дата добавления</th>
-                <th scope="col">Истекает</th>
-                <th scope="col">Последние обновление</th>
-                <th scope="col">История whois</th>
+                <th scope="col">Дата проверки</th>
+                <th scope="col">Результат</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($domains as $domain)
+            @foreach($whois as $w)
                 <tr>
                     <th scope="row">{{$loop->iteration}}</th>
-                    <td>{{$domain->name}}</td>
-                    <td>{{$domain->created_at}}</td>
-                    <td>{{$domain->expire_at}}</td>
-                    <td>{{$domain->updated_at}}</td>
-                    <td><a href="{{route('domains.show',['domain' => $domain->id])}}">Whois</a></td>
+                    <td>{{$w->created_at}}</td>
+                    <td>{!! nl2br(e($w->text)) !!}</td>
                 </tr>
             @endforeach
             </tbody>
