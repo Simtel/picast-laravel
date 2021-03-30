@@ -13,9 +13,11 @@ class AddColumnImages extends Migration
      */
     public function up()
     {
-        Schema::table('images',function (Blueprint $table) {
-           $table->bigInteger('user_id')->after('id');
-        });
+        if (!Schema::hasColumn('images', 'user_id')) {
+            Schema::table('images', function (Blueprint $table) {
+                $table->bigInteger('user_id')->after('id');
+            });
+        }
     }
 
     /**

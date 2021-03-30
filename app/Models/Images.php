@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Traits\ImagesModelTraits;
-use App\User;
 
 use Illuminate\Database\Eloquent\Model;
 

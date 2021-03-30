@@ -21,6 +21,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Whois newQuery()
  * @method static Builder|Whois query()
  * @mixin Eloquent
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\WhoisFactory factory(...$parameters)
+ * @method static Builder|Whois whereCreatedAt($value)
+ * @method static Builder|Whois whereDomainId($value)
+ * @method static Builder|Whois whereId($value)
+ * @method static Builder|Whois whereText($value)
+ * @method static Builder|Whois whereUpdatedAt($value)
  */
 class Whois extends Model
 {
