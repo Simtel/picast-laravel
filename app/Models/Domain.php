@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $owner
  * @method static \Illuminate\Database\Eloquent\Builder|Domain whereExpireAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Domain whereOwner($value)
+ * @method static \Database\Factories\DomainFactory factory(...$parameters)
  */
 class Domain extends Model
 {

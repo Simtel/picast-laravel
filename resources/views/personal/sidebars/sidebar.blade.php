@@ -8,7 +8,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{request()->routeIs('personal\domains') ? 'active' : ''}}" href="{{route('personal\domains')}}">
+                <a class="nav-link {{request()->routeIs('domains.index') ? 'active' : ''}}"
+                   href="{{route('domains.index')}}">
                     <span data-feather="file"></span>
                     Домены
                 </a>

@@ -13,9 +13,11 @@ class AddImagesCheckField extends Migration
      */
     public function up()
     {
-        Schema::table('images', function (Blueprint $table) {
-            $table->boolean('check')->after('width');
-        });
+        if (!Schema::hasColumn('images', 'check')) {
+            Schema::table('images', function (Blueprint $table) {
+                $table->boolean('check')->after('width');
+            });
+        }
     }
 
     /**
