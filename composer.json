@@ -19,11 +19,13 @@
         "laravel/legacy-factories": "^1.1",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
+        "laravelcollective/html": "^6.2",
         "nunomaduro/collision": "^5.0",
         "prozorov/data-locker": "^0.1.0",
         "symfony/dom-crawler": "^5.2"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest",
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "~1.0",
