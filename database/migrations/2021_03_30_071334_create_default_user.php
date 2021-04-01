@@ -33,7 +33,7 @@ class CreateDefaultUser extends Migration
     public function down()
     {
         try {
-            $user = User::findOrFail(['email' => 'simtel@mail.ru']);
+            $user = User::findOrFail(['email' => getenv('DEFAULT_USER_EMAIL')]);
             $user->delete();
         } catch (ModelNotFoundException | Exception $e) {
 
