@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Domain;
 use App\Models\Whois;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -27,7 +28,7 @@ class DomainsController extends Controller
     public function index()
     {
         $domains = Domain::whereUserId(Auth()->id())->get();
-        return view('personal.domains', ['domains' => $domains]);
+        return view('personal.domains.index', ['domains' => $domains]);
     }
 
     /**
@@ -37,7 +38,7 @@ class DomainsController extends Controller
      */
     public function create()
     {
-        return view('personal.domains_create');
+        return view('personal.domains.create');
     }
 
     /**
@@ -79,7 +80,7 @@ class DomainsController extends Controller
     {
         $domain = Domain::find($id);
         $whois = Whois::where('domain_id', $id)->get();
-        return view('personal.domains_show', ['domain' => $domain, 'whois' => $whois]);
+        return view('personal.domains.show', ['domain' => $domain, 'whois' => $whois]);
     }
 
     /**
@@ -98,21 +99,32 @@ class DomainsController extends Controller
      *
      * @param Request $request
      * @param int $id
-     * @return Response
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
-        //
+        $domain = Domain::find($id);
+        $whois = \App\Facades\Whois::loadDomainInfo($domain->name);
+        \App\Models\Whois::create(
+            [
+                'domain_id' => $domain->id,
+                'text' => $whois->getResponse()->text,
+            ]
+        );
+        $domain->expire_at = Carbon::createFromTimestamp($whois->getExpirationDate());
+        $domain->save();
+        return redirect()->route('domains.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return Response
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
-        //
+        Domain::destroy([$id]);
+        return redirect()->route('domains.index');
     }
 }

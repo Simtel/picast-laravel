@@ -18,6 +18,8 @@
                 <th scope="col">Истекает</th>
                 <th scope="col">Последние обновление</th>
                 <th scope="col">История whois</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -29,6 +31,14 @@
                     <td>{{$domain->expire_at}}</td>
                     <td>{{$domain->updated_at}}</td>
                     <td><a href="{{route('domains.show',['domain' => $domain->id])}}">Whois</a></td>
+                    <td> {{ Form::open(['url' => route('domains.destroy',['domain' => $domain->id]), 'class' => 'pull-right']) }}
+                        {{ Form::hidden('_method', 'DELETE') }}
+                        {{ Form::submit('Удалить', array('class' => 'btn btn-warning btn-sm')) }}
+                        {{ Form::close() }}</td>
+                    <td> {{ Form::open(['url' => route('domains.update',['domain' => $domain->id]), 'class' => 'pull-right']) }}
+                        {{ Form::hidden('_method', 'PUT') }}
+                        {{ Form::submit('Обновить', array('class' => 'btn btn-success btn-sm')) }}
+                        {{ Form::close() }}</td>
                 </tr>
             @endforeach
             </tbody>
