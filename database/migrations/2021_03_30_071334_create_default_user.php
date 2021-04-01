@@ -3,7 +3,7 @@
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+
 
 class CreateDefaultUser extends Migration
 {
@@ -16,12 +16,12 @@ class CreateDefaultUser extends Migration
     {
         $user = User::firstOrNew(
             [
-                'email' => 'simtel@mail.ru'
+                'email' => getenv('DEFAULT_USER_EMAIL')
             ]
         );
 
-        $user->name = 'Simtel';
-        $user->password = Hash::make('123456');
+        $user->name = getenv('DEFAULT_USER_NAME');
+        $user->password = Hash::make(getenv('DEFAULT_USER_PASSWORD'));
         $user->save();
     }
 
