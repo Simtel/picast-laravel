@@ -2,27 +2,34 @@
 
 namespace App\Models;
 
+use Database\Factories\UserFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 /**
  * App\User
  *
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
- * @mixin \Eloquent
+ * @mixin Eloquent
  * @property int $id
  * @property string $name
  * @property string $email
  * @property string $password
  * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
@@ -30,27 +37,27 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Domain[] $domains
+ * @property Carbon|null $deleted_at
+ * @property-read Collection|Domain[] $domains
  * @property-read int|null $domains_count
  * @property-read int|null $notifications_count
- * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
+ * @method static Builder|User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|User simtelEmail()
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
- * @method static \Illuminate\Database\Query\Builder|User withTrashed()
- * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
- * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static Builder|User withTrashed()
+ * @method static Builder|User withoutTrashed()
+ * @method static UserFactory factory(...$parameters)
  */
 class User extends Authenticatable
 {
-    use Notifiable,HasFactory,SoftDeletes;
+    use Notifiable, HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected  $fillable = [
+    protected $fillable = [
         'name', 'email', 'password',
     ];
 
@@ -69,7 +76,12 @@ class User extends Authenticatable
     protected $dates = ['deleted_at'];
 
     /**
-     * @return BelongsToMany
+     * @var string[]
+     */
+    protected $with = ['domains'];
+
+    /**
+     * @return HasMany
      */
     public function domains()
     {
