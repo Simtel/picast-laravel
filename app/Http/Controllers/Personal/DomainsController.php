@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Personal;
 
+use App\Facades\Whois;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DomainRequest;
 use App\Models\Domain;
-use App\Models\Whois;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
@@ -14,7 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Illuminate\Validation\Rule;
+
 
 class DomainsController extends Controller
 {
@@ -44,23 +45,11 @@ class DomainsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param DomainRequest $request
      * @return Application|RedirectResponse|Response|Redirector
      */
-    public function store(Request $request)
+    public function store(DomainRequest $request)
     {
-        $rules = [
-            'name' => [
-                'required',
-                'max:225',
-                Rule::unique('domains')->where(function ($query) use ($request) {
-                    return $query->where('name', $request->get('name'))
-                        ->where('user_id', Auth::id());
-                })
-            ]
-        ];
-        $request->validate($rules);
-
         Domain::create(
             [
                 'name' => $request->get('name'),
@@ -76,11 +65,10 @@ class DomainsController extends Controller
      * @param int $id
      * @return Application|Factory|View|Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $domain = Domain::find($id);
-        $whois = Whois::where('domain_id', $id)->get();
-        return view('personal.domains.show', ['domain' => $domain, 'whois' => $whois]);
+        return view('personal.domains.show', ['domain' => $domain, 'whois' => $domain->whois]);
     }
 
     /**
@@ -89,7 +77,7 @@ class DomainsController extends Controller
      * @param int $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(int $id): ?Response
     {
         //
     }
@@ -104,7 +92,7 @@ class DomainsController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $domain = Domain::find($id);
-        $whois = \App\Facades\Whois::loadDomainInfo($domain->name);
+        $whois = Whois::loadDomainInfo($domain->name);
         \App\Models\Whois::create(
             [
                 'domain_id' => $domain->id,

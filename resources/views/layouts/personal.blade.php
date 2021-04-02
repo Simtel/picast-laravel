@@ -16,6 +16,9 @@
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
+            <a class="nav-link" href="{{route('settings')}}">Настройки</a>
+        </li>
+        <li class="nav-item text-nowrap">
             <a class="nav-link" href="{{route('logout')}}">Выйти</a>
         </li>
     </ul>
