@@ -10,14 +10,20 @@ class InviteUserNotify extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public string $code;
+
+    public string $name;
+
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param string $code
+     * @param string $name
      */
-    public function __construct()
+    public function __construct(string $code, string $name)
     {
-        //
+        $this->code = $code;
+        $this->name = $name;
     }
 
     /**
@@ -25,8 +31,8 @@ class InviteUserNotify extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): InviteUserNotify
     {
-        return $this->view('mail.personal.invite');
+        return $this->subject('Вы приглашены в сервис')->view('mail.personal.invite');
     }
 }
