@@ -29,7 +29,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
     Route::get('/settings', 'Personal\SettingsController@index')->name('settings');
     Route::get('/invite', 'Personal\InviteController@index')->name('invite');
     Route::post('/invite', 'Personal\InviteController@invite')->name('invite.user');
-    Route::get('/domains', 'Personal\DomainsController@index')->name('personal\domains');
     Route::resource('domains', '\App\Http\Controllers\Personal\DomainsController');
 });
 

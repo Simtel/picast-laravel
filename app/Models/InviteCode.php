@@ -20,6 +20,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder|InviteCode newQuery()
  * @method static Builder|InviteCode query()
  * @mixin Eloquent
+ * @method static Builder|InviteCode whereCode($value)
+ * @method static Builder|InviteCode whereCreatedAt($value)
+ * @method static Builder|InviteCode whereCreatedBy($value)
+ * @method static Builder|InviteCode whereId($value)
+ * @method static Builder|InviteCode whereUpdatedAt($value)
  */
 class InviteCode extends Model
 {
