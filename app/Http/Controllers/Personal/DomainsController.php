@@ -8,6 +8,7 @@ use App\Http\Requests\DomainRequest;
 use App\Models\Domain;
 use Auth;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -20,6 +21,10 @@ use Illuminate\Routing\Redirector;
 class DomainsController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->authorizeResource(Domain::class, 'domain');
+    }
 
     /**
      * Display a listing of the resource.
@@ -62,12 +67,11 @@ class DomainsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param Domain $domain
      * @return Application|Factory|View|Response
      */
-    public function show(int $id)
+    public function show(Domain $domain)
     {
-        $domain = Domain::find($id);
         return view('personal.domains.show', ['domain' => $domain, 'whois' => $domain->whois]);
     }
 
@@ -86,12 +90,11 @@ class DomainsController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param int $id
+     * @param Domain $domain
      * @return RedirectResponse
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, Domain $domain): RedirectResponse
     {
-        $domain = Domain::find($id);
         $whois = Whois::loadDomainInfo($domain->name);
         \App\Models\Whois::create(
             [
@@ -99,7 +102,7 @@ class DomainsController extends Controller
                 'text' => $whois->getResponse()->text,
             ]
         );
-        $domain->expire_at = Carbon::createFromTimestamp($whois->getExpirationDate());
+        $domain->expire_at = Carbon::createFromTimestamp($whois->expirationDate);
         $domain->save();
         return redirect()->route('domains.index');
     }
@@ -107,12 +110,13 @@ class DomainsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param Domain $domain
      * @return RedirectResponse
+     * @throws Exception
      */
-    public function destroy(int $id): RedirectResponse
+    public function destroy(Domain $domain): RedirectResponse
     {
-        Domain::destroy([$id]);
+        $domain->delete();
         return redirect()->route('domains.index');
     }
 }
