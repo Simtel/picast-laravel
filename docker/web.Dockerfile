@@ -42,14 +42,10 @@ ENV PATH=$PATH:$GOPATH/bin
 RUN go get github.com/mailhog/mhsendmail
 RUN cp /root/go/bin/mhsendmail /usr/bin/mhsendmail
 
-##Mongo
-RUN apk --update add --virtual build-dependencies build-base openssl-dev autoconf \
-  && pecl install mongodb \
-  && docker-php-ext-enable mongodb \
-  && apk del build-dependencies build-base openssl-dev autoconf \
-  && rm -rf /var/cache/apk/*
 
 # Clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 RUN usermod -u 1000 www-data
 RUN chown -R www-data:www-data /var/www/html
+
+USER www-data

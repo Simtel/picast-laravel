@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Events\DomainCreated;
-use App\Models\Domain;
+
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Iodev\Whois\Factory;
 
@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
 
-        $this->app->singleton('whois', function ($app) {
+        $this->app->singleton('whois', function (Application $app) {
             return Factory::get()->createWhois();
         });
 
