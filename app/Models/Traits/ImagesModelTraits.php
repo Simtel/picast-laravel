@@ -9,11 +9,11 @@
 namespace App\Models\Traits;
 
 use Auth;
+use Cache;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Image;
 use Storage;
 use Symfony\Component\HttpFoundation\File\File;
-use Cache;
 
 trait ImagesModelTraits
 {
@@ -53,28 +53,24 @@ trait ImagesModelTraits
      * Сохранение нового файла
      * @param UploadedFile $file
      * @return bool
-     * @throws \Exception
      */
     public function saveUploadFile(UploadedFile $file): bool
     {
-        if ($file instanceof UploadedFile) {
-            $path = $this->getFolderUploads();
-            $this->filename = $this->getNewFileName($file);
-            $uploadFile = $file->move($path, $file->getClientOriginalName());
-            $this->storeFileCloud($uploadFile, $this->filename);
-            $thumb = $this->createThumbnail($uploadFile);
-            if ($thumb instanceof Image) {
-                $this->thumb = $this->getNewThumbFileName($file);
-                $this->storeFileCloud($thumb->basePath(), $this->thumb);
-            }
-            $this->check = 1;
-            if (Auth::check()) {
-                $this->user_id = Auth::user()->id;
-            }
-            return $this->save();
+        $path = $this->getFolderUploads();
+        $this->filename = $this->getNewFileName($file);
+        $uploadFile = $file->move($path, $file->getClientOriginalName());
+        $this->storeFileCloud($uploadFile, $this->filename);
+        $thumb = $this->createThumbnail($uploadFile);
+        if ($thumb instanceof Image) {
+            $this->thumb = $this->getNewThumbFileName($file);
+            $this->storeFileCloud($thumb->basePath(), $this->thumb);
         }
+        $this->check = 1;
+        if (Auth::check()) {
+            $this->user_id = (int)Auth::id();
+        }
+        return $this->save();
 
-        throw new \RuntimeException('Не передан загружаймый файл');
     }
 
     /**
@@ -123,7 +119,7 @@ trait ImagesModelTraits
     /**
      * Создание миниатюры
      * @param File $file
-     * @return \Intervention\Image\Image
+     * @return Image
      */
     protected function createThumbnail(File $file): Image
     {

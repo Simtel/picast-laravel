@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Database\Factories\WhoisFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 
 /**
@@ -13,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  * @property int $_id
- * @property $domain_id
+ * @property int $domain_id
  * @property string $text
  * @property-read User $users
  * @method static Builder|Whois newModelQuery()
@@ -21,9 +23,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Whois query()
  * @mixin Eloquent
  * @property int $id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\WhoisFactory factory(...$parameters)
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static WhoisFactory factory(...$parameters)
  * @method static Builder|Whois whereCreatedAt($value)
  * @method static Builder|Whois whereDomainId($value)
  * @method static Builder|Whois whereId($value)

@@ -14,7 +14,7 @@ class DomainPolicy
      * Determine whether the user can view any models.
      *
      * @param User $user
-     * @return mixed
+     * @return bool
      */
     public function viewAny(User $user): bool
     {
@@ -26,7 +26,7 @@ class DomainPolicy
      *
      * @param User $user
      * @param Domain $domain
-     * @return mixed
+     * @return bool
      */
     public function view(User $user, Domain $domain): bool
     {
@@ -37,7 +37,7 @@ class DomainPolicy
      * Determine whether the user can create models.
      *
      * @param User $user
-     * @return mixed
+     * @return bool
      */
     public function create(User $user): bool
     {
@@ -49,7 +49,7 @@ class DomainPolicy
      *
      * @param User $user
      * @param Domain $domain
-     * @return mixed
+     * @return bool
      */
     public function update(User $user, Domain $domain): bool
     {
@@ -61,7 +61,7 @@ class DomainPolicy
      *
      * @param User $user
      * @param Domain $domain
-     * @return mixed
+     * @return bool
      */
     public function delete(User $user, Domain $domain): bool
     {
@@ -73,7 +73,7 @@ class DomainPolicy
      *
      * @param User $user
      * @param Domain $domain
-     * @return mixed
+     * @return bool
      */
     public function restore(User $user, Domain $domain): bool
     {
@@ -85,7 +85,7 @@ class DomainPolicy
      *
      * @param User $user
      * @param Domain $domain
-     * @return mixed
+     * @return bool
      */
     public function forceDelete(User $user, Domain $domain): bool
     {

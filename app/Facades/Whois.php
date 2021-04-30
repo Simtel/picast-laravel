@@ -3,8 +3,6 @@
 
 namespace App\Facades;
 
-
-use App\Contracts\SomeServiceContract;
 use Illuminate\Support\Facades\Facade;
 
 class Whois extends Facade

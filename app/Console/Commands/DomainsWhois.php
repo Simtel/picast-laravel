@@ -6,7 +6,6 @@ use App\Facades\Whois;
 use App\Models\Domain;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Iodev\Whois\Factory;
 
 class DomainsWhois extends Command
 {
@@ -37,14 +36,14 @@ class DomainsWhois extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
 
         $domains = Domain::all();
         foreach ($domains as $domain) {
-            $this->output->writeln('Обработка домена:'.$domain->name);
+            $this->output->writeln('Обработка домена:' . $domain->name);
             $whois = Whois::loadDomainInfo($domain->name);
             \App\Models\Whois::create(
                 [
