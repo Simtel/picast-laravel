@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 class CheckImages extends Command
@@ -26,14 +27,14 @@ class CheckImages extends Command
     protected $description = 'Скрипт для проверки наличия изображений в хранилище';
 
     /**
-     * @var
+     * @var Collection
      */
-    protected $images;
+    protected Collection $images;
 
     /**
      * @var ProgressBar
      */
-    protected $progress;
+    protected ProgressBar $progress;
 
     /**
      * Execute the console command.
@@ -71,7 +72,7 @@ class CheckImages extends Command
         foreach ($this->images as $image) {
             if ($image instanceof Images) {
                 try {
-                    $image->check = $this->checkImage($image);
+                    $image->check = (int)$this->checkImage($image);
                     $image->save();
                 } catch (GuzzleException $e) {
                     $this->progress->setMessage($e->getMessage());

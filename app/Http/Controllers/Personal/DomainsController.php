@@ -83,7 +83,7 @@ class DomainsController extends Controller
      */
     public function edit(int $id): ?Response
     {
-        //
+        return null;
     }
 
     /**
