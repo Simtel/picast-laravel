@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Хостинг изображений A&S Tech - @yield('title')</title>
-    <meta name="description"
-          content="Быстрый легкий хостинг картинок, с подержкой загрузки выделенной области рабочего стола, и самое главное все это без рекламы!">
+    <title>A&S Tech - @yield('title')</title>
+    <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <link rel="Shortcut Icon" href="/Hopstarter-Soft-Scraps-Image-JPEG.ico" type="image/x-icon"/>
 
