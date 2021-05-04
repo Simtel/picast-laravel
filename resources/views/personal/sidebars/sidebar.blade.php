@@ -14,6 +14,13 @@
                     Домены
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{request()->routeIs('settings') ? 'active' : ''}}"
+                   href="{{route('settings')}}">
+                    <span data-feather="file"></span>
+                    Настройки
+                </a>
+            </li>
         </ul>
 
 

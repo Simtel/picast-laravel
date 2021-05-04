@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,6 +11,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::fallback(function () {
+    return response()->json(['message' => 'Page Not Found'], 404);
 });
+
+Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], static function () {
+    Route::get('/user/current', function () {
+        return ['data' => 123];
+    })->name('api.current');
+
+    Route::get('/domains', 'Api\V1\DomainsController@index')->name('api.domains');
+});
+

@@ -14,6 +14,8 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -48,12 +50,14 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User withTrashed()
  * @method static Builder|User withoutTrashed()
  * @method static UserFactory factory(...$parameters)
- * @property-read Collection|\Spatie\Permission\Models\Permission[] $permissions
+ * @property-read Collection|Permission[] $permissions
  * @property-read int|null $permissions_count
- * @property-read Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property-read Collection|Role[] $roles
  * @property-read int|null $roles_count
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
+ * @property string|null $api_token
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereApiToken($value)
  */
 class User extends Authenticatable
 {
