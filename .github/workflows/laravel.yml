@@ -5,38 +5,6 @@ on:
     branches:
       - master
 jobs:
-  tests:
-    name: Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Startup
-        run: docker-compose up -d --remove-orphans
-
-      - name: Sleep
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '60s'
-
-      - name: Check docker container
-        run: docker ps
-
-      - name: Env file
-        run: mv .env.example .env
-
-      - name: Composer Install
-        run: docker exec  picast_web sh -c "composer install"
-
-      - name: Migrate up
-        run: docker exec  picast_web sh -c "php artisan migrate"
-
-      - name: Test
-        run: vendor/bin/phpunit
-
-
   publish:
     name: Publish
     runs-on: ubuntu-latest
