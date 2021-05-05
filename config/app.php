@@ -171,6 +171,7 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
+        Vyuldashev\LaravelOpenApi\OpenApiServiceProvider::class,
 
         /*
          * Application Service Providers...
