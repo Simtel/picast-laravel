@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>A&S Tech - @yield('title')</title>
+    <title>A&S Tech</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <link rel="Shortcut Icon" href="/Hopstarter-Soft-Scraps-Image-JPEG.ico" type="image/x-icon"/>

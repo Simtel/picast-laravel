@@ -21,6 +21,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], static function () 
         return ['data' => 123];
     })->name('api.current');
 
-    Route::get('/domains', 'Api\V1\DomainsController@index')->name('api.domains');
+
+    Route::resource('domains', 'Api\V1\DomainsController');
 });
 
