@@ -12,7 +12,7 @@ class ErrorForbiddenResponse extends ResponseFactory
     public function build(): Response
     {
         $response = Schema::object()->properties(
-            Schema::string('error')->example('Unauthenticated')
+            Schema::string('message')->example('Unauthenticated')
         );
         return Response::unauthorized()->content(MediaType::json()->schema($response))->description('Unauthenticated');
     }

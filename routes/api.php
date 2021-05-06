@@ -18,10 +18,9 @@ Route::fallback(function () {
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], static function () {
     Route::get('/user/current', function () {
-        return ['data' => 123];
+        return Auth::user();
     })->name('api.current');
 
-
-    Route::resource('domains', 'Api\V1\DomainsController');
+    Route::resource('domains', 'Api\V1\DomainsController')->names('api.domains');
 });
 
