@@ -13,6 +13,7 @@ use App\OpenApi\Responses\V1\DomainResponse;
 use App\OpenApi\Responses\V1\ErrorForbiddenResponse;
 use App\OpenApi\Responses\V1\ListDomainsResponse;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
@@ -62,6 +63,21 @@ class DomainsController extends Controller
         return new DomainResourse($domain);
     }
 
+    /**
+     * @return JsonResponse
+     */
+    public function create(): JsonResponse
+    {
+        return response()->json(['message' => 'Not action.'], 403);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function edit(): JsonResponse
+    {
+        return response()->json(['message' => 'Not action.'], 403);
+    }
 
     /**
      * @param DomainRequest $request
