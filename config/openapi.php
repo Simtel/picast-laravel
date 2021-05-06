@@ -20,15 +20,15 @@ return [
 
             'tags' => [
 
-                // [
-                //    'name' => 'user',
-                //    'description' => 'Application users',
-                // ],
+                [
+                    'name' => 'domains',
+                    'description' => 'Domains operations for users',
+                ],
 
             ],
 
             'security' => [
-                // GoldSpecDigital\ObjectOrientedOAS\Objects\SecurityRequirement::create()->securityScheme('JWT'),
+                GoldSpecDigital\ObjectOrientedOAS\Objects\SecurityRequirement::create()->securityScheme('BearerToken'),
             ],
 
             // Route for exposing specification.

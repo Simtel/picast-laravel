@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DomainResourse;
+use App\Http\Resources\Api\V1\DomainResourse;
 use App\Models\Domain;
+use App\OpenApi\Parameters\AuthParameters;
 use App\OpenApi\Responses\V1\DomainResponse;
 use App\OpenApi\Responses\V1\ErrorForbiddenResponse;
 use App\OpenApi\Responses\V1\ListDomainsResponse;
@@ -14,6 +15,12 @@ use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 #[OpenApi\PathItem]
 class DomainsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Domain::class, 'domain');
+    }
+
     /**
      * Show all user domains
      *
@@ -21,7 +28,8 @@ class DomainsController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    #[OpenApi\Operation]
+    #[OpenApi\Operation(tags: ['domains'])]
+    #[OpenApi\Parameters(factory: AuthParameters::class)]
     #[OpenApi\Response(factory: ListDomainsResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: ErrorForbiddenResponse::class, statusCode: 401)]
     public function index(): AnonymousResourceCollection
@@ -40,8 +48,10 @@ class DomainsController extends Controller
      * @param Domain $domain Domain ID
      * @return DomainResourse
      */
-    #[OpenApi\Operation]
+    #[OpenApi\Operation(tags: ['domains'])]
+    #[OpenApi\Parameters(factory: AuthParameters::class)]
     #[OpenApi\Response(factory: DomainResponse::class)]
+    #[OpenApi\Response(factory: ErrorForbiddenResponse::class, statusCode: 401)]
     public function show(Domain $domain): DomainResourse
     {
         return new DomainResourse($domain);
