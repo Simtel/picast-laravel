@@ -45,7 +45,7 @@ class Domain extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'user_id'];
+    protected $fillable = ['name', 'user_id', 'expire_at'];
 
     protected $hidden = ['created_at', 'updated_at'];
 

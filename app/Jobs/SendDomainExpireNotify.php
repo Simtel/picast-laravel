@@ -40,9 +40,9 @@ class SendDomainExpireNotify implements ShouldQueue, ShouldBeUnique
     /**
      * The unique ID of the job.
      *
-     * @return string
+     * @return int
      */
-    public function uniqueId(): string
+    public function uniqueId(): int
     {
         return $this->domain->id;
     }

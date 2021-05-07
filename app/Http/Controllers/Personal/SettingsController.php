@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class SettingsController extends Controller
 {
@@ -44,7 +45,11 @@ class SettingsController extends Controller
      */
     public function password(ChangePasswordRequest $request): RedirectResponse
     {
-        Auth::user()->fill(
+        $user = Auth::user();
+        if ($user === null) {
+            throw new BadRequestException('Not found user');
+        }
+        $user->fill(
             [
                 'password' => bcrypt($request->input('new_password'))
             ]

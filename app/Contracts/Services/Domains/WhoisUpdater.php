@@ -8,5 +8,9 @@ use App\Models\Domain;
 
 interface WhoisUpdater
 {
-    public function update(Domain $domain);
+    /**
+     * @param Domain $domain
+     * @return void
+     */
+    public function update(Domain $domain): void;
 }

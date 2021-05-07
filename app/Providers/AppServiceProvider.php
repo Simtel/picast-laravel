@@ -11,7 +11,7 @@ use Iodev\Whois\Factory;
 class AppServiceProvider extends ServiceProvider
 {
 
-    public $singletons = [
+    public array $singletons = [
         WhoisUpdater::class => \App\Services\Domains\WhoisUpdater::class,
     ];
 

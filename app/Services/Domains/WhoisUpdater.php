@@ -14,7 +14,7 @@ class WhoisUpdater implements \App\Contracts\Services\Domains\WhoisUpdater
     /**
      * @param Domain $domain
      */
-    public function update(Domain $domain)
+    public function update(Domain $domain): void
     {
         $whois = Whois::loadDomainInfo($domain->name);
         \App\Models\Whois::create(

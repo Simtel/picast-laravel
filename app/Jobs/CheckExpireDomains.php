@@ -6,6 +6,7 @@ use App\Models\Domain;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -20,7 +21,7 @@ class CheckExpireDomains implements ShouldQueue
      */
     private array $days = [1, 3, 7, 30];
 
-    private Carbon $now;
+
 
     /**
      * Create a new job instance.
@@ -29,7 +30,7 @@ class CheckExpireDomains implements ShouldQueue
      */
     public function __construct()
     {
-        $this->now = Carbon::now();
+
     }
 
     /**
@@ -39,13 +40,21 @@ class CheckExpireDomains implements ShouldQueue
      */
     public function handle(): void
     {
-        $domains = Domain::all();
-        foreach ($domains as $domain) {
+        $now = Carbon::now();
+        foreach ($this->getDomains() as $domain) {
             $expire_at = new Carbon($domain->expire_at);
-            $days = $expire_at->diffInDays($this->now);
+            $days = $expire_at->diffInDays($now);
             if (in_array($days, $this->days, true)) {
                 SendDomainExpireNotify::dispatch($domain);
             }
         }
+    }
+
+    /**
+     * @return Collection|array
+     */
+    protected function getDomains(): Collection|array
+    {
+        return Domain::all();
     }
 }

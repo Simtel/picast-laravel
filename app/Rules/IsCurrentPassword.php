@@ -3,7 +3,9 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class IsCurrentPassword implements Rule
 {
@@ -26,7 +28,11 @@ class IsCurrentPassword implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        $current_password = auth()->user()->password;
+        $user = Auth::user();
+        if ($user === null) {
+            throw new BadRequestException('Not found user.');
+        }
+        $current_password = $user->password;
         return Hash::check($value, $current_password);
     }
 

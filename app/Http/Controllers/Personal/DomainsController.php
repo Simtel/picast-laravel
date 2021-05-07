@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DomainRequest;
 use App\Models\Domain;
 use Auth;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -33,16 +32,8 @@ class DomainsController extends Controller
      *
      * @return Application|Factory|View|Response
      */
-    public function index()
+    public function index(): View|Factory|Response|Application
     {
-        $days2 = [];
-        $domains = Domain::all();
-        foreach ($domains as $domain) {
-            $expire_at = new Carbon($domain->expire_at);
-            $days = $expire_at->diffInDays(Carbon::now());
-            $days2[] = $days;
-        }
-        dd($days2);
         $domains = Domain::whereUserId(Auth()->id())->get();
         return view('personal.domains.index', ['domains' => $domains]);
     }
@@ -52,7 +43,7 @@ class DomainsController extends Controller
      *
      * @return Application|Factory|View|Response
      */
-    public function create()
+    public function create(): View|Factory|Response|Application
     {
         return view('personal.domains.create');
     }
@@ -63,7 +54,7 @@ class DomainsController extends Controller
      * @param DomainRequest $request
      * @return Application|RedirectResponse|Response|Redirector
      */
-    public function store(DomainRequest $request)
+    public function store(DomainRequest $request): Response|Redirector|Application|RedirectResponse
     {
         Domain::create(
             [
@@ -80,7 +71,7 @@ class DomainsController extends Controller
      * @param Domain $domain
      * @return Application|Factory|View|Response
      */
-    public function show(Domain $domain)
+    public function show(Domain $domain): View|Factory|Response|Application
     {
         return view('personal.domains.show', ['domain' => $domain, 'whois' => $domain->whois]);
     }
@@ -89,7 +80,7 @@ class DomainsController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return Response
+     * @return Response|null
      */
     public function edit(int $id): ?Response
     {
