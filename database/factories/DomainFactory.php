@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Domain;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DomainFactory extends Factory
@@ -22,7 +23,8 @@ class DomainFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name
+            'name' => $this->faker->name,
+            'user_id' => User::all()->random()->id,
         ];
     }
 }

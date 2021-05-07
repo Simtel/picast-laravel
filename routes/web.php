@@ -27,7 +27,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
     Route::get('/', 'Personal\IndexController@index')->name('personal');
     Route::get('/settings', 'Personal\SettingsController@index')->name('settings');
-    Route::post('/settings/password', 'Personal\SettingsController@index')->name('settings.password');
+    Route::post('/settings/password', 'Personal\SettingsController@password')->name('settings.password');
     Route::post('/settings/token', 'Personal\SettingsController@token')->name('settings.token');
     Route::get('/invite', 'Personal\InviteController@index')->name('invite');
     Route::post('/invite', 'Personal\InviteController@invite')->name('invite.user');

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+use App\Contracts\Services\Domains\WhoisUpdater;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Iodev\Whois\Factory;
@@ -10,6 +11,9 @@ use Iodev\Whois\Factory;
 class AppServiceProvider extends ServiceProvider
 {
 
+    public array $singletons = [
+        WhoisUpdater::class => \App\Services\Domains\WhoisUpdater::class,
+    ];
 
     /**
      * Bootstrap any application services.

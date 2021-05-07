@@ -39,17 +39,18 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Domain whereExpireAt($value)
  * @method static Builder|Domain whereOwner($value)
  * @method static DomainFactory factory(...$parameters)
+ * @property-read User $user
  */
 class Domain extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'user_id'];
+    protected $fillable = ['name', 'user_id', 'expire_at'];
 
     protected $hidden = ['created_at', 'updated_at'];
-    protected $with = ['whois'];
 
-    public function users(): BelongsTo
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

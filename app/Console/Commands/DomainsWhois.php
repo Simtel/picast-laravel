@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Facades\Whois;
+use App\Contracts\Services\Domains\WhoisUpdater;
 use App\Models\Domain;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class DomainsWhois extends Command
@@ -23,13 +22,16 @@ class DomainsWhois extends Command
      */
     protected $description = 'Get all domains whois';
 
+    private WhoisUpdater $whoisUpdater;
+
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(WhoisUpdater $whoisUpdater)
     {
+        $this->whoisUpdater = $whoisUpdater;
         parent::__construct();
     }
 
@@ -44,17 +46,7 @@ class DomainsWhois extends Command
         $domains = Domain::all();
         foreach ($domains as $domain) {
             $this->output->writeln('Обработка домена:' . $domain->name);
-            $whois = Whois::loadDomainInfo($domain->name);
-            \App\Models\Whois::create(
-                [
-                    'domain_id' => $domain->id,
-                    'text' => $whois->getResponse()->text,
-                ]
-            );
-            $domain->expire_at = Carbon::createFromTimestamp($whois->getExpirationDate());
-            $domain->owner = $whois->getOwner();
-            $domain->save();
-
+            $this->whoisUpdater->update($domain);
         }
         $this->output->success('Закончили обновление');
     }
