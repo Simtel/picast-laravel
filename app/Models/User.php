@@ -86,10 +86,6 @@ class User extends Authenticatable
      */
     protected $dates = ['deleted_at'];
 
-    /**
-     * @var string[]
-     */
-    protected $with = ['domains'];
 
     /**
      * @return HasMany

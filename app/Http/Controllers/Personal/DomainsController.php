@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Personal;
 
-use App\Facades\Whois;
+use App\Contracts\Services\Domains\WhoisUpdater;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DomainRequest;
 use App\Models\Domain;
@@ -13,7 +13,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 
@@ -21,9 +20,12 @@ use Illuminate\Routing\Redirector;
 class DomainsController extends Controller
 {
 
-    public function __construct()
+    private WhoisUpdater $whoisUpdater;
+
+    public function __construct(WhoisUpdater $whoisUpdater)
     {
         $this->authorizeResource(Domain::class, 'domain');
+        $this->whoisUpdater = $whoisUpdater;
     }
 
     /**
@@ -33,6 +35,14 @@ class DomainsController extends Controller
      */
     public function index()
     {
+        $days2 = [];
+        $domains = Domain::all();
+        foreach ($domains as $domain) {
+            $expire_at = new Carbon($domain->expire_at);
+            $days = $expire_at->diffInDays(Carbon::now());
+            $days2[] = $days;
+        }
+        dd($days2);
         $domains = Domain::whereUserId(Auth()->id())->get();
         return view('personal.domains.index', ['domains' => $domains]);
     }
@@ -89,21 +99,12 @@ class DomainsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
      * @param Domain $domain
      * @return RedirectResponse
      */
-    public function update(Request $request, Domain $domain): RedirectResponse
+    public function update(Domain $domain): RedirectResponse
     {
-        $whois = Whois::loadDomainInfo($domain->name);
-        \App\Models\Whois::create(
-            [
-                'domain_id' => $domain->id,
-                'text' => $whois->getResponse()->text,
-            ]
-        );
-        $domain->expire_at = Carbon::createFromTimestamp($whois->expirationDate);
-        $domain->save();
+        $this->whoisUpdater->update($domain);
         return redirect()->route('domains.index');
     }
 
