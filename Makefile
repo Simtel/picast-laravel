@@ -27,3 +27,6 @@ php-console: ## PHP console
 
 migrate-up:
 	docker exec -it picast_web sh -c "php artisan migrate"
+
+phpstan: ##Run phpstan analyse
+	docker exec -it picast_web sh -c "./vendor/bin/phpstan analyse --memory-limit=2G"

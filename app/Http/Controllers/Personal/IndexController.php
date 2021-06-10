@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Auth;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 
@@ -17,6 +18,11 @@ class IndexController extends Controller
      */
     public function index()
     {
-        return view('personal.index',['users' => User::all()]);
+        if (Auth::user()->hasRole('admin')) {
+            return view('personal.index', ['users' => User::all()]);
+        }
+
+        return redirect()->route('domains.index');
+
     }
 }

@@ -20,7 +20,7 @@ class ExampleTest extends TestCase
     {
 
         $m = Domain::first();
-        self::assertInstanceOf(Domain::clas);
+        self::assertInstanceOf(Domain::class, $m);
 
 
     }
