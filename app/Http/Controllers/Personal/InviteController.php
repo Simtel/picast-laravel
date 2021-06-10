@@ -17,6 +17,15 @@ use Illuminate\Support\Facades\Mail;
 class InviteController extends Controller
 {
     /**
+     * InviteController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware(['can:invite user']);
+    }
+
+
+    /**
      * @return Application|Factory|View
      */
     public function index()
