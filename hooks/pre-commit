@@ -1,0 +1,11 @@
+#!/bin/bash
+
+against=HEAD
+test=$(docker exec picast_web bash -c './vendor/bin/phpstan analyse --error-format=raw --memory-limit=2G ')
+  if [ "$test" = "" ]; then
+    echo 'passed'
+  else
+    echo 'Error find:'
+    echo "$test"
+    exit 1;
+  fi
