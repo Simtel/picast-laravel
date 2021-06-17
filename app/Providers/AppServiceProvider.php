@@ -5,6 +5,7 @@ namespace App\Providers;
 
 use App\Contracts\Services\Domains\WhoisUpdater;
 use Illuminate\Foundation\Application;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Iodev\Whois\Factory;
 
@@ -22,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
+        Paginator::useBootstrap();
     }
 
     /**

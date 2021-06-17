@@ -31,5 +31,6 @@
             @endforeach
             </tbody>
         </table>
+        {{ $whois->links() }}
     </main>
 @endsection

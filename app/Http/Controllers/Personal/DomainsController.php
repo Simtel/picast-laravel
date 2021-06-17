@@ -6,6 +6,7 @@ use App\Contracts\Services\Domains\WhoisUpdater;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DomainRequest;
 use App\Models\Domain;
+use App\Models\Whois;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -34,7 +35,7 @@ class DomainsController extends Controller
      */
     public function index(): View|Factory|Response|Application
     {
-        $domains = Domain::whereUserId(Auth()->id())->get();
+        $domains = Domain::whereUserId(Auth()->id())->paginate(15);
         return view('personal.domains.index', ['domains' => $domains]);
     }
 
@@ -73,7 +74,7 @@ class DomainsController extends Controller
      */
     public function show(Domain $domain): View|Factory|Response|Application
     {
-        return view('personal.domains.show', ['domain' => $domain, 'whois' => $domain->whois]);
+        return view('personal.domains.show', ['domain' => $domain, 'whois' => Whois::whereDomainId($domain->id)->paginate(15)]);
     }
 
     /**
