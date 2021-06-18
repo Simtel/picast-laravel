@@ -74,7 +74,14 @@ class DomainsController extends Controller
      */
     public function show(Domain $domain): View|Factory|Response|Application
     {
-        return view('personal.domains.show', ['domain' => $domain, 'whois' => Whois::whereDomainId($domain->id)->paginate(15)]);
+
+        return view(
+            'personal.domains.show',
+            [
+                'domain' => $domain,
+                'whois' => Whois::whereDomainId($domain->id)->paginate(15)
+            ]
+        );
     }
 
     /**
@@ -112,4 +119,6 @@ class DomainsController extends Controller
         $domain->delete();
         return redirect()->route('domains.index');
     }
+
+
 }
