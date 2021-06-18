@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+use App\Contracts\Services\Domains\WhoisService;
 use App\Contracts\Services\Domains\WhoisUpdater;
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
@@ -14,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
 
     public array $singletons = [
         WhoisUpdater::class => \App\Services\Domains\WhoisUpdater::class,
+        WhoisService::class => \App\Services\Domains\WhoisService::class
     ];
 
     /**
@@ -37,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('whois', function (Application $app) {
             return Factory::get()->createWhois();
         });
+
 
     }
 }

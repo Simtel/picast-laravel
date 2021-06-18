@@ -13,6 +13,15 @@
         Дата добавления: {{$domain->created_at}}</br>
         Истекает: {{$domain->expire_at}}</br>
         Дата обновления: {{$domain->updated_at}}</br>
+        <br> <br>
+        {{ Form::open(['route' => ['domains.delete_old_whois',$domain->id]]) }}
+        <div class="form-group">
+            {{ Form::label('delete_old_whois', 'Удалить записи whois старше') }}
+            {{ Form::select('delete_old_whois', \App\Facades\Domains\WhoisService::getTimeFrameOptions(),null,['class' => 'form-control']) }}
+        </div>
+        {{ Form::submit('Удалить', array('class' => 'btn btn-primary')) }}
+        {{ Form::close() }}
+        <br> <br>
         <table class="table">
             <thead>
             <tr>
@@ -24,7 +33,7 @@
             <tbody>
             @foreach($whois as $w)
                 <tr>
-                    <th scope="row">{{$loop->iteration}}</th>
+                    <th scope="row">{{ ($whois ->currentpage()-1) * $whois ->perpage() + $loop->index + 1 }}</th>
                     <td>{{$w->created_at}}</td>
                     <td>{!! nl2br(e($w->text)) !!}</td>
                 </tr>

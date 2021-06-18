@@ -1,5 +1,7 @@
 <?php
 
+use App\Facades\Domains\WhoisService;
+
 return [
 
     /*
@@ -236,6 +238,7 @@ return [
         'Whois' => App\Facades\Whois::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'WhoisService' => WhoisService::class,
     ],
 
 ];

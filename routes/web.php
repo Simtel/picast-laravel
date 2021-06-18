@@ -12,6 +12,8 @@
 */
 
 
+use App\Http\Controllers\Personal\WhoisController;
+
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('personal');
@@ -32,6 +34,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
     Route::get('/invite', 'Personal\InviteController@index')->name('invite');
     Route::post('/invite', 'Personal\InviteController@invite')->name('invite.user');
     Route::resource('domains', '\App\Http\Controllers\Personal\DomainsController');
+    Route::post('/domain/{id}/delete_old_whois', [WhoisController::class, 'deleteOldWhois'])->name('domains.delete_old_whois');
 });
 
 
