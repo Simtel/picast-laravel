@@ -16,7 +16,7 @@
                 <th scope="col">Имя</th>
                 <th scope="col">E-mail</th>
                 <th scope="col">Дата регистрации</th>
-                <th scope="col">Роли</th>
+                <th scope="col">Роли пользователя</th>
             </tr>
             </thead>
             <tbody>
