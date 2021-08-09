@@ -17,6 +17,7 @@
                 <th scope="col">E-mail</th>
                 <th scope="col">Дата регистрации</th>
                 <th scope="col">Роли пользователя</th>
+                <th scope="col">Действия</th>
             </tr>
             </thead>
             <tbody>
@@ -31,6 +32,7 @@
                             {{$role->name}}
                         @endforeach
                     </td>
+                    <td></td>
                 </tr>
             @endforeach
             </tbody>
