@@ -20,12 +20,12 @@ stop: ## Stop contrainers
 restart: stop up ## Restart docker containers	
 
 mysql-console: ## Mysql Console Failed
-	@docker exec -it docker-dev_db_1 /usr/bin/mysql -uroot -pexample
+	@docker exec -it picast_db /usr/bin/mysql -uroot -pexample
 
 php-console: ## PHP console
-	docker-compose exec --user www-data web bash
+	docker exec -it --user www-data picast_web bash
 
-migrate-up:
+migrate-up: ## Up MIgrate
 	docker exec -it picast_web sh -c "php artisan migrate"
 
 phpstan: ##Run phpstan analyse
