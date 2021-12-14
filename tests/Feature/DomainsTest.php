@@ -29,8 +29,9 @@ class DomainsTest extends TestCase
         $domain->expire_at = Carbon::now()->addDays(7);
         $domain->user = User::find(1);
         $domains = Collection::make([$domain]);
+
         $checkJob = $this->partialMock(CheckExpireDomains::class);
-        $checkJob->shouldAllowMockingProtectedMethods('getDomains');
+        $checkJob->shouldAllowMockingProtectedMethods();
         $checkJob->shouldReceive('getDomains')->andReturn($domains);
         $checkJob->handle();
     }
