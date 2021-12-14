@@ -12,7 +12,12 @@
 */
 
 
+use App\Http\Controllers\Personal\DomainsController;
+use App\Http\Controllers\Personal\IndexController;
+use App\Http\Controllers\Personal\InviteController;
+use App\Http\Controllers\Personal\SettingsController;
 use App\Http\Controllers\Personal\WhoisController;
+
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -22,19 +27,21 @@ Route::get('/', function () {
 })->name('home');
 
 Auth::routes();
+
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 
 //личный кабинет
 Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
-    Route::get('/', 'Personal\IndexController@index')->name('personal');
-    Route::get('/settings', 'Personal\SettingsController@index')->name('settings');
-    Route::post('/settings/password', 'Personal\SettingsController@password')->name('settings.password');
-    Route::post('/settings/token', 'Personal\SettingsController@token')->name('settings.token');
-    Route::get('/invite', 'Personal\InviteController@index')->name('invite');
-    Route::post('/invite', 'Personal\InviteController@invite')->name('invite.user');
-    Route::resource('domains', '\App\Http\Controllers\Personal\DomainsController');
-    Route::post('/domain/{id}/delete_old_whois', [WhoisController::class, 'deleteOldWhois'])->name('domains.delete_old_whois');
+    Route::get('/', [IndexController::class, 'index'])->name('personal');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::post('/settings/password', [SettingsController::class, 'password'])->name('settings.password');
+    Route::post('/settings/token', [SettingsController::class, 'token'])->name('settings.token');
+    Route::get('/invite', [InviteController::class, 'index'])->name('invite');
+    Route::post('/invite', [InviteController::class, 'invite'])->name('invite.user');
+    Route::resource('domains', DomainsController::class);
+    Route::post('/domain/{id}/delete_old_whois',
+        [WhoisController::class, 'deleteOldWhois'])->name('domains.delete_old_whois');
 });
 
 
