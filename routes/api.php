@@ -14,14 +14,14 @@
 
 use App\Http\Controllers\Api\V1\DomainsController;
 
-Route::fallback(function () {
+Route::fallback(static function () {
     return response()->json(['message' => 'Page Not Found'], 404);
 });
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], static function () {
-    Route::get('/user/current', function () {
+    Route::get('/user/current', static function () {
         return Auth::user();
-    })->name('api.current');
+    })->name('api.user.current');
 
     Route::resource('domains', DomainsController::class)->names('api.domains');
 });

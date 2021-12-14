@@ -24,12 +24,11 @@ class DomainTest extends TestCase
 
     public function test_domains_list()
     {
-
-        $response = $this->get(route('api.domains.index'), ['Authorization' => 'Bearer ' . User::find(1)->api_token]);
+        $response = $this->get(route('api.domains.index'), ['Authorization' => 'Bearer '.User::find(1)->api_token]);
         $response->assertOk();
 
-        $response->assertJson(fn(AssertableJson $json) => $json->whereType('data', 'array')
+        $response->assertJson(
+            fn(AssertableJson $json) => $json->whereType('data', 'array')
         );
-
     }
 }
