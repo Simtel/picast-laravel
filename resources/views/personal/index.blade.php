@@ -32,7 +32,7 @@
                             {{$role->name}}
                         @endforeach
                     </td>
-                    <td></td>
+                    <td><a href="{{route('user.edit',[$user])}}">Редактировать</a></td>
                 </tr>
             @endforeach
             </tbody>
