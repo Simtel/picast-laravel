@@ -9,13 +9,15 @@
                     </a>
                 </li>
             @endcan
-            <li class="nav-item">
-                <a class="nav-link {{request()->routeIs('domains.*') ? 'active' : ''}}"
-                   href="{{route('domains.index')}}">
-                    <span data-feather="file"></span>
-                    Домены
-                </a>
-            </li>
+            @can('domains')
+                <li class="nav-item">
+                    <a class="nav-link {{request()->routeIs('domains.*') ? 'active' : ''}}"
+                       href="{{route('domains.index')}}">
+                        <span data-feather="file"></span>
+                        Домены
+                    </a>
+                </li>
+            @endcan
             <li class="nav-item">
                 <a class="nav-link {{request()->routeIs('settings') ? 'active' : ''}}"
                    href="{{route('settings')}}">
