@@ -18,6 +18,15 @@
                     </a>
                 </li>
             @endcan
+            @can('edit images')
+                <li class="nav-item">
+                    <a class="nav-link {{request()->routeIs('images.*') ? 'active' : ''}}"
+                       href="{{route('images.index')}}">
+                        <span data-feather="file"></span>
+                        Изображения
+                    </a>
+                </li>
+            @endcan
             <li class="nav-item">
                 <a class="nav-link {{request()->routeIs('settings') ? 'active' : ''}}"
                    href="{{route('settings')}}">
