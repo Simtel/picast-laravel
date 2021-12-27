@@ -13,6 +13,7 @@
 
 
 use App\Http\Controllers\Personal\DomainsController;
+use App\Http\Controllers\Personal\ImagesController;
 use App\Http\Controllers\Personal\IndexController;
 use App\Http\Controllers\Personal\InviteController;
 use App\Http\Controllers\Personal\SettingsController;
@@ -35,15 +36,25 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 //личный кабинет
 Route::group(['middleware' => 'auth', 'prefix' => 'personal'], static function () {
     Route::get('/', [IndexController::class, 'index'])->name('personal');
+
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::post('/settings/password', [SettingsController::class, 'password'])->name('settings.password');
     Route::post('/settings/token', [SettingsController::class, 'token'])->name('settings.token');
+
     Route::get('/invite', [InviteController::class, 'index'])->name('invite');
-    Route::group(['prefix' => 'user'], static function () {
+    Route::post('/invite', [InviteController::class, 'invite'])->name('invite.user');
+
+    Route::group(['prefix' => 'user', 'middleware' => ['can:edit user']], static function () {
         Route::get('/edit/{user}', [UsersController::class, 'edit'])->name('user.edit');
         Route::post('/edit/{user}', [UsersController::class, 'update'])->name('user.update');
     });
-    Route::post('/invite', [InviteController::class, 'invite'])->name('invite.user');
+
+    Route::group(['prefix' => 'images', 'middleware' => ['can:edit images']], static function () {
+        Route::get('/', [ImagesController::class, 'index'])->name('images.index');
+        Route::get('/new', [ImagesController::class, 'create'])->name('images.create');
+        Route::post('/store', [ImagesController::class, 'store'])->name('images.store');
+    });
+
     Route::resource('domains', DomainsController::class);
     Route::post('/domain/{id}/delete_old_whois',
         [WhoisController::class, 'deleteOldWhois'])->name('domains.delete_old_whois');
