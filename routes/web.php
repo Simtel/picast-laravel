@@ -16,6 +16,8 @@ use App\Http\Controllers\Personal\DomainsController;
 use App\Http\Controllers\Personal\ImagesController;
 use App\Http\Controllers\Personal\IndexController;
 use App\Http\Controllers\Personal\InviteController;
+use App\Http\Controllers\Personal\PricesController;
+use App\Http\Controllers\Personal\ProductsController;
 use App\Http\Controllers\Personal\SettingsController;
 use App\Http\Controllers\Personal\UsersController;
 use App\Http\Controllers\Personal\WhoisController;
@@ -34,7 +36,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 
 //личный кабинет
-Route::group(['middleware' => 'auth', 'prefix' => 'personal'], static function () {
+Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static function () {
     Route::get('/', [IndexController::class, 'index'])->name('personal');
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
@@ -56,6 +58,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], static function (
     });
 
     Route::resource('domains', DomainsController::class);
+
+    Route::group(['prefix' => 'prices', 'middleware' => ['can:edit prices']], static function () {
+        Route::get('/', [PricesController::class, 'index'])->name('prices.index');
+        Route::get('/product/add', [ProductsController::class, 'create'])->name('prices.product.create');
+        Route::post('/product/store', [ProductsController::class, 'store'])->name('prices.product.store');
+    });
+
     Route::post('/domain/{id}/delete_old_whois',
         [WhoisController::class, 'deleteOldWhois'])->name('domains.delete_old_whois');
 });

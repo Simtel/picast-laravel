@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
+use App\Models\Images;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -26,7 +27,8 @@ class ImagesController extends Controller
      */
     public function index(): Factory|View|Application
     {
-        return view('personal.images.index');
+        $images = Images::whereUserId(Auth()->id())->paginate(15);
+        return view('personal.images.index', ['images' => $images]);
     }
 
     /**
@@ -45,7 +47,17 @@ class ImagesController extends Controller
             $imageName = time().'.'.$file->extension();
 
             $file->move(public_path('images'), $imageName);
+            Images::create(
+                [
+                    'user_id' => Auth()->id(),
+                    'filename' => $imageName,
+                    'thumb' => '',
+                    'width' => 0,
+                    'check' => 1
+                ]
+            );
         }
+
 
         return back()->with('success', 'You have successfully upload image.');
     }

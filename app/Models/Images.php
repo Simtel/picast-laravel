@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ImagesModelTraits;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -37,10 +36,12 @@ use Illuminate\Support\Carbon;
  */
 class Images extends Model
 {
-    use ImagesModelTraits;
+
+    protected $fillable = ['filename', 'user_id', 'thumb', 'width', 'check'];
 
     /**
      * Подрубаем пользователя
+     *
      * @return BelongsTo
      */
     public function user(): BelongsTo

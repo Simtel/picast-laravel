@@ -18,6 +18,15 @@
                     </a>
                 </li>
             @endcan
+            @can('edit prices')
+                <li class="nav-item">
+                    <a class="nav-link {{request()->routeIs('prices.*') ? 'active' : ''}}"
+                       href="{{route('prices.index')}}">
+                        <span data-feather="file"></span>
+                        Мониторинг цен
+                    </a>
+                </li>
+            @endcan
             @can('edit images')
                 <li class="nav-item">
                     <a class="nav-link {{request()->routeIs('images.*') ? 'active' : ''}}"
