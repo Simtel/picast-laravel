@@ -27,7 +27,7 @@
             {{ Form::text('email', Form::old('email'), ['class' => 'form-control']) }}
         </div>
 
-        {{ Form::submit('Пригласить пользователя', array('class' => 'btn btn-primary')) }}
+        {{ Form::submit('Пригласить пользователя', ['class' => 'btn btn-primary']) }}
 
         {{ Form::close() }}
     </main>

@@ -28,7 +28,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Products whereUpdatedAt($value)
  * @method static Builder|Products whereUserId($value)
  * @mixin Eloquent
- * @property-read Collection|ProductUrls[] $urls
+ * @property-read Collection|ProductsUrls[] $urls
  * @property-read int|null $urls_count
  * @property-read User $user
  */

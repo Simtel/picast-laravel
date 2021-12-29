@@ -26,7 +26,7 @@
             @foreach($products as $product)
                 <tr>
                     <th scope="row">{{$loop->iteration}}</th>
-                    <td>{{$product->name}}</td>
+                    <td><a href="{{route('prices.show',['product' => $product])}}">{{$product->name}}</a></td>
                     <td>{{$product->created_at}}</td>
                     @foreach($product->urls as $url)
                         <td>
@@ -37,10 +37,8 @@
                     @endforeach
 
                     <td>
-                        {{ Form::open(['url' => route('prices.product.edit',['product' => $product->id]), 'class' => 'pull-right']) }}
-                        {{ Form::hidden('_method', 'GET') }}
-                        {{ Form::submit('Редактировать', ['class' => 'btn  btn-sm glyphicon glyphicon-pencil']) }}
-                        {{ Form::close() }}
+                        <a href="{{route('prices.product.edit',['product' => $product])}}"
+                           class="btn  btn-sm glyphicon">Редактировать</a>
                     </td>
                     <td>
                         {{ Form::open(['url' => route('prices.product.destroy',['product' => $product->id]), 'class' => 'pull-right']) }}
