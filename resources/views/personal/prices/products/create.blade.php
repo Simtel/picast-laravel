@@ -24,8 +24,8 @@
 
         @foreach($market_places as $place)
             <div class="form-group">
-                {{ Form::label('urls['.$place->id.']', 'Адрес на '.$place->name) }}
-                {{ Form::text('urls['.$place->id.']', Form::old('urls['.$place->id.']'), ['class' => 'form-control']) }}
+                {{ Form::label('urls['.$place->id.'][url]', 'Адрес на '.$place->name) }}
+                {{ Form::text('urls['.$place->id.'][url]', Form::old('urls['.$place->id.']'), ['class' => 'form-control']) }}
             </div>
         @endforeach
         {{ Form::submit('Сохранить', ['class' => 'btn btn-primary']) }}

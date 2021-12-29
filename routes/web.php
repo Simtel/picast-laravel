@@ -63,6 +63,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         Route::get('/', [PricesController::class, 'index'])->name('prices.index');
         Route::get('/product/add', [ProductsController::class, 'create'])->name('prices.product.create');
         Route::post('/product/store', [ProductsController::class, 'store'])->name('prices.product.store');
+        Route::post('/product/{product}/delete', [ProductsController::class, 'store'])->name('prices.product.destroy');
+        Route::get('/product/{product}/edit', [ProductsController::class, 'edit'])->name('prices.product.edit');
     });
 
     Route::post('/domain/{id}/delete_old_whois',
