@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductAddRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\MarketPlaces;
 use App\Models\Products;
 use App\Models\ProductsUrls;
@@ -46,6 +47,36 @@ class ProductsController extends Controller
                 ]
             );
         }
+        return redirect()->route('prices.index');
+    }
+
+    /**
+     * @param  Products  $product
+     *
+     * @return Factory|View|Application
+     */
+    public function edit(Products $product): Factory|View|Application
+    {
+        $market_places = MarketPlaces::all();
+
+        return view('personal.prices.products.edit', ['product' => $product, 'market_places' => $market_places]);
+    }
+
+    /**
+     * @param  ProductUpdateRequest  $request
+     * @param  Products  $product
+     *
+     * @return RedirectResponse
+     */
+    public function update(ProductUpdateRequest $request, Products $product): RedirectResponse
+    {
+        $product->name = $request->get('name');
+        foreach ($product->urls as $url) {
+            if ($request->get('urls')) {
+                $url->url = $request->get('urls')[$url->marketplace_id]['url'];
+            }
+        }
+        $product->push();
         return redirect()->route('prices.index');
     }
 }
