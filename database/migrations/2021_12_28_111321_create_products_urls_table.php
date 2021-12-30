@@ -27,7 +27,7 @@ class CreateProductsUrlsTable extends Migration
                 ->on('market_places')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->text('url');
+            $table->text('url')->nullable();
             $table->timestamps();
         });
     }

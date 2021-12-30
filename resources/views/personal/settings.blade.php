@@ -27,7 +27,7 @@
             {{ Form::password('new_password', ['class' => 'form-control']) }}
         </div>
 
-        {{ Form::submit('Обновить пароль', array('class' => 'btn btn-primary')) }}
+        {{ Form::submit('Обновить пароль', ['class' => 'btn btn-primary']) }}
 
         {{ Form::close() }}
         <br>
@@ -41,7 +41,7 @@
             {{ Form::text('password', $token,['class' => 'form-control','readonly' => 'true']) }}
         </div>
 
-        {{ Form::submit('Получить новый токен', array('class' => 'btn btn-primary')) }}
+        {{ Form::submit('Получить новый токен', ['class' => 'btn btn-primary']) }}
 
         {{ Form::close() }}
     </main>

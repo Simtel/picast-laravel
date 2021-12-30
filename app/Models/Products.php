@@ -4,8 +4,11 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -25,8 +28,33 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Products whereUpdatedAt($value)
  * @method static Builder|Products whereUserId($value)
  * @mixin Eloquent
+ * @property-read Collection|ProductsUrls[] $urls
+ * @property-read int|null $urls_count
+ * @property-read User $user
  */
 class Products extends Model
 {
     use HasFactory;
+
+    /**
+     * @var string[]
+     */
+    protected $fillable = ['name', 'user_id'];
+
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function urls(): HasMany
+    {
+        return $this->hasMany(ProductsUrls::class, 'product_id');
+    }
 }

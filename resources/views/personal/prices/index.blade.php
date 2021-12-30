@@ -9,7 +9,47 @@
                 <a href="{{route('prices.product.create')}}" class="btn btn-primary">Добавить товар</a>
             </div>
         </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Название</th>
+                <th scope="col">Дата добавления</th>
+                @foreach($marketplaces as $place)
+                    <th scope="col">Ссылка на {{$place->name}}</th>
+                @endforeach
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($products as $product)
+                <tr>
+                    <th scope="row">{{$loop->iteration}}</th>
+                    <td><a href="{{route('prices.show',['product' => $product])}}">{{$product->name}}</a></td>
+                    <td>{{$product->created_at}}</td>
+                    @foreach($product->urls as $url)
+                        <td>
+                            @if($url->url)
+                                <a href="{{$url->url}}" target="_blank">Ссылка</a>
+                            @endif
+                        </td>
+                    @endforeach
 
+                    <td>
+                        <a href="{{route('prices.product.edit',['product' => $product])}}"
+                           class="btn  btn-sm glyphicon">Редактировать</a>
+                    </td>
+                    <td>
+                        {{ Form::open(['url' => route('prices.product.destroy',['product' => $product->id]), 'class' => 'pull-right']) }}
+                        {{ Form::hidden('_method', 'DELETE') }}
+                        {{ Form::submit('Удалить', ['class' => 'btn btn-warning btn-sm']) }}
+                        {{ Form::close() }}
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
 
     </main>
 @endsection

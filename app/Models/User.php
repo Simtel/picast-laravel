@@ -58,6 +58,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
  * @property string|null $api_token
  * @method static \Illuminate\Database\Eloquent\Builder|User whereApiToken($value)
+ * @property-read Collection|Products[] $products
+ * @property-read int|null $products_count
  */
 class User extends Authenticatable
 {
@@ -90,9 +92,17 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    public function domains()
+    public function domains(): HasMany
     {
         return $this->hasMany(Domain::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Products::class);
     }
 
 }
