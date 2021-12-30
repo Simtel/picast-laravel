@@ -24,9 +24,9 @@
 
         @foreach($market_places as $place)
             <div class="form-group">
-                {{ Form::label('urls['.$place->id.'][url]', 'Адрес на '.$place->name) }}
+                {{ Form::label('urls['.$place->id.']', 'Адрес на '.$place->name) }}
                 {{ Form::text(
-                            'urls['.$place->id.'][url]',
+                            'urls['.$place->id.']',
                             $product->urls->firstWhere('marketplace_id',$place->id)->url,
                             ['class' => 'form-control']
                             )

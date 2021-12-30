@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\UrlMartketPlace;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductUpdateRequest extends FormRequest
+class ProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +26,7 @@ class ProductUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:225'],
-            'urls.*.url' => ['string', 'url', 'nullable']
+            'urls' => ['array', 'required', new UrlMartketPlace()]
         ];
     }
 }

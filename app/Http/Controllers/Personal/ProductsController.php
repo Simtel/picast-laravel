@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductAddRequest;
+use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\MarketPlaces;
 use App\Models\Products;
@@ -30,11 +30,11 @@ class ProductsController extends Controller
 
 
     /**
-     * @param  ProductAddRequest  $request
+     * @param  ProductRequest  $request
      *
      * @return RedirectResponse
      */
-    public function store(ProductAddRequest $request): RedirectResponse
+    public function store(ProductRequest $request): RedirectResponse
     {
         $product = Products::create(['name' => $request->get('name'), 'user_id' => Auth()->id()]);
 
@@ -43,7 +43,7 @@ class ProductsController extends Controller
                 [
                     'product_id' => $product->id,
                     'marketplace_id' => $key,
-                    'url' => $url['url']
+                    'url' => $url
                 ]
             );
         }
@@ -63,20 +63,25 @@ class ProductsController extends Controller
     }
 
     /**
-     * @param  ProductUpdateRequest  $request
+     * @param  ProductRequest  $request
      * @param  Products  $product
      *
      * @return RedirectResponse
      */
-    public function update(ProductUpdateRequest $request, Products $product): RedirectResponse
+    public function update(ProductRequest $request, Products $product): RedirectResponse
     {
         $product->name = $request->get('name');
-        foreach ($product->urls as $url) {
-            if ($request->get('urls')) {
-                $url->url = $request->get('urls')[$url->marketplace_id]['url'];
+        $urls = [];
+        foreach ($request->get('urls') as $marketplace_id => $value) {
+            $productUrl = $product->urls->firstWhere('marketplace_id', $marketplace_id);
+            if ($productUrl === null) {
+                $productUrl = new ProductsUrls();
             }
+            $productUrl->url = $value;
+            $urls[] = $productUrl;
         }
-        $product->push();
+        $product->urls()->saveMany($urls);
+        $product->save();
         return redirect()->route('prices.index');
     }
 }
