@@ -60,7 +60,7 @@ class UrlMartketPlace implements Rule
             $this->message = 'Неверный идентификатор магазина';
             return false;
         }
-        if (mb_stripos($url, $market->url) === false) {
+        if (mb_stripos($url, $market->url) !== 0) {
             $this->message = 'Неверный адрес товара для '.$market->name;
             return false;
         }
