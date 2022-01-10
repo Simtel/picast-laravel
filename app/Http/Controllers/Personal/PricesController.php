@@ -12,6 +12,9 @@ use Illuminate\Contracts\View\View;
 class PricesController extends Controller
 {
 
+    /**
+     * @return Factory|View|Application
+     */
     public function index(): Factory|View|Application
     {
         $products = Products::whereUserId(Auth()->id())->with('urls')->get();
@@ -19,4 +22,13 @@ class PricesController extends Controller
         return view('personal.prices.index', ['products' => $products, 'marketplaces' => $marketplaces]);
     }
 
+    /**
+     * @param  Products  $product
+     *
+     * @return void
+     */
+    public function show(Products $product): void
+    {
+        response('', 404);
+    }
 }
