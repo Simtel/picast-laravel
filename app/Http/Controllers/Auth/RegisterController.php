@@ -66,7 +66,7 @@ class RegisterController extends Controller
      * @return User|Model
      * @throws Exception
      */
-    protected function create(array $data)
+    protected function create(array $data): Model|User
     {
         InviteCode::where('code', $data['code'])->delete();
 
