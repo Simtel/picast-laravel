@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
-
 /**
  * App\ImagesController
  *
@@ -36,7 +35,6 @@ use Illuminate\Support\Carbon;
  */
 class Images extends Model
 {
-
     protected $fillable = ['filename', 'user_id', 'thumb', 'width', 'check'];
 
     /**

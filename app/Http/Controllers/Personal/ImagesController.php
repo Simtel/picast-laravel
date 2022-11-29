@@ -13,7 +13,6 @@ use Illuminate\Http\UploadedFile;
 
 class ImagesController extends Controller
 {
-
     /**
      * @return Factory|View|Application
      */

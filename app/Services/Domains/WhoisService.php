@@ -1,14 +1,11 @@
 <?php
 
-
 namespace App\Services\Domains;
-
 
 use App\Models\Whois;
 
 class WhoisService implements \App\Contracts\Services\Domains\WhoisService
 {
-
     private array $time_frame_options = [
         'day' => '1 дня',
         'week' => '1 недели',
@@ -31,5 +28,4 @@ class WhoisService implements \App\Contracts\Services\Domains\WhoisService
         $expire_at = now()->sub('1 ' . $sub);
         return Whois::whereDate('created_at', '<', $expire_at)->delete();
     }
-
 }

@@ -58,6 +58,5 @@ class Domain extends Model
     public function whois(): HasMany
     {
         return $this->hasMany(Whois::class);
-
     }
 }

@@ -2,17 +2,13 @@
 
 namespace Tests\Unit\Personal\Prices;
 
-
 use App\Http\Requests\ProductRequest;
-use App\Http\Requests\ProductUpdateRequest;
 use App\Models\MarketPlaces;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\TestCase;
 
-
 class ProductsTest extends TestCase
 {
-
     /**
      * @return void
      */

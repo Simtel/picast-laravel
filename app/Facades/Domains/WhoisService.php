@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Facades\Domains;
-
 
 use Illuminate\Support\Facades\Facade;
 
@@ -12,5 +10,4 @@ class WhoisService extends Facade
     {
         return \App\Contracts\Services\Domains\WhoisService::class;
     }
-
 }

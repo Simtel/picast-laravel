@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-
 /**
  * Class Whois
  *
@@ -42,5 +41,4 @@ class Whois extends Model
     protected $fillable = ['domain_id', 'text'];
 
     protected $hidden = ['text'];
-
 }

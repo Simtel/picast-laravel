@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use App\Http\Requests\ProductUpdateRequest;
 use App\Models\MarketPlaces;
 use App\Models\Products;
 use App\Models\ProductsUrls;
@@ -18,7 +17,6 @@ use Illuminate\Http\RedirectResponse;
  */
 class ProductsController extends Controller
 {
-
     /**
      * @return Factory|View|Application
      */

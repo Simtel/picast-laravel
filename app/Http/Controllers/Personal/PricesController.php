@@ -11,7 +11,6 @@ use Illuminate\Contracts\View\View;
 
 class PricesController extends Controller
 {
-
     /**
      * @return Factory|View|Application
      */

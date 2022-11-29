@@ -7,7 +7,6 @@ use App\Events\DomainCreated;
 
 class GetWhoisDomain
 {
-
     private WhoisUpdater $whoisUpdater;
 
     /**

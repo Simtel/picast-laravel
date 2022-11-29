@@ -13,7 +13,10 @@ use Illuminate\Queue\SerializesModels;
 
 class CheckExpireDomains implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * За сколько дней отправлять уведомление
@@ -30,7 +33,6 @@ class CheckExpireDomains implements ShouldQueue
      */
     public function __construct()
     {
-
     }
 
     /**

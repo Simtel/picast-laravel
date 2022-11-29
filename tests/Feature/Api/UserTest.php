@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-
-
     /**
      *
      * @return void
@@ -18,7 +16,7 @@ class UserTest extends TestCase
     {
         $response = $this->json('get', route('api.user.current'));
         $response->assertStatus(401);
-        $response->assertJson(fn(AssertableJson $json) => $json->where('message', 'Unauthenticated'));
+        $response->assertJson(fn (AssertableJson $json) => $json->where('message', 'Unauthenticated'));
     }
 
     /**
@@ -37,6 +35,4 @@ class UserTest extends TestCase
 
         $response->assertJson(['id' => true]);
     }
-
-
 }

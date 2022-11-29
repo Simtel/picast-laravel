@@ -16,10 +16,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 
-
 class DomainsController extends Controller
 {
-
     private WhoisUpdater $whoisUpdater;
 
     public function __construct(WhoisUpdater $whoisUpdater)
@@ -74,7 +72,6 @@ class DomainsController extends Controller
      */
     public function show(Domain $domain): View|Factory|Response|Application
     {
-
         return view(
             'personal.domains.show',
             [
@@ -119,6 +116,4 @@ class DomainsController extends Controller
         $domain->delete();
         return redirect()->route('domains.index');
     }
-
-
 }

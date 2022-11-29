@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
@@ -14,5 +13,4 @@ class Whois extends Facade
     {
         return 'whois';
     }
-
 }

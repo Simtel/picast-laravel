@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Mail;
 
 class SendDomainExpireNotify implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * The number of seconds after which the job's unique lock will be released.
@@ -56,5 +59,4 @@ class SendDomainExpireNotify implements ShouldQueue, ShouldBeUnique
     {
         Mail::to($this->user->email)->send(new ExpireDomainNotify($this->domain, $this->user));
     }
-
 }

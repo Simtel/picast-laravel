@@ -21,7 +21,6 @@ use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 #[OpenApi\PathItem]
 class DomainsController extends Controller
 {
-
     public function __construct()
     {
         $this->authorizeResource(Domain::class, 'domain');
@@ -40,7 +39,6 @@ class DomainsController extends Controller
     #[OpenApi\Response(factory: ErrorForbiddenResponse::class, statusCode: 401)]
     public function index(): AnonymousResourceCollection
     {
-
         $domains = Domain::whereUserId(Auth()->id())->get();
 
         return DomainResourse::collection($domains);

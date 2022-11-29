@@ -6,7 +6,6 @@ use Illuminate\Cookie\Middleware\EncryptCookies as Middleware;
 
 class EncryptCookies extends Middleware
 {
-
     /**
      * Indicates if cookies should be serialized.
      *

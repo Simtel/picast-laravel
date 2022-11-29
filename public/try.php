@@ -1,4 +1,5 @@
 <?php
+
 require_once '../vendor/autoload.php';
 $t = [
     ['22', '02'],
@@ -14,7 +15,6 @@ $t = [
 usort($t, static function ($a, $b) {
     if ($a[1] == $b[1]) {
         return $a[0] < $b[0] ? -1 : 1;
-
     }
     return $a[1] < $b[1] ? -1 : 1;
 });

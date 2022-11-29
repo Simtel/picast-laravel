@@ -25,4 +25,3 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], static function () 
 
     Route::resource('domains', DomainsController::class)->names('api.domains');
 });
-

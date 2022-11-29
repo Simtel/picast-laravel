@@ -31,7 +31,6 @@ class SettingsController extends Controller
      */
     public function token(Request $request): RedirectResponse
     {
-
         $request->user()->forceFill([
             'api_token' => Str::random(60),
         ])->save();

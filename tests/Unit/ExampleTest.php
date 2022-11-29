@@ -8,7 +8,6 @@ use Tests\CreatesApplication;
 
 class ExampleTest extends TestCase
 {
-
     use CreatesApplication;
 
     /**
@@ -18,11 +17,8 @@ class ExampleTest extends TestCase
      */
     public function test_example()
     {
-
         $m = Domain::first();
         self::assertInstanceOf(Domain::class, $m);
-
-
     }
 
     protected function setUp(): void

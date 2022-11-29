@@ -27,7 +27,7 @@ class AddColumnImages extends Migration
      */
     public function down()
     {
-        Schema::table('images',function (Blueprint $table) {
+        Schema::table('images', function (Blueprint $table) {
             $table->dropColumn('user_id');
         });
     }

@@ -9,7 +9,6 @@ use App\Models\Domain;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 
-
 class WhoisController extends Controller
 {
     /**

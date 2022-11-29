@@ -6,7 +6,6 @@ use App\Rules\IsCurrentPassword;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-
 class ChangePasswordRequest extends FormRequest
 {
     /**
@@ -27,10 +26,8 @@ class ChangePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'password' => ['required', Password::min(6), new IsCurrentPassword],
+            'password' => ['required', Password::min(6), new IsCurrentPassword()],
             'new_password' => ['required', Password::min(8)]
         ];
     }
-
-
 }

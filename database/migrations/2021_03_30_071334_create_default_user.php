@@ -4,7 +4,6 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Migrations\Migration;
 
-
 class CreateDefaultUser extends Migration
 {
     /**
@@ -36,8 +35,6 @@ class CreateDefaultUser extends Migration
             $user = User::findOrFail(['email' => getenv('DEFAULT_USER_EMAIL')]);
             $user->delete();
         } catch (ModelNotFoundException | Exception $e) {
-
         }
-
     }
 }

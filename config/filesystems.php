@@ -69,7 +69,7 @@ return [
             'password' => env('SELECTEL_PASSWORD'),
             'container' => env('SELECTEL_DEFAULT_CONTAINER'),
             'container_url' => env('APP_FILES_URL'),
-        ]
+        ],
 
     ],
 

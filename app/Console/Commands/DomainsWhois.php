@@ -42,7 +42,6 @@ class DomainsWhois extends Command
      */
     public function handle(): void
     {
-
         $domains = Domain::all();
         foreach ($domains as $domain) {
             $this->output->writeln('Обработка домена:' . $domain->name);

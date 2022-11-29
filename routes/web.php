@@ -22,7 +22,6 @@ use App\Http\Controllers\Personal\SettingsController;
 use App\Http\Controllers\Personal\UsersController;
 use App\Http\Controllers\Personal\WhoisController;
 
-
 Route::get('/', static function () {
     if (Auth::check()) {
         return redirect()->route('personal');
@@ -69,8 +68,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         Route::post('/product/{product}/update', [ProductsController::class, 'update'])->name('prices.product.update');
     });
 
-    Route::post('/domain/{id}/delete_old_whois',
-        [WhoisController::class, 'deleteOldWhois'])->name('domains.delete_old_whois');
+    Route::post(
+        '/domain/{id}/delete_old_whois',
+        [WhoisController::class, 'deleteOldWhois']
+    )->name('domains.delete_old_whois');
 });
-
-

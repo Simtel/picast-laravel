@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Models\DataObjects;
-
 
 class InviteUser
 {
-
     /**
      * @var string
      */
@@ -48,6 +45,4 @@ class InviteUser
     {
         $this->name = $name;
     }
-
-
 }

@@ -63,7 +63,10 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable
 {
-    use Notifiable, HasFactory, SoftDeletes, HasRoles;
+    use Notifiable;
+    use HasFactory;
+    use SoftDeletes;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -104,5 +107,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Products::class);
     }
-
 }

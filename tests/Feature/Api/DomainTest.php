@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 class DomainTest extends TestCase
 {
-
-
     /**
      * A basic feature test example.
      *
@@ -19,7 +17,7 @@ class DomainTest extends TestCase
     {
         $response = $this->json('get', route('api.domains.index'));
         $response->assertStatus(401);
-        $response->assertJson(fn(AssertableJson $json) => $json->where('message', 'Unauthenticated'));
+        $response->assertJson(fn (AssertableJson $json) => $json->where('message', 'Unauthenticated'));
     }
 
     public function test_domains_list()
@@ -28,7 +26,7 @@ class DomainTest extends TestCase
         $response->assertOk();
 
         $response->assertJson(
-            fn(AssertableJson $json) => $json->whereType('data', 'array')
+            fn (AssertableJson $json) => $json->whereType('data', 'array')
         );
     }
 }

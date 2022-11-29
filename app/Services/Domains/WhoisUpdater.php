@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Services\Domains;
-
 
 use App\Facades\Whois;
 use App\Models\Domain;
@@ -10,7 +8,6 @@ use Carbon\Carbon;
 
 class WhoisUpdater implements \App\Contracts\Services\Domains\WhoisUpdater
 {
-
     /**
      * @param Domain $domain
      */
