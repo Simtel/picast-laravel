@@ -1,4 +1,4 @@
-FROM php:8.0-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 RUN apk --no-cache add shadow sudo
 
@@ -22,7 +22,6 @@ RUN docker-php-ext-install \
     bcmath \
     gd \
     pdo \
-    tokenizer \
     mysqli \
     pdo_mysql \
     zip
@@ -31,17 +30,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # fix this issue https://ask.fedoraproject.org/t/sudo-setrlimit-rlimit-core-operation-not-permitted/4223
 RUN echo "Set disable_coredump false" >> /etc/sudo.conf
-
-#Install mhsendmail
-RUN apk update && apk add \
-     go \
-     git
-RUN mkdir /root/go
-ENV GOPATH=/root/go
-ENV PATH=$PATH:$GOPATH/bin
-RUN go get github.com/mailhog/mhsendmail
-RUN cp /root/go/bin/mhsendmail /usr/bin/mhsendmail
-
 
 # Clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
