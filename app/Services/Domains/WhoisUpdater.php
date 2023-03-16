@@ -23,5 +23,9 @@ class WhoisUpdater implements \App\Contracts\Services\Domains\WhoisUpdater
         $domain->expire_at = Carbon::createFromTimestamp($whois->expirationDate);
         $domain->owner = $whois->owner;
         $domain->save();
+
+        \Telegram::setAsyncRequest(true)->sendMessage(
+            ['chat_id' => env('TELEGRAM_MAIN_CHANNEL'), 'text' => 'Update info for domain:' . $domain->name]
+        );
     }
 }
