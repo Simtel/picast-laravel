@@ -4,12 +4,19 @@ namespace App\Services\Domains;
 
 use App\Facades\Whois;
 use App\Models\Domain;
+use App\Services\Notifications\TelegramChannelNotification;
 use Carbon\Carbon;
+use Telegram\Bot\Exceptions\TelegramSDKException;
 
-class WhoisUpdater implements \App\Contracts\Services\Domains\WhoisUpdater
+readonly class WhoisUpdater implements \App\Contracts\Services\Domains\WhoisUpdater
 {
+    public function __construct(private TelegramChannelNotification $telegramChannelNotification)
+    {
+    }
+
     /**
      * @param Domain $domain
+     * @throws TelegramSDKException
      */
     public function update(Domain $domain): void
     {
@@ -24,8 +31,6 @@ class WhoisUpdater implements \App\Contracts\Services\Domains\WhoisUpdater
         $domain->owner = $whois->owner;
         $domain->save();
 
-        \Telegram::setAsyncRequest(true)->sendMessage(
-            ['chat_id' => env('TELEGRAM_MAIN_CHANNEL'), 'text' => 'Update info for domain:' . $domain->name]
-        );
+        $this->telegramChannelNotification->sendToChannel('Update domain info for: ' . $domain->name);
     }
 }
