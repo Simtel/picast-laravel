@@ -31,6 +31,6 @@ readonly class WhoisUpdater implements \App\Contracts\Services\Domains\WhoisUpda
         $domain->owner = $whois->owner;
         $domain->save();
 
-        $this->telegramChannelNotification->sendToChannel('Update domain info for: ' . $domain->name);
+        $this->telegramChannelNotification->sendTextToChannel('Update domain info for: ' . $domain->name);
     }
 }

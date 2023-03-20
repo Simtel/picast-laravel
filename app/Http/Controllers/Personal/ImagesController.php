@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use App\Models\Images;
+use App\Services\Notifications\TelegramChannelNotification;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -31,11 +32,11 @@ class ImagesController extends Controller
     }
 
     /**
-     * @param  Request  $request
-     *
+     * @param Request $request
+     * @param TelegramChannelNotification $telegramChannelNotification
      * @return RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, TelegramChannelNotification $telegramChannelNotification): RedirectResponse
     {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -43,7 +44,7 @@ class ImagesController extends Controller
 
         $file = $request->file('image');
         if ($file instanceof UploadedFile) {
-            $imageName = time().'.'.$file->extension();
+            $imageName = time() . '.' . $file->extension();
 
             $file->move(public_path('images'), $imageName);
             Images::create(
@@ -54,6 +55,11 @@ class ImagesController extends Controller
                     'width' => 0,
                     'check' => 1
                 ]
+            );
+
+            $telegramChannelNotification->sendImageToChannel(
+                public_path('images') . '/' . $imageName,
+                $imageName
             );
         }
 
