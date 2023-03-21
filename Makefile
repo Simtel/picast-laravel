@@ -35,3 +35,6 @@ set-githooks: ##Set githooks
 	@cd .git/hooks && \
     	ln -sfn ../../hooks/pre-commit pre-commit && \
     	chmod -R +x pre-commit
+
+pint: ##Run pint analyse
+	docker exec -it picast_web sh -c "./vendor/bin/pint"

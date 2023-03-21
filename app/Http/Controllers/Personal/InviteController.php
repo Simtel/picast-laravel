@@ -46,7 +46,7 @@ class InviteController extends Controller
                 'code' => str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT)
             ]
         );
-        Mail::to($request->get('email'))->send(new InviteUserNotify($code->code, $request->get('name')));
+        Mail::to($request->get('email'))->send(new InviteUserNotify($code->code, $request->string('name')));
         return redirect()->route('personal');
     }
 }

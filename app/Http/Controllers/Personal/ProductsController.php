@@ -36,7 +36,7 @@ class ProductsController extends Controller
     {
         $product = Products::create(['name' => $request->get('name'), 'user_id' => Auth()->id()]);
 
-        foreach ($request->get('urls') as $key => $url) {
+        foreach ($request->all('urls') as $key => $url) {
             ProductsUrls::create(
                 [
                     'product_id' => $product->id,
@@ -68,9 +68,11 @@ class ProductsController extends Controller
      */
     public function update(ProductRequest $request, Products $product): RedirectResponse
     {
-        $product->name = $request->get('name');
+        $product->name = $request->string('name');
         $urls = [];
-        foreach ($request->get('urls') as $marketplace_id => $value) {
+        /** @var array<int, string> $products */
+        $products = $request->all('urls');
+        foreach ($products as $marketplace_id => $value) {
             $productUrl = $product->urls->firstWhere('marketplace_id', $marketplace_id);
             if ($productUrl === null) {
                 $productUrl = new ProductsUrls();

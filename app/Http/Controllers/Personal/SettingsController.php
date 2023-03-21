@@ -21,7 +21,7 @@ class SettingsController extends Controller
      */
     public function index(Request $request): Factory|View|Application
     {
-        $token = $request->user()->api_token;
+        $token = $request->user()?->api_token;
         return view('personal.settings', ['token' => $token]);
     }
 
@@ -31,6 +31,10 @@ class SettingsController extends Controller
      */
     public function token(Request $request): RedirectResponse
     {
+        if ($request->user() === null) {
+            return redirect()->route('login');
+        }
+
         $request->user()->forceFill([
             'api_token' => Str::random(60),
         ])->save();
@@ -50,7 +54,7 @@ class SettingsController extends Controller
         }
         $user->fill(
             [
-                'password' => bcrypt($request->input('new_password'))
+                'password' => bcrypt($request->string('new_password'))
             ]
         )->save();
 
