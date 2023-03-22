@@ -24,7 +24,7 @@ class WhoisController extends Controller
             return redirect()->route('personal');
         }
         $this->authorize('update', $domain);
-        WhoisService::deleteOldWhois($deleteOldWhois->get('delete_old_whois'));
+        WhoisService::deleteOldWhois($deleteOldWhois->string('delete_old_whois'));
         return redirect()->route('domains.show', ['domain' => $domain->id]);
     }
 }

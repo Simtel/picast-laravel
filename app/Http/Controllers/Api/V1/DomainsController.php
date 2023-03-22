@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Facades\Whois;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DomainRequest;
-use App\Http\Resources\Api\V1\DomainResourse;
+use App\Http\Resources\Api\V1\DomainResource;
 use App\Models\Domain;
 use App\Models\Whois as WhoisModel;
 use App\OpenApi\Parameters\AuthParameters;
@@ -41,7 +41,7 @@ class DomainsController extends Controller
     {
         $domains = Domain::whereUserId(Auth()->id())->get();
 
-        return DomainResourse::collection($domains);
+        return DomainResource::collection($domains);
     }
 
     /**
@@ -50,15 +50,15 @@ class DomainsController extends Controller
      * Show once domain info with whois
      *
      * @param Domain $domain Domain ID
-     * @return DomainResourse
+     * @return DomainResource
      */
     #[OpenApi\Operation(tags: ['domains'])]
     #[OpenApi\Parameters(factory: AuthParameters::class)]
     #[OpenApi\Response(factory: DomainResponse::class)]
     #[OpenApi\Response(factory: ErrorForbiddenResponse::class, statusCode: 401)]
-    public function show(Domain $domain): DomainResourse
+    public function show(Domain $domain): DomainResource
     {
-        return new DomainResourse($domain);
+        return new DomainResource($domain);
     }
 
     /**

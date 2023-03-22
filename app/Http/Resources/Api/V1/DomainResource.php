@@ -5,7 +5,12 @@ namespace App\Http\Resources\Api\V1;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DomainResourse extends JsonResource
+/**
+ * @property integer $id
+ * @property string $name
+ * @property string $expire_at
+ */
+class DomainResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -13,7 +18,7 @@ class DomainResourse extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,

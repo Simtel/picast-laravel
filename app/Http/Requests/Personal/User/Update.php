@@ -13,7 +13,10 @@ class Update extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->hasRole('admin');
+        if ($this->user() !== null) {
+            return $this->user()->hasRole('admin');
+        }
+        return false;
     }
 
     /**

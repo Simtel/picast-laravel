@@ -32,9 +32,9 @@ class UsersController extends Controller
      */
     public function update(User $user, Update $request): RedirectResponse
     {
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
-        $user->syncRoles($request->get('roles'));
+        $user->name = $request->string('name');
+        $user->email = $request->string('email');
+        $user->syncRoles($request->all('roles'));
         $user->save();
         return redirect()->route('user.edit', [$user]);
     }
