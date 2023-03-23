@@ -25,6 +25,9 @@ class FQDN implements Rule
      */
     public function passes($attribute, $value): bool
     {
+        if (!is_string($value)) {
+            return false;
+        }
         return (bool)preg_match('/^(?!:\/\/)(?=.{1,255}$)((.{1,63}\.){1,127}(?![0-9]*$)[a-z0-9-]+\.?)$/i', $value);
     }
 
@@ -33,7 +36,7 @@ class FQDN implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'Неправильный адрес домена.';
     }

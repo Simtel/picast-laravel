@@ -49,12 +49,17 @@ class Domain extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-
+    /**
+     * @return BelongsTo<User, Domain>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return HasMany<Whois>
+     */
     public function whois(): HasMany
     {
         return $this->hasMany(Whois::class);

@@ -32,6 +32,9 @@ class IsCurrentPassword implements Rule
         if ($user === null) {
             throw new BadRequestException('Not found user.');
         }
+        if (!is_string($value)) {
+            return false;
+        }
         $current_password = $user->password;
         return Hash::check($value, $current_password);
     }

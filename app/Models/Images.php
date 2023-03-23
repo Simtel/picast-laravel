@@ -40,7 +40,7 @@ class Images extends Model
     /**
      * Подрубаем пользователя
      *
-     * @return BelongsTo
+     * @return BelongsTo<User, Images>
      */
     public function user(): BelongsTo
     {

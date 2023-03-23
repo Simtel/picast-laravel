@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 class UrlMartketPlace implements Rule
 {
     /**
-     * @var Collection
+     * @var Collection<int, MarketPlaces>
      **/
     private Collection $marketplaces;
 
@@ -31,13 +31,16 @@ class UrlMartketPlace implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      *
      * @return bool
      */
     public function passes($attribute, $value): bool
     {
+        if (!is_iterable($value)) {
+            return false;
+        }
         foreach ($value as $market_id => $val) {
             if (!empty($val) && $this->checkUrl($val, $market_id) === false) {
                 return false;
@@ -47,8 +50,8 @@ class UrlMartketPlace implements Rule
     }
 
     /**
-     * @param  string  $url
-     * @param  int  $market_id
+     * @param string $url
+     * @param int $market_id
      *
      * @return bool
      */
@@ -61,7 +64,7 @@ class UrlMartketPlace implements Rule
             return false;
         }
         if (mb_stripos($url, $market->url) !== 0) {
-            $this->message = 'Неверный адрес товара для '.$market->name;
+            $this->message = 'Неверный адрес товара для ' . $market->name;
             return false;
         }
         return true;

@@ -43,7 +43,7 @@ class Products extends Model
 
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<User, Products>
      */
     public function user(): BelongsTo
     {
@@ -51,7 +51,7 @@ class Products extends Model
     }
 
     /**
-     * @return HasMany
+     * @return HasMany<ProductsUrls>
      */
     public function urls(): HasMany
     {

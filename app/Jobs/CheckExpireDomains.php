@@ -53,9 +53,9 @@ class CheckExpireDomains implements ShouldQueue
     }
 
     /**
-     * @return Collection|array
+     * @return Collection<int, Domain>
      */
-    protected function getDomains(): Collection|array
+    protected function getDomains(): Collection
     {
         return Domain::all();
     }

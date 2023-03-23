@@ -71,7 +71,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var string[]
      */
     protected $fillable = [
         'name', 'email', 'password',
@@ -80,7 +80,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
         'password', 'remember_token',
@@ -93,7 +93,7 @@ class User extends Authenticatable
 
 
     /**
-     * @return HasMany
+     * @return HasMany<Domain>
      */
     public function domains(): HasMany
     {
@@ -101,7 +101,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return HasMany
+     * @return HasMany<Products>
      */
     public function products(): HasMany
     {

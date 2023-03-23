@@ -26,6 +26,11 @@ class WhoisService implements \App\Contracts\Services\Domains\WhoisService
     public function deleteOldWhois(string $sub): int
     {
         $expire_at = now()->sub('1 ' . $sub);
-        return Whois::whereDate('created_at', '<', $expire_at)->delete();
+
+        $result = Whois::whereDate('created_at', '<', $expire_at)->delete();
+        if (is_numeric($result)) {
+            return (int)$result;
+        }
+        return 0;
     }
 }
