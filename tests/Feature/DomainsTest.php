@@ -10,6 +10,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class DomainsTest extends TestCase
@@ -21,12 +23,13 @@ class DomainsTest extends TestCase
      */
     public function test_create_job_domain_expire_notify(): void
     {
-        $this->expectsJobs(SendDomainExpireNotify::class);
+        Queue::fake();
+
         $domain = $this->partialMock(Domain::class);
         $domain->id = 1;
         $domain->name = 'prosf.ru';
         $domain->user_id = 1;
-        $domain->expire_at = Carbon::now()->addDays(7);
+        $domain->expire_at = Carbon::now()->addDays(8);
         $domain->user = User::find(1);
         $domains = Collection::make([$domain]);
 
@@ -34,6 +37,8 @@ class DomainsTest extends TestCase
         $checkJob->shouldAllowMockingProtectedMethods();
         $checkJob->shouldReceive('getDomains')->andReturn($domains);
         $checkJob->handle();
+
+        Queue::assertPushed(SendDomainExpireNotify::class, 1);
     }
 
     /**
@@ -41,8 +46,11 @@ class DomainsTest extends TestCase
      */
     public function test_domain_created(): void
     {
-        $this->expectsEvents(DomainCreated::class);
+        Event::fake([DomainCreated::class]);
+
         $domain = Domain::factory(1)->create();
         $domain->first()->delete();
+
+        Event::assertDispatched(DomainCreated::class, 1);
     }
 }
