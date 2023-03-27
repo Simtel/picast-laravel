@@ -22,16 +22,14 @@ class DomainsWhois extends Command
      */
     protected $description = 'Get all domains whois';
 
-    private WhoisUpdater $whoisUpdater;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(WhoisUpdater $whoisUpdater)
+    public function __construct(private readonly WhoisUpdater $whoisUpdater)
     {
-        $this->whoisUpdater = $whoisUpdater;
         parent::__construct();
     }
 

@@ -30,7 +30,13 @@ readonly class WhoisUpdater implements \App\Contracts\Services\Domains\WhoisUpda
         $domain->expire_at = Carbon::createFromTimestamp($whois->expirationDate);
         $domain->owner = $whois->owner;
         $domain->save();
+        if ($this->isEnableNotification()) {
+            $this->telegramChannelNotification->sendTextToChannel('Update domain info for: ' . $domain->name);
+        }
+    }
 
-        $this->telegramChannelNotification->sendTextToChannel('Update domain info for: ' . $domain->name);
+    private function isEnableNotification(): bool
+    {
+        return !str_contains(PHP_SAPI, 'cli');
     }
 }
