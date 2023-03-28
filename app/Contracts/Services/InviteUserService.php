@@ -9,5 +9,5 @@ interface InviteUserService
      * @param string $email
      * @return mixed
      */
-    public function invite(string $name, string $email);
+    public function invite(string $name, string $email): mixed;
 }

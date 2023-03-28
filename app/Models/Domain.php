@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\DomainDeleted;
 use Database\Factories\DomainFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
@@ -44,6 +46,7 @@ use Illuminate\Support\Carbon;
 class Domain extends Model
 {
     use HasFactory;
+    use Notifiable;
 
     protected $fillable = ['name', 'user_id', 'expire_at'];
 
@@ -63,5 +66,10 @@ class Domain extends Model
     public function whois(): HasMany
     {
         return $this->hasMany(Whois::class);
+    }
+
+    public function routeNotificationForMail(DomainDeleted $notification): array
+    {
+        return [env('DEFAULT_USER_EMAIL') => 'Admin'];
     }
 }
