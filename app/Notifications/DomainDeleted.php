@@ -3,6 +3,8 @@
 namespace App\Notifications;
 
 use App\Models\Domain;
+use App\Notifications\Channels\TelegramChannel;
+use App\Notifications\Channels\TelegramMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -27,7 +29,7 @@ class DomainDeleted extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', TelegramChannel::class];
     }
 
     /**
@@ -39,6 +41,11 @@ class DomainDeleted extends Notification
             ->line($this->domain->name . ' был удален из системы.')
             ->action('Личный кабинет', url('/'))
             ->line('Спасибо что пользуетесь нашим сервисом!');
+    }
+
+    public function toTelegram(object $notifiable): TelegramMessage
+    {
+        return new TelegramMessage('Домен ' . $this->domain->name . ' был удален из системы.');
     }
 
     /**
