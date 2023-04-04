@@ -38,7 +38,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static function () {
     Route::get('/', [IndexController::class, 'index'])->name('personal');
 
-    Route::get('/telegram-test', [IndexController::class,'telegramTest'])->name('test.telegram');
+    Route::get('/telegram-test', [IndexController::class, 'telegramTest'])->name('test.telegram');
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::post('/settings/password', [SettingsController::class, 'password'])->name('settings.password');
@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
 
     Route::group(['prefix' => 'images', 'middleware' => ['can:edit images']], static function () {
         Route::get('/', [ImagesController::class, 'index'])->name('images.index');
+        Route::get('/show/{image}', [ImagesController::class, 'show'])->name('images.show');
         Route::get('/new', [ImagesController::class, 'create'])->name('images.create');
         Route::post('/store', [ImagesController::class, 'store'])->name('images.store');
     });

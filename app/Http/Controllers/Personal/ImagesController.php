@@ -66,4 +66,9 @@ class ImagesController extends Controller
 
         return back()->with('success', 'You have successfully upload image.');
     }
+
+    public function show(Images $image): Factory|View|Application
+    {
+        return view('personal.images.show', ['image' => $image]);
+    }
 }
