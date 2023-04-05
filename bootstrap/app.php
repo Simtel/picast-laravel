@@ -41,6 +41,7 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+require_once 'functions.php';
 /*
 |--------------------------------------------------------------------------
 | Return The Application

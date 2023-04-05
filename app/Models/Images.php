@@ -46,4 +46,9 @@ class Images extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getPath(): string
+    {
+        return public_path('images') . '/' . $this->filename;
+    }
 }

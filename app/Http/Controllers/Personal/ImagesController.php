@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Personal;
 use App\Http\Controllers\Controller;
 use App\Models\Images;
 use App\Services\Notifications\TelegramChannelNotification;
+use File;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -69,6 +70,13 @@ class ImagesController extends Controller
 
     public function show(Images $image): Factory|View|Application
     {
-        return view('personal.images.show', ['image' => $image]);
+        return view(
+            'personal.images.show',
+            [
+                'image' => $image,
+                'size' => convert_filesize(File::size($image->getPath())),
+                'type' => File::mimeType($image->getPath()),
+            ]
+        );
     }
 }
