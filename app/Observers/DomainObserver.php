@@ -14,9 +14,6 @@ class DomainObserver
 
     /**
      * Handle the Domain "created" event.
-     *
-     * @param Domain $domain
-     * @return void
      */
     public function created(Domain $domain): void
     {
@@ -25,9 +22,6 @@ class DomainObserver
 
     /**
      * Handle the Domain "updated" event.
-     *
-     * @param Domain $domain
-     * @return void
      */
     public function updated(Domain $domain): void
     {
@@ -36,9 +30,6 @@ class DomainObserver
 
     /**
      * Handle the Domain "deleted" event.
-     *
-     * @param Domain $domain
-     * @return void
      */
     public function deleted(Domain $domain): void
     {
@@ -47,9 +38,6 @@ class DomainObserver
 
     /**
      * Handle the Domain "restored" event.
-     *
-     * @param Domain $domain
-     * @return void
      */
     public function restored(Domain $domain): void
     {
@@ -58,9 +46,6 @@ class DomainObserver
 
     /**
      * Handle the Domain "force deleted" event.
-     *
-     * @param Domain $domain
-     * @return void
      */
     public function forceDeleted(Domain $domain): void
     {

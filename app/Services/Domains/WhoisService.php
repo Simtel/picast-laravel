@@ -13,7 +13,7 @@ class WhoisService implements \App\Contracts\Services\Domains\WhoisService
     ];
 
     /**
-     * @return array
+     * @return array<string>
      */
     public function getTimeFrameOptions(): array
     {
