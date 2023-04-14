@@ -7,10 +7,12 @@ use App\Jobs\CheckExpireDomains;
 use App\Jobs\SendDomainExpireNotify;
 use App\Models\Domain;
 use App\Models\User;
+use App\Notifications\DomainDeleted;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
@@ -46,7 +48,9 @@ class DomainsTest extends TestCase
      */
     public function test_domain_created(): void
     {
-        Event::fake([DomainCreated::class]);
+        Notification::fake();
+
+        Event::fake([DomainCreated::class, DomainDeleted::class]);
 
         $domain = Domain::factory(1)->create();
         $domain->first()->delete();

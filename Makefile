@@ -38,3 +38,6 @@ set-githooks: ##Set githooks
 
 pint: ##Run pint analyse
 	docker exec -it picast_web sh -c "./vendor/bin/pint"
+
+test: ##Run pint analyse
+	docker exec -it picast_web sh -c "php artisan test"

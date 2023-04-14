@@ -5,9 +5,9 @@ namespace Tests\Unit\Personal\Prices;
 use App\Http\Requests\ProductRequest;
 use App\Models\MarketPlaces;
 use Illuminate\Support\Facades\Validator;
-use PHPUnit\Framework\TestCase;
+use Tests\Unit\ExampleTest;
 
-class ProductsTest extends TestCase
+class ProductsTest extends ExampleTest
 {
     /**
      * @return void

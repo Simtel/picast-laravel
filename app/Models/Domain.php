@@ -41,7 +41,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Domain whereExpireAt($value)
  * @method static Builder|Domain whereOwner($value)
  * @method static DomainFactory factory(...$parameters)
- * @property-read User $user
+ * @property User $user
  */
 class Domain extends Model
 {
