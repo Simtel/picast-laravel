@@ -2,20 +2,24 @@
 
 namespace Tests\Unit;
 
+use App\Events\DomainCreated;
+use App\Listeners\GetWhoisDomain;
+use App\Models\Domain;
+use Event;
+use Illuminate\Foundation\Testing\TestCase;
 use Tests\CreatesApplication;
 
-class ExampleTest extends \Illuminate\Foundation\Testing\TestCase
+class ExampleTest extends TestCase
 {
     use CreatesApplication;
 
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function test_example()
+    public function test_example(): void
     {
-        self::assertSame(true, true);
+        Event::fake([DomainCreated::class]);
+        Domain::factory(1)->create();
+
+        $m = Domain::first();
+        self::assertInstanceOf(Domain::class, $m);
     }
 
     protected function setUp(): void
