@@ -41,4 +41,15 @@ class Whois extends Model
     protected $fillable = ['domain_id', 'text'];
 
     protected $hidden = ['text'];
+
+    public function isEqualResult(string $result): bool
+    {
+        return $this->getText() === $result;
+    }
+
+
+    public function getText(): string
+    {
+        return $this->text;
+    }
 }
