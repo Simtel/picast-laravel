@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Events\DomainCreated;
+use App\Listeners\GetWhoisDomain;
 use App\Models\Domain;
 use Event;
 use Illuminate\Foundation\Testing\TestCase;
