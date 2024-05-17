@@ -25,8 +25,9 @@ mysql-console: ## Mysql Console Failed
 php-console: ## PHP console
 	docker exec -it --user www-data picast_web bash
 
-migrate-up: ## Up MIgrate
+migrate: ## Up Migrate
 	docker exec -it picast_web sh -c "php artisan migrate"
+	docker exec -it picast_web sh -c "php artisan migrate --env=testing"
 
 phpstan: ##Run phpstan analyse
 	docker exec -it picast_web sh -c "./vendor/bin/phpstan analyse --memory-limit=2G"
