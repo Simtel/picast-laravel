@@ -30,8 +30,5 @@ class MarketPlaces extends Model
 {
     use HasFactory;
 
-    /**
-     * @var string[]
-     */
     protected $fillable = ['name', 'url'];
 }

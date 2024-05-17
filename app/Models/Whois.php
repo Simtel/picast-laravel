@@ -35,9 +35,6 @@ class Whois extends Model
 {
     use HasFactory;
 
-    /**
-     * @var string[]
-     */
     protected $fillable = ['domain_id', 'text'];
 
     protected $hidden = ['text'];

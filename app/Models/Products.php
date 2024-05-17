@@ -36,9 +36,6 @@ class Products extends Model
 {
     use HasFactory;
 
-    /**
-     * @var string[]
-     */
     protected $fillable = ['name', 'user_id'];
 
 

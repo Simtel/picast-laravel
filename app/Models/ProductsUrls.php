@@ -32,8 +32,5 @@ class ProductsUrls extends Model
 {
     use HasFactory;
 
-    /**
-     * @var string[]
-     */
     protected $fillable = ['product_id', 'marketplace_id', 'url'];
 }

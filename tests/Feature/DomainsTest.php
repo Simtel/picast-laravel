@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
+use Mockery\ExpectationInterface;
 use Tests\TestCase;
 
 class DomainsTest extends TestCase
@@ -32,12 +33,19 @@ class DomainsTest extends TestCase
         $domain->name = 'prosf.ru';
         $domain->user_id = 1;
         $domain->expire_at = Carbon::now()->addDays(8);
-        $domain->user = User::find(1);
+        $user = User::find(1);
+        if ($user === null) {
+            self::fail('User not found');
+        }
+        $domain->user = $user;
         $domains = Collection::make([$domain]);
 
         $checkJob = $this->partialMock(CheckExpireDomains::class);
         $checkJob->shouldAllowMockingProtectedMethods();
-        $checkJob->shouldReceive('getDomains')->andReturn($domains);
+        $job = $checkJob->shouldReceive('getDomains');
+        if($job instanceof ExpectationInterface) {
+            $job->andReturn($domains);
+        }
         $checkJob->handle();
 
         Queue::assertPushed(SendDomainExpireNotify::class, 1);
@@ -53,7 +61,7 @@ class DomainsTest extends TestCase
         Event::fake([DomainCreated::class, DomainDeleted::class]);
 
         $domain = Domain::factory(1)->create();
-        $domain->first()->delete();
+        $domain->first()?->delete();
 
         Event::assertDispatched(DomainCreated::class, 1);
     }

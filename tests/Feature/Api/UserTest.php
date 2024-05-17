@@ -12,7 +12,7 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function test_usercurrent_not_auth(): void
+    public function test_user_current_not_auth(): void
     {
         $response = $this->json('get', route('api.user.current'));
         $response->assertStatus(401);
@@ -23,12 +23,12 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function test_usercurrent(): void
+    public function test_user_current(): void
     {
         $response = $this->get(
             route('api.user.current'),
             [
-                'Authorization' => 'Bearer '.User::find(1)->api_token
+                'Authorization' => 'Bearer '.User::find(1)?->api_token
             ]
         );
         $response->assertOk();

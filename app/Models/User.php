@@ -68,11 +68,6 @@ class User extends Authenticatable
     use SoftDeletes;
     use HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
     protected $fillable = [
         'name', 'email', 'password',
     ];
