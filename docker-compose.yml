@@ -1,7 +1,7 @@
 services:
   db:
     container_name: picast_db
-    image: mysql
+    image: mysql:8.3.0
     command: '--default-authentication-plugin=mysql_native_password'
     volumes:
       - './docker/db:/var/lib/mysql'
