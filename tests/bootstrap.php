@@ -1,14 +1,15 @@
 <?php
 
 
+use Illuminate\Contracts\Console\Kernel;
 use App\Models\User;
 use Illuminate\Support\Str;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-$app = require_once dirname(__DIR__) . '/bootstrap/app.php';
+$app = require dirname(__DIR__) . '/bootstrap/app.php';
 
-$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+$app->make(Kernel::class)->bootstrap();
 
 $user = $user = User::findOrNew(1);
 
