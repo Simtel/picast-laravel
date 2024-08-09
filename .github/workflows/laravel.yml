@@ -1,5 +1,4 @@
-# GitHub Action for Laravel with MySQL and Redis
-name: Testing Laravel with MySQL
+name: Publishing
 on:
   push:
     branches:
