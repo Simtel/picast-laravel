@@ -9,6 +9,8 @@
   ],
   "require": {
     "php": ">=8.2",
+    "alaouy/youtube": "^2.2",
+    "barryvdh/laravel-ide-helper": "^2.5",
     "doctrine/dbal": "^3.0",
     "guzzlehttp/guzzle": "^7.0.1",
     "intervention/image": "^2.4",
@@ -25,8 +27,7 @@
     "spatie/laravel-ignition": "^2.0",
     "spatie/laravel-permission": "^5.0",
     "symfony/dom-crawler": "^6.0",
-    "vyuldashev/laravel-openapi": "^1.1.0",
-    "barryvdh/laravel-ide-helper": "^2.5"
+    "vyuldashev/laravel-openapi": "^1.1.0"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "^2.30",

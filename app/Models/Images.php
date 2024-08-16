@@ -26,12 +26,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|\App\Images whereThumb($value)
  * @method static Builder|\App\Images whereUpdatedAt($value)
  * @method static Builder|\App\Images whereWidth($value)
- * @mixin Eloquent
  * @property int $check
  * @method static Builder|\App\Images whereCheck($value)
  * @property int $user_id
  * @property-read \App\User $user
  * @method static Builder|\App\Images whereUserId($value)
+ * @mixin Eloquent
  */
 class Images extends Model
 {
