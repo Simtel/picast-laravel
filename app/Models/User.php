@@ -25,7 +25,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
- * @mixin Eloquent
  * @property int $id
  * @property string $name
  * @property string $email
@@ -60,6 +59,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereApiToken($value)
  * @property-read Collection|Products[] $products
  * @property-read int|null $products_count
+ * @mixin Eloquent
  */
 class User extends Authenticatable
 {

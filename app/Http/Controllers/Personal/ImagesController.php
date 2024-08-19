@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Storage;
 
 class ImagesController extends Controller
 {
@@ -46,22 +47,24 @@ class ImagesController extends Controller
         $file = $request->file('image');
         if ($file instanceof UploadedFile) {
             $imageName = time() . '.' . $file->extension();
-
-            $file->move(public_path('images'), $imageName);
+            $directory = 'images/'.date('m-Y');
+            Storage::disk('s3')->put($directory.'/'. $imageName, File::get($file));
             Images::create(
                 [
                     'user_id' => Auth()->id(),
                     'filename' => $imageName,
+                    'directory' => $directory,
                     'thumb' => '',
                     'width' => 0,
-                    'check' => 1
+                    'check' => 1,
+                    'disk'  => 's3'
                 ]
             );
 
-            $telegramChannelNotification->sendImageToChannel(
-                public_path('images') . '/' . $imageName,
-                $imageName
-            );
+            /*  $telegramChannelNotification->sendImageToChannel(
+                  public_path('images') . '/' . $imageName,
+                  $imageName
+              );*/
         }
 
 
@@ -74,8 +77,6 @@ class ImagesController extends Controller
             'personal.images.show',
             [
                 'image' => $image,
-                'size' => convert_filesize(File::size($image->getPath())),
-                'type' => File::mimeType($image->getPath()),
             ]
         );
     }

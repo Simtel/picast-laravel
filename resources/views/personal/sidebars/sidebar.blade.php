@@ -36,6 +36,15 @@
                     </a>
                 </li>
             @endcan
+            @can('edit youtube')
+                <li class="nav-item">
+                    <a class="nav-link {{request()->routeIs('images.*') ? 'active' : ''}}"
+                       href="{{route('youtube.index')}}">
+                        <span data-feather="file"></span>
+                        YouTube Videos
+                    </a>
+                </li>
+            @endcan
             <li class="nav-item">
                 <a class="nav-link {{request()->routeIs('settings') ? 'active' : ''}}"
                    href="{{route('settings')}}">

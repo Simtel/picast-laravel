@@ -56,6 +56,7 @@ return [
         ],
 
         's3' => [
+            'endpoint' => env('AWS_ENDPOINT', 'https://minio:9000'),
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
@@ -63,13 +64,6 @@ return [
             'bucket' => env('AWS_BUCKET'),
         ],
 
-        'selectel' => [
-            'driver' => 'selectel',
-            'username' => env('SELECTEL_LOGIN'),
-            'password' => env('SELECTEL_PASSWORD'),
-            'container' => env('SELECTEL_DEFAULT_CONTAINER'),
-            'container_url' => env('APP_FILES_URL'),
-        ],
 
     ],
 

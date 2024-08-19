@@ -11,7 +11,7 @@
         </div>
 
         @foreach($images as $image)
-            <a href="{{route('images.show',[$image])}}"><img src="/images/{{$image->filename}}" style="width:250px;"></a>
+            <a href="{{route('images.show',[$image])}}"><img src="{{$image->getPath()}}" style="width:250px;"></a>
         @endforeach
     </main>
 @endsection

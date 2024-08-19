@@ -21,6 +21,7 @@ use App\Http\Controllers\Personal\ProductsController;
 use App\Http\Controllers\Personal\SettingsController;
 use App\Http\Controllers\Personal\UsersController;
 use App\Http\Controllers\Personal\WhoisController;
+use App\Http\Controllers\Personal\YouTubeVideoController;
 
 Route::get('/', static function () {
     if (Auth::check()) {
@@ -60,6 +61,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
     });
 
     Route::resource('domains', DomainsController::class);
+
+    Route::group(['prefix' => 'youtube', 'middleware' => ['can:edit youtube']], static function () {
+        Route::get('/', [YouTubeVideoController::class, 'index'])->name('youtube.index');
+        Route::POST('/youtube/{video}}', [YouTubeVideoController::class, 'index'])->name('youtube.destroy');
+    });
 
     Route::group(['prefix' => 'prices', 'middleware' => ['can:edit prices']], static function () {
         Route::get('/', [PricesController::class, 'index'])->name('prices.index');

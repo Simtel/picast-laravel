@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Domain;
+use App\Models\YouTubeVideo;
 use App\Policies\DomainPolicy;
+use App\Policies\YouTubeVideoPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -15,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Domain::class => DomainPolicy::class,
+        YouTubeVideo::class => YouTubeVideoPolicy::class,
     ];
 
     /**

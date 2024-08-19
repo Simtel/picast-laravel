@@ -27,10 +27,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Products whereName($value)
  * @method static Builder|Products whereUpdatedAt($value)
  * @method static Builder|Products whereUserId($value)
- * @mixin Eloquent
  * @property-read Collection|ProductsUrls[] $urls
  * @property-read int|null $urls_count
  * @property-read User $user
+ * @mixin Eloquent
  */
 class Products extends Model
 {

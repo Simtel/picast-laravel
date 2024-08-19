@@ -20,7 +20,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Whois newModelQuery()
  * @method static Builder|Whois newQuery()
  * @method static Builder|Whois query()
- * @mixin Eloquent
  * @property int $id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -30,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Whois whereId($value)
  * @method static Builder|Whois whereText($value)
  * @method static Builder|Whois whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Whois extends Model
 {

@@ -32,7 +32,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Domain whereId($value)
  * @method static Builder|Domain whereName($value)
  * @method static Builder|Domain whereUpdatedAt($value)
- * @mixin Eloquent
  * @property-read Collection|Whois[] $whois
  * @property-read int|null $whois_count
  * @method static Builder|Domain whereUserId($value)
@@ -42,6 +41,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Domain whereOwner($value)
  * @method static DomainFactory factory(...$parameters)
  * @property User $user
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @mixin Eloquent
  */
 class Domain extends Model
 {
