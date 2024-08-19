@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Composer Install and Migrate up
+      - name: Check PHP version
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -30,11 +30,20 @@ jobs:
           PASSWORD: ${{ secrets.SSH_KEY }}
           script: cd ${{ secrets.PUBLISH_DIR }} && git pull
 
-      - name: Composer Install and Migrate up
+      - name: Composer Install
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.SSH_KEY }}
-          script: cd ${{ secrets.PUBLISH_DIR }} && composer install --no-dev && php artisan migrate --force
+          script: cd ${{ secrets.PUBLISH_DIR }} && composer install --no-dev
+
+      - name: Migrate up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.SSH_KEY }}
+          script: cd ${{ secrets.PUBLISH_DIR }} && php artisan migrate --force
