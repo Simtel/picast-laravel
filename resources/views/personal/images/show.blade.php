@@ -13,38 +13,19 @@
         <div class="container text-center">
             <div class="row align-items-start">
                 <div class="col">
-                    <img src="/images/{{$image->filename}}" style="max-width: 100%;" alt="">
+                    <img src="{{$image->getPath()}}" style="max-width: 100%;" alt="">
                 </div>
                 <div class="col">
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label">Путь до файла:</label>
                         <input type="text" class="form-control" id="exampleFormControlInput1"
-                               value="{{url('')}}/images/{{$image->filename}}">
+                               value="{{$image->getPath()}}">
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label">Путь до страницы:</label>
                         <input type="text" class="form-control" id="exampleFormControlInput1"
                                value="{{route('images.show',[$image])}}">
                     </div>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">Размер:</th>
-                            <td>{{$size}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Тип:</th>
-                            <td>{{$type}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>

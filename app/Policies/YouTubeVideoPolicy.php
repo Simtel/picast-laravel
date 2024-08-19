@@ -20,7 +20,7 @@ class YouTubeVideoPolicy
      */
     public function view(User $user, YouTubeVideo $youTubeVideo): bool
     {
-        //
+        return $user->id === $youTubeVideo->user_id;
     }
 
     /**
@@ -28,7 +28,7 @@ class YouTubeVideoPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -36,7 +36,7 @@ class YouTubeVideoPolicy
      */
     public function update(User $user, YouTubeVideo $youTubeVideo): bool
     {
-        //
+        return $user->id === $youTubeVideo->user_id;
     }
 
     /**
@@ -44,7 +44,7 @@ class YouTubeVideoPolicy
      */
     public function delete(User $user, YouTubeVideo $youTubeVideo): bool
     {
-        //
+        return $user->id === $youTubeVideo->user_id;
     }
 
     /**
@@ -52,7 +52,7 @@ class YouTubeVideoPolicy
      */
     public function restore(User $user, YouTubeVideo $youTubeVideo): bool
     {
-        //
+        return $user->id === $youTubeVideo->user_id;
     }
 
     /**
@@ -60,6 +60,6 @@ class YouTubeVideoPolicy
      */
     public function forceDelete(User $user, YouTubeVideo $youTubeVideo): bool
     {
-        //
+        return $user->id === $youTubeVideo->user_id;
     }
 }

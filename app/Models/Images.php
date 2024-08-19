@@ -31,11 +31,15 @@ use Illuminate\Support\Carbon;
  * @property int $user_id
  * @property-read \App\User $user
  * @method static Builder|\App\Images whereUserId($value)
+ * @property string $directory
+ * @property string $disk
+ * @method static Builder|Images whereDirectory($value)
+ * @method static Builder|Images whereDisk($value)
  * @mixin Eloquent
  */
 class Images extends Model
 {
-    protected $fillable = ['filename', 'user_id', 'thumb', 'width', 'check'];
+    protected $fillable = ['filename', 'user_id', 'thumb', 'width', 'check', 'directory', 'disk'];
 
     /**
      * Подрубаем пользователя
@@ -49,6 +53,12 @@ class Images extends Model
 
     public function getPath(): string
     {
+        if ($this->disk === 's3') {
+            $host = is_string(env('SELECTEL_PUBLIC'))
+                ? rtrim((string)env('SELECTEL_PUBLIC'), '/')
+                : config('app.url');
+            return $host . '/' . $this->directory . '/' . $this->filename;
+        }
         return public_path('images') . '/' . $this->filename;
     }
 }

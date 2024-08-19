@@ -3,8 +3,6 @@
 namespace App\Console\Commands;
 
 use Alaouy\Youtube\Facades\Youtube;
-use App\Contracts\Services\Domains\WhoisUpdater;
-use App\Models\Domain;
 use App\Models\YouTubeVideo;
 use Illuminate\Console\Command;
 
@@ -46,7 +44,8 @@ class YotubeVideosDownload extends Command
         foreach ($videos as $video) {
             $this->output->info('Обработка видео:' . $video->url);
             $videoInfo = Youtube::getVideoInfo(Youtube::parseVidFromURL($video->url));
-            $this->output->info($videoInfo->title);
+            dump($videoInfo);
+            $this->output->info($videoInfo->snippet->title);
 
         }
         $this->output->success('Закончили скачивание');
