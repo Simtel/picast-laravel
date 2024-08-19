@@ -23,6 +23,7 @@
     "laravel/ui": "^4.0",
     "laravelcollective/html": "^6.2",
     "league/flysystem-aws-s3-v3": "^3.0",
+    "norkunas/youtube-dl-php": "dev-master",
     "nunomaduro/collision": "^7.0",
     "pusher/pusher-php-server": "^7.0",
     "spatie/laravel-ignition": "^2.0",

@@ -15,7 +15,7 @@
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Адрес</th>
+                <th scope="col">Ролик</th>
                 <th scope="col">Добавлено</th>
                 <th scope="col">Скачено</th>
                 <th scope="col"></th>
@@ -26,7 +26,7 @@
             @foreach($videos as $video)
                 <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
-                    <td><a href="{{ $video->url }}" target="_blank">{{ $video->url }}</a></td></td>
+                    <td><a href="{{ $video->url }}" target="_blank">{{ $video->title != '' ? $video->title : $video->url }}</a></td></td>
                     <td>{{ $video->created_at }}</td>
                     <td>{{ $video->is_downloaded? 'Да' : 'Нет'}}</td>
                     <td>
