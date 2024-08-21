@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Files;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -24,9 +25,36 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereUserId($value)
+ * @property string $title
+ * @property string $thumb
+ * @property string $file_link
+ * @property string $size
+ * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereFileLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereThumb($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereTitle($value)
  * @mixin \Eloquent
  */
 class YouTubeVideo extends Model
 {
     use HasFactory;
+
+    public function getFileUrl(): string
+    {
+        if ($this->file_link === '') {
+            return '';
+        }
+        $host = is_string(env('SELECTEL_PUBLIC'))
+            ? rtrim((string)env('SELECTEL_PUBLIC'), '/')
+            : config('app.url');
+        return $host . '/videos/' . $this->file_link;
+    }
+
+    public function getSize(): string
+    {
+        if($this->size === '') {
+            return '';
+        }
+        return Files::bytesToHuman((int)$this->size);
+    }
 }

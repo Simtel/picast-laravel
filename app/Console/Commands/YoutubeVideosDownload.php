@@ -11,26 +11,20 @@ use Illuminate\Support\Facades\Storage;
 use YoutubeDl\Options;
 use YoutubeDl\YoutubeDl;
 
-class YotubeVideosDownload extends Command
+class YoutubeVideosDownload extends Command
 {
     /**
-     * The name and signature of the console command.
-     *
      * @var string
      */
     protected $signature = 'youtube:download';
 
     /**
-     * The console command description.
-     *
      * @var string
      */
     protected $description = 'Download all videos';
 
 
     /**
-     * Execute the console command.
-     *
      * @return void
      * @throws Exception
      */
@@ -81,20 +75,26 @@ class YotubeVideosDownload extends Command
                     ->downloadPath(Storage::disk('local')->path('public/videos'))
                     ->output($videoId . '.%(ext)s')
                     ->url($video->url)
-                //->format('bestvideo[height<=1080]+bestaudio/best[height<=1080]')
+                    ->format('399')
             );
 
             foreach ($collection->getVideos() as $element) {
                 if ($element->getError() !== null) {
                     $this->output->error($element->getError());
                 } else {
+                    $fileName = $videoId . '.' . $element->getExt();
                     $filePath = 'public/videos' . '/' . $videoId . '.' . $element->getExt();
                     $this->output->info($filePath);
                     $this->copyFileToS3(
                         $filePath,
-                        'videos/' . $element->getFilename(),
+                        'videos/' . $fileName,
                         $this->output
                     );
+                    $video->is_download = true;
+                    $video->file_link = $fileName;
+                    $video->size = (string)Storage::disk('local')->size($filePath);
+                    $video->save();
+                    Storage::disk('local')->delete($filePath);
                     $this->output->writeln('');
                     $this->output->writeln('');
                 }
@@ -108,7 +108,11 @@ class YotubeVideosDownload extends Command
         if (Storage::disk('local')->exists($localFilePath)) {
             $content = Storage::disk('local')->get($localFilePath);
             if ($content !== null) {
+                if (Storage::disk('s3')->exists($s3FilePath)) {
+                    return;
+                }
                 Storage::disk('s3')->put($s3FilePath, $content);
+
                 return;
             }
         }
