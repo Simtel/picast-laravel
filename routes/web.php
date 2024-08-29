@@ -64,7 +64,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
 
     Route::group(['prefix' => 'youtube', 'middleware' => ['can:edit youtube']], static function () {
         Route::get('/', [YouTubeVideoController::class, 'index'])->name('youtube.index');
-        Route::POST('/youtube/{video}}', [YouTubeVideoController::class, 'index'])->name('youtube.destroy');
+        Route::delete('/{video}', [YouTubeVideoController::class, 'index'])->name('youtube.destroy');
+        Route::get('/create', [YouTubeVideoController::class, 'create'])->name('youtube.create');
+        Route::post('/store', [YouTubeVideoController::class, 'store'])->name('youtube.store');
     });
 
     Route::group(['prefix' => 'prices', 'middleware' => ['can:edit prices']], static function () {

@@ -75,7 +75,7 @@ class YoutubeVideosDownload extends Command
                     ->downloadPath(Storage::disk('local')->path('public/videos'))
                     ->output($videoId . '.%(ext)s')
                     ->url($video->url)
-                    ->format('399')
+                    ->format('299')
             );
 
             foreach ($collection->getVideos() as $element) {
@@ -106,7 +106,7 @@ class YoutubeVideosDownload extends Command
     public function copyFileToS3(string $localFilePath, string $s3FilePath, OutputStyle $output): void
     {
         if (Storage::disk('local')->exists($localFilePath)) {
-            $content = Storage::disk('local')->get($localFilePath);
+            $content = Storage::disk('local')->readStream($localFilePath);
             if ($content !== null) {
                 if (Storage::disk('s3')->exists($s3FilePath)) {
                     return;

@@ -39,6 +39,9 @@ class YouTubeVideo extends Model
 {
     use HasFactory;
 
+    protected $attributes = ['is_download' => false, 'title' => '', 'thumb' => '', 'file_link' => '','size' => ''];
+    protected $fillable = ['user_id', 'url', 'is_download', 'created_at', 'updated_at'];
+
     public function getFileUrl(): string
     {
         if ($this->file_link === '') {
@@ -52,7 +55,7 @@ class YouTubeVideo extends Model
 
     public function getSize(): string
     {
-        if($this->size === '') {
+        if ($this->size === '') {
             return '';
         }
         return Files::bytesToHuman((int)$this->size);
