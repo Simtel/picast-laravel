@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use App\Events\DomainCreated;
+use App\Events\YouTubeVideoCreated;
 use App\Listeners\GetWhoisDomain;
+use App\Listeners\YouTubeVideoCreateListener;
 use App\Models\Domain;
+use App\Models\YouTubeVideo;
 use App\Observers\DomainObserver;
-use Illuminate\Support\Facades\Event;
+use App\Observers\YouTubeVideoObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -17,9 +20,12 @@ class EventServiceProvider extends ServiceProvider
      * @var array<string, array<int, string>>
      */
     protected $listen = [
-       DomainCreated::class => [
+        DomainCreated::class       => [
             GetWhoisDomain::class
         ],
+        YouTubeVideoCreated::class => [
+            YouTubeVideoCreateListener::class
+        ]
     ];
 
     /**
@@ -32,6 +38,7 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
 
         Domain::observe(DomainObserver::class);
+        YouTubeVideo::observe(YouTubeVideoObserver::class);
         //
     }
 }
