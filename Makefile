@@ -22,7 +22,7 @@ restart: stop up ## Restart docker containers
 mysql-console: ## Mysql Console Failed
 	@docker exec -it picast_db /usr/bin/mysql -uroot -pexample
 
-php-console: ## PHP console
+cli: ## PHP console
 	docker exec -it --user www-data picast_web bash
 
 migrate: ## Up Migrate

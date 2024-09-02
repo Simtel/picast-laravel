@@ -37,10 +37,7 @@ class YoutubeVideosDownload extends Command
             }
             $this->output->info('Обработка видео:' . $video->url);
             $videoId = Youtube::parseVidFromURL($video->url);
-            $videoInfo = Youtube::getVideoInfo($videoId);
-            $video->title = $videoInfo->snippet->title;
             $this->output->info($video->title);
-            $video->save();
 
             $yt = new YoutubeDl();
 
@@ -49,7 +46,7 @@ class YoutubeVideosDownload extends Command
             $progressBar->setFormat(
                 ' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%  %size% %speed%'
             );
-            $progressBar->start(100); // 100 - это % завершения, от 0 до 100
+            $progressBar->start(100);
             $yt->onProgress(
                 function (
                     ?string $progressTarget,
