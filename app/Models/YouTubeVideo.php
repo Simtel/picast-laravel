@@ -6,6 +6,7 @@ use App\Helpers\Files;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class YouTubeVideoController
@@ -59,5 +60,13 @@ class YouTubeVideo extends Model
             return '';
         }
         return Files::bytesToHuman((int)$this->size);
+    }
+
+    /**
+     * @return HasMany<VideoFormats>
+     */
+    public function formats(): HasMany
+    {
+        return $this->hasMany(VideoFormats::class, 'video_id');
     }
 }

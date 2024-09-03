@@ -19,6 +19,7 @@
                 <th scope="col">Добавлено</th>
                 <th scope="col">Скачено</th>
                 <th scope="col">Ссылка</th>
+                <th scope="col">Форматы</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
@@ -28,7 +29,7 @@
                 <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td><a href="{{ $video->url }}"
-                           target="_blank">{{ $video->title != '' ? $video->title : $video->url }}</a></td>
+                           target="_blank">{{ $video->title != '' ? $video->title : $video->url }}</a>
                     </td>
                     <td>{{ $video->created_at }}</td>
                     <td>{{ $video->is_download ? 'Да' : 'Нет'}}</td>
@@ -36,6 +37,18 @@
                         @if($video->is_download)
                             <a href="{{ $video->getFileUrl() }}" target="_blank">Скачать ({{$video->getSize()}})</a>
                         @endif
+                    </td>
+                    <td>
+                        <select name="video_formats" id="video_formats">
+                            @foreach($video->formats as $format)
+                                <option value="{{ $format->format_id }}">{{ $format->format_ext }} {{ $format->resolution }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        {{-- Компонент кнопки уобновления форматов--}}
+                        <x-button :route="route('youtube.refresh_formats', ['video' => $video->id])" method="POST"
+                                  class="btn-success" text="Обновить форматы"/>
                     </td>
                     <td>
                         {{-- Компонент кнопки удаления --}}

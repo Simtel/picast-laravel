@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Personal;
 
+use Alaouy\Youtube\Facades\Youtube;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\YouTubeUrlRequest;
+use App\Models\VideoFormats;
 use App\Models\YouTubeVideo;
+use App\Services\Youtube\GetVideoFormatsService;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -15,8 +19,8 @@ use Illuminate\Support\Facades\Auth;
 
 class YouTubeVideoController extends Controller
 {
-    public function __construct(
-    ) {
+    public function __construct(private readonly GetVideoFormatsService $getVideoFormatsService)
+    {
         $this->authorizeResource(YouTubeVideo::class, 'youTubeVideo');
     }
 
@@ -49,10 +53,34 @@ class YouTubeVideoController extends Controller
     {
         YouTubeVideo::create(
             [
-                'url' => $request->get('url'),
+                'url'     => $request->get('url'),
                 'user_id' => Auth::id()
             ]
         );
+        return redirect()->route('youtube.index');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function refreshFormats(YouTubeVideo $video): Response|Redirector|Application|RedirectResponse
+    {
+        $videoId = Youtube::parseVidFromURL($video->url);
+        $videoInfo = Youtube::getVideoInfo($videoId);
+        $video->title = $videoInfo->snippet->title;
+        $video->save();
+        $formats = $this->getVideoFormatsService->getVideoFormats($videoId);
+        foreach ($formats as $formatDto) {
+            $format = new VideoFormats();
+            $format->video_id = $video->id;
+
+            $format->format_id = $formatDto->getFormatId();
+            $format->format_note = $formatDto->getFormatNote();
+            $format->format_ext = $formatDto->getVideoExt();
+            $format->vcodec = $formatDto->getVCodec();
+            $format->resolution = $formatDto->getResolution();
+            $format->save();
+        }
         return redirect()->route('youtube.index');
     }
 }

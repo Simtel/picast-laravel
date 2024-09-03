@@ -4,6 +4,7 @@ namespace App\Services\Youtube;
 
 use App\Dto\Youtube\FormatVideoDto;
 use Exception;
+use JsonException;
 use RuntimeException;
 
 class GetVideoFormatsService
@@ -15,31 +16,69 @@ class GetVideoFormatsService
      */
     public function getVideoFormats(string $videoId): array
     {
-        $formats = [];
+        $videoUrl = $this->buildVideoUrl($videoId);
+        $jsonResult = $this->executeCommand($videoUrl);
+        $videoInfo = $this->decodeJson($jsonResult);
 
-        $video_url = "https://www.youtube.com/watch?v=" . $videoId;
+        return $this->extractFormats($videoInfo);
+    }
 
-        $command = "youtube-dl --dump-json " . escapeshellarg($video_url);
 
-        $json_result = shell_exec($command);
 
-        $video_info = json_decode((string)$json_result, true, 512, JSON_THROW_ON_ERROR);
+    private function buildVideoUrl(string $videoId): string
+    {
+        return "https://www.youtube.com/watch?v=" . $videoId;
+    }
 
-        if (is_array($video_info) && isset($video_info['formats']) && is_array($video_info['formats'])) {
-            foreach ($video_info['formats'] as $format) {
-                if (array_key_exists('height', $format) && $format['height'] >= 720) {
-                    $formats[] = new FormatVideoDto(
-                        $format['format_id'],
-                        $format['format_note'] ?? '',
-                        $format['video_ext'] ?? '',
-                        $format['vcodec'] ?? '',
-                        $format['resolution'] ?? '',
-                    );
-                }
-            }
-        } else {
+    /**
+     * @throws RuntimeException
+     */
+    private function executeCommand(string $videoUrl): string
+    {
+        $command = "youtube-dl --dump-json " . escapeshellarg($videoUrl);
+        $output = shell_exec($command);
+
+        if ($output === null || $output === false) {
+            throw new RuntimeException('Ошибка при выполнении команды youtube-dl');
+        }
+
+        return $output;
+    }
+
+    /**
+     * @throws JsonException
+     */
+    private function decodeJson(string $jsonResult): array
+    {
+        $jsonResult = json_decode($jsonResult, true, 512, JSON_THROW_ON_ERROR);
+        return !is_array($jsonResult) ? throw new JsonException('Не удалось декодировать JSON') : $jsonResult;
+    }
+
+    /**
+     * @param array $videoInfo
+     * @return FormatVideoDto[]
+     * @throws RuntimeException
+     */
+    private function extractFormats(array $videoInfo): array
+    {
+        if (!isset($videoInfo['formats']) || !is_array($videoInfo['formats'])) {
             throw new RuntimeException('Не удалось получить информацию о видео');
         }
+
+        $formats = [];
+
+        foreach ($videoInfo['formats'] as $format) {
+            if (isset($format['height']) && $format['height'] >= 720) {
+                $formats[] = new FormatVideoDto(
+                    $format['format_id'],
+                    $format['format_note'] ?? '',
+                    $format['video_ext'] ?? '',
+                    $format['vcodec'] ?? '',
+                    $format['resolution'] ?? ''
+                );
+            }
+        }
+
         return $formats;
     }
 }
