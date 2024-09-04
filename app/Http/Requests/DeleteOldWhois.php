@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Facades\Domains\WhoisService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\In;
 
 class DeleteOldWhois extends FormRequest
 {
@@ -21,7 +22,7 @@ class DeleteOldWhois extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, array<int, string|In>>
      */
     public function rules(): array
     {

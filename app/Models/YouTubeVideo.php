@@ -40,6 +40,9 @@ class YouTubeVideo extends Model
 {
     use HasFactory;
 
+    /**
+     * @var array<string, mixed>
+     */
     protected $attributes = ['is_download' => false, 'title' => '', 'thumb' => '', 'file_link' => '','size' => ''];
     protected $fillable = ['user_id', 'url', 'is_download', 'created_at', 'updated_at'];
 

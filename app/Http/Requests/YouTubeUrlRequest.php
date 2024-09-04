@@ -17,9 +17,7 @@ class YouTubeUrlRequest extends FormRequest
     }
 
     /**
-     * Получите правила валидации, которые применяются к запросу.
-     *
-     * @return array
+     *  @return array<string, array<int, string>>
      */
     public function rules(): array
     {
@@ -29,9 +27,7 @@ class YouTubeUrlRequest extends FormRequest
     }
 
     /**
-     * Получите сообщения об ошибках для определенных правил валидации.
-     *
-     * @return array
+     * @return array<string, string>
      */
     public function messages(): array
     {

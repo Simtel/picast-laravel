@@ -13,7 +13,7 @@ class UserResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
-     * @return array|Arrayable<string, mixed>|JsonSerializable
+     * @return array<string, mixed>|Arrayable<string, mixed>|JsonSerializable
      */
     public function toArray($request): array|JsonSerializable|Arrayable
     {

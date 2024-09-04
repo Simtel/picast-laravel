@@ -25,8 +25,13 @@ class YouTubeVideoCreated
         $this->video = $video;
     }
 
+    /**
+     * Get the channels the event should broadcast on.
+     *
+     * @return Channel|PrivateChannel|Channel[]|PrivateChannel[]
+     */
     public function broadcastOn(): Channel|PrivateChannel|array
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel('video.'.$this->video->id);
     }
 }

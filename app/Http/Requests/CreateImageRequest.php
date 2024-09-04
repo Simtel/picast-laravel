@@ -11,7 +11,7 @@ class CreateImageRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -19,9 +19,9 @@ class CreateImageRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'id' => 'integer'

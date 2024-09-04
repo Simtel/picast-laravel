@@ -46,6 +46,7 @@ class GetVideoFormatsService
     }
 
     /**
+     * @return array<string, mixed>
      * @throws JsonException
      */
     private function decodeJson(string $jsonResult): array
@@ -55,7 +56,7 @@ class GetVideoFormatsService
     }
 
     /**
-     * @param array $videoInfo
+     * @param array<string, mixed> $videoInfo
      * @return FormatVideoDto[]
      * @throws RuntimeException
      */

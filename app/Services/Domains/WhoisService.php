@@ -6,6 +6,9 @@ use App\Models\Whois;
 
 class WhoisService implements \App\Contracts\Services\Domains\WhoisService
 {
+    /**
+     * @var array<string, string>
+     */
     private array $time_frame_options = [
         'day' => '1 дня',
         'week' => '1 недели',

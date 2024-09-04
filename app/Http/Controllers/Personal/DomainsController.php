@@ -16,6 +16,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class DomainsController extends Controller
 {
@@ -97,6 +98,7 @@ class DomainsController extends Controller
      *
      * @param Domain $domain
      * @return RedirectResponse
+     * @throws TelegramSDKException
      */
     public function update(Domain $domain): RedirectResponse
     {

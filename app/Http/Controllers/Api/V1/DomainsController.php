@@ -79,9 +79,9 @@ class DomainsController extends Controller
 
     /**
      * @param DomainRequest $request
-     * @return array
+     * @return JsonResponse
      */
-    public function store(DomainRequest $request): array
+    public function store(DomainRequest $request): JsonResponse
     {
         Domain::create(
             [
@@ -90,7 +90,7 @@ class DomainsController extends Controller
             ]
         );
 
-        return ['success' => true];
+        return  response()->json(['success' => true]);
     }
 
 

@@ -70,6 +70,10 @@ class Domain extends Model
         return $this->hasMany(Whois::class);
     }
 
+    /**
+     * @param DomainDeleted $notification
+     * @return string[]
+     */
     public function routeNotificationForMail(DomainDeleted $notification): array
     {
         return [env('DEFAULT_USER_EMAIL') => 'Admin'];
