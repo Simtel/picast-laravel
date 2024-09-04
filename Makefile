@@ -5,11 +5,9 @@ help: ## Show this help.
 
 up: ## Up containers
 	@docker compose up -d --remove-orphans
-	@echo -e "Make: Up containers.\n"
 
 build: ## Build containers
 	docker compose build
-	@echo -e "Make: Up containers.\n"
 
 down: ## Down containers
 	@docker compose down
@@ -23,22 +21,22 @@ mysql-console: ## Mysql Console Failed
 	@docker exec -it picast_db /usr/bin/mysql -uroot -pexample
 
 cli: ## PHP console
-	docker exec -it --user www-data picast_web bash
+	docker exec -it --user www-data picast_php bash
 
 migrate: ## Up Migrate
-	docker exec -it picast_web sh -c "php artisan migrate"
-	docker exec -it picast_web sh -c "php artisan migrate --env=testing"
+	docker exec -it picast_php sh -c "php artisan migrate"
+	docker exec -it picast_php sh -c "php artisan migrate --env=testing"
 
 phpstan: ##Run phpstan analyse
-	docker exec -it picast_web sh -c "./vendor/bin/phpstan analyse --memory-limit=2G"
+	docker exec -it picast_php sh -c "./vendor/bin/phpstan analyse --memory-limit=2G"
 
 set-githooks: ##Set githooks
 	@cd .git/hooks && \
-    	ln -sfn ../../hooks/pre-commit pre-commit && \
+    	ln -sfn ../../.hooks/pre-commit pre-commit && \
     	chmod -R +x pre-commit
 
 pint: ##Run pint analyse
-	docker exec -it picast_web sh -c "./vendor/bin/pint"
+	docker exec -it picast_php sh -c "./vendor/bin/pint"
 
 test: ##Run pint analyse
-	docker exec -it picast_web sh -c "php artisan test"
+	docker exec -it picast_php sh -c "php artisan test"

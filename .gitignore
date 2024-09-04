@@ -12,7 +12,7 @@ yarn-error.log
 .env
 public/uploads/
 config/telegram.php
-docker/db
+.docker/db
 .gitattributes
 .phpstorm.meta.php
 _ide_helper.php
