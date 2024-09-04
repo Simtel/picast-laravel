@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Services\Domains;
 
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 
 interface WhoisUpdater
 {

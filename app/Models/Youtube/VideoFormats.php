@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Youtube;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,5 +32,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class VideoFormats extends Model
 {
-    protected $table = 'you_tube_videos_formats';
+    protected $table = 'youtube_videos_formats';
 }

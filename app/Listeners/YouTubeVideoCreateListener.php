@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use Alaouy\Youtube\Facades\Youtube;
 use App\Events\YouTubeVideoCreated;
-use App\Models\VideoFormats;
+use App\Models\Youtube\VideoFormats;
 use App\Services\Youtube\GetVideoFormatsService;
 use Exception;
 

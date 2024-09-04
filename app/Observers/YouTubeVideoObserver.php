@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Events\YouTubeVideoCreated;
-use App\Models\YouTubeVideo;
+use App\Models\Youtube\YouTubeVideo;
 
 class YouTubeVideoObserver
 {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Domains\Domain;
 use Database\Factories\UserFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;

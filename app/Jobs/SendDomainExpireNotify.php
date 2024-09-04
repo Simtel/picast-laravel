@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\ExpireDomainNotify;
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;

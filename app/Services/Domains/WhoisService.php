@@ -2,7 +2,7 @@
 
 namespace App\Services\Domains;
 
-use App\Models\Whois;
+use App\Models\Domains\Whois;
 
 class WhoisService implements \App\Contracts\Services\Domains\WhoisService
 {

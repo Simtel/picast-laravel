@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Alaouy\Youtube\Facades\Youtube;
-use App\Models\YouTubeVideo;
+use App\Models\Youtube\YouTubeVideo;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;

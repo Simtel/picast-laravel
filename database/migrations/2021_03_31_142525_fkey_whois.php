@@ -13,7 +13,7 @@ class FkeyWhois extends Migration
      */
     public function up(): void
     {
-        \App\Models\Whois::truncate();
+        \App\Models\Domains\Whois::truncate();
         Schema::table('whois', static function (Blueprint $table) {
             $table->bigInteger('domain_id')->unsigned()->change();
             $table->foreign('domain_id')

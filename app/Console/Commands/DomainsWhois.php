@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Contracts\Services\Domains\WhoisUpdater;
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 use Illuminate\Console\Command;
 
 class DomainsWhois extends Command

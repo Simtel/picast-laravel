@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Youtube;
 
 use App\Helpers\Files;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Class YouTubeVideoController
@@ -33,12 +33,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereThumb($value)
  * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereTitle($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\VideoFormats> $formats
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Youtube\VideoFormats> $formats
  * @property-read int|null $formats_count
  * @mixin \Eloquent
  */
 class YouTubeVideo extends Model
 {
+    protected $table = 'youtube_videos';
     /**
      * @var array<string, mixed>
      */

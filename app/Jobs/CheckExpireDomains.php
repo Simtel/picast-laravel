@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -45,7 +45,8 @@ class CheckExpireDomains implements ShouldQueue
         $now = Carbon::now();
         foreach ($this->getDomains() as $domain) {
             $expire_at = new Carbon($domain->expire_at);
-            $days = (int)$expire_at->diffInDays($now);
+            $days = (int)abs($expire_at->diffInDays($now));
+
             if (in_array($days, $this->days, true)) {
                 SendDomainExpireNotify::dispatch($domain);
             }

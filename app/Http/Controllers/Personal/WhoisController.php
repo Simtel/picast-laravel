@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Personal;
 use App\Facades\Domains\WhoisService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteOldWhois;
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 

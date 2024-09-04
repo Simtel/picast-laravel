@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Domains;
 
-use Database\Factories\WhoisFactory;
+use App\Models\User;
+use Database\Factories\Domains\WhoisFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

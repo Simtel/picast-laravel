@@ -2,15 +2,12 @@
 
 namespace App\Events;
 
-use App\Models\Domain;
-use Illuminate\Broadcasting\Channel;
+use App\Models\Domains\Domain;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class DomainCreated implements ShouldBroadcast
+class DomainCreated
 {
     use Dispatchable;
     use InteractsWithSockets;
@@ -29,13 +26,4 @@ class DomainCreated implements ShouldBroadcast
         $this->domain = $domain;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel|PrivateChannel|Channel[]|PrivateChannel[]
-     */
-    public function broadcastOn(): Channel|PrivateChannel|array
-    {
-        return new PrivateChannel('domains'.$this->domain->id);
-    }
 }

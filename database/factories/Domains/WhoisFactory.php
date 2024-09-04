@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Domains;
 
-use App\Models\Whois;
+use App\Models\Domains\Whois;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class WhoisFactory extends Factory

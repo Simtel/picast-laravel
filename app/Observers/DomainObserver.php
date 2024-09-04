@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Events\DomainCreated;
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 use App\Notifications\DomainDeleted;
 
 class DomainObserver

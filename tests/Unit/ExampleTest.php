@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Events\DomainCreated;
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 use DB;
 use Event;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

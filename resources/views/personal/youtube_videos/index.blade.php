@@ -41,7 +41,7 @@
                     <td>
                         <select name="video_formats" id="video_formats">
                             @foreach($video->formats as $format)
-                                <option value="{{ $format->format_id }}">{{ $format->format_ext }} {{ $format->resolution }}</option>
+                                <option value="{{ $format->format_id }}">{{ $format->format_ext }} {{ $format->resolution }} ({{$format->vcodec}})</option>
                             @endforeach
                         </select>
                     </td>

@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Events\DomainCreated;
 use App\Jobs\CheckExpireDomains;
 use App\Jobs\SendDomainExpireNotify;
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 use App\Models\User;
 use App\Notifications\DomainDeleted;
 use Carbon\Carbon;

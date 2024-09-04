@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\YouTubeVideo;
+use App\Models\Youtube\YouTubeVideo;
 
 class YouTubeVideoPolicy
 {

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 use Illuminate\Database\Seeder;
 
 class DomainTableSeeder extends Seeder

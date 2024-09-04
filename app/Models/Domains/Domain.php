@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Domains;
 
+use App\Models\User;
 use App\Notifications\DomainDeleted;
-use Database\Factories\DomainFactory;
+use Database\Factories\Domains\DomainFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

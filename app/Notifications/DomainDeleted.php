@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 use App\Notifications\Channels\TelegramChannel;
 use App\Notifications\Channels\TelegramMessage;
 use Illuminate\Bus\Queueable;

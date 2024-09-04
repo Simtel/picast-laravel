@@ -3,7 +3,7 @@
 namespace App\Services\Domains;
 
 use App\Facades\Whois;
-use App\Models\Domain;
+use App\Models\Domains\Domain;
 use Carbon\Carbon;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
@@ -16,7 +16,7 @@ readonly class WhoisUpdater implements \App\Contracts\Services\Domains\WhoisUpda
     public function update(Domain $domain): void
     {
         $whois = Whois::loadDomainInfo($domain->name);
-        \App\Models\Whois::create(
+        \App\Models\Domains\Whois::create(
             [
                 'domain_id' => $domain->id,
                 'text' => $whois->getResponse()->text,
