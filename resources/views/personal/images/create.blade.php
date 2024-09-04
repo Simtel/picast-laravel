@@ -22,14 +22,14 @@
 
         <div class="form-group">
             {{ Html::label('Название', 'name') }}
-            {{ Html::text('name') }}
+            {{ Html::text('name')->class('form-control')}}
         </div>
         <div class="form-group">
             {{ Html::label('Изображение', 'image') }}
-            {{ Html::file('image') }}
+            {{ Html::file('image')->class('form-control')  }}
         </div>
 
-        {{ Html::submit('Сохранить') }}
+        {{ Html::submit('Сохранить')->class('btn btn-primary')}}
 
         {{ Html::form()->close() }}
     </main>

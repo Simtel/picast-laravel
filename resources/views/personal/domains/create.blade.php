@@ -22,10 +22,10 @@
 
         <div class="form-group">
             {{ Html::label('Название', 'name') }}
-            {{ Html::text('name') }}
+            {{ Html::text('name')->class('form-control')}}
         </div>
 
-        {{ Html::submit('Сохранить домен') }}
+        {{ Html::submit('Сохранить домен')->class('btn btn-primary')}}
 
         {{ Html::form()->close() }}
     </main>

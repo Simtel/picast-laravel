@@ -10,16 +10,27 @@
             </div>
         </div>
         </br>
-        Дата добавления: {{$domain->created_at}}</br>
-        Истекает: {{$domain->expire_at}}</br>
-        Дата обновления: {{$domain->updated_at}}</br>
+        <table class="table">
+            <tr>
+                <td>Дата добавления:</td>
+                <td> {{$domain->created_at}}</td>
+            </tr>
+            <tr>
+                <td>Истекает:</td>
+                <td>{{$domain->expire_at}}</td>
+            </tr>
+            <tr>
+                <td>Дата обновления:</td>
+                <td> {{$domain->updated_at}}</td>
+            </tr>
+        </table>
         <br> <br>
         {{ Html::form('POST',route('domains.delete_old_whois',$domain->id))->open()}}
         <div class="form-group">
             {{ Html::label('Удалить записи whois старше','delete_old_whois') }}
-            {{ Html::select('delete_old_whois', \App\Facades\Domains\WhoisService::getTimeFrameOptions(),null,['class' => 'form-control']) }}
+            {{ Html::select('delete_old_whois', \App\Facades\Domains\WhoisService::getTimeFrameOptions())->class('form-control') }}
         </div>
-        {{ Html::submit('Удалить') }}
+        {{ Html::submit('Удалить')->class('btn btn-danger') }}
         {{ Html::form()->close() }}
         <br> <br>
         <table class="table">

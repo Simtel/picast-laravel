@@ -21,11 +21,11 @@
         {{ Html::form('POST',route('youtube.store'))->open()}}
 
         <div class="form-group">
-            {{ Html::label('url', 'Сссылка') }}
-            {{ Html::text('url') }}
+            {{ Html::label('Сссылка', 'url') }}
+            {{ Html::text('url')->class('form-control')}}
         </div>
 
-        {{ Html::submit('Сохранить видео') }}
+        {{ Html::submit('Сохранить видео')->class('btn btn-primary')}}
 
         {{ Html::form()->close() }}
     </main>

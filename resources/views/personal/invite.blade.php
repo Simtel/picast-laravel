@@ -19,15 +19,15 @@
         {{ Html::form('POST',route('invite.user'))->open() }}
 
         <div class="form-group">
-            {{ Html::label('name', 'Имя') }}
-            {{ Html::text('name') }}
+            {{ Html::label('Имя', 'name') }}
+            {{ Html::text('name')->class('form-control')}}
         </div>
         <div class="form-group">
-            {{ Html::label('email', 'E-mail') }}
-            {{ Html::text('email') }}
+            {{ Html::label('E-mail', 'email') }}
+            {{ Html::text('email')->class('form-control')}}
         </div>
 
-        {{ Html::submit('Пригласить пользователя', ['class' => 'btn btn-primary']) }}
+        {{ Html::submit('Пригласить пользователя')->class('btn btn-primary') }}
 
         {{ Html::form()->close() }}
     </main>
