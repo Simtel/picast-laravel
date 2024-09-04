@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -30,7 +29,5 @@ use Illuminate\Support\Carbon;
  */
 class ProductsUrls extends Model
 {
-    use HasFactory;
-
     protected $fillable = ['product_id', 'marketplace_id', 'url'];
 }

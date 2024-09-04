@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Helpers\Files;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -34,12 +33,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereThumb($value)
  * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereTitle($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\VideoFormats> $formats
+ * @property-read int|null $formats_count
  * @mixin \Eloquent
  */
 class YouTubeVideo extends Model
 {
-    use HasFactory;
-
     /**
      * @var array<string, mixed>
      */

@@ -20,7 +20,7 @@ class CheckExpireDomains implements ShouldQueue
 
     /**
      * За сколько дней отправлять уведомление
-     * @var array|int[]
+     * @var int[]
      */
     private array $days = [1, 3, 7, 30];
 
@@ -45,7 +45,7 @@ class CheckExpireDomains implements ShouldQueue
         $now = Carbon::now();
         foreach ($this->getDomains() as $domain) {
             $expire_at = new Carbon($domain->expire_at);
-            $days = $expire_at->diffInDays($now);
+            $days = (int)$expire_at->diffInDays($now);
             if (in_array($days, $this->days, true)) {
                 SendDomainExpireNotify::dispatch($domain);
             }

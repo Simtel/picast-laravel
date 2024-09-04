@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -28,7 +27,5 @@ use Illuminate\Support\Carbon;
  */
 class InviteCode extends Model
 {
-    use HasFactory;
-
     protected $fillable = ['created_by', 'code'];
 }

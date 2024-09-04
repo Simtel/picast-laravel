@@ -33,6 +33,7 @@ use Illuminate\Support\Carbon;
  */
 class Whois extends Model
 {
+    /** @use HasFactory<WhoisFactory> */
     use HasFactory;
 
     protected $fillable = ['domain_id', 'text'];

@@ -59,11 +59,14 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereApiToken($value)
  * @property-read Collection|Products[] $products
  * @property-read int|null $products_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User withoutPermission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|User withoutRole($roles, $guard = null)
  * @mixin Eloquent
  */
 class User extends Authenticatable
 {
     use Notifiable;
+    /** @use HasFactory<UserFactory> */
     use HasFactory;
     use SoftDeletes;
     use HasRoles;
