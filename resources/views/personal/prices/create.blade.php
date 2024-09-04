@@ -18,19 +18,19 @@
                 </ul>
             </div>
         @endif
-        {{ Form::open(['route' => 'images.store','files' => true]) }}
+        {{ Html::form(['route' => 'images.store','files' => true]) }}
 
         <div class="form-group">
-            {{ Form::label('name', 'Название') }}
-            {{ Form::text('name', Form::old('name'), ['class' => 'form-control']) }}
+            {{ Html::label('name', 'Название') }}
+            {{ Html::text('name', Html::old('name'), ['class' => 'form-control']) }}
         </div>
         <div class="form-group">
-            {{ Form::label('name', 'Изображение') }}
-            {{ Form::file('image', ['class' => 'form-control']) }}
+            {{ Html::label('name', 'Изображение') }}
+            {{ Html::file('image', ['class' => 'form-control']) }}
         </div>
 
-        {{ Form::submit('Сохранить', ['class' => 'btn btn-primary']) }}
+        {{ Html::submit('Сохранить', ['class' => 'btn btn-primary']) }}
 
-        {{ Form::close() }}
+        {{ Html::close() }}
     </main>
 @endsection

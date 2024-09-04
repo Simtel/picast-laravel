@@ -41,10 +41,10 @@
                            class="btn  btn-sm glyphicon">Редактировать</a>
                     </td>
                     <td>
-                        {{ Form::open(['url' => route('prices.product.destroy',['product' => $product->id]), 'class' => 'pull-right']) }}
-                        {{ Form::hidden('_method', 'DELETE') }}
-                        {{ Form::submit('Удалить', ['class' => 'btn btn-warning btn-sm']) }}
-                        {{ Form::close() }}
+                        {{ Html::form(['url' => route('prices.product.destroy',['product' => $product->id]), 'class' => 'pull-right']) }}
+                        {{ Html::hidden('_method', 'DELETE') }}
+                        {{ Html::submit('Удалить', ['class' => 'btn btn-warning btn-sm']) }}
+                        {{ Html::close() }}
                     </td>
                 </tr>
             @endforeach

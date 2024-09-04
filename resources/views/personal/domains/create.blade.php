@@ -18,15 +18,15 @@
                 </ul>
             </div>
         @endif
-        {{ Form::open(['route' => 'domains.store']) }}
+        {{ Html::form(['route' => 'domains.store']) }}
 
         <div class="form-group">
-            {{ Form::label('name', 'Название') }}
-            {{ Form::text('name', Form::old('name'), ['class' => 'form-control']) }}
+            {{ Html::label('name', 'Название') }}
+            {{ Html::text('name', Html::old('name'), ['class' => 'form-control']) }}
         </div>
 
-        {{ Form::submit('Сохранить домен', array('class' => 'btn btn-primary')) }}
+        {{ Html::submit('Сохранить домен', array('class' => 'btn btn-primary')) }}
 
-        {{ Form::close() }}
+        {{ Html::close() }}
     </main>
 @endsection

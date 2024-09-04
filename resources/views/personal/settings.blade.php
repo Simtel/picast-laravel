@@ -16,33 +16,33 @@
                 </ul>
             </div>
         @endif
-        {{ Form::open(['route' => 'settings.password']) }}
+        {{ Html::form(['route' => 'settings.password']) }}
 
         <div class="form-group">
-            {{ Form::label('password', 'Старый пароль') }}
-            {{ Form::password('password', ['class' => 'form-control']) }}
+            {{ Html::label('password', 'Старый пароль') }}
+            {{ Html::password('password', ['class' => 'form-control']) }}
         </div>
         <div class="form-group">
-            {{ Form::label('new_password', 'Новый пароль') }}
-            {{ Form::password('new_password', ['class' => 'form-control']) }}
+            {{ Html::label('new_password', 'Новый пароль') }}
+            {{ Html::password('new_password', ['class' => 'form-control']) }}
         </div>
 
-        {{ Form::submit('Обновить пароль', ['class' => 'btn btn-primary']) }}
+        {{ Html::submit('Обновить пароль', ['class' => 'btn btn-primary']) }}
 
-        {{ Form::close() }}
+        {{ Html::close() }}
         <br>
         <br>
         <h2 class="h2">API Токен</h2>
         <hr>
-        {{ Form::open(['route' => 'settings.token']) }}
+        {{ Html::form(['route' => 'settings.token']) }}
 
         <div class="form-group">
-            {{ Form::label('token', 'Токен') }}
-            {{ Form::text('password', $token,['class' => 'form-control','readonly' => 'true']) }}
+            {{ Html::label('token', 'Токен') }}
+            {{ Html::text('password', $token,['class' => 'form-control','readonly' => 'true']) }}
         </div>
 
-        {{ Form::submit('Получить новый токен', ['class' => 'btn btn-primary']) }}
+        {{ Html::submit('Получить новый токен', ['class' => 'btn btn-primary']) }}
 
-        {{ Form::close() }}
+        {{ Html::close() }}
     </main>
 @endsection

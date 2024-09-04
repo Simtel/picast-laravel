@@ -18,15 +18,15 @@
                 </ul>
             </div>
         @endif
-        {{ Form::open(['route' => 'youtube.store']) }}
+        {{ Html::form('POST',route('youtube.store'))->open()}}
 
         <div class="form-group">
-            {{ Form::label('url', 'Сссылка') }}
-            {{ Form::text('url', Form::old('url'), ['class' => 'form-control']) }}
+            {{ Html::label('url', 'Сссылка') }}
+            {{ Html::text('url', ) }}
         </div>
 
-        {{ Form::submit('Сохранить видео', array('class' => 'btn btn-primary')) }}
+        {{ Html::submit('Сохранить видео') }}
 
-        {{ Form::close() }}
+        {{ Html::form()->close() }}
     </main>
 @endsection

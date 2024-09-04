@@ -16,27 +16,27 @@
                 </ul>
             </div>
         @endif
-        {{ Form::open(['route' => ['user.update',$user]]) }}
+        {{ Html::form(['route' => ['user.update',$user]]) }}
 
         <div class="form-group">
-            {{ Form::label('name', 'Имя') }}
-            {{ Form::text('name', $user->name, ['class' => 'form-control']) }}
+            {{ Html::label('name', 'Имя') }}
+            {{ Html::text('name', $user->name, ['class' => 'form-control']) }}
         </div>
         <div class="form-group">
-            {{ Form::label('email', 'E-mail') }}
-            {{ Form::text('email', $user->email, ['class' => 'form-control']) }}
+            {{ Html::label('email', 'E-mail') }}
+            {{ Html::text('email', $user->email, ['class' => 'form-control']) }}
         </div>
 
         <div class="form-group">
-            {{ Form::label('roles[]', 'Роли') }}
+            {{ Html::label('roles[]', 'Роли') }}
             @foreach($roles as $role)
-                {{ Form::checkbox('roles[]', $role->name, $user->hasRole($role->name)) }} {{$role->name}}
+                {{ Html::checkbox('roles[]', $role->name, $user->hasRole($role->name)) }} {{$role->name}}
             @endforeach
         </div>
 
-        {{ Form::submit('Сохранить', ['class' => 'btn btn-primary']) }}
+        {{ Html::submit('Сохранить', ['class' => 'btn btn-primary']) }}
 
-        {{ Form::close() }}
+        {{ Html::close() }}
     </main>
 
 @endsection

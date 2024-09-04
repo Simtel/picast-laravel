@@ -182,7 +182,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
+        Spatie\Html\HtmlServiceProvider::class,
 
     ],
 
@@ -236,7 +236,7 @@ return [
         'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
         'Whois' => App\Facades\Whois::class,
         'Form' => Collective\Html\FormFacade::class,
-        'Html' => Collective\Html\HtmlFacade::class,
+        'Html' => Spatie\Html\Facades\Html::class,
         'WhoisService' => WhoisService::class,
     ],
 

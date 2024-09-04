@@ -2,8 +2,8 @@
   "preset": "psr12",
   "exclude": [
     ".github",
-    "docker",
-    "hooks",
+    ".docker",
+    ".hooks",
     "storage"
   ]
 }

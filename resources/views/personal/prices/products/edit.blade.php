@@ -15,17 +15,17 @@
                 </ul>
             </div>
         @endif
-        {{ Form::open(['url' => route('prices.product.update',['product' => $product]),'files' => true]) }}
+        {{ Html::form(['url' => route('prices.product.update',['product' => $product]),'files' => true]) }}
 
         <div class="form-group">
-            {{ Form::label('name', 'Название') }}
-            {{ Form::text('name', $product->name, ['class' => 'form-control']) }}
+            {{ Html::label('name', 'Название') }}
+            {{ Html::text('name', $product->name, ['class' => 'form-control']) }}
         </div>
 
         @foreach($market_places as $place)
             <div class="form-group">
-                {{ Form::label('urls['.$place->id.']', 'Адрес на '.$place->name) }}
-                {{ Form::text(
+                {{ Html::label('urls['.$place->id.']', 'Адрес на '.$place->name) }}
+                {{ Html::text(
                             'urls['.$place->id.']',
                             $product->urls->firstWhere('marketplace_id',$place->id)->url,
                             ['class' => 'form-control']
@@ -33,8 +33,8 @@
                 }}
             </div>
         @endforeach
-        {{ Form::submit('Сохранить', ['class' => 'btn btn-primary']) }}
+        {{ Html::submit('Сохранить', ['class' => 'btn btn-primary']) }}
 
-        {{ Form::close() }}
+        {{ Html::close() }}
     </main>
 @endsection

@@ -14,13 +14,13 @@
         Истекает: {{$domain->expire_at}}</br>
         Дата обновления: {{$domain->updated_at}}</br>
         <br> <br>
-        {{ Form::open(['route' => ['domains.delete_old_whois',$domain->id]]) }}
+        {{ Html::form(['route' => ['domains.delete_old_whois',$domain->id]]) }}
         <div class="form-group">
-            {{ Form::label('delete_old_whois', 'Удалить записи whois старше') }}
-            {{ Form::select('delete_old_whois', \App\Facades\Domains\WhoisService::getTimeFrameOptions(),null,['class' => 'form-control']) }}
+            {{ Html::label('delete_old_whois', 'Удалить записи whois старше') }}
+            {{ Html::select('delete_old_whois', \App\Facades\Domains\WhoisService::getTimeFrameOptions(),null,['class' => 'form-control']) }}
         </div>
-        {{ Form::submit('Удалить', array('class' => 'btn btn-primary')) }}
-        {{ Form::close() }}
+        {{ Html::submit('Удалить', array('class' => 'btn btn-primary')) }}
+        {{ Html::close() }}
         <br> <br>
         <table class="table">
             <thead>

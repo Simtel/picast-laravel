@@ -15,21 +15,21 @@
                 </ul>
             </div>
         @endif
-        {{ Form::open(['route' => 'prices.product.store','files' => true]) }}
+        {{ Html::form(['route' => 'prices.product.store','files' => true]) }}
 
         <div class="form-group">
-            {{ Form::label('name', 'Название') }}
-            {{ Form::text('name', Form::old('name'), ['class' => 'form-control']) }}
+            {{ Html::label('name', 'Название') }}
+            {{ Html::text('name', Html::old('name'), ['class' => 'form-control']) }}
         </div>
 
         @foreach($market_places as $place)
             <div class="form-group">
-                {{ Form::label('urls['.$place->id.']', 'Адрес на '.$place->name) }}
-                {{ Form::text('urls['.$place->id.']', Form::old('urls['.$place->id.']'), ['class' => 'form-control']) }}
+                {{ Html::label('urls['.$place->id.']', 'Адрес на '.$place->name) }}
+                {{ Html::text('urls['.$place->id.']', Html::old('urls['.$place->id.']'), ['class' => 'form-control']) }}
             </div>
         @endforeach
-        {{ Form::submit('Сохранить', ['class' => 'btn btn-primary']) }}
+        {{ Html::submit('Сохранить', ['class' => 'btn btn-primary']) }}
 
-        {{ Form::close() }}
+        {{ Html::close() }}
     </main>
 @endsection

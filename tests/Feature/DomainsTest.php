@@ -43,7 +43,7 @@ class DomainsTest extends TestCase
         $checkJob = $this->partialMock(CheckExpireDomains::class);
         $checkJob->shouldAllowMockingProtectedMethods();
         $job = $checkJob->shouldReceive('getDomains');
-        if($job instanceof ExpectationInterface) {
+        if ($job instanceof ExpectationInterface) {
             $job->andReturn($domains);
         }
         $checkJob->handle();

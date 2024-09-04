@@ -16,19 +16,19 @@
                 </ul>
             </div>
         @endif
-        {{ Form::open(['route' => 'invite.user']) }}
+        {{ Html::form('POST',route('invite.user')) }}
 
         <div class="form-group">
-            {{ Form::label('name', 'Имя') }}
-            {{ Form::text('name', Form::old('name'), ['class' => 'form-control']) }}
+            {{ Html::label('name', 'Имя') }}
+            {{ Html::text('name') }}
         </div>
         <div class="form-group">
-            {{ Form::label('email', 'E-mail') }}
-            {{ Form::text('email', Form::old('email'), ['class' => 'form-control']) }}
+            {{ Html::label('email', 'E-mail') }}
+            {{ Html::text('email') }}
         </div>
 
-        {{ Form::submit('Пригласить пользователя', ['class' => 'btn btn-primary']) }}
+        {{ Html::submit('Пригласить пользователя', ['class' => 'btn btn-primary']) }}
 
-        {{ Form::close() }}
+        {{ Html::form()->close() }}
     </main>
 @endsection
