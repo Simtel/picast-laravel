@@ -31,6 +31,6 @@
 
         {{ Html::submit('Сохранить', ['class' => 'btn btn-primary']) }}
 
-        {{ Html::close() }}
+        {{ Html::form()->close() }}
     </main>
 @endsection

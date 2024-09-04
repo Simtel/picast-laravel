@@ -16,7 +16,7 @@
                 </ul>
             </div>
         @endif
-        {{ Html::form('POST',route('invite.user')) }}
+        {{ Html::form('POST',route('invite.user'))->open() }}
 
         <div class="form-group">
             {{ Html::label('name', 'Имя') }}

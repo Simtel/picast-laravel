@@ -22,7 +22,7 @@
 
         <div class="form-group">
             {{ Html::label('url', 'Сссылка') }}
-            {{ Html::text('url', ) }}
+            {{ Html::text('url') }}
         </div>
 
         {{ Html::submit('Сохранить видео') }}

@@ -44,7 +44,7 @@
                         {{ Html::form(['url' => route('prices.product.destroy',['product' => $product->id]), 'class' => 'pull-right']) }}
                         {{ Html::hidden('_method', 'DELETE') }}
                         {{ Html::submit('Удалить', ['class' => 'btn btn-warning btn-sm']) }}
-                        {{ Html::close() }}
+                        {{ Html::form()->close() }}
                     </td>
                 </tr>
             @endforeach
