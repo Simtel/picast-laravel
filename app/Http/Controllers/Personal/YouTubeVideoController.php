@@ -21,7 +21,7 @@ class YouTubeVideoController extends Controller
 {
     public function __construct(private readonly GetVideoFormatsService $getVideoFormatsService)
     {
-        $this->authorizeResource(YouTubeVideo::class, 'youTubeVideo');
+        $this->authorizeResource(YouTubeVideo::class, 'video');
     }
 
     /**
@@ -81,6 +81,12 @@ class YouTubeVideoController extends Controller
             $format->resolution = $formatDto->getResolution();
             $format->save();
         }
+        return redirect()->route('youtube.index');
+    }
+
+    public function destroy(YouTubeVideo $video): RedirectResponse
+    {
+        $video->delete();
         return redirect()->route('youtube.index');
     }
 }

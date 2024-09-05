@@ -18,9 +18,9 @@ class YouTubeVideoPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, YouTubeVideo $youTubeVideo): bool
+    public function view(User $user, YouTubeVideo $video): bool
     {
-        return $user->id === $youTubeVideo->user_id;
+        return $user->id === $video->user_id;
     }
 
     /**
@@ -34,32 +34,32 @@ class YouTubeVideoPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, YouTubeVideo $youTubeVideo): bool
+    public function update(User $user, YouTubeVideo $video): bool
     {
-        return $user->id === $youTubeVideo->user_id;
+        return $user->id === $video->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, YouTubeVideo $youTubeVideo): bool
+    public function delete(User $user, YouTubeVideo $video): bool
     {
-        return $user->id === $youTubeVideo->user_id;
+        return $user->id === $video->user_id;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, YouTubeVideo $youTubeVideo): bool
+    public function restore(User $user, YouTubeVideo $video): bool
     {
-        return $user->id === $youTubeVideo->user_id;
+        return $user->id === $video->user_id;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, YouTubeVideo $youTubeVideo): bool
+    public function forceDelete(User $user, YouTubeVideo $video): bool
     {
-        return $user->id === $youTubeVideo->user_id;
+        return $user->id === $video->user_id;
     }
 }
