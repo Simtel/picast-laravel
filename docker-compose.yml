@@ -26,6 +26,7 @@ services:
     volumes:
       - './:/var/www/html'
       - './.docker/php:/usr/local/etc/php/custom.d'
+      - './.docker/supervisor/conf/:/etc/supervisor/conf.d'
     links:
       - db
       - memcached

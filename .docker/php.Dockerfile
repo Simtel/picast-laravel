@@ -26,6 +26,9 @@ RUN docker-php-ext-install \
     pdo_mysql \
     zip
 
+RUN apk add --no-cache \
+    supervisor
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 # fix this issue https://ask.fedoraproject.org/t/sudo-setrlimit-rlimit-core-operation-not-permitted/4223

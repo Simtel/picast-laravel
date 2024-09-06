@@ -40,3 +40,6 @@ pint: ##Run pint analyse
 
 test: ##Run pint analyse
 	docker exec -it picast_php sh -c "php artisan test"
+
+worker:
+	docker exec -it picast_php sh -c "/usr/bin/supervisord -c /etc/supervisor/conf.d/laravel-worker.conf"

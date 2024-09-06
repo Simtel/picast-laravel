@@ -2,12 +2,15 @@
 
 namespace App\Models\Youtube;
 
+use Alaouy\Youtube\Facades\Youtube;
 use App\Exceptions\NotFoundS3VideoFileException;
 use App\Helpers\Files;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Log;
 
 /**
  * Class YouTubeVideoController
@@ -82,8 +85,17 @@ class YouTubeVideo extends Model
     {
         $filePath = 'videos/' . $this->file_link;
         if (!Storage::disk('s3')->exists($filePath)) {
-            throw new NotFoundS3VideoFileException('File not found on S3: ' . $filePath);
+            Log::debug('File not found on S3: ' . $filePath);
+            return;
         }
         Storage::disk('s3')->delete($filePath);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getVideoId(): string
+    {
+        return Youtube::parseVidFromURL($this->url);
     }
 }

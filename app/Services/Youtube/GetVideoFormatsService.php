@@ -3,6 +3,7 @@
 namespace App\Services\Youtube;
 
 use App\Dto\Youtube\FormatVideoDto;
+use App\Models\Youtube\YouTubeVideo;
 use Exception;
 use JsonException;
 use RuntimeException;
@@ -10,13 +11,12 @@ use RuntimeException;
 class GetVideoFormatsService
 {
     /**
-     * @param string $videoId
      * @return FormatVideoDto[]
      * @throws Exception
      */
-    public function getVideoFormats(string $videoId): array
+    public function getVideoFormats(YouTubeVideo $video): array
     {
-        $videoUrl = $this->buildVideoUrl($videoId);
+        $videoUrl = $this->buildVideoUrl($video->getVideoId());
         $jsonResult = $this->executeCommand($videoUrl);
         $videoInfo = $this->decodeJson($jsonResult);
 

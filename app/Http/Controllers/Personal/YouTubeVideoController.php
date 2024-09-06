@@ -57,6 +57,7 @@ class YouTubeVideoController extends Controller
                 'user_id' => Auth::id()
             ]
         );
+
         return redirect()->route('youtube.index');
     }
 
@@ -65,11 +66,10 @@ class YouTubeVideoController extends Controller
      */
     public function refreshFormats(YouTubeVideo $video): Response|Redirector|Application|RedirectResponse
     {
-        $videoId = Youtube::parseVidFromURL($video->url);
-        $videoInfo = Youtube::getVideoInfo($videoId);
+        $videoInfo = Youtube::getVideoInfo($video->getVideoId());
         $video->title = $videoInfo->snippet->title;
         $video->save();
-        $formats = $this->getVideoFormatsService->getVideoFormats($videoId);
+        $formats = $this->getVideoFormatsService->getVideoFormats($video);
         foreach ($formats as $formatDto) {
             $format = new VideoFormats();
             $format->video_id = $video->id;
