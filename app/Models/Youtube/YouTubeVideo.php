@@ -2,10 +2,12 @@
 
 namespace App\Models\Youtube;
 
+use App\Exceptions\NotFoundS3VideoFileException;
 use App\Helpers\Files;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class YouTubeVideoController
@@ -43,7 +45,7 @@ class YouTubeVideo extends Model
     /**
      * @var array<string, mixed>
      */
-    protected $attributes = ['is_download' => false, 'title' => '', 'thumb' => '', 'file_link' => '','size' => ''];
+    protected $attributes = ['is_download' => false, 'title' => '', 'thumb' => '', 'file_link' => '', 'size' => ''];
     protected $fillable = ['user_id', 'url', 'is_download', 'created_at', 'updated_at'];
 
     public function getFileUrl(): string
@@ -71,5 +73,17 @@ class YouTubeVideo extends Model
     public function formats(): HasMany
     {
         return $this->hasMany(VideoFormats::class, 'video_id');
+    }
+
+    /**
+     * @throws NotFoundS3VideoFileException
+     */
+    public function deleteFile(): void
+    {
+        $filePath = 'videos/' . $this->file_link;
+        if (!Storage::disk('s3')->exists($filePath)) {
+            throw new NotFoundS3VideoFileException('File not found on S3: ' . $filePath);
+        }
+        Storage::disk('s3')->delete($filePath);
     }
 }
