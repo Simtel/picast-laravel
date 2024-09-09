@@ -47,3 +47,21 @@ jobs:
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.SSH_KEY }}
           script: cd ${{ secrets.PUBLISH_DIR }} && php artisan migrate --force
+
+      - name: Stop worker
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.SSH_KEY }}
+          script: cd ${{ secrets.PUBLISH_DIR }} && php artisan queue:restart
+
+      - name: Run worker
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.SSH_KEY }}
+          script: cd ${{ secrets.PUBLISH_DIR }} && nohup php artisan queue:work --daemon >> storage/logs/nohup-worker.log &
