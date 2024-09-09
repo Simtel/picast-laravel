@@ -64,6 +64,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.SSH_KEY }}
+          command_timeout: "30s"
           script: |
             cd ${{ secrets.PUBLISH_DIR }}
             nohup php artisan queue:work --daemon >> storage/logs/nohup-worker.log & 
