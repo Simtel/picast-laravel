@@ -31,75 +31,84 @@ class YoutubeVideosDownload extends Command implements Isolatable
      */
     public function handle(): void
     {
-        $this->output->info('Загрузка видео...');
-        $videos = YouTubeVideo::whereIsDownload(false)->get();
-        foreach ($videos as $video) {
-            if ($video->url === '') {
-                continue;
+        $lockKey = 'youtube_download_lock';
+        $lock = cache()->lock($lockKey, 600);
+        if ($lock->get()) {
+            $videos = YouTubeVideo::whereIsDownload(false)->get();
+            if (count($videos) > 0) {
+                $this->output->info('Загрузка видео...');
             }
-            $this->output->info('Обработка видео:' . $video->url);
-            $videoId = Youtube::parseVidFromURL($video->url);
-            $this->output->info($video->title);
-
-            $yt = new YoutubeDl();
-
-            $progressBar = $this->output->createProgressBar();
-            $progressBar->setBarWidth(50);
-            $progressBar->setFormat(
-                ' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%  %size% %speed%'
-            );
-            $progressBar->start(100);
-            $yt->onProgress(
-                function (
-                    ?string $progressTarget,
-                    string $percentage,
-                    string $size,
-                    ?string $speed,
-                    ?string $eta,
-                    ?string $totalTime
-                ) use ($progressBar): void {
-                    $percentNumber = (int)rtrim($percentage, '%');
-                    $progressBar->setProgress($percentNumber);
-                    $progressBar->setPlaceholderFormatter('size', function ($value) use ($size) {
-                        return $size;
-                    });
-                    $progressBar->setPlaceholderFormatter('speed', function ($value) use ($speed) {
-                        return $speed ?? '';
-                    });
+            foreach ($videos as $video) {
+                if ($video->url === '') {
+                    continue;
                 }
-            );
+                $this->output->info('Обработка видео:' . $video->url);
+                $videoId = Youtube::parseVidFromURL($video->url);
+                $this->output->info($video->title);
 
-            $collection = $yt->download(
-                Options::create()
-                    ->downloadPath(Storage::disk('local')->path('public/videos'))
-                    ->output($videoId . '.%(ext)s')
-                    ->url($video->url)
-                    ->format('299')
-            );
+                $yt = new YoutubeDl();
 
-            foreach ($collection->getVideos() as $element) {
-                if ($element->getError() !== null) {
-                    $this->output->error($element->getError());
-                } else {
-                    $fileName = $videoId . '.' . $element->getExt();
-                    $filePath = 'public/videos' . '/' . $videoId . '.' . $element->getExt();
-                    $this->output->info($filePath);
-                    $this->copyFileToS3(
-                        $filePath,
-                        'videos/' . $fileName,
-                        $this->output
-                    );
-                    $video->is_download = true;
-                    $video->file_link = $fileName;
-                    $video->size = (string)Storage::disk('local')->size($filePath);
-                    $video->save();
-                    Storage::disk('local')->delete($filePath);
-                    $this->output->writeln('');
-                    $this->output->writeln('');
+                $progressBar = $this->output->createProgressBar();
+                $progressBar->setBarWidth(50);
+                $progressBar->setFormat(
+                    ' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%  %size% %speed%'
+                );
+                $progressBar->start(100);
+                $yt->onProgress(
+                    function (
+                        ?string $progressTarget,
+                        string $percentage,
+                        string $size,
+                        ?string $speed,
+                        ?string $eta,
+                        ?string $totalTime
+                    ) use ($progressBar): void {
+                        $percentNumber = (int)rtrim($percentage, '%');
+                        $progressBar->setProgress($percentNumber);
+                        $progressBar->setPlaceholderFormatter('size', function ($value) use ($size) {
+                            return $size;
+                        });
+                        $progressBar->setPlaceholderFormatter('speed', function ($value) use ($speed) {
+                            return $speed ?? '';
+                        });
+                    }
+                );
+
+                $collection = $yt->download(
+                    Options::create()
+                        ->downloadPath(Storage::disk('local')->path('public/videos'))
+                        ->output($videoId . '.%(ext)s')
+                        ->url($video->url)
+                        ->format('299')
+                );
+
+                foreach ($collection->getVideos() as $element) {
+                    if ($element->getError() !== null) {
+                        $this->output->error($element->getError());
+                    } else {
+                        $fileName = $videoId . '.' . $element->getExt();
+                        $filePath = 'public/videos' . '/' . $videoId . '.' . $element->getExt();
+                        $this->output->info($filePath);
+                        $this->copyFileToS3(
+                            $filePath,
+                            'videos/' . $fileName,
+                            $this->output
+                        );
+                        $video->is_download = true;
+                        $video->file_link = $fileName;
+                        $video->size = (string)Storage::disk('local')->size($filePath);
+                        $video->save();
+                        Storage::disk('local')->delete($filePath);
+                        $this->output->writeln('');
+                        $this->output->writeln('');
+                    }
                 }
             }
+            $lock->release();
+            $this->output->success('Закончили скачивание');
+        } else {
+            $this->error('Команда уже выполняется!');
         }
-        $this->output->success('Закончили скачивание');
     }
 
     public function copyFileToS3(string $localFilePath, string $s3FilePath, OutputStyle $output): void
