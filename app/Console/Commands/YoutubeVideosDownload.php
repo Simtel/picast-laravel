@@ -7,11 +7,12 @@ use App\Models\Youtube\YouTubeVideo;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
+use Illuminate\Contracts\Console\Isolatable;
 use Illuminate\Support\Facades\Storage;
 use YoutubeDl\Options;
 use YoutubeDl\YoutubeDl;
 
-class YoutubeVideosDownload extends Command
+class YoutubeVideosDownload extends Command implements Isolatable
 {
     /**
      * @var string
@@ -30,6 +31,7 @@ class YoutubeVideosDownload extends Command
      */
     public function handle(): void
     {
+        $this->output->info('Загрузка видео...');
         $videos = YouTubeVideo::whereIsDownload(false)->get();
         foreach ($videos as $video) {
             if ($video->url === '') {

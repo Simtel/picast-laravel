@@ -4,12 +4,12 @@ namespace App\Models\Youtube;
 
 use Alaouy\Youtube\Facades\Youtube;
 use App\Exceptions\NotFoundS3VideoFileException;
-use App\Helpers\Files;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Number;
 use Log;
 
 /**
@@ -67,7 +67,7 @@ class YouTubeVideo extends Model
         if ($this->size === '') {
             return '';
         }
-        return Files::bytesToHuman((int)$this->size);
+        return Number::fileSize((int)$this->size, 2);
     }
 
     /**

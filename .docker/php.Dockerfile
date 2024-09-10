@@ -16,7 +16,8 @@ RUN apk update && apk add --no-cache \
     unzip \
     vim \
     wget \
-    zip
+    zip \
+    icu-dev
 
 RUN docker-php-ext-install \
     bcmath \
@@ -24,7 +25,8 @@ RUN docker-php-ext-install \
     pdo \
     mysqli \
     pdo_mysql \
-    zip
+    zip \
+    intl
 
 RUN apk add --no-cache \
     supervisor
