@@ -17,7 +17,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Ролик</th>
                 <th scope="col">Добавлено</th>
-                <th scope="col">Скачено</th>
+                <th scope="col">Cтатус</th>
                 <th scope="col">Ссылка</th>
                 <th scope="col">Форматы</th>
                 <th scope="col"></th>
@@ -32,7 +32,7 @@
                            target="_blank">{{ $video->title != '' ? $video->title : $video->url }}</a>
                     </td>
                     <td>{{ $video->created_at }}</td>
-                    <td>{{ $video->is_download ? 'Да' : 'Нет'}}</td>
+                    <td>{{ $video->status->title}}</td>
                     <td>
                         @if($video->is_download)
                             <a href="{{ $video->getFileUrl() }}" target="_blank">Скачать ({{$video->getSize()}})</a>

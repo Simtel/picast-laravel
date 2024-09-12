@@ -6,6 +6,7 @@ use Alaouy\Youtube\Facades\Youtube;
 use App\Exceptions\NotFoundS3VideoFileException;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -97,5 +98,9 @@ class YouTubeVideo extends Model
     public function getVideoId(): string
     {
         return Youtube::parseVidFromURL($this->url);
+    }
+
+    public function status(): BelongsTo {
+        return $this->belongsTo(YouTubeVideoStatus::class,'status_id');
     }
 }
