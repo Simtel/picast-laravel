@@ -1,8 +1,7 @@
 <?php
 
 
-use Database\Seeders\DomainTableSeeder;
-use Database\Seeders\UsersTableSeeder;
+use Database\Seeders\YouTubeVideoStatusSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,9 +11,8 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->call(UsersTableSeeder::class);
-        $this->call(DomainTableSeeder::class);
+        $this->call(YouTubeVideoStatusSeeder::class);
     }
 }

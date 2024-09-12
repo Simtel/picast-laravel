@@ -48,6 +48,15 @@ jobs:
           PASSWORD: ${{ secrets.SSH_KEY }}
           script: cd ${{ secrets.PUBLISH_DIR }} && php artisan migrate --force
 
+      - name: Db seed
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.SSH_KEY }}
+          script: cd ${{ secrets.PUBLISH_DIR }} && php artisan db:seed
+
       - name: Stop worker
         uses: appleboy/ssh-action@master
         with:
