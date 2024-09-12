@@ -41,6 +41,9 @@ use Log;
  * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereTitle($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Youtube\VideoFormats> $formats
  * @property-read int|null $formats_count
+ * @property int|null $status_id
+ * @property-read \App\Models\Youtube\YouTubeVideoStatus|null $status
+ * @method static \Illuminate\Database\Eloquent\Builder|YouTubeVideo whereStatusId($value)
  * @mixin \Eloquent
  */
 class YouTubeVideo extends Model
@@ -50,7 +53,7 @@ class YouTubeVideo extends Model
      * @var array<string, mixed>
      */
     protected $attributes = ['is_download' => false, 'title' => '', 'thumb' => '', 'file_link' => '', 'size' => ''];
-    protected $fillable = ['user_id', 'url', 'is_download', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'url', 'is_download', 'created_at', 'updated_at', 'status_id'];
 
     public function getFileUrl(): string
     {
@@ -100,7 +103,11 @@ class YouTubeVideo extends Model
         return Youtube::parseVidFromURL($this->url);
     }
 
-    public function status(): BelongsTo {
-        return $this->belongsTo(YouTubeVideoStatus::class,'status_id');
+    /**
+     * @return BelongsTo<YouTubeVideoStatus,YouTubeVideo >
+     */
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(YouTubeVideoStatus::class, 'status_id');
     }
 }

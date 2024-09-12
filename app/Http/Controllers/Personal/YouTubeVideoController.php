@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\YouTubeUrlRequest;
 use App\Models\Youtube\VideoFormats;
 use App\Models\Youtube\YouTubeVideo;
+use App\Repositories\YouTubeVideoStatusRepository;
 use App\Services\Youtube\GetVideoFormatsService;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -19,8 +20,10 @@ use Illuminate\Support\Facades\Auth;
 
 class YouTubeVideoController extends Controller
 {
-    public function __construct(private readonly GetVideoFormatsService $getVideoFormatsService)
-    {
+    public function __construct(
+        private readonly GetVideoFormatsService $getVideoFormatsService,
+        private readonly YouTubeVideoStatusRepository $statusRepository,
+    ) {
         $this->authorizeResource(YouTubeVideo::class, 'video');
     }
 
@@ -54,7 +57,8 @@ class YouTubeVideoController extends Controller
         YouTubeVideo::create(
             [
                 'url'     => $request->get('url'),
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
+                'status_id' => $this->statusRepository->findByCode('new')->id,
             ]
         );
 
