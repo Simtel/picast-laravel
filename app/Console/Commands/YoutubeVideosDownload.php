@@ -3,7 +3,10 @@
 namespace App\Console\Commands;
 
 use Alaouy\Youtube\Facades\Youtube;
-use App\Models\Youtube\YouTubeVideo;
+use App\Models\Youtube\Video;
+use App\Models\Youtube\VideoFile;
+use App\Models\Youtube\VideoFormats;
+use App\Repositories\YouTubeVideoStatusRepository;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
@@ -24,6 +27,11 @@ class YoutubeVideosDownload extends Command implements Isolatable
      */
     protected $description = 'Download all videos';
 
+    public function __construct(private readonly YouTubeVideoStatusRepository $statusRepository)
+    {
+        parent::__construct();
+    }
+
 
     /**
      * @return void
@@ -34,12 +42,16 @@ class YoutubeVideosDownload extends Command implements Isolatable
         $lockKey = 'youtube_download_lock';
         $lock = cache()->lock($lockKey, 600);
         if ($lock->get()) {
-            $videos = YouTubeVideo::whereIsDownload(false)->get();
+            $videos = Video::whereStatusId($this->statusRepository->findByCode('new')->id)->get();
             if (count($videos) > 0) {
                 $this->output->info('Загрузка видео...');
             }
             foreach ($videos as $video) {
                 if ($video->url === '') {
+                    continue;
+                }
+                $format = $this->getVideoFormat($video);
+                if ($format === null) {
                     continue;
                 }
                 $this->output->info('Обработка видео:' . $video->url);
@@ -79,7 +91,7 @@ class YoutubeVideosDownload extends Command implements Isolatable
                         ->downloadPath(Storage::disk('local')->path('public/videos'))
                         ->output($videoId . '.%(ext)s')
                         ->url($video->url)
-                        ->format('299')
+                        ->format((string)$format->format_id)
                 );
 
                 foreach ($collection->getVideos() as $element) {
@@ -94,9 +106,14 @@ class YoutubeVideosDownload extends Command implements Isolatable
                             'videos/' . $fileName,
                             $this->output
                         );
-                        $video->is_download = true;
-                        $video->file_link = $fileName;
-                        $video->size = (string)Storage::disk('local')->size($filePath);
+                        $videoFile = new VideoFile();
+                        $videoFile->format_id = $format->id;
+                        $videoFile->video_id = $video->id;
+                        $videoFile->file_link = $fileName;
+                        $videoFile->size = (string)Storage::disk('local')->size($filePath);
+                        $videoFile->save();
+
+                        $video->status_id = $this->statusRepository->findByCode('downloaded')->id;
                         $video->save();
                         Storage::disk('local')->delete($filePath);
                         $this->output->writeln('');
@@ -111,7 +128,7 @@ class YoutubeVideosDownload extends Command implements Isolatable
         }
     }
 
-    public function copyFileToS3(string $localFilePath, string $s3FilePath, OutputStyle $output): void
+    private function copyFileToS3(string $localFilePath, string $s3FilePath, OutputStyle $output): void
     {
         if (Storage::disk('local')->exists($localFilePath)) {
             $content = Storage::disk('local')->readStream($localFilePath);
@@ -126,5 +143,16 @@ class YoutubeVideosDownload extends Command implements Isolatable
         }
 
         $output->error('Файл не найден!');
+    }
+
+    private function getVideoFormat(Video $video): ?VideoFormats
+    {
+        foreach ($video->formats as $format) {
+            if ($format->resolution === '1920x1080' && $format->format_ext === 'mp4') {
+                return $format;
+            }
+        }
+
+        return null;
     }
 }

@@ -18,7 +18,6 @@
                 <th scope="col">Ролик</th>
                 <th scope="col">Добавлено</th>
                 <th scope="col">Cтатус</th>
-                <th scope="col">Ссылка</th>
                 <th scope="col">Форматы</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -34,12 +33,8 @@
                     <td>{{ $video->created_at }}</td>
                     <td>{{ $video->status->title}}</td>
                     <td>
-                        @if($video->is_download)
-                            <a href="{{ $video->getFileUrl() }}" target="_blank">Скачать ({{$video->getSize()}})</a>
-                        @endif
-                    </td>
-                    <td>
                         <select name="video_formats" id="video_formats">
+                            <option >---</option>
                             @foreach($video->formats as $format)
                                 <option value="{{ $format->format_id }}">{{ $format->format_ext }} {{ $format->resolution }} ({{$format->vcodec}})</option>
                             @endforeach

@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Youtube\YouTubeVideo;
+use App\Models\Youtube\Video;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -13,10 +13,10 @@ class YouTubeVideoCreated
     use InteractsWithSockets;
     use SerializesModels;
 
-    public YouTubeVideo $video;
+    public Video $video;
 
 
-    public function __construct(YouTubeVideo $video)
+    public function __construct(Video $video)
     {
 
         $this->video = $video;

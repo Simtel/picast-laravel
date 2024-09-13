@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Youtube\YouTubeVideo;
+use App\Models\Youtube\Video;
 
 class YouTubeVideoPolicy
 {
@@ -18,7 +18,7 @@ class YouTubeVideoPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, YouTubeVideo $video): bool
+    public function view(User $user, Video $video): bool
     {
         return $user->id === $video->user_id;
     }
@@ -34,7 +34,7 @@ class YouTubeVideoPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, YouTubeVideo $video): bool
+    public function update(User $user, Video $video): bool
     {
         return $user->id === $video->user_id;
     }
@@ -42,7 +42,7 @@ class YouTubeVideoPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, YouTubeVideo $video): bool
+    public function delete(User $user, Video $video): bool
     {
         return $user->id === $video->user_id;
     }
@@ -50,7 +50,7 @@ class YouTubeVideoPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, YouTubeVideo $video): bool
+    public function restore(User $user, Video $video): bool
     {
         return $user->id === $video->user_id;
     }
@@ -58,7 +58,7 @@ class YouTubeVideoPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, YouTubeVideo $video): bool
+    public function forceDelete(User $user, Video $video): bool
     {
         return $user->id === $video->user_id;
     }

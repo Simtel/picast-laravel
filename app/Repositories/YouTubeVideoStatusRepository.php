@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Youtube\YouTubeVideoStatus;
+use App\Models\Youtube\VideoStatus;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class YouTubeVideoStatusRepository
@@ -11,12 +11,12 @@ class YouTubeVideoStatusRepository
      * Найти статус видео по ID
      *
      * @param int $id
-     * @return YouTubeVideoStatus
+     * @return VideoStatus
      * @throws ModelNotFoundException
      */
-    public function findById(int $id): YouTubeVideoStatus
+    public function findById(int $id): VideoStatus
     {
-        $status = YouTubeVideoStatus::find($id);
+        $status = VideoStatus::find($id);
         if (!$status) {
             throw new ModelNotFoundException("Статус видео с ID {$id} не найден.");
         }
@@ -27,12 +27,12 @@ class YouTubeVideoStatusRepository
      * Найти статус видео по заголовку
      *
      * @param string $title
-     * @return YouTubeVideoStatus
+     * @return VideoStatus
      * @throws ModelNotFoundException
      */
-    public function findByTitle(string $title): YouTubeVideoStatus
+    public function findByTitle(string $title): VideoStatus
     {
-        $status = YouTubeVideoStatus::where('title', $title)->first();
+        $status = VideoStatus::where('title', $title)->first();
         if (!$status) {
             throw new ModelNotFoundException("Статус видео с заголовком '{$title}' не найден.");
         }
@@ -43,12 +43,12 @@ class YouTubeVideoStatusRepository
      * Найти статус видео по коду
      *
      * @param string $code
-     * @return YouTubeVideoStatus
+     * @return VideoStatus
      * @throws ModelNotFoundException
      */
-    public function findByCode(string $code): YouTubeVideoStatus
+    public function findByCode(string $code): VideoStatus
     {
-        $status = YouTubeVideoStatus::where('code', $code)->first();
+        $status = VideoStatus::where('code', $code)->first();
         if ($status === null) {
             throw new ModelNotFoundException("Статус видео с кодом '{$code}' не найден.");
         }

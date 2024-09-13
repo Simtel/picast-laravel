@@ -7,7 +7,7 @@ use App\Events\YouTubeVideoCreated;
 use App\Listeners\GetWhoisDomain;
 use App\Listeners\YouTubeVideoCreateListener;
 use App\Models\Domains\Domain;
-use App\Models\Youtube\YouTubeVideo;
+use App\Models\Youtube\Video;
 use App\Observers\DomainObserver;
 use App\Observers\YouTubeVideoObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -38,7 +38,7 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
 
         Domain::observe(DomainObserver::class);
-        YouTubeVideo::observe(YouTubeVideoObserver::class);
+        Video::observe(YouTubeVideoObserver::class);
         //
     }
 }

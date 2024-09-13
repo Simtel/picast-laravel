@@ -6,7 +6,7 @@ use Alaouy\Youtube\Facades\Youtube;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\YouTubeUrlRequest;
 use App\Models\Youtube\VideoFormats;
-use App\Models\Youtube\YouTubeVideo;
+use App\Models\Youtube\Video;
 use App\Repositories\YouTubeVideoStatusRepository;
 use App\Services\Youtube\GetVideoFormatsService;
 use Exception;
@@ -24,7 +24,7 @@ class YouTubeVideoController extends Controller
         private readonly GetVideoFormatsService $getVideoFormatsService,
         private readonly YouTubeVideoStatusRepository $statusRepository,
     ) {
-        $this->authorizeResource(YouTubeVideo::class, 'video');
+        $this->authorizeResource(Video::class, 'video');
     }
 
     /**
@@ -34,7 +34,7 @@ class YouTubeVideoController extends Controller
      */
     public function index(): View|Factory|Response|Application
     {
-        $videos = YouTubeVideo::whereUserId(Auth()->id())->paginate(15);
+        $videos = Video::whereUserId(Auth()->id())->paginate(15);
         return view('personal.youtube_videos.index', ['videos' => $videos]);
     }
 
@@ -54,7 +54,7 @@ class YouTubeVideoController extends Controller
      */
     public function store(YouTubeUrlRequest $request): Response|Redirector|Application|RedirectResponse
     {
-        YouTubeVideo::create(
+        Video::create(
             [
                 'url'     => $request->get('url'),
                 'user_id' => Auth::id(),
@@ -68,7 +68,7 @@ class YouTubeVideoController extends Controller
     /**
      * @throws Exception
      */
-    public function refreshFormats(YouTubeVideo $video): Response|Redirector|Application|RedirectResponse
+    public function refreshFormats(Video $video): Response|Redirector|Application|RedirectResponse
     {
         $videoInfo = Youtube::getVideoInfo($video->getVideoId());
         $video->title = $videoInfo->snippet->title;
@@ -88,7 +88,7 @@ class YouTubeVideoController extends Controller
         return redirect()->route('youtube.index');
     }
 
-    public function destroy(YouTubeVideo $video): RedirectResponse
+    public function destroy(Video $video): RedirectResponse
     {
         $video->delete();
         return redirect()->route('youtube.index');

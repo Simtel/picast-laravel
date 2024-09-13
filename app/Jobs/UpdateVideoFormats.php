@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Youtube\VideoFormats;
-use App\Models\Youtube\YouTubeVideo;
+use App\Models\Youtube\Video;
 use App\Services\Youtube\GetVideoFormatsService;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,7 +18,7 @@ class UpdateVideoFormats implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        private readonly YouTubeVideo $video,
+        private readonly Video $video,
     ) {
     }
 
