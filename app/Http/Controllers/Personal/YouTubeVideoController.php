@@ -56,8 +56,8 @@ class YouTubeVideoController extends Controller
     {
         Video::create(
             [
-                'url'     => $request->get('url'),
-                'user_id' => Auth::id(),
+                'url'       => $request->get('url'),
+                'user_id'   => Auth::id(),
                 'status_id' => $this->statusRepository->findByCode('new')->id,
             ]
         );
@@ -74,6 +74,14 @@ class YouTubeVideoController extends Controller
         $video->title = $videoInfo->snippet->title;
         $video->save();
         $formats = $this->getVideoFormatsService->getVideoFormats($video);
+        if (count($formats) > 0) {
+            foreach ($video->formats as $format) {
+                $format->delete();
+            }
+        }
+        $video->status_id = $this->statusRepository->findByCode('new')->id;
+        $video->save();
+
         foreach ($formats as $formatDto) {
             $format = new VideoFormats();
             $format->video_id = $video->id;

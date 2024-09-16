@@ -3,6 +3,7 @@
 namespace App\Models\Youtube;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\VideoFormats
@@ -28,9 +29,28 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFormats whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFormats whereVcodec($value)
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFormats whereVideoId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Youtube\VideoFile> $files
+ * @property-read int|null $files_count
  * @mixin \Eloquent
  */
 class VideoFormats extends Model
 {
     protected $table = 'youtube_videos_formats';
+
+    public function delete(): ?bool
+    {
+        foreach ($this->files as $file) {
+            $file->deleteFile();
+        }
+
+        return parent::delete();
+    }
+
+    /**
+     * @return HasMany<VideoFile>
+     */
+    public function files(): HasMany
+    {
+        return $this->hasMany(VideoFile::class);
+    }
 }
