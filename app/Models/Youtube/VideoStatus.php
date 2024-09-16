@@ -2,7 +2,6 @@
 
 namespace App\Models\Youtube;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,8 +20,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class VideoStatus extends Model
 {
-    use HasFactory;
-
     protected $table = 'youtube_video_statuses';
 
 

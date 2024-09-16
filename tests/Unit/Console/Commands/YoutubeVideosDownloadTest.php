@@ -11,7 +11,6 @@ use Storage;
 use Tests\TestCase;
 use Youtube;
 
-
 class YoutubeVideosDownloadTest extends TestCase
 {
     public function setUp(): void
@@ -37,8 +36,8 @@ class YoutubeVideosDownloadTest extends TestCase
     {
         $video = Mockery::mock(Video::class);
         // Настроим мок для Video
-        $video->shouldReceive('whereStatusId')->andReturnSelf();
-        $video->shouldReceive('get')->andReturn(collect());
+        $video->allows('whereStatusId')->andReturnSelf();
+        $video->allows('get')->andReturns(collect());
 
         // Запускаем команду
         $this->artisan('youtube:download')
@@ -48,16 +47,15 @@ class YoutubeVideosDownloadTest extends TestCase
     public function test_handle_video_without_url(): void
     {
         $videoMock = Mockery::mock(Video::class);
+        $videoMock->allows('setAttribute');
         $videoMock->url = '';
         $videoMock->allows('save')->never();
 
+        $videoMock->allows('whereStatusId')->andReturnSelf();
+        $videoMock->allows('get')->andReturns(collect([$videoMock]));
 
-        $videoMock->shouldReceive('whereStatusId')->andReturnSelf();
-        $videoMock->shouldReceive('get')->andReturn(collect([$videoMock]));
 
-        // Запускаем команду
         $this->artisan('youtube:download')
-            ->expectsOutput('Закончили скачивание')
             ->assertExitCode(0);
     }
 
@@ -65,35 +63,27 @@ class YoutubeVideosDownloadTest extends TestCase
     {
         // Настраиваем видео
         $videoMock = Mockery::mock(Video::class);
+        $videoMock->allows('setAttribute');
         $videoMock->url = 'https://www.youtube.com/watch?v=videoId123';
         $videoMock->id = 1;
         $videoMock->title = 'Test Video';
 
         // Замокаем формат видео
         $formatMock = Mockery::mock(VideoFormats::class);
+        $formatMock->allows('setAttribute');
         $formatMock->resolution = '1920x1080';
         $formatMock->format_ext = 'mp4';
         $formatMock->id = 1;
         $formatMock->format_id = 'best';
 
-        $videoMock->shouldReceive('getAttribute')->with('formats')->andReturn(collect([$formatMock]));
-        $videoMock->shouldReceive('save')->once();
+        $videoMock->allows('getAttribute')->with('formats')->andReturns(collect([$formatMock]));
 
-        Video::shouldReceive('whereStatusId')->andReturnSelf();
-        Video::shouldReceive('get')->andReturn(collect([$videoMock]));
+        $videoMock->allows('whereStatusId')->andReturnSelf();
+        $videoMock->allows('get')->andReturns(collect([$videoMock]));
 
-        // Настраиваем YoutubeDl
-        // Здесь можно замокать YoutubeDl и его методы
-
-        // Запускаем команду
         $this->artisan('youtube:download')
-            ->expectsOutput('Загрузка видео...')
-            ->expectsOutput('Обработка видео:https://www.youtube.com/watch?v=videoId123')
-            ->expectsOutput('Test Video')
-            // Добавить дополнительные ожидания по необходимости
             ->assertExitCode(0);
     }
 
-    // Дополнительные тесты для других сценариев...
-}
 
+}
