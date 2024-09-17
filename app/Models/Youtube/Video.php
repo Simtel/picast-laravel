@@ -91,4 +91,15 @@ class Video extends Model
         }
         return parent::delete();
     }
+
+    public function setDownloadedStatus(): void
+    {
+        $this->status_id = VideoStatus::whereCode('downloaded')->first()?->id;
+        $this->save();
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
 }

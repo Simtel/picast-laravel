@@ -23,4 +23,5 @@ class VideoStatus extends Model
     protected $table = 'youtube_video_statuses';
 
 
+
 }
