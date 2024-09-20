@@ -12,6 +12,7 @@
 */
 
 
+use App\Context\Youtube\Infrastructure\Controller\YouTubeVideoController;
 use App\Http\Controllers\Personal\DomainsController;
 use App\Http\Controllers\Personal\ImagesController;
 use App\Http\Controllers\Personal\IndexController;
@@ -21,7 +22,6 @@ use App\Http\Controllers\Personal\ProductsController;
 use App\Http\Controllers\Personal\SettingsController;
 use App\Http\Controllers\Personal\UsersController;
 use App\Http\Controllers\Personal\WhoisController;
-use App\Http\Controllers\Personal\YouTubeVideoController;
 
 Route::get('/', static function () {
     if (Auth::check()) {

@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
+use App\Context\Youtube\Application\Policy\YouTubeVideoPolicy;
+use App\Context\Youtube\Domain\Model\Video;
 use App\Models\Domains\Domain;
-use App\Models\Youtube\Video;
 use App\Policies\DomainPolicy;
-use App\Policies\YouTubeVideoPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider

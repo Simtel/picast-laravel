@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Context\Youtube\Application\Listener;
 
 use Alaouy\Youtube\Facades\Youtube;
-use App\Events\YouTubeVideoCreated;
-use App\Jobs\UpdateVideoFormats;
+use App\Context\Youtube\Domain\Event\YouTubeVideoCreated;
+use App\Context\Youtube\Infrastructure\Jobs\UpdateVideoFormats;
 use Exception;
 
 readonly class YouTubeVideoCreateListener

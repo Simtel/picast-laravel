@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Youtube;
+namespace App\Context\Youtube\Domain\Model;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -30,8 +30,9 @@ use Log;
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereVideoId($value)
- * @property-read \App\Models\Youtube\Video $video
+ * @property-read Video $video
  * @mixin Eloquent
+
  */
 class VideoFile extends Model
 {

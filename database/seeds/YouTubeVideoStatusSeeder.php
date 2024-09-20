@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Youtube\VideoStatus;
 use DB;
 use Illuminate\Database\Seeder;
+use VideoStatus;
 
 class YouTubeVideoStatusSeeder extends Seeder
 {

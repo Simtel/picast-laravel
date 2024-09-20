@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto\Youtube;
+namespace App\Context\Youtube\Domain\Dto;
 
 final readonly class FormatVideoDto
 {

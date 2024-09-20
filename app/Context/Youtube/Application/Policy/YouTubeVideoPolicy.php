@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Policies;
+namespace App\Context\Youtube\Application\Policy;
 
+use App\Context\Youtube\Domain\Model\Video;
 use App\Models\User;
-use App\Models\Youtube\Video;
 
 class YouTubeVideoPolicy
 {

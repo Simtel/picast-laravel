@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Youtube;
+namespace App\Context\Youtube\Domain\Model;
 
 use Alaouy\Youtube\Facades\Youtube;
 use Exception;
@@ -32,12 +32,12 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereThumb($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereTitle($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Youtube\VideoFormats> $formats
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, VideoFormats> $formats
  * @property-read int|null $formats_count
  * @property int|null $status_id
- * @property-read \App\Models\Youtube\VideoStatus|null $status
+ * @property-read VideoStatus|null $status
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereStatusId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Youtube\VideoFile> $files
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, VideoFile> $files
  * @property-read int|null $files_count
  * @mixin \Eloquent
  */
@@ -61,6 +61,7 @@ class Video extends Model
 
 
     /**
+     * @return string
      * @throws Exception
      */
     public function getVideoId(): string

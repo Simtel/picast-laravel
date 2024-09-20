@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Events;
+namespace App\Context\Youtube\Domain\Event;
 
-use App\Models\Youtube\Video;
+use App\Context\Youtube\Domain\Model\Video;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -13,12 +13,8 @@ class YouTubeVideoCreated
     use InteractsWithSockets;
     use SerializesModels;
 
-    public Video $video;
 
-
-    public function __construct(Video $video)
+    public function __construct(public Video $video)
     {
-
-        $this->video = $video;
     }
 }

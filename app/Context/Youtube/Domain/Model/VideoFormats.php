@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models\Youtube;
+namespace App\Context\Youtube\Domain\Model;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -29,9 +30,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFormats whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFormats whereVcodec($value)
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFormats whereVideoId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Youtube\VideoFile> $files
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, VideoFile> $files
  * @property-read int|null $files_count
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class VideoFormats extends Model
 {
@@ -51,6 +52,6 @@ class VideoFormats extends Model
      */
     public function files(): HasMany
     {
-        return $this->hasMany(VideoFile::class);
+        return $this->hasMany(VideoFile::class, 'format_id');
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Context\Youtube\Infrastructure\Repository;
 
-use App\Models\Youtube\VideoStatus;
+use App\Context\Youtube\Domain\Model\VideoStatus;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class YouTubeVideoStatusRepository
@@ -12,7 +12,6 @@ class YouTubeVideoStatusRepository
      *
      * @param int $id
      * @return VideoStatus
-     * @throws ModelNotFoundException
      */
     public function findById(int $id): VideoStatus
     {

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Context\Youtube\Infrastructure\Commands;
 
-use App\Models\Youtube\Video;
-use App\Models\Youtube\VideoFile;
-use App\Models\Youtube\VideoFormats;
-use App\Repositories\YouTubeVideoStatusRepository;
+use App\Context\Youtube\Domain\Model\Video;
+use App\Context\Youtube\Domain\Model\VideoFile;
+use App\Context\Youtube\Domain\Model\VideoFormats;
+use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;

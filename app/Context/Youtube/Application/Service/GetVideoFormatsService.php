@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Youtube;
+namespace App\Context\Youtube\Application\Service;
 
-use App\Dto\Youtube\FormatVideoDto;
-use App\Models\Youtube\Video;
+use App\Context\Youtube\Domain\Dto\FormatVideoDto;
+use App\Context\Youtube\Domain\Model\Video;
 use Exception;
 use JsonException;
 use RuntimeException;

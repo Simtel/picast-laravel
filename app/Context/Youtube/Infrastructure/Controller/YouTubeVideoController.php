@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Personal;
+namespace App\Context\Youtube\Infrastructure\Controller;
 
-use Alaouy\Youtube\Facades\Youtube;
+use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;
+use App\Context\Youtube\Domain\Model\Video;
+use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\YouTubeUrlRequest;
-use App\Models\Youtube\VideoFormats;
-use App\Models\Youtube\Video;
-use App\Repositories\YouTubeVideoStatusRepository;
-use App\Services\Youtube\GetVideoFormatsService;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -21,8 +19,8 @@ use Illuminate\Support\Facades\Auth;
 class YouTubeVideoController extends Controller
 {
     public function __construct(
-        private readonly GetVideoFormatsService $getVideoFormatsService,
         private readonly YouTubeVideoStatusRepository $statusRepository,
+        private readonly RefreshVideoFormatsService $refreshVideoFormatsService
     ) {
         $this->authorizeResource(Video::class, 'video');
     }
@@ -70,29 +68,8 @@ class YouTubeVideoController extends Controller
      */
     public function refreshFormats(Video $video): Response|Redirector|Application|RedirectResponse
     {
-        $videoInfo = Youtube::getVideoInfo($video->getVideoId());
-        $video->title = $videoInfo->snippet->title;
-        $video->save();
-        $formats = $this->getVideoFormatsService->getVideoFormats($video);
-        if (count($formats) > 0) {
-            foreach ($video->formats as $format) {
-                $format->delete();
-            }
-        }
-        $video->status_id = $this->statusRepository->findByCode('new')->id;
-        $video->save();
+        $this->refreshVideoFormatsService->refresh($video);
 
-        foreach ($formats as $formatDto) {
-            $format = new VideoFormats();
-            $format->video_id = $video->id;
-
-            $format->format_id = $formatDto->getFormatId();
-            $format->format_note = $formatDto->getFormatNote();
-            $format->format_ext = $formatDto->getVideoExt();
-            $format->vcodec = $formatDto->getVCodec();
-            $format->resolution = $formatDto->getResolution();
-            $format->save();
-        }
         return redirect()->route('youtube.index');
     }
 

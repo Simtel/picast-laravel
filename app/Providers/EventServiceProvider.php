@@ -2,14 +2,14 @@
 
 namespace App\Providers;
 
+use App\Context\Youtube\Application\Listener\YouTubeVideoCreateListener;
+use App\Context\Youtube\Domain\Event\YouTubeVideoCreated;
+use App\Context\Youtube\Domain\Model\Video;
+use App\Context\Youtube\Domain\Observer\YouTubeVideoObserver;
 use App\Events\DomainCreated;
-use App\Events\YouTubeVideoCreated;
 use App\Listeners\GetWhoisDomain;
-use App\Listeners\YouTubeVideoCreateListener;
 use App\Models\Domains\Domain;
-use App\Models\Youtube\Video;
 use App\Observers\DomainObserver;
-use App\Observers\YouTubeVideoObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
