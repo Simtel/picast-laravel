@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Context\Youtube\Infrastructure\Jobs;
 
 use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;

@@ -5,5 +5,8 @@
     ".docker",
     ".hooks",
     "storage"
-  ]
+  ],
+  "rules": {
+    "declare_strict_types": true
+  }
 }

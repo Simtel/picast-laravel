@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Domains;
 
 use App\Models\User;
@@ -36,7 +38,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|Whois[] $whois
  * @property-read int|null $whois_count
  * @method static Builder|Domain whereUserId($value)
- * @property string $expire_at
+ * @property Carbon $expire_at
  * @property string $owner
  * @method static Builder|Domain whereExpireAt($value)
  * @method static Builder|Domain whereOwner($value)

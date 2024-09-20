@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use App\Models\Images;
 use App\Services\Notifications\TelegramChannelNotification;
 use File;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -37,6 +40,7 @@ class ImagesController extends Controller
      * @param Request $request
      * @param TelegramChannelNotification $telegramChannelNotification
      * @return RedirectResponse
+     * @throws FileNotFoundException
      */
     public function store(Request $request, TelegramChannelNotification $telegramChannelNotification): RedirectResponse
     {
@@ -48,7 +52,7 @@ class ImagesController extends Controller
         if ($file instanceof UploadedFile) {
             $imageName = time() . '.' . $file->extension();
             $directory = 'images/'.date('m-Y');
-            Storage::disk('s3')->put($directory.'/'. $imageName, File::get($file));
+            Storage::disk('s3')->put($directory.'/'. $imageName, File::get($file->path()));
             Images::create(
                 [
                     'user_id' => Auth()->id(),

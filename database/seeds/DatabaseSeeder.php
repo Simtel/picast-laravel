@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 
 use Database\Seeders\YouTubeVideoStatusSeeder;
 use Illuminate\Database\Seeder;

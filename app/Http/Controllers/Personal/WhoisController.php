@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Personal;
 
 use App\Facades\Domains\WhoisService;
@@ -24,7 +26,7 @@ class WhoisController extends Controller
             return redirect()->route('personal');
         }
         $this->authorize('update', $domain);
-        WhoisService::deleteOldWhois($deleteOldWhois->string('delete_old_whois'));
+        WhoisService::deleteOldWhois($deleteOldWhois->string('delete_old_whois')->toString());
         return redirect()->route('domains.show', ['domain' => $domain->id]);
     }
 }

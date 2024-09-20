@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Events\DomainCreated;
@@ -8,9 +10,9 @@ use App\Jobs\SendDomainExpireNotify;
 use App\Models\Domains\Domain;
 use App\Models\User;
 use App\Notifications\DomainDeleted;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;

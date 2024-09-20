@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Laravel PHP Facade/Wrapper for the Youtube Data API v3

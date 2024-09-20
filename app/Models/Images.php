@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Eloquent;
@@ -17,20 +19,20 @@ use Illuminate\Support\Carbon;
  * @property int $width
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @method static Builder|\App\Images newModelQuery()
- * @method static Builder|\App\Images newQuery()
- * @method static Builder|\App\Images query()
- * @method static Builder|\App\Images whereCreatedAt($value)
- * @method static Builder|\App\Images whereFilename($value)
- * @method static Builder|\App\Images whereId($value)
- * @method static Builder|\App\Images whereThumb($value)
- * @method static Builder|\App\Images whereUpdatedAt($value)
- * @method static Builder|\App\Images whereWidth($value)
+ * @method static Builder|Images newModelQuery()
+ * @method static Builder|Images newQuery()
+ * @method static Builder|Images query()
+ * @method static Builder|Images whereCreatedAt($value)
+ * @method static Builder|Images whereFilename($value)
+ * @method static Builder|Images whereId($value)
+ * @method static Builder|Images whereThumb($value)
+ * @method static Builder|Images whereUpdatedAt($value)
+ * @method static Builder|Images whereWidth($value)
  * @property int $check
- * @method static Builder|\App\Images whereCheck($value)
+ * @method static Builder|Images whereCheck($value)
  * @property int $user_id
- * @property-read \App\User $user
- * @method static Builder|\App\Images whereUserId($value)
+ * @property-read \App\Models\User $user
+ * @method static Builder|Images whereUserId($value)
  * @property string $directory
  * @property string $disk
  * @method static Builder|Images whereDirectory($value)

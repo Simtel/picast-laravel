@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1;
 
 use App\Facades\Whois;
@@ -12,9 +14,9 @@ use App\OpenApi\Parameters\AuthParameters;
 use App\OpenApi\Responses\V1\DomainResponse;
 use App\OpenApi\Responses\V1\ErrorForbiddenResponse;
 use App\OpenApi\Responses\V1\ListDomainsResponse;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
@@ -68,7 +70,7 @@ class ProductsController extends Controller
      */
     public function update(ProductRequest $request, Products $product): RedirectResponse
     {
-        $product->name = $request->string('name');
+        $product->name = $request->string('name')->toString();
         $urls = [];
         /** @var array<int, string> $products */
         $products = $request->all('urls');

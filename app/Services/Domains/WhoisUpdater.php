@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Domains;
 
 use App\Facades\Whois;
 use App\Models\Domains\Domain;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
 readonly class WhoisUpdater implements \App\Contracts\Services\Domains\WhoisUpdater

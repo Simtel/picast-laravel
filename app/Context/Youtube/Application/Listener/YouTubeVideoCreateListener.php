@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Context\Youtube\Application\Listener;
 
 use Alaouy\Youtube\Facades\Youtube;

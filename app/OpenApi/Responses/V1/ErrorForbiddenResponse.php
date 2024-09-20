@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OpenApi\Responses\V1;
 
 use GoldSpecDigital\ObjectOrientedOAS\Objects\MediaType;

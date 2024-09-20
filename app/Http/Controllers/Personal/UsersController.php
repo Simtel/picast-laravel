@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
@@ -32,8 +34,8 @@ class UsersController extends Controller
      */
     public function update(User $user, Update $request): RedirectResponse
     {
-        $user->name = $request->string('name');
-        $user->email = $request->string('email');
+        $user->name = $request->string('name')->toString();
+        $user->email = $request->string('email')->toString();
         $user->syncRoles($request->all('roles'));
         $user->save();
         return redirect()->route('user.edit', [$user]);

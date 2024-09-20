@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
@@ -43,10 +45,12 @@ class InviteController extends Controller
         $code = InviteCode::create(
             [
                 'created_by' => Auth::id(),
-                'code' => str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT)
+                'code'       => str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT)
             ]
         );
-        Mail::to($request->get('email'))->send(new InviteUserNotify($code->code, $request->string('name')));
+        Mail::to($request->get('email'))->send(
+            new InviteUserNotify($code->code, $request->string('name')->toString())
+        );
         return redirect()->route('personal');
     }
 }
