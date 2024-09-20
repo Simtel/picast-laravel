@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Context\Youtube\Domain\Model\VideoStatus;
 use DB;
 use Illuminate\Database\Seeder;
-use VideoStatus;
+
 
 class YouTubeVideoStatusSeeder extends Seeder
 {
