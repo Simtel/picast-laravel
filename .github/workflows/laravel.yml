@@ -12,18 +12,12 @@ jobs:
         with:
           php-version: '8.3'
       - uses: actions/checkout@v3
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
       - name: Install Dependencies
         run: composer install
       - name: PHPStan
         run: vendor/bin/phpstan analyse
+      - name: Pint
+        run: vendor/bin/pint
   publish:
     name: Publish
     runs-on: ubuntu-latest
