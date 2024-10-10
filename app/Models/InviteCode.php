@@ -29,9 +29,5 @@ use Illuminate\Support\Carbon;
  */
 class InviteCode extends Model
 {
-
-
-
-
     protected $fillable = ['created_by', 'code'];
 }
