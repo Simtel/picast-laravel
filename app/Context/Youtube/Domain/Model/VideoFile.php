@@ -13,7 +13,7 @@ use Illuminate\Support\Number;
 use Log;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $video_id

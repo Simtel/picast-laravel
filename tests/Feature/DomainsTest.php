@@ -10,6 +10,7 @@ use App\Context\Domains\Infrastructure\Job\CheckExpireDomains;
 use App\Context\Domains\Infrastructure\Job\SendDomainExpireNotify;
 use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
 use App\Models\User;
+use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
@@ -66,5 +67,43 @@ class DomainsTest extends TestCase
         $domain->first()?->delete();
 
         Event::assertDispatched(DomainCreated::class, 1);
+    }
+
+
+    /**
+     * @dataProvider dataProviderForValidationTest
+     * @param string|int $name
+     * @param string $error
+     * @return void
+     */
+    public function test_validate_domain_name(string|int $name, string $error): void
+    {
+        /** @var User $user */
+        $user = User::find(1);
+        Auth::login($user);
+
+        $data = [
+            'name' => $name,
+        ];
+
+        $response = $this->post(route('domains.store'), $data);
+        $response->assertInvalid(['name' => $error]);
+    }
+
+    /**
+     * @return array<int,array{name:int|string, error: string}>
+     */
+    public static function dataProviderForValidationTest(): array
+    {
+        return [
+            [
+                'name'  => 'prosf',
+                'error' => 'Неправильное имя домена.'
+            ],
+            [
+                'name'  => 1,
+                'error' => 'Имя домена должно быть строкой.'
+            ]
+        ];
     }
 }
