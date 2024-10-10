@@ -8,6 +8,9 @@ use App\Context\Domains\Domain\Model\Domain;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<Domain>
+ */
 class DomainFactory extends Factory
 {
     /**
@@ -17,12 +20,13 @@ class DomainFactory extends Factory
      */
     protected $model = Domain::class;
 
+
     /**
      * Define the model's default state.
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'name' => $this->faker->name,

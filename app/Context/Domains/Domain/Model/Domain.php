@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
@@ -44,7 +46,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Domain whereOwner($value)
  * @method static DomainFactory factory(...$parameters)
  * @property User $user
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @mixin Eloquent
  */
@@ -57,6 +59,8 @@ class Domain extends Model
     protected $fillable = ['name', 'user_id', 'expire_at'];
 
     protected $hidden = ['created_at', 'updated_at'];
+
+    protected static string $factory = DomainFactory::class;
 
     /**
      * @return BelongsTo<User, Domain>

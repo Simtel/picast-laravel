@@ -13,7 +13,7 @@ use Illuminate\Support\Number;
 use Log;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $video_id
@@ -34,7 +34,6 @@ use Log;
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereVideoId($value)
  * @property-read Video $video
  * @mixin Eloquent
-
  */
 class VideoFile extends Model
 {
