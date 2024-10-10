@@ -28,7 +28,7 @@
         {{ Html::form('POST',route('domains.delete_old_whois',$domain->id))->open()}}
         <div class="form-group">
             {{ Html::label('Удалить записи whois старше','delete_old_whois') }}
-            {{ Html::select('delete_old_whois', \App\Facades\Domains\WhoisService::getTimeFrameOptions())->class('form-control') }}
+            {{ Html::select('delete_old_whois', \App\Context\Domains\Infrastructure\Facades\WhoisService::getTimeFrameOptions())->class('form-control') }}
         </div>
         {{ Html::submit('Удалить')->class('btn btn-danger') }}
         {{ Html::form()->close() }}

@@ -15,7 +15,8 @@ declare(strict_types=1);
 
 
 use App\Context\Youtube\Infrastructure\Controller\YouTubeVideoController;
-use App\Http\Controllers\Personal\DomainsController;
+use App\Context\Domains\Infrastructure\Controller\DomainsController;
+use App\Context\Domains\Infrastructure\Controller\WhoisController;
 use App\Http\Controllers\Personal\ImagesController;
 use App\Http\Controllers\Personal\IndexController;
 use App\Http\Controllers\Personal\InviteController;
@@ -23,7 +24,6 @@ use App\Http\Controllers\Personal\PricesController;
 use App\Http\Controllers\Personal\ProductsController;
 use App\Http\Controllers\Personal\SettingsController;
 use App\Http\Controllers\Personal\UsersController;
-use App\Http\Controllers\Personal\WhoisController;
 
 Route::get('/', static function () {
     if (Auth::check()) {

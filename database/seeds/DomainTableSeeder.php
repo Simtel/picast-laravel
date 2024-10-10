@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\Domains\Domain;
+use App\Context\Domains\Domain\Model\Domain;
 use Illuminate\Database\Seeder;
 
 class DomainTableSeeder extends Seeder

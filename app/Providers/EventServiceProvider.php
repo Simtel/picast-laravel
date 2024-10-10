@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Context\Domains\Domain\Event\DomainCreated;
+use App\Context\Domains\Domain\Model\Domain;
+use App\Context\Domains\Domain\Observer\DomainObserver;
+use App\Context\Domains\Infrastructure\EventListener\GetWhoisDomain;
 use App\Context\Youtube\Application\Listener\YouTubeVideoCreateListener;
 use App\Context\Youtube\Domain\Event\YouTubeVideoCreated;
 use App\Context\Youtube\Domain\Model\Video;
 use App\Context\Youtube\Domain\Observer\YouTubeVideoObserver;
-use App\Events\DomainCreated;
-use App\Listeners\GetWhoisDomain;
-use App\Models\Domains\Domain;
-use App\Observers\DomainObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider

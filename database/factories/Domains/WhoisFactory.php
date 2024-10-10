@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories\Domains;
 
-use App\Models\Domains\Whois;
+use App\Context\Domains\Domain\Model\Whois;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class WhoisFactory extends Factory

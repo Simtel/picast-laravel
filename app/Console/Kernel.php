@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use App\Jobs\CheckExpireDomains;
+use App\Context\Domains\Infrastructure\Job\CheckExpireDomains;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

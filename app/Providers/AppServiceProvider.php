@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Contracts\Services\Domains\WhoisService;
-use App\Contracts\Services\Domains\WhoisUpdater;
+use App\Context\Domains\Application\Contract\WhoisService;
+use App\Context\Domains\Application\Contract\WhoisUpdater;
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -17,8 +17,8 @@ class AppServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     public array $singletons = [
-        WhoisUpdater::class => \App\Services\Domains\WhoisUpdater::class,
-        WhoisService::class => \App\Services\Domains\WhoisService::class
+        WhoisUpdater::class => \App\Context\Domains\Application\Service\WhoisUpdater::class,
+        WhoisService::class => \App\Context\Domains\Application\Service\WhoisService::class
     ];
 
     /**

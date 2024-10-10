@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Events\DomainCreated;
-use App\Models\Domains\Domain;
+use App\Context\Domains\Domain\Event\DomainCreated;
+use App\Context\Domains\Domain\Model\Domain;
 use DB;
 use Event;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

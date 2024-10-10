@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Context\Domains\Application\Policy\DomainPolicy;
+use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Youtube\Application\Policy\YouTubeVideoPolicy;
 use App\Context\Youtube\Domain\Model\Video;
-use App\Models\Domains\Domain;
-use App\Policies\DomainPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider

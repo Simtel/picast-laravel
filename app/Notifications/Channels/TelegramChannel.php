@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications\Channels;
 
-use App\Notifications\DomainDeleted;
+use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
 use App\Services\Notifications\TelegramChannelNotification;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 

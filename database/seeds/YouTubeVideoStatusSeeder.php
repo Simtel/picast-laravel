@@ -8,7 +8,6 @@ use App\Context\Youtube\Domain\Model\VideoStatus;
 use DB;
 use Illuminate\Database\Seeder;
 
-
 class YouTubeVideoStatusSeeder extends Seeder
 {
     private array $statuses = [

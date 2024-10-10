@@ -14,7 +14,7 @@ declare(strict_types=1);
 */
 
 
-use App\Http\Controllers\Api\V1\DomainsController;
+use App\Context\Domains\Infrastructure\Controller\Api\DomainsController;
 
 Route::fallback(static function () {
     return response()->json(['message' => 'Page Not Found'], 404);
