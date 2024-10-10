@@ -17,7 +17,7 @@ jobs:
       - name: PHPStan
         run: vendor/bin/phpstan analyse
       - name: Pint
-        run: vendor/bin/pint
+        run: vendor/bin/pint --test
   publish:
     name: Publish
     runs-on: ubuntu-latest
