@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Factories\Domains;
+namespace App\Context\Domains\Domain\Factory;
 
 use App\Context\Domains\Domain\Model\Domain;
 use App\Models\User;
@@ -16,7 +16,7 @@ class DomainFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<Domain>
      */
     protected $model = Domain::class;
 
@@ -24,7 +24,7 @@ class DomainFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array{name:string, user_id: int}
      */
     public function definition(): array
     {

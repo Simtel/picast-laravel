@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Domain\Model;
 
+use App\Context\Domains\Domain\Factory\WhoisFactory;
 use App\Models\User;
-use Database\Factories\Domains\WhoisFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,4 +42,6 @@ class Whois extends Model
     protected $fillable = ['domain_id', 'text'];
 
     protected $hidden = ['text'];
+
+    protected static string $factory = WhoisFactory::class;
 }

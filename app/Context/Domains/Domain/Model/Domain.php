@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Domain\Model;
 
+use App\Context\Domains\Domain\Factory\DomainFactory;
 use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
 use App\Models\User;
-use Database\Factories\Domains\DomainFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

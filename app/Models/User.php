@@ -100,12 +100,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Domain::class);
     }
-
-    /**
-     * @return HasMany<Products>
-     */
-    public function products(): HasMany
-    {
-        return $this->hasMany(Products::class);
-    }
 }
