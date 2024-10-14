@@ -22,10 +22,6 @@ class CreateMarketPlacesTable extends Migration
             $table->string('url');
             $table->timestamps();
         });
-
-        MarketPlaces::create(['name' => 'ozon.ru', 'url' => 'https://ozon.ru']);
-        MarketPlaces::create(['name' => 'wb.ru', 'url' => 'https://wb.ru']);
-        MarketPlaces::create(['name' => 'kazanexpress.ru', 'url' => 'https://kazanexpress.ru']);
     }
 
     /**
