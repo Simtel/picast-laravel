@@ -42,10 +42,12 @@ jobs:
           php-version: '8.3'
       - name: Install dependencies
         run: composer install --no-scripts
+      - name: Copy .env.test.local
+        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
       - name: Migrate
-        run: php artisan migrate --env=testing
+        run: php artisan migrate --env=github
       - name: Run test
-        run: php artisan test
+        run: php artisan test --env=github
 
   publish:
     name: Publish
