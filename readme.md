@@ -13,7 +13,7 @@
 
 Локальная разработка с помощью Docker:
 
-- PHP 8.2 FPM
+- PHP 8.3 FPM
 - MySQL + Adminer
 - Nginx 1.13
 - XDebug

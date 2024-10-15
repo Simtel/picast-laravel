@@ -20,8 +20,6 @@ use App\Context\Domains\Infrastructure\Controller\WhoisController;
 use App\Http\Controllers\Personal\ImagesController;
 use App\Http\Controllers\Personal\IndexController;
 use App\Http\Controllers\Personal\InviteController;
-use App\Http\Controllers\Personal\PricesController;
-use App\Http\Controllers\Personal\ProductsController;
 use App\Http\Controllers\Personal\SettingsController;
 use App\Http\Controllers\Personal\UsersController;
 
@@ -70,16 +68,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         Route::get('/create', [YouTubeVideoController::class, 'create'])->name('youtube.create');
         Route::post('/store', [YouTubeVideoController::class, 'store'])->name('youtube.store');
         Route::post('/refresh_formats/{video}', [YouTubeVideoController::class, 'refreshFormats'])->name('youtube.refresh_formats');
-    });
-
-    Route::group(['prefix' => 'prices', 'middleware' => ['can:edit prices']], static function () {
-        Route::get('/', [PricesController::class, 'index'])->name('prices.index');
-        Route::get('/prices/{product}', [PricesController::class, 'show'])->name('prices.show');
-        Route::get('/product/add', [ProductsController::class, 'create'])->name('prices.product.create');
-        Route::post('/product/store', [ProductsController::class, 'store'])->name('prices.product.store');
-        Route::post('/product/{product}/delete', [ProductsController::class, 'store'])->name('prices.product.destroy');
-        Route::get('/product/{product}/edit', [ProductsController::class, 'edit'])->name('prices.product.edit');
-        Route::post('/product/{product}/update', [ProductsController::class, 'update'])->name('prices.product.update');
     });
 
     Route::post(
