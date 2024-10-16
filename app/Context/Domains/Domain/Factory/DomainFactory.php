@@ -14,16 +14,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class DomainFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
      * @var class-string<Domain>
      */
     protected $model = Domain::class;
 
 
     /**
-     * Define the model's default state.
-     *
      * @return array{name:string, user_id: int}
      */
     public function definition(): array

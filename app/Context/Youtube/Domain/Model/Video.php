@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Context\Youtube\Domain\Model;
 
 use Alaouy\Youtube\Facades\Youtube;
+use App\Context\Youtube\Domain\Factory\VideoFactory;
 use Exception;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -45,6 +47,9 @@ use Illuminate\Support\Carbon;
  */
 class Video extends Model
 {
+    /** @use HasFactory<VideoFactory> */
+    use HasFactory;
+
     protected $table = 'youtube_videos';
     /**
      * @var array<string, mixed>
@@ -52,6 +57,7 @@ class Video extends Model
     protected $attributes = ['title' => '', 'thumb' => ''];
     protected $fillable = ['user_id', 'url', 'created_at', 'updated_at', 'status_id'];
 
+    protected static string $factory = VideoFactory::class;
 
     /**
      * @return HasMany<VideoFormats>

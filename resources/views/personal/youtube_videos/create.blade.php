@@ -21,7 +21,7 @@
         {{ Html::form('POST',route('youtube.store'))->open()}}
 
         <div class="form-group">
-            {{ Html::label('Сссылка', 'url') }}
+            {{ Html::label('Ссылка', 'url') }}
             {{ Html::text('url')->class('form-control')}}
         </div>
 

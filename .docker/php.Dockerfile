@@ -2,6 +2,8 @@ FROM php:8.3-fpm-alpine
 
 RUN apk --no-cache add shadow sudo
 
+RUN apk add --update linux-headers
+
 RUN apk update && apk add --no-cache \
     $PHPIZE_DEPS \
     bash \
@@ -30,6 +32,9 @@ RUN docker-php-ext-install \
 
 RUN apk add --no-cache \
     supervisor
+
+RUN pecl install xdebug && \
+    docker-php-ext-enable xdebug
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 

@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace YouTube;
 
 use Alaouy\Youtube\Facades\Youtube;
+use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;
+use App\Context\Youtube\Domain\Event\YouTubeVideoCreated;
 use App\Context\Youtube\Domain\Model\Video;
 use App\Context\Youtube\Infrastructure\Jobs\UpdateVideoFormats;
 use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
 use App\Models\User;
 use Auth;
+use Event;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Queue;
+use Mockery;
+use Mockery\Expectation;
 use stdClass;
 use Tests\TestCase;
 
@@ -116,6 +121,61 @@ class YoutubeControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewHas('videos');
         $response->assertSee('Тестовый заголовок 222');
+    }
+
+
+    public function test_user_can_delete_videos(): void
+    {
+        $this->loginAdmin();
+
+        Queue::fake();
+        Event::fake([YouTubeVideoCreated::class]);
+
+        $videos = Video::factory()->count(2)->create();
+
+        Event::assertDispatched(YouTubeVideoCreated::class, 2);
+        $this->assertDatabaseCount(Video::class, 2);
+
+        $this->delete(route('youtube.destroy', $videos[0]));
+
+        $this->assertDatabaseCount(Video::class, 1);
+        $this->assertDatabaseHas(Video::class, ['id' => $videos[1]->id]);
+    }
+
+
+    public function test_user_can_refresh_formats(): void
+    {
+        $this->loginAdmin();
+        Queue::fake();
+        Event::fake([YouTubeVideoCreated::class]);
+
+        $video = Video::factory()->count(1)->create()->first();
+
+        Event::assertDispatched(YouTubeVideoCreated::class, 1);
+
+        /** @var  Expectation $mockRefreshFormatService */
+        $mockRefreshFormatService = Mockery::mock(RefreshVideoFormatsService::class)
+            ->expects('refresh');
+
+        $this->instance(
+            RefreshVideoFormatsService::class,
+            $mockRefreshFormatService->getMock()
+        );
+
+
+        $response = $this->post(route('youtube.refresh_formats', $video));
+        $response->assertStatus(302);
+    }
+
+    public function test_user_can_see_add_form(): void
+    {
+        $this->loginAdmin();
+
+        $response = $this->get(route('youtube.create'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Сохранить видео');
+        $response->assertSee('Ссылка');
     }
 
     private function mockGetVideoInfo(string $videoId, string $title = 'Тестовый заголовок'): void

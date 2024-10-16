@@ -10,11 +10,11 @@ use App\Context\Youtube\Domain\Model\VideoFormats;
 use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
 use Exception;
 
-readonly class RefreshVideoFormatsService
+class RefreshVideoFormatsService
 {
     public function __construct(
-        private GetVideoFormatsService $getVideoFormatsService,
-        private YouTubeVideoStatusRepository $statusRepository,
+        readonly private GetVideoFormatsService $getVideoFormatsService,
+        readonly private YouTubeVideoStatusRepository $statusRepository,
     ) {
     }
 
