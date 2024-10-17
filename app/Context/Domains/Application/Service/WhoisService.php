@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Context\Domains\Application\Service;
 
 use App\Context\Domains\Domain\Model\Whois;
+use Illuminate\Database\Query\Builder;
 
 class WhoisService implements \App\Context\Domains\Application\Contract\WhoisService
 {
@@ -32,10 +33,8 @@ class WhoisService implements \App\Context\Domains\Application\Contract\WhoisSer
     {
         $expire_at = now()->sub('1 ' . $sub);
 
-        $result = Whois::whereDate('created_at', '<', $expire_at)->delete();
-        if (is_numeric($result)) {
-            return (int)$result;
-        }
-        return 0;
+        /** @var Builder $builder */
+        $builder = Whois::whereDate('created_at', '<', $expire_at);
+        return $builder->delete();
     }
 }

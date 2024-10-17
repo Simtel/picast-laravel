@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Context\Domains\Domain\Model\Domain;
-use Database\Factories\UserFactory;
+use App\Context\User\Domain\Factory\UserFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -87,11 +87,17 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected static string $factory = UserFactory::class;
+
     /**
      * @var string[]
      */
     protected $dates = ['deleted_at'];
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     /**
      * @return HasMany<Domain>

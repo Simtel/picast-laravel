@@ -27,9 +27,11 @@ class WhoisFactory extends Factory
      */
     public function definition(): array
     {
+        /** @var Domain $domain */
+        $domain = Domain::factory()->create()->first();
         return [
-            'domain_id' => Domain::factory(1)->create()->id,
-            'text' => '% TCI Whois Service. Terms of use:
+            'domain_id' => $domain->getId(),
+            'text'      => '% TCI Whois Service. Terms of use:
 % https://tcinet.ru/documents/whois_ru_rf.pdf (in Russian)
 % https://tcinet.ru/documents/whois_su.pdf (in Russian)
 

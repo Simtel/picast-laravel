@@ -25,7 +25,7 @@ class DomainFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
+            'name' => $this->faker->domainName(),
             'user_id' => User::all()->random()->id,
         ];
     }

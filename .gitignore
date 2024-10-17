@@ -21,3 +21,4 @@ _ide_helper_models.php
 *.sql
 /public/images/
 /public/videos/
+/tests/reports/

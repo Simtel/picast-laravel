@@ -71,11 +71,11 @@ class YoutubeControllerTest extends TestCase
 
         Queue::fake();
 
-        $this->mockGetVideoInfo('BRCsU4D852M', 'Тестовый заголовок 222');
-        $this->mockParseVidFromUrl('https://www.youtube.com/watch?v=BRCsU4D852M', 'BRCsU4D852M');
+        $this->mockGetVideoInfo('BRCsU4D852T', 'Тестовый заголовок 222');
+        $this->mockParseVidFromUrl('https://www.youtube.com/watch?v=BRCsU4D852T', 'BRCsU4D852T');
 
         $data = [
-            'url' => 'https://www.youtube.com/watch?v=BRCsU4D852M',
+            'url' => 'https://www.youtube.com/watch?v=BRCsU4D852T',
         ];
 
         $response = $this->post(route('youtube.store'), $data);
@@ -83,7 +83,7 @@ class YoutubeControllerTest extends TestCase
 
         Queue::assertPushed(UpdateVideoFormats::class, 1);
 
-        $this->assertDatabaseHas(Video::class, ['url' => 'https://www.youtube.com/watch?v=BRCsU4D852M']);
+        $this->assertDatabaseHas(Video::class, ['url' => 'https://www.youtube.com/watch?v=BRCsU4D852T']);
         $this->assertDatabaseCount(Video::class, 1);
     }
 

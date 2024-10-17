@@ -236,7 +236,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
-        'Whois' => \App\Domains\Infrastructure\Facades\Whois::class,
+        'Whois' => App\Context\Domains\Infrastructure\Facades\Whois::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Spatie\Html\Facades\Html::class,
         'WhoisService' => WhoisService::class,

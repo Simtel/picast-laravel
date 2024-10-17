@@ -62,6 +62,15 @@ class Domain extends Model
 
     protected static string $factory = DomainFactory::class;
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
     /**
      * @return BelongsTo<User, Domain>
      */
