@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Context\Youtube\Application\Policy;
 
+use App\Context\User\Domain\Model\User;
 use App\Context\Youtube\Domain\Model\Video;
-use App\Models\User;
 
 class YouTubeVideoPolicy
 {

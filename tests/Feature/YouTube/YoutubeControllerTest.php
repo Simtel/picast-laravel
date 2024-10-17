@@ -10,8 +10,6 @@ use App\Context\Youtube\Domain\Event\YouTubeVideoCreated;
 use App\Context\Youtube\Domain\Model\Video;
 use App\Context\Youtube\Infrastructure\Jobs\UpdateVideoFormats;
 use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
-use App\Models\User;
-use Auth;
 use Event;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Queue;
@@ -22,6 +20,12 @@ use Tests\TestCase;
 
 class YoutubeControllerTest extends TestCase
 {
+    protected function setUp(): void
+    {
+
+        parent::setUp();
+    }
+
     /**
      * @dataProvider dataProviderForValidationTest
      * @param mixed $url
@@ -30,9 +34,7 @@ class YoutubeControllerTest extends TestCase
      */
     public function test_validate_youtube_link(mixed $url, string|array $error): void
     {
-        /** @var User $user */
-        $user = User::find(1);
-        Auth::login($user);
+        $this->loginAdmin();
 
         $data = [
             'url' => $url,
@@ -65,9 +67,7 @@ class YoutubeControllerTest extends TestCase
 
     public function test_user_can_add_youtube_url(): void
     {
-        /** @var User $user */
-        $user = User::find(1);
-        Auth::login($user);
+        $this->loginAdmin();
 
         Queue::fake();
 

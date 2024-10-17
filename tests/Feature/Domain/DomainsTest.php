@@ -9,7 +9,7 @@ use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Infrastructure\Job\CheckExpireDomains;
 use App\Context\Domains\Infrastructure\Job\SendDomainExpireNotify;
 use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
-use App\Models\User;
+use App\Context\User\Domain\Model\User;
 use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;

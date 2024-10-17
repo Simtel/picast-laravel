@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Context\Domains\Domain\Factory;
 
 use App\Context\Domains\Domain\Model\Domain;
-use App\Models\User;
+use App\Context\User\Domain\Model\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

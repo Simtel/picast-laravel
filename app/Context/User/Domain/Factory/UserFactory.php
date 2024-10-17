@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\User\Domain\Factory;
 
-use App\Models\User;
+use App\Context\User\Domain\Model\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

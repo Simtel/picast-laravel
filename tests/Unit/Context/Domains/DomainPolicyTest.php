@@ -6,7 +6,7 @@ namespace Context\Domains;
 
 use App\Context\Domains\Application\Policy\DomainPolicy;
 use App\Context\Domains\Domain\Model\Domain;
-use App\Models\User;
+use App\Context\User\Domain\Model\User;
 use Tests\TestCase;
 
 class DomainPolicyTest extends TestCase

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Context\User\Domain\Model;
 
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\User\Domain\Factory\UserFactory;
+use App\Models\Products;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -100,7 +101,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return HasMany<Domain>
+     * @return HasMany<Domain, $this>
      */
     public function domains(): HasMany
     {

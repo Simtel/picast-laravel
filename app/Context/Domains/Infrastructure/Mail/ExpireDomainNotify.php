@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Context\Domains\Infrastructure\Mail;
 
 use App\Context\Domains\Domain\Model\Domain;
-use App\Models\User;
+use App\Context\User\Domain\Model\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;

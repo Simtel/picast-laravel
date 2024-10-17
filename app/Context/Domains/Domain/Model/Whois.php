@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Context\Domains\Domain\Model;
 
 use App\Context\Domains\Domain\Factory\WhoisFactory;
-use App\Models\User;
+use App\Context\User\Domain\Model\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

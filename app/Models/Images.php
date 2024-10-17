@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Context\User\Domain\Model\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +32,7 @@ use Illuminate\Support\Carbon;
  * @property int $check
  * @method static Builder|Images whereCheck($value)
  * @property int $user_id
- * @property-read \App\Models\User $user
+ * @property-read \App\Context\User\Domain\Model\User $user
  * @method static Builder|Images whereUserId($value)
  * @property string $directory
  * @property string $disk
@@ -46,7 +47,7 @@ class Images extends Model
     /**
      * Подрубаем пользователя
      *
-     * @return BelongsTo<User, Images>
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {

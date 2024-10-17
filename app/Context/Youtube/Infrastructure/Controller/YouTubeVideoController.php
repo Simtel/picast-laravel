@@ -24,7 +24,7 @@ class YouTubeVideoController extends Controller
         private readonly YouTubeVideoStatusRepository $statusRepository,
         private readonly RefreshVideoFormatsService $refreshVideoFormatsService
     ) {
-        $this->authorizeResource(Video::class, 'video');
+        //$this->authorizeResource(Video::class, 'video');
     }
 
     /**

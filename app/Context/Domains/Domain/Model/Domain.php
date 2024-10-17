@@ -6,7 +6,7 @@ namespace App\Context\Domains\Domain\Model;
 
 use App\Context\Domains\Domain\Factory\DomainFactory;
 use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
-use App\Models\User;
+use App\Context\User\Domain\Model\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -72,7 +72,7 @@ class Domain extends Model
         return $this->name;
     }
     /**
-     * @return BelongsTo<User, Domain>
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
@@ -80,7 +80,7 @@ class Domain extends Model
     }
 
     /**
-     * @return HasMany<Whois>
+     * @return HasMany<Whois, $this>
      */
     public function whois(): HasMany
     {

@@ -71,7 +71,7 @@ class VideoFile extends Model
 
 
     /**
-     * @return BelongsTo<Video,VideoFile>
+     * @return BelongsTo<Video,$this>
      */
     public function video(): BelongsTo
     {

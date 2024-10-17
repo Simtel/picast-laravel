@@ -50,7 +50,7 @@ class VideoFormats extends Model
     }
 
     /**
-     * @return HasMany<VideoFile>
+     * @return HasMany<VideoFile, $this>
      */
     public function files(): HasMany
     {

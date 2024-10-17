@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api;
 
-use App\Models\User;
+use App\Context\User\Domain\Model\User;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 

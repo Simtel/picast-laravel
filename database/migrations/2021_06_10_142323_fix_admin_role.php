@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use App\Context\User\Domain\Model\User;
 use Illuminate\Database\Migrations\Migration;
 use Spatie\Permission\Models\Role;
 

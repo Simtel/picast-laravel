@@ -60,7 +60,7 @@ class Video extends Model
     protected static string $factory = VideoFactory::class;
 
     /**
-     * @return HasMany<VideoFormats>
+     * @return HasMany<VideoFormats, $this>
      */
     public function formats(): HasMany
     {
@@ -78,7 +78,7 @@ class Video extends Model
     }
 
     /**
-     * @return BelongsTo<VideoStatus,Video >
+     * @return BelongsTo<VideoStatus,$this>
      */
     public function status(): BelongsTo
     {
@@ -86,7 +86,7 @@ class Video extends Model
     }
 
     /**
-     * @return HasMany<VideoFile>
+     * @return HasMany<VideoFile, $this>
      */
     public function files(): HasMany
     {

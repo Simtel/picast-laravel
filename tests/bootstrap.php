@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 
+use App\Context\User\Domain\Model\User;
 use Illuminate\Contracts\Console\Kernel;
-use App\Models\User;
 use Illuminate\Support\Str;
 
 require dirname(__DIR__) . '/vendor/autoload.php';

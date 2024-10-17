@@ -6,7 +6,7 @@ namespace App\Context\Domains\Infrastructure\Job;
 
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Infrastructure\Mail\ExpireDomainNotify;
-use App\Models\User;
+use App\Context\User\Domain\Model\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
