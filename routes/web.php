@@ -62,7 +62,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
 
     Route::resource('domains', DomainsController::class);
 
-    Route::group(['prefix' => 'youtube', 'middleware' => ['can:edit youtube']], static function () {
+    Route::group(['prefix' => 'youtube','middleware' => ['permission:edit youtube']], static function () {
         Route::get('/', [YouTubeVideoController::class, 'index'])->name('youtube.index');
         Route::delete('/{video}', [YouTubeVideoController::class, 'destroy'])->name('youtube.destroy');
         Route::get('/create', [YouTubeVideoController::class, 'create'])->name('youtube.create');
