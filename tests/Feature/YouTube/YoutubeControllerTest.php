@@ -24,6 +24,7 @@ class YoutubeControllerTest extends TestCase
     {
 
         parent::setUp();
+
     }
 
     /**
@@ -35,6 +36,7 @@ class YoutubeControllerTest extends TestCase
     public function test_validate_youtube_link(mixed $url, string|array $error): void
     {
         $this->loginAdmin();
+
 
         $data = [
             'url' => $url,

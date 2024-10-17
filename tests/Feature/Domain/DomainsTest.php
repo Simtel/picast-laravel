@@ -10,7 +10,6 @@ use App\Context\Domains\Infrastructure\Job\CheckExpireDomains;
 use App\Context\Domains\Infrastructure\Job\SendDomainExpireNotify;
 use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
 use App\Context\User\Domain\Model\User;
-use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
@@ -78,9 +77,7 @@ class DomainsTest extends TestCase
      */
     public function test_validate_domain_name(string|int $name, string $error): void
     {
-        /** @var User $user */
-        $user = User::find(1);
-        Auth::login($user);
+        $this->loginAdmin();
 
         $data = [
             'name' => $name,
