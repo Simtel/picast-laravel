@@ -50,7 +50,7 @@
       "App\\": "app/"
     },
     "classmap": [
-      "database/seeds",
+      "database/seeds"
     ]
   },
   "autoload-dev": {
