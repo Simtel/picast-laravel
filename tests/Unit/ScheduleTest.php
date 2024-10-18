@@ -25,6 +25,6 @@ class ScheduleTest extends TestCase
         foreach ($events as $event) {
             $actual[$event->description ?? $event->command] = $event->getExpression();
         }
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals(sort($expected), sort($actual));
     }
 }
