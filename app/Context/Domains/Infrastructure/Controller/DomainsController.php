@@ -79,7 +79,7 @@ class DomainsController extends Controller
             'personal.domains.show',
             [
                 'domain' => $domain,
-                'whois' => Whois::whereDomainId($domain->id)->paginate(15)
+                'whois'  => Whois::whereDomainId($domain->id)->paginate(15)
             ]
         );
     }
@@ -87,12 +87,12 @@ class DomainsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     * @return Response|null
+     * @param Domain $domain
+     * @return never
      */
-    public function edit(int $id): ?Response
+    public function edit(Domain $domain): never
     {
-        return null;
+        abort(403);
     }
 
     /**

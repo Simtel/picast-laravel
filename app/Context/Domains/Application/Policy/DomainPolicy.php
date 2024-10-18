@@ -93,4 +93,5 @@ class DomainPolicy
     {
         return false;
     }
+
 }

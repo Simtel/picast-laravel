@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Domain;
 
+use App\Context\Domains\Application\Contract\WhoisUpdater;
 use App\Context\Domains\Domain\Event\DomainCreated;
 use App\Context\Domains\Domain\Model\Domain;
+use App\Context\Domains\Domain\Model\Whois;
 use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
+use App\Services\Notifications\TelegramChannelNotification;
 use Illuminate\Support\Facades\Event;
+use Mockery;
+use Mockery\ExpectationInterface;
 use Notification;
 use Tests\TestCase;
 
@@ -105,6 +110,83 @@ class DomainControllerTest extends TestCase
         $response->assertStatus(302);
         $this->assertDatabaseCount(Domain::class, 1);
         $this->assertDatabaseHas(Domain::class, ['name' => $domain2->getName()]);
+    }
 
+    public function test_user_can_see_add_form(): void
+    {
+        $this->loginAdmin();
+
+        $response = $this->get(route('domains.create'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Сохранить');
+        $response->assertSee('Домен');
+    }
+
+    public function test_user_can_see_domain_info(): void
+    {
+        $this->loginAdmin();
+        $user = $this->getAuthUser();
+        if ($user === null) {
+            self::fail('Auth user not found');
+        }
+
+        Event::fake();
+        $domain = Domain::factory()->make(['user_id' => $user->getId()]);
+        $domain->save();
+        $whois = Whois::factory()->make(['domain_id' => $domain->getId()]);
+        $whois->save();
+
+        $response = $this->get(route('domains.show', $domain->getId()));
+        $response->assertStatus(200);
+        $response->assertViewIs('personal.domains.show');
+        $response->assertViewHas('domain', $domain);
+        $response->assertViewHas('whois', Whois::whereDomainId($domain->id)->paginate(15));
+    }
+
+    public function test_user_can_edit_domain(): void
+    {
+        $this->loginAdmin();
+        $user = $this->getAuthUser();
+        if ($user === null) {
+            self::fail('Auth user not found');
+        }
+
+        Event::fake();
+        $domain = Domain::factory()->make(['user_id' => $user->getId()]);
+        $domain->save();
+        $response = $this->get(route('domains.edit', $domain->getId()));
+        $response->assertStatus(403);
+    }
+
+    public function test_user_can_update_domain(): void
+    {
+        $this->loginAdmin();
+        $user = $this->getAuthUser();
+        if ($user === null) {
+            self::fail('Auth user not found');
+        }
+
+        Event::fake();
+        $domain = Domain::factory()->make(['user_id' => $user->getId()]);
+        $domain->save();
+
+        Notification::fake();
+
+        /** @var ExpectationInterface $mockWhoisUpdater */
+        $mockWhoisUpdater = Mockery::mock(WhoisUpdater::class)
+            ->expects('update');
+
+
+        /** @var ExpectationInterface $mockNotification */
+        $mockNotification = Mockery::mock(TelegramChannelNotification::class)
+            ->expects('sendTextToChannel');
+
+        $this->app->instance(WhoisUpdater::class, $mockWhoisUpdater->getMock());
+        $this->app->instance(TelegramChannelNotification::class, $mockNotification->getMock());
+
+        $response = $this->put(route('domains.update', $domain->getId()));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('domains.index'));
     }
 }
