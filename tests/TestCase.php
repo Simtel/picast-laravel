@@ -6,6 +6,7 @@ namespace Tests;
 
 use App\Context\User\Domain\Model\User;
 use Auth;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Spatie\Permission\Models\Permission;
@@ -39,5 +40,10 @@ abstract class TestCase extends BaseTestCase
         }
         $user->assignRole($role);
         Auth::login($user);
+    }
+
+    public function getAuthUser(): ?Authenticatable
+    {
+        return Auth::user();
     }
 }

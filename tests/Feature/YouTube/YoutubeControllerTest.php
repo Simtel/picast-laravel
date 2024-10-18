@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YouTube;
+namespace Tests\Feature\YouTube;
 
 use Alaouy\Youtube\Facades\Youtube;
 use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;

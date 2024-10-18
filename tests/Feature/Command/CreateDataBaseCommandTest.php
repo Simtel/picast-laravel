@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Command;
+namespace Tests\Feature\Command;
 
 use Illuminate\Testing\PendingCommand;
 use Tests\TestCase;

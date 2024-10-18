@@ -60,7 +60,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         Route::post('/store', [ImagesController::class, 'store'])->name('images.store');
     });
 
-    Route::resource('domains', DomainsController::class);
+    Route::resource('domains', DomainsController::class)->middleware('permission:domains');
 
     Route::group(['prefix' => 'youtube','middleware' => ['permission:edit youtube']], static function () {
         Route::get('/', [YouTubeVideoController::class, 'index'])->name('youtube.index');
