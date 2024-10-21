@@ -41,6 +41,7 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__.'/Commands');
         $this->load(__DIR__.'/../Context/Youtube/Infrastructure/Commands');
+        $this->load(__DIR__.'/../Context/Domains/Infrastructure/Command');
 
         require base_path('routes/console.php');
     }

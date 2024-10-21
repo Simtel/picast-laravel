@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Context\Domains;
+namespace Tests\Unit\Context\Domains;
 
 use App\Context\Domains\Application\Policy\DomainPolicy;
 use App\Context\Domains\Domain\Model\Domain;
