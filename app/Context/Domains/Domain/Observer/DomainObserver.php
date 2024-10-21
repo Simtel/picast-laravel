@@ -27,7 +27,7 @@ class DomainObserver
      */
     public function updated(Domain $domain): void
     {
-        //
+
     }
 
     /**
