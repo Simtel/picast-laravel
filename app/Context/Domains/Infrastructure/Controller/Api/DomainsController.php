@@ -72,9 +72,10 @@ class DomainsController extends Controller
     }
 
     /**
+     * @param Domain $domain
      * @return JsonResponse
      */
-    public function edit(): JsonResponse
+    public function edit(Domain $domain): JsonResponse
     {
         return response()->json(['message' => 'Not action.'], 403);
     }

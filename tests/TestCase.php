@@ -46,4 +46,14 @@ abstract class TestCase extends BaseTestCase
     {
         return Auth::user();
     }
+
+    public function getAdminUser(): User
+    {
+        $user = User::find(1)?->first();
+        if ($user === null) {
+            throw new \RuntimeException('Not found admin user');
+        }
+
+        return $user;
+    }
 }
