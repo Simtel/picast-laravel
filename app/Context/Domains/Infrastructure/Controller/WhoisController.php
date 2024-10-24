@@ -21,10 +21,7 @@ class WhoisController extends Controller
      */
     public function deleteOldWhois(int $id, DeleteOldWhois $deleteOldWhois): RedirectResponse
     {
-        $domain = Domain::find($id);
-        if ($domain === null) {
-            return redirect()->route('personal');
-        }
+        $domain = Domain::findOrFail($id);
         $this->authorize('update', $domain);
         WhoisService::deleteOldWhois($deleteOldWhois->string('delete_old_whois')->toString());
         return redirect()->route('domains.show', ['domain' => $domain->id]);

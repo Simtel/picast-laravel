@@ -6,6 +6,7 @@ namespace App\Context\Domains\Domain\Factory;
 
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Domain\Model\Whois;
+use Closure;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,14 +24,13 @@ class WhoisFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array{domain_id: int, text:string}
+     * @return array{domain_id: Closure, text:string}
      */
     public function definition(): array
     {
-        /** @var Domain $domain */
-        $domain = Domain::factory()->create()->first();
+
         return [
-            'domain_id' => $domain->getId(),
+            'domain_id' => fn () => Domain::factory()->create()->first()->id,
             'text'      => '% TCI Whois Service. Terms of use:
 % https://tcinet.ru/documents/whois_ru_rf.pdf (in Russian)
 % https://tcinet.ru/documents/whois_su.pdf (in Russian)

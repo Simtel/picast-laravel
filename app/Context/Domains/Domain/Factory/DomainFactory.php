@@ -6,6 +6,7 @@ namespace App\Context\Domains\Domain\Factory;
 
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\User\Domain\Model\User;
+use Closure;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,13 +21,13 @@ class DomainFactory extends Factory
 
 
     /**
-     * @return array{name:string, user_id: int}
+     * @return array{name:string, user_id: Closure}
      */
     public function definition(): array
     {
         return [
             'name' => $this->faker->domainName(),
-            'user_id' => User::all()->random()->id,
+            'user_id' => fn () => User::all()->random()->id,
         ];
     }
 }

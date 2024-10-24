@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain;
+namespace Tests\Feature\Domain;
 
 use App\Context\Domains\Domain\Event\DomainCreated;
 use App\Context\Domains\Domain\Model\Domain;
