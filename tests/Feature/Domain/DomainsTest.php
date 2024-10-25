@@ -7,16 +7,13 @@ namespace Tests\Feature\Domain;
 use App\Context\Domains\Domain\Event\DomainCreated;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Infrastructure\Job\CheckExpireDomains;
-use App\Context\Domains\Infrastructure\Job\SendDomainExpireNotify;
+use App\Context\Domains\Infrastructure\Mail\ExpireDomainNotify;
 use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
-use App\Context\User\Domain\Model\User;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Queue;
-use Mockery\ExpectationInterface;
 use Tests\TestCase;
 
 class DomainsTest extends TestCase
@@ -28,29 +25,24 @@ class DomainsTest extends TestCase
      */
     public function test_create_job_domain_expire_notify(): void
     {
-        Queue::fake();
-
-        $domain = $this->partialMock(Domain::class);
+        Event::fake();
+        Mail::fake();
+        $user = $this->getAdminUser();
+        $domain = new Domain();
         $domain->id = 1;
         $domain->name = 'prosf.ru';
-        $domain->user_id = 1;
+        $domain->user_id = $user->getId();
         $domain->expire_at = Carbon::now()->addDays(8);
-        $user = User::find(1);
-        if ($user === null) {
-            self::fail('User not found');
-        }
-        $domain->user = $user;
-        $domains = Collection::make([$domain]);
+        $domain->save();
 
         $checkJob = $this->partialMock(CheckExpireDomains::class);
-        $checkJob->shouldAllowMockingProtectedMethods();
-        $job = $checkJob->shouldReceive('getDomains');
-        if ($job instanceof ExpectationInterface) {
-            $job->andReturn($domains);
-        }
+
         $checkJob->handle();
 
-        Queue::assertPushed(SendDomainExpireNotify::class, 1);
+        Mail::assertSent(ExpireDomainNotify::class, static function ($mail) use ($user) {
+            return $mail->hasTo($user->email);
+        });
+
     }
 
     /**

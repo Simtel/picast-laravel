@@ -95,4 +95,9 @@ class Domain extends Model
     {
         return [env('DEFAULT_USER_EMAIL') => 'Admin'];
     }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
 }

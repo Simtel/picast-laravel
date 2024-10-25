@@ -70,13 +70,16 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use Notifiable;
+
     /** @use HasFactory<UserFactory> */
     use HasFactory;
     use SoftDeletes;
     use HasRoles;
 
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -85,7 +88,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     protected static string $factory = UserFactory::class;
@@ -106,5 +110,15 @@ class User extends Authenticatable
     public function domains(): HasMany
     {
         return $this->hasMany(Domain::class);
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }
