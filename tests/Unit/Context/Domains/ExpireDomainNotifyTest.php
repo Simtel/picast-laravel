@@ -22,7 +22,7 @@ class ExpireDomainNotifyTest extends TestCase
         $mailable->assertHasSubject('Информация о вашем домене');
         $mailable->assertSeeInHtml($domain->getName());
         $mailable->assertSeeInHtml($user->getName());
-        $mailable->assertSeeInHtml($date);
+        $mailable->assertSeeInHtml($date->toDateString());
 
     }
 }
