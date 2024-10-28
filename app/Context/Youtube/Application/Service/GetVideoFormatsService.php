@@ -7,6 +7,7 @@ namespace App\Context\Youtube\Application\Service;
 use App\Context\Youtube\Domain\Dto\FormatVideoDto;
 use App\Context\Youtube\Domain\Model\Video;
 use Exception;
+use Illuminate\Support\Facades\Process;
 use JsonException;
 use RuntimeException;
 
@@ -38,13 +39,7 @@ class GetVideoFormatsService
     private function executeCommand(string $videoUrl): string
     {
         $command = "youtube-dl --dump-json " . escapeshellarg($videoUrl);
-        $output = shell_exec($command);
-
-        if ($output === null || $output === false) {
-            throw new RuntimeException('Ошибка при выполнении команды youtube-dl');
-        }
-
-        return $output;
+        return Process::run($command)->output();
     }
 
     /**
@@ -73,7 +68,7 @@ class GetVideoFormatsService
         foreach ($videoInfo['formats'] as $format) {
             if (isset($format['height']) && $format['height'] >= 720) {
                 $formats[] = new FormatVideoDto(
-                    $format['format_id'],
+                    (int)$format['format_id'],
                     $format['format_note'] ?? '',
                     $format['video_ext'] ?? '',
                     $format['vcodec'] ?? '',
