@@ -111,4 +111,9 @@ class Video extends Model
     {
         return $this->url;
     }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
 }

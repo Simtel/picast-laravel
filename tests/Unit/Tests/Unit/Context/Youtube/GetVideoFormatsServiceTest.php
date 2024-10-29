@@ -7,13 +7,14 @@ namespace Tests\Unit\Context\Youtube;
 use App\Context\Youtube\Application\Service\GetVideoFormatsService;
 use App\Context\Youtube\Domain\Dto\FormatVideoDto;
 use App\Context\Youtube\Domain\Model\Video;
+use Exception;
 use Illuminate\Support\Facades\Process;
 use Tests\TestCase;
 
 class GetVideoFormatsServiceTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function test_get_video_formats(): void
     {
@@ -42,7 +43,7 @@ class GetVideoFormatsServiceTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function test_invalid_video_formats(): void
     {

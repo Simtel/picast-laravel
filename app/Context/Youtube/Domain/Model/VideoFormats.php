@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Context\Youtube\Domain\Model;
 
+use App\Context\Youtube\Domain\Factory\VideoFormatFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -38,7 +40,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class VideoFormats extends Model
 {
+    /** @use HasFactory<VideoFormatFactory> */
+    use HasFactory;
+
     protected $table = 'youtube_videos_formats';
+
+    protected static string $factory = VideoFormatFactory::class;
 
     public function delete(): ?bool
     {
