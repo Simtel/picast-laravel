@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Context\Youtube\Domain\Model;
 
+use App\Context\Youtube\Domain\Factory\VideoFileFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -37,7 +39,12 @@ use Log;
  */
 class VideoFile extends Model
 {
+    /** @use HasFactory<VideoFileFactory> */
+    use HasFactory;
+
     protected $table = 'youtube_video_files';
+
+    protected static string $factory = VideoFileFactory::class;
 
 
     public function getFileUrl(): string

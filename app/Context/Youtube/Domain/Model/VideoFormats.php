@@ -63,4 +63,9 @@ class VideoFormats extends Model
     {
         return $this->hasMany(VideoFile::class, 'format_id');
     }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
 }
