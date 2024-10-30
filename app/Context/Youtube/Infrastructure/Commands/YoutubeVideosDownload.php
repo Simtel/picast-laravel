@@ -30,8 +30,11 @@ class YoutubeVideosDownload extends Command implements Isolatable
      */
     protected $description = 'Download all videos';
 
-    public function __construct(private readonly YouTubeVideoStatusRepository $statusRepository)
-    {
+
+    public function __construct(
+        private readonly YouTubeVideoStatusRepository $statusRepository,
+        private readonly YoutubeDl $youtubeDl
+    ) {
         parent::__construct();
     }
 
@@ -63,11 +66,10 @@ class YoutubeVideosDownload extends Command implements Isolatable
             }
             $this->output->writeln('Обработка видео:' . $video->getUrl());
 
-            $yt = new YoutubeDl();
 
             $progressBar = $this->getProgressBar();
 
-            $yt->onProgress(
+            $this->youtubeDl->onProgress(
                 function (
                     ?string $progressTarget,
                     string $percentage,
@@ -87,7 +89,7 @@ class YoutubeVideosDownload extends Command implements Isolatable
                 }
             );
 
-            $collection = $yt->download(
+            $collection = $this->youtubeDl->download(
                 Options::create()
                     ->downloadPath(Storage::disk('local')->path('public/videos'))
                     ->output($video->getVideoId() . '.%(ext)s')
@@ -98,7 +100,7 @@ class YoutubeVideosDownload extends Command implements Isolatable
             $this->getVideos($collection, $video, $format);
         }
         $lock->release();
-        $this->output->success('Закончили скачивание');
+        $this->output->writeln('Закончили скачивание');
     }
 
     /**
