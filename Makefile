@@ -27,6 +27,10 @@ migrate: ## Up Migrate
 	docker exec -it picast_php sh -c "php artisan migrate"
 	docker exec -it picast_php sh -c "php artisan migrate --env=testing"
 
+seed: ## Up Seed
+	docker exec -it picast_php sh -c "php artisan db:seed"
+	docker exec -it picast_php sh -c "php artisan db:seed --env=testing"
+
 phpstan: ##Run phpstan analyse
 	docker exec -it picast_php sh -c "./vendor/bin/phpstan analyse --memory-limit=2G"
 
@@ -45,3 +49,6 @@ test-coverage:
 
 worker:
 	docker exec -it picast_php sh -c "/usr/bin/supervisord -c /etc/supervisor/conf.d/laravel-worker.conf"
+
+composer-install: ##Install composer packages
+	docker exec -it picast_php sh -c "composer install"
