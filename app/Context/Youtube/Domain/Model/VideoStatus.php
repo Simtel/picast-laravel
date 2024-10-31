@@ -25,6 +25,8 @@ class VideoStatus extends Model
 {
     protected $table = 'youtube_video_statuses';
 
+    protected $fillable = ['title','code'];
 
+    public $timestamps = false;
 
 }
