@@ -11,8 +11,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Telegram;
-use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class IndexController extends Controller
 {
@@ -27,16 +25,5 @@ class IndexController extends Controller
         }
 
         return redirect()->route('domains.index');
-    }
-
-    /**
-     * @throws TelegramSDKException
-     */
-    public function telegramTest(): void
-    {
-        $message = Telegram::setAsyncRequest(true)->sendMessage(
-            ['chat_id' => env('TELEGRAM_MAIN_CHANNEL'), 'text' => 'Send from ArmiSimtel Project']
-        );
-        dump($message);
     }
 }

@@ -35,7 +35,7 @@ abstract class TestCase extends BaseTestCase
         $user = User::factory()->count(1)->create($attributes)->first();
         $role = Role::create(['name' => 'user']);
         foreach ($permissions as $permission) {
-            $permission = Permission::create(['name' => $permission]);
+            $permission = Permission::findOrCreate($permission);
             $role->givePermissionTo($permission);
         }
         $user->assignRole($role);
