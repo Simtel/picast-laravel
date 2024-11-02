@@ -9,7 +9,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class ImagesControllersTest extends TestCase
+class ImagesControllerTest extends TestCase
 {
     public function test_personal_image_create_page(): void
     {

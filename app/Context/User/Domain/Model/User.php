@@ -121,4 +121,9 @@ class User extends Authenticatable
     {
         return $this->name;
     }
+
+    public function getApiToken(): ?string
+    {
+        return $this->api_token;
+    }
 }

@@ -6,7 +6,7 @@ namespace Tests\Feature\Common;
 
 use Tests\TestCase;
 
-class PersonalControllersTest extends TestCase
+class PersonalControllerTest extends TestCase
 {
     public function test_personal_index_page_admin(): void
     {

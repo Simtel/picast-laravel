@@ -7,11 +7,13 @@ namespace App\Http\Controllers\Personal;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordRequest;
 use Auth;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
@@ -54,12 +56,12 @@ class SettingsController extends Controller
         if ($user === null) {
             throw new BadRequestException('Not found user');
         }
-        $user->fill(
-            [
-                'password' => bcrypt($request->string('new_password')->toString())
-            ]
-        )->save();
+        $user->forceFill([
+            'password' => Hash::make($request->string('new_password')->toString())
+        ])->setRememberToken(Str::random(60));
+        $user->save();
 
+        event(new PasswordReset($user));
         return redirect()->route('settings');
     }
 }
