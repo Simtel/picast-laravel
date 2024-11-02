@@ -23,12 +23,22 @@ RUN apk update && apk add --no-cache \
 
 RUN docker-php-ext-install \
     bcmath \
-    gd \
     pdo \
     mysqli \
     pdo_mysql \
     zip \
     intl
+
+RUN apk add --no-cache \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    freetype-dev \
+    && docker-php-ext-configure gd \
+    --with-freetype=/usr/include/ \
+    --with-jpeg=/usr/include/ \
+    --with-webp=/usr/include/ \
+    && docker-php-ext-install gd
 
 RUN apk add --no-cache \
     supervisor
