@@ -23,6 +23,7 @@ use App\Http\Controllers\Personal\InviteController;
 use App\Http\Controllers\Personal\SettingsController;
 use App\Http\Controllers\Personal\UsersController;
 
+Auth::routes();
 Route::get('/', static function () {
     if (Auth::check()) {
         return redirect()->route('personal');
@@ -30,7 +31,7 @@ Route::get('/', static function () {
     return view('auth.login');
 })->name('home');
 
-Auth::routes();
+
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 

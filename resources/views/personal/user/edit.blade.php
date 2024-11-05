@@ -16,25 +16,25 @@
                 </ul>
             </div>
         @endif
-        {{ Html::form(['route' => ['user.update',$user]]) }}
+        {{ Html::form('POST',route('user.update',$user))->open()}}
 
         <div class="form-group">
-            {{ Html::label('name', 'Имя') }}
-            {{ Html::text('name', $user->name, ['class' => 'form-control']) }}
+            {{ Html::label('Имя', 'name') }}
+            {{ Html::text('name', $user->name)->class('form-control') }}
         </div>
         <div class="form-group">
-            {{ Html::label('email', 'E-mail') }}
-            {{ Html::text('email', $user->email, ['class' => 'form-control']) }}
+            {{ Html::label('E-mail', 'email') }}
+            {{ Html::text('email', $user->email)->class('form-control') }}
         </div>
 
         <div class="form-group">
-            {{ Html::label('roles[]', 'Роли') }}
+            {{ Html::label('Роли', 'roles[]') }}
             @foreach($roles as $role)
                 {{ Html::checkbox('roles[]', $role->name, $user->hasRole($role->name)) }} {{$role->name}}
             @endforeach
         </div>
 
-        {{ Html::submit('Сохранить', ['class' => 'btn btn-primary']) }}
+        {{ Html::submit('Сохранить')->class('btn btn-primary') }}
 
         {{ Html::form()->close() }}
     </main>

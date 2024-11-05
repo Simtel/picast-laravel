@@ -56,4 +56,21 @@ abstract class TestCase extends BaseTestCase
 
         return $user;
     }
+
+    /**
+     * @param array<string, mixed> $attributes
+     * @param string[] $permissions
+     * @return User
+     */
+    public function createUserWithPermissions(array $attributes, array $permissions): User
+    {
+        $user = User::factory()->count(1)->create($attributes)->first();
+        $role = Role::create(['name' => 'user']);
+        foreach ($permissions as $permission) {
+            $permission = Permission::findOrCreate($permission);
+            $role->givePermissionTo($permission);
+        }
+        $user->assignRole($role);
+        return $user;
+    }
 }
