@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use App\Context\User\Domain\Model\User;
+use App\Models\InviteCode;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Feature\MakesRequestsFromPage;
@@ -169,5 +170,25 @@ class RegisterTest extends TestCase
         $this->assertTrue(session()->hasOldInput('email'));
         $this->assertFalse(session()->hasOldInput('password'));
         $this->assertGuest();
+    }
+
+    public function testUserCanRegisterWithInviteCode(): void
+    {
+        $admin = $this->getAdminUser();
+        /** @var InviteCode $inviteCode */
+        $inviteCode = InviteCode::create(['code' => '12345', 'created_by' => $admin->getId()]);
+
+        $data = [
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => 'i-love-laravel',
+            'password_confirmation' => 'i-love-laravel',
+            'code' => $inviteCode->code,
+        ];
+
+        $response = $this->fromPage($this->registerGetRoute())->post($this->registerPostRoute(), $data);
+        $response->assertRedirect(route('personal'));
+        $this->assertDatabaseCount(User::class, 2);
+        $this->assertDatabaseHas(User::class, ['email' => 'john@example.com']);
     }
 }

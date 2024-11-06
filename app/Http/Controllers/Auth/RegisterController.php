@@ -8,7 +8,6 @@ use App\Context\User\Domain\Model\User;
 use App\Http\Controllers\Controller;
 use App\Models\InviteCode;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -54,10 +53,10 @@ class RegisterController extends Controller
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'code' => 'required|exists:invite_codes'
+            'code'     => 'required|exists:invite_codes'
         ]);
     }
 
@@ -65,18 +64,19 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param array<string,string> $data
-     * @return User|Model
+     * @return User
      * @throws Exception
      */
-    protected function create(array $data): Model|User
+    protected function create(array $data): User
     {
         InviteCode::where('code', $data['code'])->delete();
-
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+        /** @var User $user */
+        $user = User::create([
+            'name'      => $data['name'],
+            'email'     => $data['email'],
+            'password'  => bcrypt($data['password']),
             'api_token' => Str::random(60),
         ]);
+        return $user;
     }
 }
