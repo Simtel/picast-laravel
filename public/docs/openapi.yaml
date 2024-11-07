@@ -1,0 +1,213 @@
+openapi: 3.0.3
+info:
+  title: Picast
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'https://picast.lc'
+paths:
+  '/api/{fallbackPlaceholder}':
+    get:
+      summary: ''
+      operationId: getApiFallbackPlaceholder
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Page Not Found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Page Not Found'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: fallbackPlaceholder
+        description: ''
+        example: Z
+        required: true
+        schema:
+          type: string
+  /api/v1/user/current:
+    get:
+      summary: ''
+      operationId: getApiV1UserCurrent
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/domains:
+    get:
+      summary: 'Show all user domains'
+      operationId: showAllUserDomains
+      description: 'Show all user domains without whois history'
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1Domains
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Количество символов в поле value не может превышать 225.'
+                  example: qhsangxkquymef
+                  nullable: false
+              required:
+                - name
+      security: []
+  /api/v1/domains/create:
+    get:
+      summary: ''
+      operationId: getApiV1DomainsCreate
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated
+      tags:
+        - Endpoints
+      security: []
+  '/api/v1/domains/{id}':
+    get:
+      summary: 'Show once domain info'
+      operationId: showOnceDomainInfo
+      description: 'Show once domain info with whois'
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1DomainsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1DomainsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the domain.'
+        example: 3
+        required: true
+        schema:
+          type: integer
+  '/api/v1/domains/{domain_id}/edit':
+    get:
+      summary: ''
+      operationId: getApiV1DomainsDomain_idEdit
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: domain_id
+        description: 'The ID of the domain.'
+        example: 3
+        required: true
+        schema:
+          type: integer
+tags:
+  -
+    name: Endpoints
+    description: ''

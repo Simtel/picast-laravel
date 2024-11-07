@@ -9,7 +9,6 @@ use App\Context\Domains\Domain\Event\DomainCreated;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Domain\Model\Whois;
 use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
-use App\Services\Notifications\TelegramChannelNotification;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 use Mockery\ExpectationInterface;
@@ -178,12 +177,7 @@ class DomainControllerTest extends TestCase
             ->expects('update');
 
 
-        /** @var ExpectationInterface $mockNotification */
-        $mockNotification = Mockery::mock(TelegramChannelNotification::class)
-            ->expects('sendTextToChannel');
-
         $this->app->instance(WhoisUpdater::class, $mockWhoisUpdater->getMock());
-        $this->app->instance(TelegramChannelNotification::class, $mockNotification->getMock());
 
         $response = $this->put(route('domains.update', $domain->getId()));
         $response->assertStatus(302);

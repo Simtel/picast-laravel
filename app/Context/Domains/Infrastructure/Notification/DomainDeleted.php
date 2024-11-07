@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Context\Domains\Infrastructure\Notification;
 
 use App\Context\Domains\Domain\Model\Domain;
-use App\Notifications\Channels\TelegramChannel;
 use App\Notifications\Channels\TelegramMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -31,7 +30,7 @@ class DomainDeleted extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', TelegramChannel::class];
+        return ['mail'];
     }
 
     /**

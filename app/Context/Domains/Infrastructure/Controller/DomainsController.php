@@ -9,7 +9,6 @@ use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Domain\Model\Whois;
 use App\Context\Domains\Infrastructure\Request\DomainRequest;
 use App\Http\Controllers\Controller;
-use App\Services\Notifications\TelegramChannelNotification;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -18,13 +17,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class DomainsController extends Controller
 {
     public function __construct(
         private readonly WhoisUpdater $whoisUpdater,
-        private readonly TelegramChannelNotification $telegramChannelNotification
     ) {
         $this->authorizeResource(Domain::class, 'domain');
     }
@@ -100,12 +97,10 @@ class DomainsController extends Controller
      *
      * @param Domain $domain
      * @return RedirectResponse
-     * @throws TelegramSDKException
      */
     public function update(Domain $domain): RedirectResponse
     {
         $this->whoisUpdater->update($domain);
-        $this->telegramChannelNotification->sendTextToChannel('Update domain info for: ' . $domain->name);
 
         return redirect()->route('domains.index');
     }
