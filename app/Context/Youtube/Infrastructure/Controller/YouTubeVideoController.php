@@ -6,6 +6,7 @@ namespace App\Context\Youtube\Infrastructure\Controller;
 
 use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;
 use App\Context\Youtube\Domain\Model\Video;
+use App\Context\Youtube\Domain\Model\VideoFormats;
 use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
 use App\Context\Youtube\Infrastructure\Request\YouTubeUrlRequest;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +26,7 @@ class YouTubeVideoController extends Controller
         private readonly YouTubeVideoStatusRepository $statusRepository,
         private readonly RefreshVideoFormatsService $refreshVideoFormatsService
     ) {
-        //$this->authorizeResource(Video::class, 'video');
+        $this->authorizeResource(Video::class, 'video');
     }
 
     /**
@@ -78,6 +80,13 @@ class YouTubeVideoController extends Controller
     public function destroy(Video $video): RedirectResponse
     {
         $video->delete();
+        return redirect()->route('youtube.index');
+    }
+
+    public function queueDownload(Video $video, Request $request): RedirectResponse
+    {
+        $a = $request->integer('video_formats');
+        $videoFormat = VideoFormats::where(['format_id' => $request->integer('video_formats'), 'video_id' => $video->id])->first();
         return redirect()->route('youtube.index');
     }
 }

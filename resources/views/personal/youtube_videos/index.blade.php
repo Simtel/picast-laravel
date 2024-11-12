@@ -39,7 +39,11 @@
                         @endforeach
                     </td>
                     <td>
-                        <select name="video_formats" id="video_formats">
+                        @if(!empty($video->formats))
+                            {{ Html::form('POST',route('youtube.queue-download',['video' => $video]))->open()}}
+                        @endif
+
+                        <select name="video_formats" id="video_formats" class="form-control">
                             <option>---</option>
                             @foreach($video->formats as $format)
                                 <option value="{{ $format->format_id }}">{{ $format->format_ext }} {{ $format->resolution }}
@@ -47,6 +51,10 @@
                                 </option>
                             @endforeach
                         </select>
+                        @if(!empty($video->formats))
+                                {{ Html::submit('Скачать выбранный формат')->class('btn')}}
+                                {{ Html::form()->close() }}
+                        @endif
                     </td>
                     <td>
                         {{-- Компонент кнопки уобновления форматов--}}

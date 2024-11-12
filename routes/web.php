@@ -66,11 +66,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         Route::delete('/{video}', [YouTubeVideoController::class, 'destroy'])->name('youtube.destroy');
         Route::get('/create', [YouTubeVideoController::class, 'create'])->name('youtube.create');
         Route::post('/store', [YouTubeVideoController::class, 'store'])->name('youtube.store');
-        Route::post('/refresh_formats/{video}', [YouTubeVideoController::class, 'refreshFormats'])->name('youtube.refresh_formats');
+        Route::post('/{video}/refresh-formats', [YouTubeVideoController::class, 'refreshFormats'])->name('youtube.refresh_formats');
+        Route::post('/{video}/queue-download', [YouTubeVideoController::class, 'queueDownload'])->name('youtube.queue-download');
     });
 
     Route::post(
-        '/domain/{id}/delete_old_whois',
+        '/domain/{id}/delete-old-whois',
         [WhoisController::class, 'deleteOldWhois']
     )->name('domains.delete_old_whois');
 });
