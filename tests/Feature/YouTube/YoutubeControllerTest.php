@@ -8,6 +8,7 @@ use Alaouy\Youtube\Facades\Youtube;
 use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;
 use App\Context\Youtube\Domain\Event\YouTubeVideoCreated;
 use App\Context\Youtube\Domain\Model\Video;
+use App\Context\Youtube\Domain\Model\VideoFormats;
 use App\Context\Youtube\Infrastructure\Jobs\UpdateVideoFormats;
 use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
 use Event;
@@ -20,13 +21,6 @@ use Tests\TestCase;
 
 class YoutubeControllerTest extends TestCase
 {
-    protected function setUp(): void
-    {
-
-        parent::setUp();
-
-    }
-
     /**
      * @dataProvider dataProviderForValidationTest
      * @param mixed $url
@@ -113,17 +107,16 @@ class YoutubeControllerTest extends TestCase
             ]
         );
 
+        VideoFormats::factory()->create(['video_id' => $video->getId()]);
         Queue::assertPushed(UpdateVideoFormats::class, 1);
 
         $this->assertDatabaseCount(Video::class, 1);
-
-        $view = $this->view('personal.youtube_videos.index', ['videos' => [$video]]);
-        $view->assertSee('Тестовый заголовок 222');
 
         $response = $this->get(route('youtube.index'));
         $response->assertStatus(200);
         $response->assertViewHas('videos');
         $response->assertSee('Тестовый заголовок 222');
+        $response->assertSee('Скачать выбранный формат');
     }
 
 
