@@ -102,6 +102,7 @@ class YoutubeControllerTest extends TestCase
         $this->mockGetVideoInfo('BRCsU4D852M', 'Тестовый заголовок 222');
         $this->mockParseVidFromUrl('https://www.youtube.com/watch?v=BRCsU4D852M', 'BRCsU4D852M');
 
+
         $statusRepository = $this->app->make(YouTubeVideoStatusRepository::class);
 
         $video = Video::create(

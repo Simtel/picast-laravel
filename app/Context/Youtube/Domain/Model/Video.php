@@ -116,4 +116,9 @@ class Video extends Model
     {
         return $this->id;
     }
+
+    public function hasFormats(): bool
+    {
+        return !$this->formats->isEmpty();
+    }
 }

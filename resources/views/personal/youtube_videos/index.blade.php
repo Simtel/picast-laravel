@@ -39,7 +39,7 @@
                         @endforeach
                     </td>
                     <td>
-                        @if(!empty($video->formats))
+                        @if ($video->hasFormats())
                             {{ Html::form('POST',route('youtube.queue-download',['video' => $video]))->open()}}
                         @endif
 
@@ -51,7 +51,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        @if(!empty($video->formats))
+                            @if ($video->hasFormats())
                                 {{ Html::submit('Скачать выбранный формат')->class('btn')}}
                                 {{ Html::form()->close() }}
                         @endif
