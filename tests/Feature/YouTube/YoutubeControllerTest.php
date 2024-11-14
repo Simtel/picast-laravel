@@ -174,6 +174,18 @@ class YoutubeControllerTest extends TestCase
         $response->assertSee('Ссылка');
     }
 
+    public function test_user_can_add_video_to_download(): void
+    {
+        $user = $this->createUserWithPermissions([], ['edit youtube']);
+        $this->actingAs($user);
+        Event::fake();
+        $video = Video::factory()->create();
+        $format = VideoFormats::factory()->create(['video_id' => $video->getId()]);
+
+        $response = $this->post(route('youtube.queue-download', ['video' => $video]), ['video_formats' => $format->getId()]);
+        $response->assertStatus(302);
+    }
+
     private function mockGetVideoInfo(string $videoId, string $title = 'Тестовый заголовок'): void
     {
         $stdClass = new \StdClass();
@@ -193,4 +205,5 @@ class YoutubeControllerTest extends TestCase
             ->with($url)
             ->andReturn($videoId);
     }
+
 }
