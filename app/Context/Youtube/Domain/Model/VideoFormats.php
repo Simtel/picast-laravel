@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFormats whereVideoId($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, VideoFile> $files
  * @property-read int|null $files_count
+ * @method static \App\Context\Youtube\Domain\Factory\VideoFormatFactory factory($count = null, $state = [])
  * @mixin Eloquent
  */
 class VideoFormats extends Model

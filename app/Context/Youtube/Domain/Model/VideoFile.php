@@ -35,6 +35,7 @@ use Log;
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereVideoId($value)
  * @property-read Video $video
+ * @method static \App\Context\Youtube\Domain\Factory\VideoFileFactory factory($count = null, $state = [])
  * @mixin Eloquent
  */
 class VideoFile extends Model

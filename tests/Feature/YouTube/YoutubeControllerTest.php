@@ -8,6 +8,7 @@ use Alaouy\Youtube\Facades\Youtube;
 use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;
 use App\Context\Youtube\Domain\Event\YouTubeVideoCreated;
 use App\Context\Youtube\Domain\Model\Video;
+use App\Context\Youtube\Domain\Model\VideoDownloadQueue;
 use App\Context\Youtube\Domain\Model\VideoFormats;
 use App\Context\Youtube\Infrastructure\Jobs\UpdateVideoFormats;
 use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
@@ -182,8 +183,12 @@ class YoutubeControllerTest extends TestCase
         $video = Video::factory()->create();
         $format = VideoFormats::factory()->create(['video_id' => $video->getId()]);
 
+        $this->assertDatabaseHas(VideoFormats::class, ['video_id' => $video->getId(), 'id' => $format->getId()]);
+        $this->assertDatabaseCount(VideoDownloadQueue::class, 0);
         $response = $this->post(route('youtube.queue-download', ['video' => $video]), ['video_formats' => $format->getId()]);
         $response->assertStatus(302);
+        $this->assertDatabaseCount(VideoDownloadQueue::class, 1);
+        $this->assertDatabaseHas(VideoDownloadQueue::class, ['video_id' => $video->getId(), 'format_id' => $format->getId()]);
     }
 
     private function mockGetVideoInfo(string $videoId, string $title = 'Тестовый заголовок'): void

@@ -43,6 +43,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereStatusId($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, VideoFile> $files
  * @property-read int|null $files_count
+ * @method static \App\Context\Youtube\Domain\Factory\VideoFactory factory($count = null, $state = [])
  * @mixin \Eloquent
  */
 class Video extends Model

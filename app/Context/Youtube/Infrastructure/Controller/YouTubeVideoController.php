@@ -6,6 +6,7 @@ namespace App\Context\Youtube\Infrastructure\Controller;
 
 use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;
 use App\Context\Youtube\Domain\Model\Video;
+use App\Context\Youtube\Domain\Model\VideoDownloadQueue;
 use App\Context\Youtube\Domain\Model\VideoFormats;
 use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
 use App\Context\Youtube\Infrastructure\Request\YouTubeUrlRequest;
@@ -58,8 +59,8 @@ class YouTubeVideoController extends Controller
     {
         Video::create(
             [
-                'url'       => $request->get('url'),
-                'user_id'   => Auth::id(),
+                'url' => $request->get('url'),
+                'user_id' => Auth::id(),
                 'status_id' => $this->statusRepository->findByCode('new')->id,
             ]
         );
@@ -85,8 +86,16 @@ class YouTubeVideoController extends Controller
 
     public function queueDownload(Video $video, Request $request): RedirectResponse
     {
-        $a = $request->integer('video_formats');
-        $videoFormat = VideoFormats::where(['format_id' => $request->integer('video_formats'), 'video_id' => $video->id])->first();
+        /** @var VideoFormats $format */
+        $format = VideoFormats::where(
+            [
+                'id' => $request->integer('video_formats'),
+                'video_id' => $video->id
+            ]
+        )->first();
+
+
+        $queue = VideoDownloadQueue::create(['video_id' => $video->id, 'format_id' => $format->getId()]);
         return redirect()->route('youtube.index');
     }
 }
