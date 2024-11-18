@@ -95,7 +95,7 @@ class YouTubeVideoController extends Controller
         )->first();
 
 
-        $queue = VideoDownloadQueue::create(['video_id' => $video->id, 'format_id' => $format->getId()]);
+        VideoDownloadQueue::create(['video_id' => $video->id, 'format_id' => $format->getId()]);
         return redirect()->route('youtube.index');
     }
 }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Context\Youtube\Infrastructure\Commands;
 
 use App\Context\Youtube\Domain\Model\Video;
+use App\Context\Youtube\Domain\Model\VideoDownloadQueue;
 use App\Context\Youtube\Domain\Model\VideoFile;
 use App\Context\Youtube\Domain\Model\VideoFormats;
-use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
@@ -32,7 +32,6 @@ class YoutubeVideosDownload extends Command implements Isolatable
 
 
     public function __construct(
-        private readonly YouTubeVideoStatusRepository $statusRepository,
         private readonly YoutubeDl $youtubeDl
     ) {
         parent::__construct();
@@ -51,16 +50,17 @@ class YoutubeVideosDownload extends Command implements Isolatable
             $this->error('Команда уже выполняется!');
             return;
         }
-        $videos = Video::whereStatusId($this->statusRepository->findByCode('new')->id)->get();
-        if (count($videos) > 0) {
-            $this->output->writeln('В очереди на загрузку: ' . count($videos));
+        $videosQueue = VideoDownloadQueue::all();
+        if (count($videosQueue) > 0) {
+            $this->output->writeln('В очереди на загрузку: ' . count($videosQueue));
         }
-        /** @var Video $video */
-        foreach ($videos as $video) {
+
+        foreach ($videosQueue as $queue) {
+            $video = $queue->video;
             if ($video->getUrl() === '') {
                 continue;
             }
-            $format = $this->getVideoFormat($video);
+            $format = $queue->format;
             if ($format === null) {
                 continue;
             }
@@ -98,6 +98,7 @@ class YoutubeVideosDownload extends Command implements Isolatable
             );
 
             $this->getVideos($collection, $video, $format);
+            $queue->delete();
         }
         $lock->release();
         $this->output->writeln('Закончили скачивание');
@@ -157,18 +158,6 @@ class YoutubeVideosDownload extends Command implements Isolatable
         }
 
         $output->error('Файл не найден!');
-    }
-
-    private function getVideoFormat(
-        Video $video
-    ): ?VideoFormats {
-        foreach ($video->formats as $format) {
-            if ($format->resolution === '1920x1080' && $format->format_ext === 'mp4') {
-                return $format;
-            }
-        }
-
-        return null;
     }
 
     private function getProgressBar(): ProgressBar

@@ -67,4 +67,12 @@ class VideoDownloadQueue extends Model
     {
         return $this->belongsTo(Video::class);
     }
+
+    /**
+     * @return BelongsTo<VideoFormats,$this>
+     */
+    public function format(): BelongsTo
+    {
+        return $this->belongsTo(VideoFormats::class);
+    }
 }

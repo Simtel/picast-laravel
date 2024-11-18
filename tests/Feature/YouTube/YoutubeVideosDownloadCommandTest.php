@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\YouTube;
 
 use App\Context\Youtube\Domain\Model\Video;
+use App\Context\Youtube\Domain\Model\VideoDownloadQueue;
 use App\Context\Youtube\Domain\Model\VideoFormats;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +23,12 @@ class YoutubeVideosDownloadCommandTest extends TestCase
         Storage::fake();
 
         $video = Video::factory()->create();
-        VideoFormats::factory()->create(['video_id' => $video->getId(), 'resolution' => '1920x1080']);
+        $format = VideoFormats::factory()->create(['video_id' => $video->getId(), 'resolution' => '1920x1080']);
+
+
+        VideoDownloadQueue::create(['video_id' => $video->getId(), 'format_id' => $format->getId()]);
+
+        $this->assertDatabaseCount(VideoDownloadQueue::class, 1);
 
 
         $element = $this->getMockBuilder(\YoutubeDl\Entity\Video::class)
@@ -59,6 +65,7 @@ class YoutubeVideosDownloadCommandTest extends TestCase
         $command->expectsOutput('Обработка видео:' . $video->getUrl());
         $command->expectsOutput($filePath);
         $command->expectsOutput('Закончили скачивание');
+
 
     }
 }

@@ -46,7 +46,7 @@
                         <select name="video_formats" id="video_formats" class="form-control">
                             <option>---</option>
                             @foreach($video->formats as $format)
-                                <option value="{{ $format->format_id }}">{{ $format->format_ext }} {{ $format->resolution }}
+                                <option value="{{ $format->getId() }}">{{ $format->format_ext }} {{ $format->resolution }}
                                     ({{$format->vcodec}})
                                 </option>
                             @endforeach
