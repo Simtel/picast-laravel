@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue whereVideoId($value)
  * @property-read Video $video
+ * @property-read \App\Context\Youtube\Domain\Model\VideoFormats $format
  * @mixin Eloquent
  */
 class VideoDownloadQueue extends Model

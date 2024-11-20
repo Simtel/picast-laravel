@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Api\V1;
+namespace App\Context\Youtube\Domain\Resource;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class DomainCollectionResource extends ResourceCollection
+class VideoCollectionResource extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -20,7 +19,7 @@ class DomainCollectionResource extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'data1' => $this->collection,
+            'data' => $this->collection,
         ];
     }
 }

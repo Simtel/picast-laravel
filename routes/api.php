@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 
 use App\Context\Domains\Infrastructure\Controller\Api\DomainsController;
+use App\Context\Youtube\Infrastructure\Controller\ApiVideoController;
 
 Route::fallback(static function () {
     return response()->json(['message' => 'Page Not Found'], 404);
@@ -26,4 +27,6 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], static function () 
     })->name('api.user.current');
 
     Route::resource('domains', DomainsController::class)->names('api.domains');
+
+    Route::resource('video', ApiVideoController::class)->names('api.videos');
 });

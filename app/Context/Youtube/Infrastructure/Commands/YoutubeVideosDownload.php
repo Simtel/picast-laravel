@@ -61,11 +61,8 @@ class YoutubeVideosDownload extends Command implements Isolatable
                 continue;
             }
             $format = $queue->format;
-            if ($format === null) {
-                continue;
-            }
-            $this->output->writeln('Обработка видео:' . $video->getUrl());
 
+            $this->output->writeln('Обработка видео:' . $video->getUrl());
 
             $progressBar = $this->getProgressBar();
 

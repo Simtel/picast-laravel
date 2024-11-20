@@ -6,10 +6,10 @@ namespace App\Context\Domains\Infrastructure\Controller\Api;
 
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Domain\Model\Whois as WhoisModel;
+use App\Context\Domains\Domain\Resource\DomainResource;
 use App\Context\Domains\Infrastructure\Facades\Whois;
 use App\Context\Domains\Infrastructure\Request\DomainRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\V1\DomainResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Carbon;

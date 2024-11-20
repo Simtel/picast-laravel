@@ -22,3 +22,4 @@ _ide_helper_models.php
 /public/images/
 /public/videos/
 /tests/reports/
+/storage/framework/cache/
