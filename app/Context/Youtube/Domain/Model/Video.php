@@ -122,4 +122,19 @@ class Video extends Model
     {
         return !$this->formats->isEmpty();
     }
+
+    public function getCreatedAt(): ?Carbon
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): ?Carbon
+    {
+        return $this->updated_at;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
 }
