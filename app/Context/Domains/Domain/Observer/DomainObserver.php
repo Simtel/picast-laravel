@@ -20,6 +20,7 @@ class DomainObserver
     public function created(Domain $domain): void
     {
         event(new DomainCreated($domain));
+        $domain->notify(new \App\Context\Domains\Infrastructure\Notification\DomainCreated($domain));
     }
 
     /**

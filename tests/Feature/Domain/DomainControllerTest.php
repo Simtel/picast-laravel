@@ -55,7 +55,7 @@ class DomainControllerTest extends TestCase
     public function test_user_can_create_a_domain(): void
     {
         $this->loginAdmin();
-
+        Notification::fake();
         Event::fake([DomainCreated::class]);
 
         $data = [
@@ -76,6 +76,7 @@ class DomainControllerTest extends TestCase
         if ($user === null) {
             self::fail('Auth user not found');
         }
+        Notification::fake();
         Event::fake([DomainCreated::class]);
         $domain1 = Domain::factory()->make(['user_id' => $user->getId()]);
         $domain2 = Domain::factory()->make(['user_id' => $user->getId()]);

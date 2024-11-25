@@ -9,6 +9,7 @@ use App\Context\Domains\Domain\Model\Domain;
 use DB;
 use Event;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Notification;
 use Tests\CreatesApplication;
 use Tests\TestCase;
 use Throwable;
@@ -24,6 +25,7 @@ class ExampleTest extends TestCase
     public function test_example(): void
     {
         DB::beginTransaction();
+        Notification::fake();
         Event::fake([DomainCreated::class]);
         Domain::factory(1)->create();
 

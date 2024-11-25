@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
 
 /**
@@ -91,7 +92,7 @@ class Domain extends Model
      * @param DomainDeleted $notification
      * @return string[]
      */
-    public function routeNotificationForMail(DomainDeleted $notification): array
+    public function routeNotificationForMail(Notification $notification): array
     {
         return [env('DEFAULT_USER_EMAIL') => 'Admin'];
     }
