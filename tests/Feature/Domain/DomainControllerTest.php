@@ -55,6 +55,7 @@ class DomainControllerTest extends TestCase
     public function test_user_can_create_a_domain(): void
     {
         $this->loginAdmin();
+        $user = $this->getAdminUser();
         Notification::fake();
         Event::fake([DomainCreated::class]);
 
@@ -67,6 +68,7 @@ class DomainControllerTest extends TestCase
         Event::assertDispatched(DomainCreated::class, 1);
         $this->assertDatabaseCount(Domain::class, 1);
         $this->assertDatabaseHas(Domain::class, ['name' => 'armisimtel.ru']);
+        Notification::assertCount(1);
     }
 
     public function test_user_can_see_list_domains(): void
