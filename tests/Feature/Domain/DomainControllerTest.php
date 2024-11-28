@@ -55,7 +55,6 @@ class DomainControllerTest extends TestCase
     public function test_user_can_create_a_domain(): void
     {
         $this->loginAdmin();
-        $user = $this->getAdminUser();
         Notification::fake();
         Event::fake([DomainCreated::class]);
 
