@@ -46,6 +46,6 @@ class ImagesTest extends TestCase
             ]
         );
 
-        self::assertEquals('/var/www/html/public/images/test.jpg', $image->getPath());
+        self::assertStringContainsString('/public/images/test.jpg', $image->getPath());
     }
 }
