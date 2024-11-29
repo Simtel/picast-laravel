@@ -57,7 +57,7 @@ class SettingsController extends Controller
             throw new BadRequestException('Not found user');
         }
         $user->forceFill([
-            'password' => Hash::make($request->string('new_password')->toString())
+            'password' => Hash::make($request->string('password')->toString())
         ])->setRememberToken(Str::random(60));
         $user->save();
 

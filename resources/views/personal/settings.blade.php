@@ -19,12 +19,8 @@
         {{ Html::form('POST', route('settings.password'))->open() }}
 
         <div class="form-group">
-            {{ Html::label('Старый пароль', 'password') }}
-            {{ Html::password('password')->class('form-control') }}
-        </div>
-        <div class="form-group">
-            {{ Html::label('Новый пароль', 'new_password') }}
-            {{ Html::password('new_password')->class('form-control')}}
+            {{ Html::label('Новый пароль', 'password') }}
+            {{ Html::password('password')->class('form-control')}}
         </div>
 
         {{ Html::submit('Обновить пароль')->class('btn btn-primary')}}

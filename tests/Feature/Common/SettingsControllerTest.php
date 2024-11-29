@@ -42,7 +42,7 @@ class SettingsControllerTest extends TestCase
         /** @var User $user */
         $user = $this->getAuthUser();
         self::assertEquals($password, $user->password);
-        $response = $this->post(route('settings.password', ['password' => 'testPassword', 'new_password' => 'testNewPassword']));
+        $response = $this->post(route('settings.password', ['password' => 'testNewPassword']));
         $response->assertStatus(302);
         $response->assertRedirect(route('settings'));
         /** @var User $actualUser */

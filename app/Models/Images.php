@@ -64,4 +64,9 @@ class Images extends Model
         }
         return public_path('images') . '/' . $this->filename;
     }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
 }
