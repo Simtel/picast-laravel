@@ -6,6 +6,7 @@ namespace App\Context\Domains\Application\Service;
 
 use App\Context\Domains\Domain\Model\Whois;
 use Illuminate\Database\Query\Builder;
+use Override;
 
 class WhoisService implements \App\Context\Domains\Application\Contract\WhoisService
 {
@@ -21,6 +22,7 @@ class WhoisService implements \App\Context\Domains\Application\Contract\WhoisSer
     /**
      * @return array<string>
      */
+    #[Override]
     public function getTimeFrameOptions(): array
     {
         return $this->time_frame_options;
@@ -29,6 +31,7 @@ class WhoisService implements \App\Context\Domains\Application\Contract\WhoisSer
     /**
      * @param string $sub example day,week,month
      */
+    #[Override]
     public function deleteOldWhois(string $sub): int
     {
         $expire_at = now()->sub('1 ' . $sub);

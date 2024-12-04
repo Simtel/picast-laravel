@@ -7,6 +7,7 @@ namespace App\Context\Domains\Application\Service;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Infrastructure\Facades\Whois;
 use Illuminate\Support\Carbon;
+use Override;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
 readonly class WhoisUpdater implements \App\Context\Domains\Application\Contract\WhoisUpdater
@@ -15,6 +16,7 @@ readonly class WhoisUpdater implements \App\Context\Domains\Application\Contract
      * @param Domain $domain
      * @throws TelegramSDKException
      */
+    #[Override]
     public function update(Domain $domain): void
     {
         $whois = Whois::loadDomainInfo($domain->name);
