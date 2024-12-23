@@ -44,7 +44,6 @@
     "phpstan/phpstan-mockery": "^1.1",
     "phpunit/phpunit": "^10.0",
     "roave/security-advisories": "dev-latest",
-    "simtel/phpstan-rules": "^1.1",
     "symfony/thanks": "^1.0"
   },
   "autoload": {
