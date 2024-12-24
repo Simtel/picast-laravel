@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d47e4c918784ffcee7b56ec198d899e",
+    "content-hash": "d12aec7723c5d491a3d8f33581e482dd",
     "packages": [
         {
             "name": "alaouy/youtube",
@@ -169,16 +169,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.336.2",
+            "version": "3.336.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "954bfdfc048840ca34afe2a2e1cbcff6681989c4"
+                "reference": "b863c7953ebeeae191c3835bb5413f872cfbb753"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/954bfdfc048840ca34afe2a2e1cbcff6681989c4",
-                "reference": "954bfdfc048840ca34afe2a2e1cbcff6681989c4",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b863c7953ebeeae191c3835bb5413f872cfbb753",
+                "reference": "b863c7953ebeeae191c3835bb5413f872cfbb753",
                 "shasum": ""
             },
             "require": {
@@ -261,9 +261,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.336.2"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.336.3"
             },
-            "time": "2024-12-20T19:05:10+00:00"
+            "time": "2024-12-23T19:13:29+00:00"
         },
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -9134,16 +9134,16 @@
     "packages-dev": [
         {
             "name": "barryvdh/laravel-debugbar",
-            "version": "v3.14.9",
+            "version": "v3.14.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-debugbar.git",
-                "reference": "2e805a6bd4e1aa83774316bb062703c65d0691ef"
+                "reference": "56b9bd235e3fe62e250124804009ce5bab97cc63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/2e805a6bd4e1aa83774316bb062703c65d0691ef",
-                "reference": "2e805a6bd4e1aa83774316bb062703c65d0691ef",
+                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/56b9bd235e3fe62e250124804009ce5bab97cc63",
+                "reference": "56b9bd235e3fe62e250124804009ce5bab97cc63",
                 "shasum": ""
             },
             "require": {
@@ -9202,7 +9202,7 @@
             ],
             "support": {
                 "issues": "https://github.com/barryvdh/laravel-debugbar/issues",
-                "source": "https://github.com/barryvdh/laravel-debugbar/tree/v3.14.9"
+                "source": "https://github.com/barryvdh/laravel-debugbar/tree/v3.14.10"
             },
             "funding": [
                 {
@@ -9214,7 +9214,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-25T14:51:20+00:00"
+            "time": "2024-12-23T10:10:42+00:00"
         },
         {
             "name": "ergebnis/composer-normalize",
@@ -10112,40 +10112,40 @@
         },
         {
             "name": "larastan/larastan",
-            "version": "v2.9.12",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/larastan/larastan.git",
-                "reference": "19012b39fbe4dede43dbe0c126d9681827a5e908"
+                "reference": "b2e24e1605cff1d1097ccb6fb8af3bbd1dfe1c6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larastan/larastan/zipball/19012b39fbe4dede43dbe0c126d9681827a5e908",
-                "reference": "19012b39fbe4dede43dbe0c126d9681827a5e908",
+                "url": "https://api.github.com/repos/larastan/larastan/zipball/b2e24e1605cff1d1097ccb6fb8af3bbd1dfe1c6f",
+                "reference": "b2e24e1605cff1d1097ccb6fb8af3bbd1dfe1c6f",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "illuminate/console": "^9.52.16 || ^10.28.0 || ^11.16",
-                "illuminate/container": "^9.52.16 || ^10.28.0 || ^11.16",
-                "illuminate/contracts": "^9.52.16 || ^10.28.0 || ^11.16",
-                "illuminate/database": "^9.52.16 || ^10.28.0 || ^11.16",
-                "illuminate/http": "^9.52.16 || ^10.28.0 || ^11.16",
-                "illuminate/pipeline": "^9.52.16 || ^10.28.0 || ^11.16",
-                "illuminate/support": "^9.52.16 || ^10.28.0 || ^11.16",
-                "php": "^8.0.2",
+                "illuminate/console": "^11.15.0",
+                "illuminate/container": "^11.15.0",
+                "illuminate/contracts": "^11.15.0",
+                "illuminate/database": "^11.15.0",
+                "illuminate/http": "^11.15.0",
+                "illuminate/pipeline": "^11.15.0",
+                "illuminate/support": "^11.15.0",
+                "php": "^8.2",
                 "phpmyadmin/sql-parser": "^5.9.0",
-                "phpstan/phpstan": "^1.12.11"
+                "phpstan/phpstan": "^2.0.2"
             },
             "require-dev": {
                 "doctrine/coding-standard": "^12.0",
-                "laravel/framework": "^9.52.16 || ^10.28.0 || ^11.16",
-                "mockery/mockery": "^1.5.1",
-                "nikic/php-parser": "^4.19.1",
-                "orchestra/canvas": "^7.11.1 || ^8.11.0 || ^9.0.2",
-                "orchestra/testbench-core": "^7.33.0 || ^8.13.0 || ^9.0.9",
-                "phpstan/phpstan-deprecation-rules": "^1.2",
-                "phpunit/phpunit": "^9.6.13 || ^10.5.16"
+                "laravel/framework": "^11.15.0",
+                "mockery/mockery": "^1.6",
+                "nikic/php-parser": "^5.3",
+                "orchestra/canvas": "^v9.1.3",
+                "orchestra/testbench-core": "^9.5.2",
+                "phpstan/phpstan-deprecation-rules": "^2.0.0",
+                "phpunit/phpunit": "^10.5.16"
             },
             "suggest": {
                 "orchestra/testbench": "Using Larastan for analysing a package needs Testbench"
@@ -10180,7 +10180,7 @@
                     "email": "enunomaduro@gmail.com"
                 }
             ],
-            "description": "Larastan - Discover bugs in your code without running it. A phpstan/phpstan extension for Laravel",
+            "description": "Larastan - Discover bugs in your code without running it. A phpstan/phpstan wrapper for Laravel",
             "keywords": [
                 "PHPStan",
                 "code analyse",
@@ -10193,7 +10193,7 @@
             ],
             "support": {
                 "issues": "https://github.com/larastan/larastan/issues",
-                "source": "https://github.com/larastan/larastan/tree/v2.9.12"
+                "source": "https://github.com/larastan/larastan/tree/v3.0.2"
             },
             "funding": [
                 {
@@ -10201,7 +10201,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-26T23:09:02+00:00"
+            "time": "2024-11-26T23:15:21+00:00"
         },
         {
             "name": "laravel/pint",
@@ -10868,20 +10868,20 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.13",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "9b469068840cfa031e1deaf2fa1886d00e20680f"
+                "reference": "50d276fc3bf1430ec315f2f109bbde2769821524"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9b469068840cfa031e1deaf2fa1886d00e20680f",
-                "reference": "9b469068840cfa031e1deaf2fa1886d00e20680f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/50d276fc3bf1430ec315f2f109bbde2769821524",
+                "reference": "50d276fc3bf1430ec315f2f109bbde2769821524",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2|^8.0"
+                "php": "^7.4|^8.0"
             },
             "conflict": {
                 "phpstan/phpstan-shim": "*"
@@ -10922,33 +10922,32 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-17T17:00:20+00:00"
+            "time": "2024-12-17T17:14:01+00:00"
         },
         {
             "name": "phpstan/phpstan-mockery",
-            "version": "1.1.3",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-mockery.git",
-                "reference": "98cac6e256b4ee60fdeb26a7dd81bb271b454e80"
+                "reference": "89a949d0ac64298e88b7c7fa00caee565c198394"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-mockery/zipball/98cac6e256b4ee60fdeb26a7dd81bb271b454e80",
-                "reference": "98cac6e256b4ee60fdeb26a7dd81bb271b454e80",
+                "url": "https://api.github.com/repos/phpstan/phpstan-mockery/zipball/89a949d0ac64298e88b7c7fa00caee565c198394",
+                "reference": "89a949d0ac64298e88b7c7fa00caee565c198394",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.12"
+                "php": "^7.4 || ^8.0",
+                "phpstan/phpstan": "^2.0"
             },
             "require-dev": {
                 "mockery/mockery": "^1.6.11",
-                "nikic/php-parser": "^4.13.0",
                 "php-parallel-lint/php-parallel-lint": "^1.2",
-                "phpstan/phpstan-phpunit": "^1.4",
-                "phpstan/phpstan-strict-rules": "^1.6",
-                "phpunit/phpunit": "^9.5"
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/phpunit": "^9.6"
             },
             "type": "phpstan-extension",
             "extra": {
@@ -10970,9 +10969,9 @@
             "description": "PHPStan Mockery extension",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-mockery/issues",
-                "source": "https://github.com/phpstan/phpstan-mockery/tree/1.1.3"
+                "source": "https://github.com/phpstan/phpstan-mockery/tree/2.0.0"
             },
-            "time": "2024-09-11T15:47:29+00:00"
+            "time": "2024-10-14T03:18:12+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -11402,12 +11401,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "abbccc97f36a9c78f033525c019d310433f22b57"
+                "reference": "5a88337185d08d54ac102bc6eb137fc432ea70fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/abbccc97f36a9c78f033525c019d310433f22b57",
-                "reference": "abbccc97f36a9c78f033525c019d310433f22b57",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5a88337185d08d54ac102bc6eb137fc432ea70fb",
+                "reference": "5a88337185d08d54ac102bc6eb137fc432ea70fb",
                 "shasum": ""
             },
             "conflict": {
@@ -11957,7 +11956,7 @@
                 "shopware/storefront": "<=6.4.8.1|>=6.5.8,<6.5.8.7-dev",
                 "shopxo/shopxo": "<=6.1",
                 "showdoc/showdoc": "<2.10.4",
-                "shuchkin/simplexlsx": ">=1.0.12,<1.1.12",
+                "shuchkin/simplexlsx": ">=1.0.12,<1.1.13",
                 "silverstripe-australia/advancedreports": ">=1,<=2",
                 "silverstripe/admin": "<1.13.19|>=2,<2.1.8",
                 "silverstripe/assets": ">=1,<1.11.1",
@@ -12247,7 +12246,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-20T16:05:39+00:00"
+            "time": "2024-12-23T19:04:22+00:00"
         },
         {
             "name": "sebastian/cli-parser",

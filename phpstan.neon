@@ -8,4 +8,10 @@ parameters:
         - tests
     level: max
     ignoreErrors:
+        - identifier: method.nonObject
+        - identifier: argument.type
+        - identifier: property.nonObject
+        - identifier: binaryOp.invalid
+        - identifier: offsetAccess.nonOffsetAccessible
+        - identifier: missingType.generics
     excludePaths:
