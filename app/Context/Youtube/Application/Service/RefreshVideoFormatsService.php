@@ -24,7 +24,7 @@ class RefreshVideoFormatsService
     public function refresh(Video $video): void
     {
         $videoInfo = Youtube::getVideoInfo($video->getVideoId());
-        $video->title = $videoInfo->snippet->title;
+        $video->title = strval($videoInfo->snippet->title);
         $video->save();
         $formats = $this->getVideoFormatsService->getVideoFormats($video);
         if (count($formats) > 0) {

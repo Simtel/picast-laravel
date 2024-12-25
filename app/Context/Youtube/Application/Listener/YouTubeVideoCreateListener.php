@@ -24,7 +24,11 @@ readonly class YouTubeVideoCreateListener
     {
         $video = $event->video;
         $videoInfo = Youtube::getVideoInfo($video->getVideoId());
-        $video->title = $videoInfo->snippet->title;
+        $title = $videoInfo->snippet->title;
+        if (!is_string($title)) {
+            $title = strval($title);
+        }
+        $video->title = $title;
         $video->save();
 
         UpdateVideoFormats::dispatch($video);

@@ -43,7 +43,7 @@ class GetVideoFormatsService
     }
 
     /**
-     * @return array<string, mixed>
+     * @return mixed[]
      * @throws JsonException
      */
     private function decodeJson(string $jsonResult): array
@@ -68,7 +68,7 @@ class GetVideoFormatsService
         foreach ($videoInfo['formats'] as $format) {
             if (isset($format['height']) && $format['height'] >= 720) {
                 $formats[] = new FormatVideoDto(
-                    (int)$format['format_id'],
+                    intval($format['format_id']),
                     $format['format_note'] ?? '',
                     $format['video_ext'] ?? '',
                     $format['vcodec'] ?? '',
