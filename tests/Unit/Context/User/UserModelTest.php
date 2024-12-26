@@ -8,8 +8,6 @@ use App\Context\User\Domain\Model\User;
 use Event;
 use Tests\TestCase;
 
-use function PHPUnit\Framework\assertTrue;
-
 class UserModelTest extends TestCase
 {
     public function test_user_has_domains(): void
@@ -19,7 +17,6 @@ class UserModelTest extends TestCase
         $user = User::factory()->hasDomains(2)->create();
 
         self::assertCount(2, $user->domains()->get());
-        assertTrue(true);
     }
 
     public function test_user_get_methods(): void

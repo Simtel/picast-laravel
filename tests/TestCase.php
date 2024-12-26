@@ -64,6 +64,7 @@ abstract class TestCase extends BaseTestCase
      */
     public function createUserWithPermissions(array $attributes, array $permissions): User
     {
+        /** @var User $user */
         $user = User::factory()->count(1)->create($attributes)->first();
         $role = Role::create(['name' => 'user']);
         foreach ($permissions as $permission) {

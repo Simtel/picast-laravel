@@ -62,7 +62,7 @@ class ForgotPasswordTest extends TestCase
         ]);
         /** @var stdClass $token */
         $token = DB::table('password_resets')->first();
-        $this->assertNotNull($token);
+
         Notification::assertSentTo($user, ResetPassword::class, static function ($notification, $channels) use ($token) {
             return Hash::check($notification->token, $token->token) === true;
         });
