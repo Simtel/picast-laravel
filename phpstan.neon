@@ -12,7 +12,4 @@ parameters:
         - identifier: argument.type
         - identifier: property.nonObject
         - identifier: binaryOp.invalid
-        - identifier: offsetAccess.nonOffsetAccessible
-        - identifier: missingType.generics
-        - identifier: larastan.noEnvCallsOutsideOfConfig
     excludePaths:

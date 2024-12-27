@@ -53,8 +53,8 @@ class VideoFile extends Model
         if ($this->file_link === '') {
             return '';
         }
-        $host = is_string(env('SELECTEL_PUBLIC'))
-            ? rtrim((string)env('SELECTEL_PUBLIC'), '/')
+        $host = is_string(config('SELECTEL_PUBLIC'))
+            ? rtrim((string)config('SELECTEL_PUBLIC'), '/')
             : config('app.url');
         return $host . '/videos/' . $this->file_link;
     }

@@ -241,4 +241,6 @@ return [
         'WhoisService' => WhoisService::class,
     ],
 
+    'DEFAULT_USER_EMAIL' => env('DEFAULT_USER_EMAIL'),
+    'SELECTEL_PUBLIC' => env('SELECTEL_PUBLIC'),
 ];

@@ -94,7 +94,7 @@ class Domain extends Model
      */
     public function routeNotificationForMail(Notification $notification): array
     {
-        return [env('DEFAULT_USER_EMAIL') => 'Admin'];
+        return [config('DEFAULT_USER_EMAIL') => 'Admin'];
     }
 
     public function getUser(): User

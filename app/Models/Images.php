@@ -57,8 +57,8 @@ class Images extends Model
     public function getPath(): string
     {
         if ($this->disk === 's3') {
-            $host = is_string(env('SELECTEL_PUBLIC'))
-                ? rtrim((string)env('SELECTEL_PUBLIC'), '/')
+            $host = is_string(config('SELECTEL_PUBLIC'))
+                ? rtrim((string)config('SELECTEL_PUBLIC'), '/')
                 : config('app.url');
             return $host . '/' . $this->directory . '/' . $this->filename;
         }

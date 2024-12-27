@@ -23,7 +23,11 @@ class GetVideoFormatsService
         $jsonResult = $this->executeCommand($videoUrl);
         $videoInfo = $this->decodeJson($jsonResult);
 
-        return $this->extractFormats($videoInfo);
+        if (!isset($videoInfo['formats']) || !is_array($videoInfo['formats'])) {
+            throw new RuntimeException('Не удалось получить информацию о видео');
+        }
+
+        return $this->extractFormats($videoInfo['formats']);
     }
 
 
@@ -53,21 +57,15 @@ class GetVideoFormatsService
     }
 
     /**
-     * @param array<string, mixed> $videoInfo
+     * @param array<int, array<string, mixed>> $formats
      * @return FormatVideoDto[]
-     * @throws RuntimeException
      */
-    private function extractFormats(array $videoInfo): array
+    private function extractFormats(array $formats): array
     {
-        if (!isset($videoInfo['formats']) || !is_array($videoInfo['formats'])) {
-            throw new RuntimeException('Не удалось получить информацию о видео');
-        }
-
-        $formats = [];
-
-        foreach ($videoInfo['formats'] as $format) {
+        $dto = [];
+        foreach ($formats as $format) {
             if (isset($format['height']) && $format['height'] >= 720) {
-                $formats[] = new FormatVideoDto(
+                $dto[] = new FormatVideoDto(
                     intval($format['format_id']),
                     $format['format_note'] ?? '',
                     $format['video_ext'] ?? '',
@@ -77,6 +75,6 @@ class GetVideoFormatsService
             }
         }
 
-        return $formats;
+        return $dto;
     }
 }

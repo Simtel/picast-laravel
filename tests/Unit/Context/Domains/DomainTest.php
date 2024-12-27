@@ -40,7 +40,7 @@ class DomainTest extends TestCase
         $event = new DomainDeleted($domain);
         self::assertEquals(
             [
-                env('DEFAULT_USER_EMAIL') => 'Admin'
+                config('DEFAULT_USER_EMAIL') => 'Admin'
             ],
             $domain->routeNotificationForMail($event),
         );

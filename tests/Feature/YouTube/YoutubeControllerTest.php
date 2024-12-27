@@ -128,6 +128,7 @@ class YoutubeControllerTest extends TestCase
         Queue::fake();
         Event::fake([YouTubeVideoCreated::class]);
 
+        /** @var array<int, Video> $videos */
         $videos = Video::factory()->count(2)->create();
 
         Event::assertDispatched(YouTubeVideoCreated::class, 2);
