@@ -59,7 +59,7 @@ class Images extends Model
         if ($this->disk === 's3') {
             $host = is_string(config('SELECTEL_PUBLIC'))
                 ? rtrim((string)config('SELECTEL_PUBLIC'), '/')
-                : config('app.url');
+                : strval(config('app.url'));
             return $host . '/' . $this->directory . '/' . $this->filename;
         }
         return public_path('images') . '/' . $this->filename;
