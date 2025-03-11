@@ -17,17 +17,18 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Queue;
 use Mockery;
 use Mockery\Expectation;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Tests\TestCase;
 
 class YoutubeControllerTest extends TestCase
 {
     /**
-     * @dataProvider dataProviderForValidationTest
      * @param mixed $url
      * @param string|string[] $error
      * @return void
      */
+    #[DataProvider('dataProviderForValidationTest')]
     public function test_validate_youtube_link(mixed $url, string|array $error): void
     {
         $this->loginAdmin();

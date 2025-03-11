@@ -6,6 +6,7 @@ namespace Tests;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Bootstrap\HandleExceptions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Console\Kernel;
 

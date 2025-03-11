@@ -13,16 +13,17 @@ use Illuminate\Support\Facades\Event;
 use Mockery;
 use Mockery\ExpectationInterface;
 use Notification;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class DomainControllerTest extends TestCase
 {
     /**
-     * @dataProvider dataProviderForValidationTest
      * @param string|int $name
      * @param string $error
      * @return void
      */
+    #[DataProvider('dataProviderForValidationTest')]
     public function test_validate_domain_name(string|int $name, string $error): void
     {
         $this->loginAdmin();
