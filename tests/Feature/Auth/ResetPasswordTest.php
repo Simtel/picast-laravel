@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use App\Context\User\Domain\Model\User;
+use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Event;
@@ -19,9 +22,13 @@ class ResetPasswordTest extends TestCase
     use DatabaseTransactions;
     use MakesRequestsFromPage;
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function getValidToken(CanResetPasswordContract $user): string
     {
-        return Password::broker()->createToken($user);
+        return app()->get(PasswordBroker::class)->createToken($user);
     }
 
     protected function getInvalidToken(): string
