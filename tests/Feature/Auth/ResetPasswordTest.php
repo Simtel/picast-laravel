@@ -13,7 +13,6 @@ use Psr\Container\NotFoundExceptionInterface;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Password;
 use Tests\Feature\MakesRequestsFromPage;
 use Illuminate\Auth\Events\PasswordReset;
 
