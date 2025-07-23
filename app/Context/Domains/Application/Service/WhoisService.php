@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Application\Service;
 
-use App\Context\Domains\Domain\Model\Whois;
+use App\Context\Domains\Domain\Model\Domain;
 use Illuminate\Database\Query\Builder;
 use Override;
 
@@ -32,12 +32,12 @@ class WhoisService implements \App\Context\Domains\Application\Contract\WhoisSer
      * @param string $sub example day,week,month
      */
     #[Override]
-    public function deleteOldWhois(string $sub): int
+    public function deleteOldWhois(Domain $domain, string $sub): int
     {
         $expire_at = now()->sub('1 ' . $sub);
 
         /** @var Builder $builder */
-        $builder = Whois::whereDate('created_at', '<', $expire_at);
+        $builder = $domain->whois()->where('created_at', '<', $expire_at);
         return $builder->delete();
     }
 }

@@ -23,7 +23,7 @@ class WhoisController extends Controller
     {
         $domain = Domain::findOrFail($id);
         $this->authorize('update', $domain);
-        WhoisService::deleteOldWhois($deleteOldWhois->string('delete_old_whois')->toString());
+        WhoisService::deleteOldWhois($domain, $deleteOldWhois->string('delete_old_whois')->toString());
         return redirect()->route('domains.show', ['domain' => $domain->id]);
     }
 }

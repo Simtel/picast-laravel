@@ -38,18 +38,20 @@ class WhoisServiceTest extends TestCase
     {
         Queue::fake();
         Event::fake();
+        $domain = Domain::factory()->create();
+        Whois::factory()->make(['domain_id' => $domain->getId()])->save();
+        Whois::factory()->make(['domain_id' => $domain->getId(), 'created_at' => now()->sub('2 day')])->save();
         Whois::factory()->create();
-        Whois::factory()->make(['created_at' => now()->sub('2 day')])->save();
 
+
+        $this->assertDatabaseCount(Domain::class, 2);
+        $this->assertDatabaseCount(Whois::class, 3);
+        $service = $this->app->make(WhoisService::class);
+
+        self::assertEquals(1, $service->deleteOldWhois($domain, 'day'));
 
         $this->assertDatabaseCount(Domain::class, 2);
         $this->assertDatabaseCount(Whois::class, 2);
-        $service = $this->app->make(WhoisService::class);
-
-        self::assertEquals(1, $service->deleteOldWhois('day'));
-
-        $this->assertDatabaseCount(Domain::class, 2);
-        $this->assertDatabaseCount(Whois::class, 1);
     }
 
     /**
@@ -59,14 +61,16 @@ class WhoisServiceTest extends TestCase
     {
         Queue::fake();
         Event::fake();
-        Whois::factory()->count(2)->create();
+        $domain = Domain::factory()->create();
+        Whois::factory()->make(['domain_id' => $domain->getId()])->save();
+        Whois::factory()->make()->save();
 
 
         $this->assertDatabaseCount(Domain::class, 2);
         $this->assertDatabaseCount(Whois::class, 2);
         $service = $this->app->make(WhoisService::class);
 
-        self::assertEquals(0, $service->deleteOldWhois('day'));
+        self::assertEquals(0, $service->deleteOldWhois($domain, 'day'));
 
         $this->assertDatabaseCount(Domain::class, 2);
         $this->assertDatabaseCount(Whois::class, 2);

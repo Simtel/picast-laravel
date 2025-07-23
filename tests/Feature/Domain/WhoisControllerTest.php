@@ -20,18 +20,21 @@ class WhoisControllerTest extends TestCase
         }
         Event::fake();
         $domain = Domain::factory()->create(['user_id' => $user->getId()]);
+        $domain2 = Domain::factory()->create(['user_id' => $user->getId()]);
         Whois::factory()->make(['domain_id' => $domain->getId()])->save();
+        Whois::factory()->make(['domain_id' => $domain2->getId()])->save();
         Whois::factory()->make(['domain_id' => $domain->getId(), 'created_at' => now()->sub('2 day')])->save();
+        Whois::factory()->make(['domain_id' => $domain2->getId(), 'created_at' => now()->sub('2 day')])->save();
 
-        $this->assertDatabaseCount(Domain::class, 1);
-        $this->assertDatabaseCount(Whois::class, 2);
+        $this->assertDatabaseCount(Domain::class, 2);
+        $this->assertDatabaseCount(Whois::class, 4);
 
         $response = $this->post(route('domains.delete_old_whois', ['id' => $domain->getId()]), ['delete_old_whois' => 'day']);
         $response->assertStatus(302);
         $response->assertRedirect(route('domains.show', ['domain' => $domain->id]));
 
 
-        $this->assertDatabaseCount(Domain::class, 1);
-        $this->assertDatabaseCount(Whois::class, 1);
+        $this->assertDatabaseCount(Domain::class, 2);
+        $this->assertDatabaseCount(Whois::class, 3);
     }
 }

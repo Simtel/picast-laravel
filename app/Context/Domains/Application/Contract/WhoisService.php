@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Application\Contract;
 
+use App\Context\Domains\Domain\Model\Domain;
+
 interface WhoisService
 {
     /**
@@ -11,5 +13,5 @@ interface WhoisService
      */
     public function getTimeFrameOptions(): array;
 
-    public function deleteOldWhois(string $sub): int;
+    public function deleteOldWhois(Domain $domain, string $sub): int;
 }
