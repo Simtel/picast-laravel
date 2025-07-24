@@ -90,11 +90,11 @@ class Domain extends Model
 
     /**
      * @param DomainDeleted $notification
-     * @return string[]
+     * @return string[]|string
      */
-    public function routeNotificationForMail(Notification $notification): array
+    public function routeNotificationForMail(Notification $notification): array|string
     {
-        return [config('DEFAULT_USER_EMAIL') => 'Admin'];
+        return $this->user->email;
     }
 
     public function getUser(): User
