@@ -94,7 +94,7 @@ class Domain extends Model
      */
     public function routeNotificationForMail(Notification $notification): array|string
     {
-        return $this->user->email;
+        return $this->getUser()->getEmail();
     }
 
     public function getUser(): User
