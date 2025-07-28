@@ -30,6 +30,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('domains:whois')->daily();
         $schedule->command('youtube:download')->everyMinute();
         $schedule->job(new CheckExpireDomains())->daily();
+        $schedule->command('queue:process-jobs')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->runInBackground();
     }
 
     /**
