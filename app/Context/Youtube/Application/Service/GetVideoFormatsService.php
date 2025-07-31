@@ -31,7 +31,6 @@ class GetVideoFormatsService
     }
 
 
-
     private function buildVideoUrl(string $videoId): string
     {
         return "https://www.youtube.com/watch?v=" . $videoId;
@@ -52,7 +51,11 @@ class GetVideoFormatsService
      */
     private function decodeJson(string $jsonResult): array
     {
-        $jsonResult = json_decode($jsonResult, true, 512, JSON_THROW_ON_ERROR);
+        try {
+            $jsonResult = json_decode($jsonResult, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new JsonException('Не удалось декодировать JSON:' . $jsonResult);
+        }
         return !is_array($jsonResult) ? throw new JsonException('Не удалось декодировать JSON') : $jsonResult;
     }
 
