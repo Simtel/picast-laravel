@@ -13,8 +13,8 @@ use Exception;
 class RefreshVideoFormatsService
 {
     public function __construct(
-        readonly private GetVideoFormatsService $getVideoFormatsService,
-        readonly private YouTubeVideoStatusRepository $statusRepository,
+        private readonly GetVideoFormatsService $getVideoFormatsService,
+        private readonly YouTubeVideoStatusRepository $statusRepository,
     ) {
     }
 
