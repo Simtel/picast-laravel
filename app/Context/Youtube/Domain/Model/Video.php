@@ -14,36 +14,31 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
- * Class YouTubeVideoController
- *
- * @property int $user_id
+ * @property int $id
  * @property string $url
+ * @property int $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $id
- * @method static \Illuminate\Database\Eloquent\Builder|Video newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Video newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Video query()
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereIsDownload($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereUrl($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereUserId($value)
  * @property string $title
  * @property string $thumb
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereFileLink($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereSize($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereThumb($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereTitle($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, VideoFormats> $formats
- * @property-read int|null $formats_count
  * @property int|null $status_id
- * @property-read VideoStatus|null $status
- * @method static \Illuminate\Database\Eloquent\Builder|Video whereStatusId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, VideoFile> $files
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Context\Youtube\Domain\Model\VideoFile> $files
  * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Context\Youtube\Domain\Model\VideoFormats> $formats
+ * @property-read int|null $formats_count
+ * @property-read \App\Context\Youtube\Domain\Model\VideoStatus|null $status
  * @method static \App\Context\Youtube\Domain\Factory\VideoFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereThumb($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereUserId($value)
  * @mixin \Eloquent
  */
 class Video extends Model

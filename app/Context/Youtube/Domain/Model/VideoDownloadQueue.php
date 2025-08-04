@@ -10,23 +10,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- *
- *
- * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue query()
  * @property int $id
  * @property int $video_id
  * @property int $format_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read \App\Context\Youtube\Domain\Model\VideoFormats $format
+ * @property-read \App\Context\Youtube\Domain\Model\Video $video
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue whereFormatId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue whereVideoId($value)
- * @property-read Video $video
- * @property-read \App\Context\Youtube\Domain\Model\VideoFormats $format
  * @mixin Eloquent
  */
 class VideoDownloadQueue extends Model

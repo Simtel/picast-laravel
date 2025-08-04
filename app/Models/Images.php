@@ -12,32 +12,30 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * App\ImagesController
- *
  * @property int $id
+ * @property int $user_id
  * @property string $filename
  * @property string $thumb
  * @property int $width
+ * @property int $check
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @method static Builder|Images newModelQuery()
- * @method static Builder|Images newQuery()
- * @method static Builder|Images query()
- * @method static Builder|Images whereCreatedAt($value)
- * @method static Builder|Images whereFilename($value)
- * @method static Builder|Images whereId($value)
- * @method static Builder|Images whereThumb($value)
- * @method static Builder|Images whereUpdatedAt($value)
- * @method static Builder|Images whereWidth($value)
- * @property int $check
- * @method static Builder|Images whereCheck($value)
- * @property int $user_id
- * @property-read \App\Context\User\Domain\Model\User $user
- * @method static Builder|Images whereUserId($value)
  * @property string $directory
  * @property string $disk
- * @method static Builder|Images whereDirectory($value)
- * @method static Builder|Images whereDisk($value)
+ * @property-read User|null $user
+ * @method static Builder<static>|Images newModelQuery()
+ * @method static Builder<static>|Images newQuery()
+ * @method static Builder<static>|Images query()
+ * @method static Builder<static>|Images whereCheck($value)
+ * @method static Builder<static>|Images whereCreatedAt($value)
+ * @method static Builder<static>|Images whereDirectory($value)
+ * @method static Builder<static>|Images whereDisk($value)
+ * @method static Builder<static>|Images whereFilename($value)
+ * @method static Builder<static>|Images whereId($value)
+ * @method static Builder<static>|Images whereThumb($value)
+ * @method static Builder<static>|Images whereUpdatedAt($value)
+ * @method static Builder<static>|Images whereUserId($value)
+ * @method static Builder<static>|Images whereWidth($value)
  * @mixin Eloquent
  */
 class Images extends Model

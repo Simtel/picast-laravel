@@ -15,8 +15,6 @@ use Illuminate\Support\Number;
 use Log;
 
 /**
- *
- *
  * @property int $id
  * @property int $video_id
  * @property string $file_link
@@ -24,18 +22,18 @@ use Log;
  * @property int $format_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|VideoFile newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|VideoFile newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|VideoFile query()
- * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereFileLink($value)
- * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereFormatId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereSize($value)
- * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|VideoFile whereVideoId($value)
- * @property-read Video $video
+ * @property-read \App\Context\Youtube\Domain\Model\Video $video
  * @method static \App\Context\Youtube\Domain\Factory\VideoFileFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile whereFileLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile whereFormatId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile whereSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile whereVideoId($value)
  * @mixin Eloquent
  */
 class VideoFile extends Model

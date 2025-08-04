@@ -10,21 +10,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\InviteCode
- *
- * @property integer $id
- * @property integer $created_by
+ * @property int $id
+ * @property int $created_by
  * @property string $code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @method static Builder|InviteCode newModelQuery()
- * @method static Builder|InviteCode newQuery()
- * @method static Builder|InviteCode query()
- * @method static Builder|InviteCode whereCode($value)
- * @method static Builder|InviteCode whereCreatedAt($value)
- * @method static Builder|InviteCode whereCreatedBy($value)
- * @method static Builder|InviteCode whereId($value)
- * @method static Builder|InviteCode whereUpdatedAt($value)
+ * @method static Builder<static>|InviteCode newModelQuery()
+ * @method static Builder<static>|InviteCode newQuery()
+ * @method static Builder<static>|InviteCode query()
+ * @method static Builder<static>|InviteCode whereCode($value)
+ * @method static Builder<static>|InviteCode whereCreatedAt($value)
+ * @method static Builder<static>|InviteCode whereCreatedBy($value)
+ * @method static Builder<static>|InviteCode whereId($value)
+ * @method static Builder<static>|InviteCode whereUpdatedAt($value)
  * @mixin Eloquent
  */
 class InviteCode extends Model

@@ -21,34 +21,29 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
 
 /**
- * Class Domain
- *
- * @package App\Models
  * @property int $id
  * @property string $name
  * @property int $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|User[] $users
- * @property-read int|null $users_count
- * @method static Builder|Domain newModelQuery()
- * @method static Builder|Domain newQuery()
- * @method static Builder|Domain query()
- * @method static Builder|Domain whereCreatedAt($value)
- * @method static Builder|Domain whereId($value)
- * @method static Builder|Domain whereName($value)
- * @method static Builder|Domain whereUpdatedAt($value)
- * @property-read Collection|Whois[] $whois
- * @property-read int|null $whois_count
- * @method static Builder|Domain whereUserId($value)
- * @property Carbon $expire_at
- * @property string $owner
- * @method static Builder|Domain whereExpireAt($value)
- * @method static Builder|Domain whereOwner($value)
- * @method static DomainFactory factory(...$parameters)
- * @property User $user
+ * @property string|null $expire_at
+ * @property string|null $owner
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read User|null $user
+ * @property-read Collection<int, \App\Context\Domains\Domain\Model\Whois> $whois
+ * @property-read int|null $whois_count
+ * @method static \App\Context\Domains\Domain\Factory\DomainFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Domain newModelQuery()
+ * @method static Builder<static>|Domain newQuery()
+ * @method static Builder<static>|Domain query()
+ * @method static Builder<static>|Domain whereCreatedAt($value)
+ * @method static Builder<static>|Domain whereExpireAt($value)
+ * @method static Builder<static>|Domain whereId($value)
+ * @method static Builder<static>|Domain whereName($value)
+ * @method static Builder<static>|Domain whereOwner($value)
+ * @method static Builder<static>|Domain whereUpdatedAt($value)
+ * @method static Builder<static>|Domain whereUserId($value)
  * @mixin Eloquent
  */
 class Domain extends Model
