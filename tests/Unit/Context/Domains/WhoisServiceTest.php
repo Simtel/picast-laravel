@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Unit\Context\Domains;
 
 use App\Context\Domains\Application\Contract\WhoisService;
-use App\Context\Domains\Domain\Factory\DomainFactory;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Domain\Model\Whois;
 use Event;

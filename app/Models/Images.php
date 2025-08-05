@@ -22,7 +22,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property string $directory
  * @property string $disk
- * @property-read User|null $user
+ * @property-read User $user
  * @method static Builder<static>|Images newModelQuery()
  * @method static Builder<static>|Images newQuery()
  * @method static Builder<static>|Images query()

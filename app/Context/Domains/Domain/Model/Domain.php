@@ -26,11 +26,11 @@ use Illuminate\Support\Carbon;
  * @property int $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string|null $expire_at
+ * @property Carbon|null $expire_at
  * @property string|null $owner
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read User|null $user
+ * @property-read User $user
  * @property-read Collection<int, \App\Context\Domains\Domain\Model\Whois> $whois
  * @property-read int|null $whois_count
  * @method static \App\Context\Domains\Domain\Factory\DomainFactory factory($count = null, $state = [])
