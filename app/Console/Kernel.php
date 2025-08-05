@@ -30,10 +30,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('domains:whois')->daily();
         $schedule->command('youtube:download')->everyMinute();
         $schedule->job(new CheckExpireDomains())->daily();
-        $schedule->command('queue:process-jobs')
-            ->everyMinute()
-            ->withoutOverlapping()
-            ->runInBackground();
     }
 
     /**
@@ -43,9 +39,9 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
-        $this->load(__DIR__.'/../Context/Youtube/Infrastructure/Commands');
-        $this->load(__DIR__.'/../Context/Domains/Infrastructure/Command');
+        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__ . '/../Context/Youtube/Infrastructure/Commands');
+        $this->load(__DIR__ . '/../Context/Domains/Infrastructure/Command');
 
         require base_path('routes/console.php');
     }
