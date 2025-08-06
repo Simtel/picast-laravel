@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Common;
 
-use App\Mail\InviteUserNotify;
+use App\Context\User\Infrastructure\Mail\InviteUserNotify;
 use App\Models\InviteCode;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;

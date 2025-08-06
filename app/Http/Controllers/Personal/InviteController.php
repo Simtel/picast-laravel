@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Personal;
 
+use App\Context\User\Infrastructure\Mail\InviteUserNotify;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InviteRequest;
-use App\Mail\InviteUserNotify;
 use App\Models\InviteCode;
 use Auth;
 use Exception;

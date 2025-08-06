@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Mail;
+namespace App\Context\User\Infrastructure\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
