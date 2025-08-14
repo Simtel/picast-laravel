@@ -12,18 +12,32 @@ class CreateDatabase extends Command
     /**
      * @var string
      */
-    protected $signature = 'app:create-database {name}';
+    protected $signature = 'app:create-database {name : The name of the database to create}';
 
     /**
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Create a new MySQL database with the given name.';
 
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
     public function handle(): void
     {
-        $name = $this->argument('name');
-        $this->info('Will be created  ' . $name . ' database');
-        DB::statement(sprintf('CREATE DATABASE IF NOT EXISTS %s', $this->argument('name')));
-        $this->info('Database successfully created!');
+        $databaseName = $this->argument('name');
+
+        if (!preg_match(pattern: '/^[a-zA-Z0-9_]+$/', subject: $databaseName)) {
+            $this->error("Invalid database name: '$databaseName'");
+            return;
+        }
+
+        try {
+            DB::statement('CREATE DATABASE IF NOT EXISTS ?', [$databaseName]);
+            $this->info("Database '$databaseName' has been created successfully.");
+        } catch (\Exception $e) {
+            $this->error("Failed to create database: " . $e->getMessage());
+        }
     }
 }
