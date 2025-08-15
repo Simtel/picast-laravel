@@ -15,7 +15,6 @@ class CreateDataBaseCommandTest extends TestCase
         $command = $this->artisan('app:create-database test');
 
         $command->assertSuccessful()
-            ->expectsOutput('Will be created  test database')
-            ->expectsOutput('Database successfully created!');
+            ->expectsOutput('Database test has been created successfully.');
     }
 }

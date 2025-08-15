@@ -34,8 +34,8 @@ class CreateDatabase extends Command
         }
 
         try {
-            DB::statement('CREATE DATABASE IF NOT EXISTS ?', [$databaseName]);
-            $this->info("Database '$databaseName' has been created successfully.");
+            DB::statement(sprintf('CREATE DATABASE IF NOT EXISTS %s', $databaseName));
+            $this->info("Database $databaseName has been created successfully.");
         } catch (\Exception $e) {
             $this->error("Failed to create database: " . $e->getMessage());
         }
