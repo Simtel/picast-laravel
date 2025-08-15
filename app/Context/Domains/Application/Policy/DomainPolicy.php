@@ -32,7 +32,7 @@ class DomainPolicy
      */
     public function view(User $user, Domain $domain): bool
     {
-        return $user->id === $domain->user_id;
+        return $user->getid() === $domain->getUser()->getId();
     }
 
     /**
@@ -55,7 +55,7 @@ class DomainPolicy
      */
     public function update(User $user, Domain $domain): bool
     {
-        return $user->id === $domain->user_id;
+        return $user->getid() === $domain->getUser()->getId();
     }
 
     /**
@@ -67,7 +67,7 @@ class DomainPolicy
      */
     public function delete(User $user, Domain $domain): bool
     {
-        return $domain->user_id === $user->id;
+        return $domain->getUser()->getId() === $user->getid();
     }
 
     /**

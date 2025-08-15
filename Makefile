@@ -40,7 +40,7 @@ set-githooks: ##Set githooks
     	chmod -R +x pre-commit
 
 pint: ##Run pint analyse
-	docker exec -it picast_php sh -c "./vendor/bin/pint"
+	docker exec -it picast_php sh -c "./vendor/bin/pint --parallel"
 
 test: ##Run pint analyse
 	docker exec -it picast_php sh -c "php artisan test"
