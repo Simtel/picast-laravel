@@ -24,6 +24,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property int $id
  * @property string $name
  * @property string $email
+ * @property \Illuminate\Support\Carbon|null $birth_date
  * @property string $password
  * @property string|null $api_token
  * @property string|null $remember_token
@@ -46,6 +47,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User role($roles, $guard = null, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereApiToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereBirthDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
@@ -72,6 +74,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'birth_date',
         'password',
     ];
 
@@ -86,6 +89,14 @@ class User extends Authenticatable
     ];
 
     protected static string $factory = UserFactory::class;
+
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'birth_date' => 'date',
+        'deleted_at' => 'datetime',
+    ];
 
     /**
      * @var string[]
@@ -118,5 +129,10 @@ class User extends Authenticatable
     public function getApiToken(): ?string
     {
         return $this->api_token;
+    }
+
+    public function getBirthDate(): ?\Illuminate\Support\Carbon
+    {
+        return $this->birth_date;
     }
 }
