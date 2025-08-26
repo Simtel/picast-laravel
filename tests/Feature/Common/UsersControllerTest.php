@@ -36,6 +36,7 @@ class UsersControllerTest extends TestCase
         $data = [
             'name'  => $user->getName(),
             'email' => 'test@test1.com',
+            'birth_date' => '1990-01-15',
             'roles' => [
                 'member'
             ]
@@ -43,7 +44,8 @@ class UsersControllerTest extends TestCase
         $response = $this->post(route('user.update', ['user' => $user]), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('user.edit', ['user' => $user]));
+        $response->assertSessionHas('success', 'Пользователь успешно обновлен!');
         $this->assertDatabaseCount($tableNames['model_has_roles'], 3);
-        $this->assertDatabaseHas(User::class, ['email' => 'test@test1.com']);
+        $this->assertDatabaseHas(User::class, ['email' => 'test@test1.com', 'birth_date' => '1990-01-15']);
     }
 }

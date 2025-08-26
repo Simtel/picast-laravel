@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::post('/settings/password', [SettingsController::class, 'password'])->name('settings.password');
+    Route::post('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile');
     Route::post('/settings/token', [SettingsController::class, 'token'])->name('settings.token');
 
     Route::get('/invite', [InviteController::class, 'index'])->name('invite');

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Personal;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use Auth;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Foundation\Application;
@@ -25,8 +26,9 @@ class SettingsController extends Controller
      */
     public function index(Request $request): Factory|View|Application
     {
-        $token = $request->user()?->api_token;
-        return view('personal.settings', ['token' => $token]);
+        $user = $request->user();
+        $token = $user?->api_token;
+        return view('personal.settings', ['token' => $token, 'user' => $user]);
     }
 
     /**
@@ -62,6 +64,26 @@ class SettingsController extends Controller
         $user->save();
 
         event(new PasswordReset($user));
-        return redirect()->route('settings');
+        return redirect()->route('settings')->with('success', 'Пароль успешно обновлен!');
+    }
+
+    /**
+     * @param UpdateProfileRequest $request
+     * @return RedirectResponse
+     */
+    public function updateProfile(UpdateProfileRequest $request): RedirectResponse
+    {
+        $user = Auth::user();
+        if ($user === null) {
+            throw new BadRequestException('Пользователь не найден');
+        }
+
+        $user->update([
+            'name' => $request->string('name')->toString(),
+            'email' => $request->string('email')->toString(),
+            'birth_date' => $request->date('birth_date')?->format('Y-m-d'),
+        ]);
+
+        return redirect()->route('settings')->with('success', 'Профиль успешно обновлен!');
     }
 }

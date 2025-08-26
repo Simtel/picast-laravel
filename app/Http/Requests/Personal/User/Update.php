@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Requests\Personal\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Spatie\Permission\Models\Role;
+use Illuminate\Validation\Rule;
 
 class Update extends FormRequest
 {
@@ -24,7 +26,7 @@ class Update extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, string|array<int, string>>
+     * @return array<string, mixed>
      */
     public function rules(): array
     {
@@ -36,6 +38,19 @@ class Update extends FormRequest
             'email' => [
                 'required',
                 'email'
+            ],
+            'birth_date' => [
+                'nullable',
+                'date',
+                'before:today'
+            ],
+            'roles' => [
+                'nullable',
+                'array'
+            ],
+            'roles.*' => [
+                'string',
+                Rule::in(Role::pluck('name')->toArray())
             ]
         ];
     }

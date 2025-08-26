@@ -34,10 +34,16 @@ class UsersController extends Controller
      */
     public function update(User $user, Update $request): RedirectResponse
     {
-        $user->name = $request->string('name')->toString();
-        $user->email = $request->string('email')->toString();
+        $user->update([
+            'name' => $request->string('name')->toString(),
+            'email' => $request->string('email')->toString(),
+            'birth_date' => $request->date('birth_date')?->format('Y-m-d'),
+        ]);
+
         $user->syncRoles($request->all('roles'));
+
         $user->save();
-        return redirect()->route('user.edit', [$user]);
+
+        return redirect()->route('user.edit', [$user])->with('success', 'Пользователь успешно обновлен!');
     }
 }

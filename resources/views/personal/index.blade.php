@@ -16,6 +16,7 @@
                 <th scope="col">Имя</th>
                 <th scope="col">E-mail</th>
                 <th scope="col">Дата регистрации</th>
+                <th scope="col">Дата рождения</th>
                 <th scope="col">Роли пользователя</th>
                 <th scope="col">Действия</th>
             </tr>
@@ -27,6 +28,7 @@
                     <td>{{$user->name}}</td>
                     <td>{{$user->email}}</td>
                     <td>{{$user->created_at}}</td>
+                    <td>{{ $user->birth_date ? $user->birth_date->format('d.m.Y') : 'Не указана' }}</td>
                     <td>
                         @foreach($user->roles as $role)
                             {{$role->name}}
