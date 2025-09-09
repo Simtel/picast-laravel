@@ -6,7 +6,7 @@ namespace App\Context\Domains\Infrastructure\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class WhoisService extends Facade
+final class WhoisService extends Facade
 {
     protected static function getFacadeAccessor(): string
     {

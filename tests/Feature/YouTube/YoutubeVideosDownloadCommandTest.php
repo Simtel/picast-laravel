@@ -14,7 +14,7 @@ use Tests\TestCase;
 use YoutubeDl\Entity\VideoCollection;
 use YoutubeDl\YoutubeDl;
 
-class YoutubeVideosDownloadCommandTest extends TestCase
+final class YoutubeVideosDownloadCommandTest extends TestCase
 {
     /**
      * @throws \Exception

@@ -8,7 +8,7 @@ use App\Context\User\Domain\Model\User;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
-class UserTest extends TestCase
+final class UserTest extends TestCase
 {
     /**
      *

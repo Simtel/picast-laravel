@@ -38,7 +38,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Images whereWidth($value)
  * @mixin Eloquent
  */
-class Images extends Model
+final class Images extends Model
 {
     protected $fillable = ['filename', 'user_id', 'thumb', 'width', 'check', 'directory', 'disk'];
 

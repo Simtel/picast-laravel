@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 use Override;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
-readonly class WhoisUpdater implements \App\Context\Domains\Application\Contract\WhoisUpdater
+final readonly class WhoisUpdater implements \App\Context\Domains\Application\Contract\WhoisUpdater
 {
     /**
      * @param Domain $domain

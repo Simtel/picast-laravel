@@ -6,7 +6,7 @@ namespace App\Context\Domains\Infrastructure\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Whois extends Facade
+final class Whois extends Facade
 {
     /**
      * @return string

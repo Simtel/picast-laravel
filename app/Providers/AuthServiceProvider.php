@@ -10,7 +10,7 @@ use App\Context\Youtube\Application\Policy\YouTubeVideoPolicy;
 use App\Context\Youtube\Domain\Model\Video;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
+final class AuthServiceProvider extends ServiceProvider
 {
     /**
      * The policy mappings for the application.

@@ -37,7 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFormats whereVideoId($value)
  * @mixin Eloquent
  */
-class VideoFormats extends Model
+final class VideoFormats extends Model
 {
     /** @use HasFactory<VideoFormatFactory> */
     use HasFactory;

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
-class SettingsController extends Controller
+final class SettingsController extends Controller
 {
     /**
      * @param Request $request

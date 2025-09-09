@@ -7,7 +7,7 @@ namespace Tests\Unit;
 use Illuminate\Support\Facades\Schedule;
 use Tests\TestCase;
 
-class ScheduleTest extends TestCase
+final class ScheduleTest extends TestCase
 {
     public function test_schedule_list(): void
     {

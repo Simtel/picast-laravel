@@ -16,7 +16,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
 
-class InviteController extends Controller
+final class InviteController extends Controller
 {
     /**
      * InviteController constructor.

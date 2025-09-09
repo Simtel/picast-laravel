@@ -8,7 +8,7 @@ use App\Context\Domains\Domain\Event\DomainCreated;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
 
-class DomainObserver
+final class DomainObserver
 {
     public function __construct()
     {

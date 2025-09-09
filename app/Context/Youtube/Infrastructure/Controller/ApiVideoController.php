@@ -10,7 +10,7 @@ use App\Context\Youtube\Domain\Resource\VideoResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class ApiVideoController extends Controller
+final class ApiVideoController extends Controller
 {
     public function __construct()
     {

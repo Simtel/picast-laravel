@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Log;
 
-class UpdateVideoFormats implements ShouldQueue
+final class UpdateVideoFormats implements ShouldQueue
 {
     use Queueable;
 

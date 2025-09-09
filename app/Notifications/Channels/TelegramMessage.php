@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications\Channels;
 
-class TelegramMessage
+final class TelegramMessage
 {
     public function __construct(private readonly string $message)
     {

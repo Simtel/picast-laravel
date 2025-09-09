@@ -9,7 +9,7 @@ use App\Context\Domains\Domain\Model\Whois;
 use Event;
 use Tests\TestCase;
 
-class WhoisControllerTest extends TestCase
+final class WhoisControllerTest extends TestCase
 {
     public function test_delete_old_whois(): void
     {

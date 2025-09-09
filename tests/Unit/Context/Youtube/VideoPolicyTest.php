@@ -9,7 +9,7 @@ use App\Context\Youtube\Application\Policy\YouTubeVideoPolicy;
 use App\Context\Youtube\Domain\Model\Video;
 use Tests\TestCase;
 
-class VideoPolicyTest extends TestCase
+final class VideoPolicyTest extends TestCase
 {
     public function test_view_any(): void
     {

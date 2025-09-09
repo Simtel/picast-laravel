@@ -9,7 +9,7 @@ use App\Context\Youtube\Domain\Event\YouTubeVideoCreated;
 use App\Context\Youtube\Infrastructure\Jobs\UpdateVideoFormats;
 use Exception;
 
-readonly class YouTubeVideoCreateListener
+final readonly class YouTubeVideoCreateListener
 {
     public function __construct(
 

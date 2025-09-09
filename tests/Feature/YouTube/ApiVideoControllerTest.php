@@ -9,7 +9,7 @@ use Event;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
-class ApiVideoControllerTest extends TestCase
+final class ApiVideoControllerTest extends TestCase
 {
     public function test_user_can_see_videos(): void
     {

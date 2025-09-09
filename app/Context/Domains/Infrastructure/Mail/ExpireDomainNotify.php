@@ -10,7 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ExpireDomainNotify extends Mailable
+final class ExpireDomainNotify extends Mailable
 {
     use Queueable;
     use SerializesModels;

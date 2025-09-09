@@ -12,7 +12,7 @@ use Iodev\Whois\Modules\Tld\TldInfo;
 use Iodev\Whois\Modules\Tld\TldResponse;
 use Tests\TestCase;
 
-class DomainTest extends TestCase
+final class DomainTest extends TestCase
 {
     /**
      * A basic feature test example.

@@ -7,7 +7,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-class ChangePasswordRequest extends FormRequest
+final class ChangePasswordRequest extends FormRequest
 {
     /**
      * @return bool

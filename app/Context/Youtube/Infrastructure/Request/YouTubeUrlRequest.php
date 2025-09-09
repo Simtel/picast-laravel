@@ -6,7 +6,7 @@ namespace App\Context\Youtube\Infrastructure\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class YouTubeUrlRequest extends FormRequest
+final class YouTubeUrlRequest extends FormRequest
 {
     /**
      * Определите, авторизован ли пользователь создавать данный запрос.

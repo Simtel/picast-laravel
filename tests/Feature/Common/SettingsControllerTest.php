@@ -8,7 +8,7 @@ use App\Context\User\Domain\Model\User;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-class SettingsControllerTest extends TestCase
+final class SettingsControllerTest extends TestCase
 {
     public function test_personal_settings_page(): void
     {

@@ -27,7 +27,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue whereVideoId($value)
  * @mixin Eloquent
  */
-class VideoDownloadQueue extends Model
+final class VideoDownloadQueue extends Model
 {
     protected $fillable = ['video_id', 'format_id'];
 

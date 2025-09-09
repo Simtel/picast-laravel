@@ -7,7 +7,7 @@ namespace App\Context\Youtube\Domain\Resource;
 use App\Context\Youtube\Domain\Model\Video;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VideoFullResource extends JsonResource
+final class VideoFullResource extends JsonResource
 {
     /**
      * @param $request

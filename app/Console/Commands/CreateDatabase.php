@@ -7,7 +7,7 @@ namespace App\Console\Commands;
 use DB;
 use Illuminate\Console\Command;
 
-class CreateDatabase extends Command
+final class CreateDatabase extends Command
 {
     /**
      * @var string

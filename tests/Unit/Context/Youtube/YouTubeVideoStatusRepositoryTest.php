@@ -10,7 +10,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\TestCase;
 
-class YouTubeVideoStatusRepositoryTest extends TestCase
+final class YouTubeVideoStatusRepositoryTest extends TestCase
 {
     /**
      * @throws BindingResolutionException

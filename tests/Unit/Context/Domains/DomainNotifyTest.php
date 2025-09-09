@@ -10,7 +10,7 @@ use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
 use Event;
 use Tests\TestCase;
 
-class DomainNotifyTest extends TestCase
+final class DomainNotifyTest extends TestCase
 {
     public function test_domain_deleted_notify(): void
     {

@@ -13,7 +13,7 @@ use Iodev\Whois\Modules\Tld\TldInfo;
 use Iodev\Whois\Modules\Tld\TldResponse;
 use Tests\TestCase;
 
-class WhoisUpdaterTest extends TestCase
+final class WhoisUpdaterTest extends TestCase
 {
     public function test_whois_update(): void
     {

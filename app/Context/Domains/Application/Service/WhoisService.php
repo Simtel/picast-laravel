@@ -8,7 +8,7 @@ use App\Context\Domains\Domain\Model\Domain;
 use Illuminate\Database\Query\Builder;
 use Override;
 
-class WhoisService implements \App\Context\Domains\Application\Contract\WhoisService
+final class WhoisService implements \App\Context\Domains\Application\Contract\WhoisService
 {
     /**
      * @var array<string, string>

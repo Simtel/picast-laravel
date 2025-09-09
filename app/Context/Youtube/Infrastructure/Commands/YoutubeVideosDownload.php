@@ -18,7 +18,7 @@ use YoutubeDl\Entity\VideoCollection;
 use YoutubeDl\Options;
 use YoutubeDl\YoutubeDl;
 
-class YoutubeVideosDownload extends Command implements Isolatable
+final class YoutubeVideosDownload extends Command implements Isolatable
 {
     /**
      * @var string

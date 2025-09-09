@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|InviteCode whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class InviteCode extends Model
+final class InviteCode extends Model
 {
     protected $fillable = ['created_by', 'code'];
 }

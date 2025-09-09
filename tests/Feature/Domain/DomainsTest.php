@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
-class DomainsTest extends TestCase
+final class DomainsTest extends TestCase
 {
     /**
      * Проверка что созадается задача если подходит срок истекания домена

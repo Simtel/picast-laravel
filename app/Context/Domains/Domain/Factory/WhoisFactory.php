@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory<Whois>
  */
-class WhoisFactory extends Factory
+final class WhoisFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

@@ -8,7 +8,7 @@ use App\Context\User\Domain\Model\User;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class UsersControllerTest extends TestCase
+final class UsersControllerTest extends TestCase
 {
     public function test_user_edit_page(): void
     {

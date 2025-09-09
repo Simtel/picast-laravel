@@ -17,11 +17,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 
-class YouTubeVideoController extends Controller
+final class YouTubeVideoController extends Controller
 {
     public function __construct(
         private readonly YouTubeVideoStatusRepository $statusRepository,
@@ -33,9 +31,9 @@ class YouTubeVideoController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|View|Response
+     * @return Application|Factory|View
      */
-    public function index(): View|Factory|Response|Application
+    public function index(): View|Factory|Application
     {
         $videos = Video::whereUserId(Auth()->id())->paginate(15);
         return view('personal.youtube_videos.index', ['videos' => $videos]);
@@ -44,18 +42,18 @@ class YouTubeVideoController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Application|Factory|View|Response
+     * @return Application|Factory|View
      */
-    public function create(): View|Factory|Response|Application
+    public function create(): View|Factory|Application
     {
         return view('personal.youtube_videos.create');
     }
 
     /**
      * @param YouTubeUrlRequest $request
-     * @return Application|RedirectResponse|Response|Redirector
+     * @return Application|RedirectResponse
      */
-    public function store(YouTubeUrlRequest $request): Response|Redirector|Application|RedirectResponse
+    public function store(YouTubeUrlRequest $request): Application|RedirectResponse
     {
         Video::create(
             [
@@ -71,7 +69,7 @@ class YouTubeVideoController extends Controller
     /**
      * @throws Exception
      */
-    public function refreshFormats(Video $video): Response|Redirector|Application|RedirectResponse
+    public function refreshFormats(Video $video): Application|RedirectResponse
     {
         $this->refreshVideoFormatsService->refresh($video);
 

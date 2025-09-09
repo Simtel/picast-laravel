@@ -15,10 +15,8 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
 
-class DomainsController extends Controller
+final class DomainsController extends Controller
 {
     public function __construct(
         private readonly WhoisUpdater $whoisUpdater,
@@ -29,9 +27,9 @@ class DomainsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|View|Response
+     * @return Application|Factory|View
      */
-    public function index(): View|Factory|Response|Application
+    public function index(): View|Factory|Application
     {
         $domains = Domain::whereUserId(Auth()->id())->paginate(15);
         return view('personal.domains.index', ['domains' => $domains]);
@@ -40,9 +38,9 @@ class DomainsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Application|Factory|View|Response
+     * @return Application|Factory|View
      */
-    public function create(): View|Factory|Response|Application
+    public function create(): View|Factory|Application
     {
         return view('personal.domains.create');
     }
@@ -51,9 +49,9 @@ class DomainsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param DomainRequest $request
-     * @return Application|RedirectResponse|Response|Redirector
+     * @return Application|RedirectResponse
      */
-    public function store(DomainRequest $request): Response|Redirector|Application|RedirectResponse
+    public function store(DomainRequest $request): Application|RedirectResponse
     {
         Domain::create(
             [
@@ -68,9 +66,9 @@ class DomainsController extends Controller
      * Display the specified resource.
      *
      * @param Domain $domain
-     * @return Application|Factory|View|Response
+     * @return View|Factory|Application
      */
-    public function show(Domain $domain): View|Factory|Response|Application
+    public function show(Domain $domain): View|Factory|Application
     {
         return view(
             'personal.domains.show',

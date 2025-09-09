@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Mockery;
 use Tests\TestCase;
 
-class UpdateVideoFormatsTest extends TestCase
+final class UpdateVideoFormatsTest extends TestCase
 {
     /**
      * @throws Exception

@@ -7,7 +7,7 @@ namespace App\Context\Youtube\Infrastructure\Repository;
 use App\Context\Youtube\Domain\Model\VideoStatus;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class YouTubeVideoStatusRepository
+final class YouTubeVideoStatusRepository
 {
     /**
      * Найти статус видео по ID

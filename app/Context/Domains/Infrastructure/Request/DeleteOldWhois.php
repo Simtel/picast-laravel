@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\In;
 
-class DeleteOldWhois extends FormRequest
+final class DeleteOldWhois extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

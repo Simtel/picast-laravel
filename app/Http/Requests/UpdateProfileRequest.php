@@ -6,7 +6,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfileRequest extends FormRequest
+final class UpdateProfileRequest extends FormRequest
 {
     /**
      * @return bool

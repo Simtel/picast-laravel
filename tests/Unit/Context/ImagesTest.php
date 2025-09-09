@@ -7,7 +7,7 @@ namespace Tests\Unit\Context;
 use App\Models\Images;
 use Tests\TestCase;
 
-class ImagesTest extends TestCase
+final class ImagesTest extends TestCase
 {
     public function test_a_image_has_user(): void
     {

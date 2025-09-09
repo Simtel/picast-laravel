@@ -10,7 +10,7 @@ use Illuminate\Testing\PendingCommand;
 use Mockery;
 use Tests\TestCase;
 
-class UpdateDomainsCommandTest extends TestCase
+final class UpdateDomainsCommandTest extends TestCase
 {
     public function testHandle(): void
     {

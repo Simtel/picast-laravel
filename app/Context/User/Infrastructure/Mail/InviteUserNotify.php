@@ -8,7 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class InviteUserNotify extends Mailable
+final class InviteUserNotify extends Mailable
 {
     use Queueable;
     use SerializesModels;

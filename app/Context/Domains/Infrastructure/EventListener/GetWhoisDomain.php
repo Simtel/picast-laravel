@@ -7,7 +7,7 @@ namespace App\Context\Domains\Infrastructure\EventListener;
 use App\Context\Domains\Application\Contract\WhoisUpdater;
 use App\Context\Domains\Domain\Event\DomainCreated;
 
-class GetWhoisDomain
+final class GetWhoisDomain
 {
     private WhoisUpdater $whoisUpdater;
 

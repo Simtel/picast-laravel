@@ -11,7 +11,7 @@ use Exception;
 use Illuminate\Support\Facades\Process;
 use Tests\TestCase;
 
-class GetVideoFormatsServiceTest extends TestCase
+final class GetVideoFormatsServiceTest extends TestCase
 {
     /**
      * @throws Exception

@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
 
-class Update extends FormRequest
+final class Update extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

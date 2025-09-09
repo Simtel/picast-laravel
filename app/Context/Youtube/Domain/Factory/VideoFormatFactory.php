@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory<VideoFormats>
  */
-class VideoFormatFactory extends Factory
+final class VideoFormatFactory extends Factory
 {
     /**
      * @var class-string<VideoFormats>

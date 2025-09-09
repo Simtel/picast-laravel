@@ -9,7 +9,7 @@ use App\Context\Domains\Domain\Model\Domain;
 use App\Context\User\Domain\Model\User;
 use Tests\TestCase;
 
-class DomainPolicyTest extends TestCase
+final class DomainPolicyTest extends TestCase
 {
     public function test_view_any(): void
     {

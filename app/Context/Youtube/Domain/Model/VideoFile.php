@@ -36,7 +36,7 @@ use Log;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoFile whereVideoId($value)
  * @mixin Eloquent
  */
-class VideoFile extends Model
+final class VideoFile extends Model
 {
     /** @use HasFactory<VideoFileFactory> */
     use HasFactory;

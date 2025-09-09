@@ -14,8 +14,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Iodev\Whois\Exceptions\ConnectionException;
+use Iodev\Whois\Exceptions\ServerMismatchException;
+use Iodev\Whois\Exceptions\WhoisException;
 
-class DomainsController extends Controller
+final class DomainsController extends Controller
 {
     public function __construct()
     {
@@ -86,6 +89,9 @@ class DomainsController extends Controller
     /**
      * @param Domain $domain
      * @return bool[]
+     * @throws ConnectionException
+     * @throws ServerMismatchException
+     * @throws WhoisException
      */
     public function update(Domain $domain): array
     {

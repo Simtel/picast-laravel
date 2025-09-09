@@ -16,7 +16,7 @@ use Notification;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
-class DomainControllerTest extends TestCase
+final class DomainControllerTest extends TestCase
 {
     /**
      * @param string|int $name

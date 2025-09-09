@@ -7,7 +7,7 @@ namespace Tests\Feature\Command;
 use Illuminate\Testing\PendingCommand;
 use Tests\TestCase;
 
-class CreateDataBaseCommandTest extends TestCase
+final class CreateDataBaseCommandTest extends TestCase
 {
     public function test_create_database_command(): void
     {

@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Translation\PotentiallyTranslatedString;
 
-class DomainName implements ValidationRule
+final class DomainName implements ValidationRule
 {
     /**
      * Run the validation rule.

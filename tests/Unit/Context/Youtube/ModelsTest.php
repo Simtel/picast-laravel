@@ -13,7 +13,7 @@ use Illuminate\Support\Number;
 use Storage;
 use Tests\TestCase;
 
-class ModelsTest extends TestCase
+final class ModelsTest extends TestCase
 {
     public function test_video_delete_with_files(): void
     {

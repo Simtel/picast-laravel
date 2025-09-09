@@ -8,7 +8,7 @@ use App\Context\Domains\Application\Contract\WhoisUpdater;
 use App\Context\Domains\Domain\Model\Domain;
 use Illuminate\Console\Command;
 
-class DomainsWhois extends Command
+final class DomainsWhois extends Command
 {
     /**
      * The name and signature of the console command.

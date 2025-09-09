@@ -12,7 +12,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Queue;
 use Tests\TestCase;
 
-class WhoisServiceTest extends TestCase
+final class WhoisServiceTest extends TestCase
 {
     /**
      * @throws BindingResolutionException

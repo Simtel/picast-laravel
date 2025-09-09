@@ -13,7 +13,7 @@ use Mockery;
 use Mockery\ExpectationInterface;
 use Tests\TestCase;
 
-class GetWhoisDomainListenerTest extends TestCase
+final class GetWhoisDomainListenerTest extends TestCase
 {
     public function test_created_domain_event_listener(): void
     {

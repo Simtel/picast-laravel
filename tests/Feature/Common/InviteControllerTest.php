@@ -9,7 +9,7 @@ use App\Models\InviteCode;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
-class InviteControllerTest extends TestCase
+final class InviteControllerTest extends TestCase
 {
     public function test_personal_invite_page(): void
     {

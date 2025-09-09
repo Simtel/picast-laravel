@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoStatus whereTitle($value)
  * @mixin Eloquent
  */
-class VideoStatus extends Model
+final class VideoStatus extends Model
 {
     protected $table = 'youtube_video_statuses';
 

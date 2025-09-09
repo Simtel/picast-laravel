@@ -7,7 +7,7 @@ namespace App\Context\Youtube\Application\Policy;
 use App\Context\User\Domain\Model\User;
 use App\Context\Youtube\Domain\Model\Video;
 
-class YouTubeVideoPolicy
+final class YouTubeVideoPolicy
 {
     /**
      * Determine whether the user can view any models.

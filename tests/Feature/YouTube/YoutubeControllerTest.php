@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Tests\TestCase;
 
-class YoutubeControllerTest extends TestCase
+final class YoutubeControllerTest extends TestCase
 {
     /**
      * @param mixed $url

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Event;
 use Tests\Feature\MakesRequestsFromPage;
 use Illuminate\Auth\Events\PasswordReset;
 
-class ResetPasswordTest extends TestCase
+final class ResetPasswordTest extends TestCase
 {
     use DatabaseTransactions;
     use MakesRequestsFromPage;

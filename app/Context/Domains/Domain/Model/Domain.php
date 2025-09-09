@@ -46,7 +46,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Domain whereUserId($value)
  * @mixin Eloquent
  */
-class Domain extends Model
+final class Domain extends Model
 {
     /** @use HasFactory<DomainFactory> */
     use HasFactory;
@@ -85,9 +85,9 @@ class Domain extends Model
 
     /**
      * @param DomainDeleted $notification
-     * @return string[]|string
+     * @return string
      */
-    public function routeNotificationForMail(Notification $notification): array|string
+    public function routeNotificationForMail(Notification $notification): string
     {
         return $this->getUser()->getEmail();
     }

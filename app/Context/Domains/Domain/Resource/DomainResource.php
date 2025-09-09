@@ -12,7 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $name
  * @property string $expire_at
  */
-class DomainResource extends JsonResource
+final class DomainResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

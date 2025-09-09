@@ -10,7 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class DomainDeleted extends Notification
+final class DomainDeleted extends Notification
 {
     use Queueable;
 

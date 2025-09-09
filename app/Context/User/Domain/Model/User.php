@@ -62,7 +62,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutTrashed()
  * @mixin Eloquent
  */
-class User extends Authenticatable
+final class User extends Authenticatable
 {
     use Notifiable;
 

@@ -28,7 +28,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Whois whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Whois extends Model
+final class Whois extends Model
 {
     /** @use HasFactory<WhoisFactory> */
     use HasFactory;

@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 
-class WhoisController extends Controller
+final class WhoisController extends Controller
 {
     /**
      * @param int $id

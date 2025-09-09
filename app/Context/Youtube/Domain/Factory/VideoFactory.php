@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory<Video>
  */
-class VideoFactory extends Factory
+final class VideoFactory extends Factory
 {
     /**
      * @var class-string<Video>

@@ -9,7 +9,7 @@ use Event;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
-class UserModelTest extends TestCase
+final class UserModelTest extends TestCase
 {
     public function test_user_has_domains(): void
     {

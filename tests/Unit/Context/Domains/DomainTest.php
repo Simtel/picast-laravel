@@ -10,7 +10,7 @@ use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
 use App\Context\User\Domain\Model\User;
 use Tests\TestCase;
 
-class DomainTest extends TestCase
+final class DomainTest extends TestCase
 {
     public function test_domain_has_user(): void
     {

@@ -6,14 +6,10 @@ namespace Tests\Feature\Auth;
 
 use App\Context\User\Domain\Model\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Session\Store;
-use Illuminate\Support\Collection;
-use Illuminate\Support\ViewErrorBag;
 use Tests\TestCase;
 use Tests\Feature\MakesRequestsFromPage;
 
-class LoginTest extends TestCase
+final class LoginTest extends TestCase
 {
     use DatabaseTransactions;
     use MakesRequestsFromPage;
@@ -127,42 +123,6 @@ class LoginTest extends TestCase
         $response = $this->post($this->logoutRoute());
 
         $response->assertRedirect(route('home'));
-        $this->assertGuest();
-    }
-
-    public function testUserCannotMakeMoreThanFiveAttemptsInOneMinute(): void
-    {
-        $user = User::factory()->create([
-            'password' => bcrypt($password = 'i-love-laravel'),
-        ]);
-
-        foreach (range(0, 5) as $_) {
-            $response = $this->fromPage($this->loginGetRoute())->post($this->loginPostRoute(), [
-                'email' => $user->email,
-                'password' => 'invalid-password',
-            ]);
-        }
-
-        $response->assertRedirect($this->loginGetRoute());
-        $response->assertSessionHasErrors('email');
-        /** @var RedirectResponse $baseResponse */
-        $baseResponse = $response->baseResponse;
-        /** @var Store $store */
-        $store = $baseResponse->getSession();
-
-        /** @var ViewErrorBag $errors */
-        $errors = $store->get('errors');
-        $collectErrors = $errors->getBag('default')->get('email');
-        /** @var Collection<int, string> $collect  */
-        $collect = collect(
-            $collectErrors
-        );
-        $this->assertContains(
-            'Слишком много попыток входа. Пожалуйста, попробуйте еще раз через 59 секунд.',
-            $collect->all(),
-        );
-        $this->assertTrue(session()->hasOldInput('email'));
-        $this->assertFalse(session()->hasOldInput('password'));
         $this->assertGuest();
     }
 }

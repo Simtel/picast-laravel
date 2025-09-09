@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Feature\MakesRequestsFromPage;
 
-class RegisterTest extends TestCase
+final class RegisterTest extends TestCase
 {
     use DatabaseTransactions;
     use MakesRequestsFromPage;

@@ -41,7 +41,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereUserId($value)
  * @mixin \Eloquent
  */
-class Video extends Model
+final class Video extends Model
 {
     /** @use HasFactory<VideoFactory> */
     use HasFactory;

@@ -9,7 +9,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class DomainCreated extends Notification
+final class DomainCreated extends Notification
 {
     use Queueable;
 

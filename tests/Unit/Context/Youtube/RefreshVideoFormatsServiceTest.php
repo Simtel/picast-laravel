@@ -16,7 +16,7 @@ use Mockery;
 use stdClass;
 use Tests\TestCase;
 
-class RefreshVideoFormatsServiceTest extends TestCase
+final class RefreshVideoFormatsServiceTest extends TestCase
 {
     public function test_refresh_video_formats(): void
     {

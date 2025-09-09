@@ -14,7 +14,7 @@ use Tests\CreatesApplication;
 use Tests\TestCase;
 use Throwable;
 
-class ExampleTest extends TestCase
+final class ExampleTest extends TestCase
 {
     use CreatesApplication;
     use DatabaseTransactions;

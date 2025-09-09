@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Storage;
 
-class ImagesController extends Controller
+final class ImagesController extends Controller
 {
     /**
      * @return Factory|View|Application

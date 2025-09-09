@@ -8,7 +8,7 @@ use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Infrastructure\Mail\ExpireDomainNotify;
 use Tests\TestCase;
 
-class ExpireDomainNotifyTest extends TestCase
+final class ExpireDomainNotifyTest extends TestCase
 {
     public function test_expire_domain_notify_mailable_content(): void
     {

@@ -14,7 +14,7 @@ use Tests\Feature\MakesRequestsFromPage;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\ResetPassword;
 
-class ForgotPasswordTest extends TestCase
+final class ForgotPasswordTest extends TestCase
 {
     use DatabaseTransactions;
     use MakesRequestsFromPage;
