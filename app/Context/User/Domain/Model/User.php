@@ -135,4 +135,9 @@ final class User extends Authenticatable
     {
         return $this->birth_date;
     }
+
+    public function getBirthdayYear(): ?int
+    {
+        return $this->birth_date?->year;
+    }
 }

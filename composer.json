@@ -28,6 +28,7 @@
     "norkunas/youtube-dl-php": "dev-master",
     "nunomaduro/collision": "^8.1",
     "pusher/pusher-php-server": "^7.0",
+    "spatie/laravel-data": "^4.17",
     "spatie/laravel-html": "*",
     "spatie/laravel-ignition": "^2.0",
     "spatie/laravel-permission": "^6.9",
