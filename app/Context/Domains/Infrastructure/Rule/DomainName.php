@@ -10,6 +10,8 @@ use Illuminate\Translation\PotentiallyTranslatedString;
 
 final class DomainName implements ValidationRule
 {
+    private const string DOMAIN_REGEX = '/^(?!:\/\/)(?=.{1,255}$)((.{1,63}\.){1,127}(?![0-9]*$)[a-z0-9-]+\.?)$/i';
+
     /**
      * Run the validation rule.
      *
@@ -18,11 +20,12 @@ final class DomainName implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (!is_string($value)) {
-            $fail("Имя домена должно быть строкой.");
+            $fail('Имя домена должно быть строкой.');
             return;
         }
-        if (!preg_match('/^(?!:\/\/)(?=.{1,255}$)((.{1,63}\.){1,127}(?![0-9]*$)[a-z0-9-]+\.?)$/i', $value)) {
-            $fail("Неправильное имя домена.");
+
+        if (!preg_match(self::DOMAIN_REGEX, $value)) {
+            $fail('Неправильное имя домена.');
         }
     }
 }
