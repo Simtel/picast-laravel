@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
         with:
-          php-version: '8.3'
+          php-version: '8.4'
       - uses: actions/checkout@v3
       - name: Install Dependencies
         run: composer install
@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: gd
       - uses: actions/checkout@v3
       - name: Install dependencies

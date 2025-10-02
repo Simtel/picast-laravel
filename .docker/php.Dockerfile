@@ -1,6 +1,6 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
-RUN apk --no-cache add shadow sudo
+#RUN apk --no-cache add shadow sudo
 
 RUN apk add --update linux-headers
 
@@ -52,12 +52,15 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN echo "Set disable_coredump false" >> /etc/sudo.conf
 
 
-RUN sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux -o /usr/local/bin/youtube-dl
-RUN sudo chmod a+rx /usr/local/bin/youtube-dl
+RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux -o /usr/local/bin/youtube-dl
+RUN chmod a+rx /usr/local/bin/youtube-dl
 
 # Clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
-RUN usermod -u 1000 www-data
+RUN deluser www-data 2>/dev/null || true && \
+    delgroup www-data 2>/dev/null || true && \
+    addgroup -g 1000 www-data && \
+    adduser -u 1000 -D -S -G www-data www-data
 RUN chown -R www-data:www-data /var/www/html
 
 USER www-data

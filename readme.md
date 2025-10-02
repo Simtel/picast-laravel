@@ -25,7 +25,7 @@ Picast Laravel is a comprehensive web application built with Laravel framework, 
 
 ### Backend Technologies
 - **Framework**: Laravel 12.x
-- **PHP**: 8.3+ (Latest stable version)
+- **PHP**: 8.4+ (Latest stable version)
 - **Database**: MySQL 8.3
 - **Cache**: Memcached
 - **Queue**: Laravel Queue with Supervisor
