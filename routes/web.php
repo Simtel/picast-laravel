@@ -75,4 +75,19 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         '/domain/{id}/delete-old-whois',
         [WhoisController::class, 'deleteOldWhois']
     )->name('domains.delete_old_whois');
+
+    // ChadGPT feature
+    Route::group(['prefix' => 'chadgpt'], static function () {
+        Route::get('/', [\App\Http\Controllers\Personal\ChadGpt\ChadGptController::class, 'index'])->name('chadgpt.index');
+        Route::post('/send-message', [\App\Http\Controllers\Personal\ChadGpt\ChadGptController::class, 'sendMessage'])->name('chadgpt.send-message');
+    });
+
+    // Temporary debugging route
+    Route::get('/debug-chadgpt', function () {
+        return response()->json([
+            'status' => 'ok',
+            'message' => 'Debug route working',
+            'csrf_token' => csrf_token()
+        ]);
+    });
 });
