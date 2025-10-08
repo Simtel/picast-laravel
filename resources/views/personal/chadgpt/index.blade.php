@@ -112,8 +112,41 @@
             margin-bottom: 10px;
             color: #c62828;
         }
+        /* Markdown styling */
+        .ai-message-content pre {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        .ai-message-content code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .ai-message-content blockquote {
+            border-left: 4px solid #ddd;
+            padding-left: 10px;
+            margin-left: 0;
+            color: #666;
+        }
+        .ai-message-content table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .ai-message-content table, 
+        .ai-message-content th, 
+        .ai-message-content td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .ai-message-content th {
+            background-color: #f5f5f5;
+        }
     </style>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const sendMessageBtn = document.getElementById('sendMessageBtn');
@@ -174,8 +207,8 @@
                 .then(data => {
                     console.log('Response data:', data);
                     if (data.success) {
-                        // Add AI response to chat
-                        addMessageToChat('ChadGPT', data.response, 'ai-message');
+                        // Add AI response to chat with Markdown rendering
+                        addMessageToChat('ChadGPT', data.response, 'ai-message', true);
                         
                         // Update word count
                         totalWords += data.used_words_count || 0;
@@ -202,7 +235,7 @@
                 wordsCount.textContent = '0';
             });
 
-            function addMessageToChat(sender, message, cssClass) {
+            function addMessageToChat(sender, message, cssClass, isMarkdown = false) {
                 // Remove the initial info message if it exists
                 const infoAlert = chatHistory.querySelector('.alert-info');
                 if (infoAlert) {
@@ -211,10 +244,21 @@
 
                 const messageDiv = document.createElement('div');
                 messageDiv.className = cssClass;
-                messageDiv.innerHTML = `
-                    <div class="message-label">${sender}:</div>
-                    <div>${message}</div>
-                `;
+                
+                if (isMarkdown) {
+                    // Render Markdown for AI messages
+                    messageDiv.innerHTML = `
+                        <div class="message-label">${sender}:</div>
+                        <div class="ai-message-content">${marked.parse(message)}</div>
+                    `;
+                } else {
+                    // Plain text for user messages and errors
+                    messageDiv.innerHTML = `
+                        <div class="message-label">${sender}:</div>
+                        <div>${message}</div>
+                    `;
+                }
+                
                 chatHistory.appendChild(messageDiv);
                 
                 // Scroll to bottom

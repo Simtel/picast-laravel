@@ -40,7 +40,7 @@ final class ChadGptController extends Controller
             'model' => 'nullable|string|in:gpt-5,gpt-5-mini,gpt-5-nano,gpt-4o-mini,gpt-4o,claude-3-haiku,claude-3-opus,claude-4.5-sonnet,claude-3.7-sonnet-thinking,claude-4.1-opus,gemini-2.0-flash,gemini-2.5-pro,deepseek-v3.1'
         ]);
 
-        $apiKey = config('CHADGPT_API_KEY');
+        $apiKey = config('chadgpt.api_key');
         if (!$apiKey) {
             Log::error('ChadGPT API key not configured');
             return response()->json([

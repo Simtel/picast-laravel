@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use App\Http\Controllers\Personal\ChadGpt\ChadGptController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 final class ChadGptControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * Test that the ChadGPT controller can be instantiated
      */
