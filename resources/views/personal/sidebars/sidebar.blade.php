@@ -46,6 +46,13 @@
                 </li>
             @endcan
             <li class="nav-item">
+                <a class="nav-link {{request()->routeIs('chadgpt.*') ? 'active' : ''}}"
+                   href="{{route('chadgpt.index')}}">
+                    <span data-feather="message-circle"></span>
+                    ChadGPT Chat
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{request()->routeIs('settings') ? 'active' : ''}}"
                    href="{{route('settings')}}">
                     <span data-feather="file"></span>
