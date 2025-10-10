@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Personal\ChadGpt;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChadGptConversation;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -22,7 +24,21 @@ final class ChadGptController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        return view('personal.chadgpt.index');
+        try {
+            // Get conversation history for the current user
+            $conversations = ChadGptConversation::where('user_id', Auth::id())
+                ->orderBy('created_at', 'desc')
+                ->limit(50)
+                ->get();
+        } catch (\Exception $e) {
+            Log::error('Error fetching ChadGPT conversations', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+            $conversations = collect(); // Empty collection if there's an error
+        }
+
+        return view('personal.chadgpt.index', compact('conversations'));
     }
 
     /**
@@ -50,16 +66,17 @@ final class ChadGptController extends Controller
 
         /** @var string $model */
         $model = $request->input('model', 'gpt-4o-mini');
+        $userMessage = $request->input('message');
         $endpoint = "https://ask.chadgpt.ru/api/public/{$model}";
 
         Log::info('ChadGPT API request', [
             'endpoint' => $endpoint,
             'model' => $model,
-            'message' => $request->input('message')
+            'message' => $userMessage
         ]);
 
         $requestData = [
-            'message' => $request->input('message'),
+            'message' => $userMessage,
             'api_key' => $apiKey
         ];
 
@@ -76,6 +93,25 @@ final class ChadGptController extends Controller
                 $responseData = $response->json();
 
                 if ($responseData['is_success']) {
+                    try {
+                        // Save conversation to database
+                        ChadGptConversation::create([
+                            'user_id' => Auth::id(),
+                            'model' => $model,
+                            'user_message' => $userMessage,
+                            'ai_response' => $responseData['response'],
+                            'used_words_count' => $responseData['used_words_count'] ?? 0,
+                        ]);
+                    } catch (\Exception $e) {
+                        Log::error('Error saving ChadGPT conversation to database', [
+                            'error' => $e->getMessage(),
+                            'user_id' => Auth::id(),
+                            'model' => $model
+                        ]);
+                        // We don't return an error here because the API call was successful
+                        // We just log the database error and continue
+                    }
+
                     return response()->json([
                         'success' => true,
                         'response' => $responseData['response'],

@@ -6,6 +6,7 @@ namespace App\Context\User\Domain\Model;
 
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\User\Domain\Factory\UserFactory;
+use App\Models\ChadGptConversation;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,6 +34,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon|null $deleted_at
  * @property-read Collection<int, Domain> $domains
  * @property-read int|null $domains_count
+ * @property-read Collection<int, ChadGptConversation> $chadGptConversations
+ * @property-read int|null $chadgpt_conversations_count
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read Collection<int, Permission> $permissions
@@ -114,6 +117,14 @@ final class User extends Authenticatable
     public function domains(): HasMany
     {
         return $this->hasMany(Domain::class);
+    }
+
+    /**
+     * @return HasMany<ChadGptConversation, $this>
+     */
+    public function chadGptConversations(): HasMany
+    {
+        return $this->hasMany(ChadGptConversation::class);
     }
 
     public function getEmail(): string

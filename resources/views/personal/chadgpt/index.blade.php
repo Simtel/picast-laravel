@@ -47,7 +47,20 @@
                     </div>
                     <div class="card-body">
                         <div id="chatHistory" class="chat-history">
-                            <div class="alert alert-info">Your conversation with ChadGPT will appear here.</div>
+                            @if($conversations->count() > 0)
+                                @foreach($conversations->reverse() as $conversation)
+                                    <div class="user-message">
+                                        <div class="message-label">You ({{ $conversation->model }}):</div>
+                                        <div>{{ $conversation->user_message }}</div>
+                                    </div>
+                                    <div class="ai-message">
+                                        <div class="message-label">ChadGPT:</div>
+                                        <div class="ai-message-content">{!! \Illuminate\Mail\Markdown::parse($conversation->ai_response) !!}</div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="alert alert-info">Your conversation with ChadGPT will appear here.</div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -176,7 +189,7 @@
                 }
 
                 // Add user message to chat
-                addMessageToChat('You', message, 'user-message');
+                addMessageToChat('You (' + model + ')', message, 'user-message');
 
                 // Disable button and show loading
                 sendMessageBtn.disabled = true;
