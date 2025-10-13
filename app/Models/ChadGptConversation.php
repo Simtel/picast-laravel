@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ChadGptConversation extends Model
 {
+    protected $table = 'chadgpt_conversations';
+
     protected $fillable = [
         'user_id',
         'model',
