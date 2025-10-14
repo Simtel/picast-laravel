@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Personal\ChadGpt;
+namespace App\Context\ChadGPT\Infrastructure\Controller;
 
+use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Http\Controllers\Controller;
 use App\Models\ChadGptConversation;
 use Illuminate\Contracts\Foundation\Application;
@@ -20,24 +21,12 @@ final class ChadGptController extends Controller
     /**
      * Display the ChadGPT chat page
      *
+     * @param ConversationRepository $conversationRepository
      * @return Application|Factory|View
      */
-    public function index(): View|Factory|Application
+    public function index(ConversationRepository $conversationRepository): View|Factory|Application
     {
-        try {
-            // Get conversation history for the current user
-            $conversations = ChadGptConversation::where('user_id', Auth::id())
-                ->orderBy('created_at', 'desc')
-                ->limit(50)
-                ->get();
-        } catch (\Exception $e) {
-            Log::error('Error fetching ChadGPT conversations', [
-                'error' => $e->getMessage(),
-                'user_id' => Auth::id()
-            ]);
-            $conversations = collect(); // Empty collection if there's an error
-        }
-
+        $conversations = $conversationRepository->findBuUser(Auth::user());
         return view('personal.chadgpt.index', compact('conversations'));
     }
 
@@ -94,7 +83,6 @@ final class ChadGptController extends Controller
 
                 if ($responseData['is_success']) {
                     try {
-                        // Save conversation to database
                         ChadGptConversation::create([
                             'user_id' => Auth::id(),
                             'model' => $model,
@@ -108,8 +96,6 @@ final class ChadGptController extends Controller
                             'user_id' => Auth::id(),
                             'model' => $model
                         ]);
-                        // We don't return an error here because the API call was successful
-                        // We just log the database error and continue
                     }
 
                     return response()->json([

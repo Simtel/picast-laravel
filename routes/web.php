@@ -14,9 +14,9 @@ declare(strict_types=1);
 */
 
 
-use App\Context\Youtube\Infrastructure\Controller\YouTubeVideoController;
 use App\Context\Domains\Infrastructure\Controller\DomainsController;
 use App\Context\Domains\Infrastructure\Controller\WhoisController;
+use App\Context\Youtube\Infrastructure\Controller\YouTubeVideoController;
 use App\Http\Controllers\Personal\ImagesController;
 use App\Http\Controllers\Personal\IndexController;
 use App\Http\Controllers\Personal\InviteController;
@@ -78,8 +78,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
 
     // ChadGPT feature
     Route::group(['prefix' => 'chadgpt'], static function () {
-        Route::get('/', [\App\Http\Controllers\Personal\ChadGpt\ChadGptController::class, 'index'])->name('chadgpt.index');
-        Route::post('/send-message', [\App\Http\Controllers\Personal\ChadGpt\ChadGptController::class, 'sendMessage'])->name('chadgpt.send-message');
+        Route::get('/', [\App\Context\ChadGPT\Infrastructure\Controller\ChadGptController::class, 'index'])->name('chadgpt.index');
+        Route::post('/send-message', [\App\Context\ChadGPT\Infrastructure\Controller\ChadGptController::class, 'sendMessage'])->name('chadgpt.send-message');
     });
 
     // Temporary debugging route
