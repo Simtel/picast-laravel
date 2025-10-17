@@ -1,6 +1,6 @@
 FROM php:8.4-fpm-alpine
 
-#RUN apk --no-cache add shadow sudo
+RUN apk --no-cache add shadow sudo
 
 RUN apk add --update linux-headers
 
