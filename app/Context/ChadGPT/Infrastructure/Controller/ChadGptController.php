@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Context\ChadGPT\Infrastructure\Controller;
 
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
+use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
 use App\Http\Controllers\Controller;
 use App\Models\ChadGptConversation;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -33,17 +33,12 @@ final class ChadGptController extends Controller
     /**
      * Send a message to ChadGPT API and return the response
      *
-     * @param Request $request
+     * @param SendMessageRequest $request
      * @return JsonResponse
      */
-    public function sendMessage(Request $request): JsonResponse
+    public function sendMessage(SendMessageRequest $request): JsonResponse
     {
         Log::info('ChadGPT sendMessage called', ['request' => $request->all()]);
-
-        $request->validate([
-            'message' => 'required|string|max:1000',
-            'model' => 'nullable|string|in:gpt-5,gpt-5-mini,gpt-5-nano,gpt-4o-mini,gpt-4o,claude-3-haiku,claude-3-opus,claude-4.5-sonnet,claude-3.7-sonnet-thinking,claude-4.1-opus,gemini-2.0-flash,gemini-2.5-pro,deepseek-v3.1'
-        ]);
 
         $apiKey = config('chadgpt.api_key');
         if (!$apiKey) {

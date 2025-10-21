@@ -33,7 +33,8 @@
 
 <link rel="stylesheet" href="/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/dashboard.css">
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript" src="/js/marked.min.js"></script>
 </html>
