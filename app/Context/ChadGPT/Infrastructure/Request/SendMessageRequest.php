@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Context\ChadGPT\Infrastructure\Request;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 class SendMessageRequest extends FormRequest
 {
@@ -22,5 +26,14 @@ class SendMessageRequest extends FormRequest
             'message' => 'required|string|max:1000',
             'model' => 'nullable|string|in:gpt-5,gpt-5-mini,gpt-5-nano,gpt-4o-mini,gpt-4o,claude-3-haiku,claude-3-opus,claude-4.5-sonnet,claude-3.7-sonnet-thinking,claude-4.1-opus,gemini-2.0-flash,gemini-2.5-pro,deepseek-v3.1'
         ];
+    }
+
+    protected function failedValidation(Validator $validator): void
+    {
+        $errors = new ValidationException($validator)->errors();
+
+        throw new HttpResponseException(
+            response()->json(['errors' => $errors], Response::HTTP_UNPROCESSABLE_ENTITY)
+        );
     }
 }

@@ -8,7 +8,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h5>Chat with AI Models</h5>
@@ -66,40 +66,12 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Information</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>This interface allows you to communicate with various AI models through the ChadGPT API.</p>
-                        <p><strong>How to use:</strong></p>
-                        <ol>
-                            <li>Select an AI model from the dropdown</li>
-                            <li>Type your message in the text area</li>
-                            <li>Click "Send Message" to get a response</li>
-                        </ol>
-                        <p><strong>Note:</strong> Your API key must be configured in the .env file as CHADGPT_API_KEY.</p>
-                    </div>
-                </div>
-
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h5>Usage Statistics</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="usageStats">
-                            <p>Words used: <span id="wordsCount">0</span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </main>
 
     <style>
         .chat-history {
-            max-height: 400px;
+            max-height: 800px;
             overflow-y: auto;
         }
         .user-message {
@@ -148,8 +120,8 @@
             border-collapse: collapse;
             width: 100%;
         }
-        .ai-message-content table, 
-        .ai-message-content th, 
+        .ai-message-content table,
+        .ai-message-content th,
         .ai-message-content td {
             border: 1px solid #ddd;
             padding: 8px;
@@ -197,7 +169,7 @@
                 // Send request to our backend
                 const url = '{{ route("chadgpt.send-message") }}';
                 console.log('Sending request to:', url);
-                
+
                 fetch(url, {
                     method: 'POST',
                     headers: {
@@ -211,7 +183,7 @@
                 })
                 .then(response => {
                     console.log('Response status:', response.status);
-                    if (!response.ok) {
+                    if (!response.ok && response.status !== 422) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     return response.json();
@@ -221,15 +193,16 @@
                     if (data.success) {
                         // Add AI response to chat with Markdown rendering
                         addMessageToChat('ChadGPT', data.response, 'ai-message', true);
-                        
+
                         // Update word count
                         totalWords += data.used_words_count || 0;
                         wordsCount.textContent = totalWords;
                     } else {
-                        addMessageToChat('Error', data.error || 'An unknown error occurred', 'error-message');
+                        addMessageToChat('Error', JSON.stringify(data.errors) || 'An unknown error occurred', 'error-message');
                     }
                 })
                 .catch(error => {
+                    console.log(error);
                     console.error('Fetch error:', error);
                     addMessageToChat('Error', 'Failed to communicate with the server: ' + error.message, 'error-message');
                 })
@@ -256,7 +229,7 @@
 
                 const messageDiv = document.createElement('div');
                 messageDiv.className = cssClass;
-                
+
                 if (isMarkdown) {
                     // Render Markdown for AI messages
                     messageDiv.innerHTML = `
@@ -270,9 +243,9 @@
                         <div>${message}</div>
                     `;
                 }
-                
+
                 chatHistory.appendChild(messageDiv);
-                
+
                 // Scroll to bottom
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             }

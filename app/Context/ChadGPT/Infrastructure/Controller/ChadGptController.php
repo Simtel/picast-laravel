@@ -8,6 +8,7 @@ use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
 use App\Http\Controllers\Controller;
 use App\Models\ChadGptConversation;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -51,13 +52,7 @@ final class ChadGptController extends Controller
         /** @var string $model */
         $model = $request->input('model', 'gpt-4o-mini');
         $userMessage = $request->input('message');
-        $endpoint = "https://ask.chadgpt.ru/api/public/{$model}";
-
-        Log::info('ChadGPT API request', [
-            'endpoint' => $endpoint,
-            'model' => $model,
-            'message' => $userMessage
-        ]);
+        $endpoint = config('chadgpt.url').$model;
 
         $requestData = [
             'message' => $userMessage,
@@ -67,10 +62,6 @@ final class ChadGptController extends Controller
         try {
             $response = Http::timeout(30)->post($endpoint, $requestData);
 
-            Log::info('ChadGPT API response', [
-                'status' => $response->status(),
-                'response' => $response->body()
-            ]);
 
             if ($response->successful()) {
                 /** @var mixed[] $responseData */
@@ -85,7 +76,7 @@ final class ChadGptController extends Controller
                             'ai_response' => $responseData['response'],
                             'used_words_count' => $responseData['used_words_count'] ?? 0,
                         ]);
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         Log::error('Error saving ChadGPT conversation to database', [
                             'error' => $e->getMessage(),
                             'user_id' => Auth::id(),
@@ -113,7 +104,7 @@ final class ChadGptController extends Controller
             return response()->json([
                 'error' => 'Failed to connect to ChadGPT API. Status code: ' . $response->status()
             ], 500);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('ChadGPT API exception', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
