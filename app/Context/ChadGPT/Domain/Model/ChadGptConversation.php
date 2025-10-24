@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Context\ChadGPT\Domain\Model;
 
+use App\Context\ChadGPT\Domain\Factory\ChadGptConversationFactory;
 use App\Context\User\Domain\Model\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -33,6 +35,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ChadGptConversation extends Model
 {
+    /** @use HasFactory<ChadGptConversationFactory> */
+    use HasFactory;
+
+    protected static string $factory = ChadGptConversationFactory::class;
+
     protected $table = 'chadgpt_conversations';
 
     protected $fillable = [

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Context\ChadGPT\Infrastructure\Controller;
 
+use App\Context\ChadGPT\Domain\Model\ChadGptConversation;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
 use App\Http\Controllers\Controller;
-use App\Models\ChadGptConversation;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -52,7 +52,7 @@ final class ChadGptController extends Controller
         /** @var string $model */
         $model = $request->input('model', 'gpt-4o-mini');
         $userMessage = $request->input('message');
-        $endpoint = config('chadgpt.url').$model;
+        $endpoint = config('chadgpt.url') . $model;
 
         $requestData = [
             'message' => $userMessage,
@@ -111,6 +111,28 @@ final class ChadGptController extends Controller
             ]);
             return response()->json([
                 'error' => 'An error occurred while communicating with ChadGPT API: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function clearHistory(ConversationRepository $conversationRepository): JsonResponse
+    {
+        try {
+            $conversationRepository->deleteByUser(Auth::user());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Chat history cleared successfully'
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error clearing ChadGPT chat history', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to clear chat history'
             ], 500);
         }
     }

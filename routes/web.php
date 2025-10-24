@@ -81,14 +81,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
     Route::group(['prefix' => 'chadgpt'], static function () {
         Route::get('/', [ChadGptController::class, 'index'])->name('chadgpt.index');
         Route::post('/send-message', [ChadGptController::class, 'sendMessage'])->name('chadgpt.send-message');
+        Route::delete('/clear-history', [ChadGptController::class, 'clearHistory'])->name('chadgpt.clear-history');
     });
 
-    // Temporary debugging route
-    Route::get('/debug-chadgpt', function () {
-        return response()->json([
-            'status' => 'ok',
-            'message' => 'Debug route working',
-            'csrf_token' => csrf_token()
-        ]);
-    });
+
+
+
 });
