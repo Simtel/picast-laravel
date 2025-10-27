@@ -215,9 +215,43 @@
             });
 
             clearChatBtn.addEventListener('click', function() {
-                chatHistory.innerHTML = '<div class="alert alert-info">Your conversation with ChadGPT will appear here.</div>';
-                totalWords = 0;
-                wordsCount.textContent = '0';
+                if (!confirm('Are you sure you want to clear all chat history?')) {
+                    return;
+                }
+
+                // Disable button during request
+                clearChatBtn.disabled = true;
+                clearChatBtn.textContent = 'Clearing...';
+
+                fetch('{{ route("chadgpt.clear-history") }}', {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken.getAttribute('content'),
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Clear chat display
+                            chatHistory.innerHTML = '<div class="alert alert-info">Your conversation with ChadGPT will appear here.</div>';
+                            // Reset word count if exists
+                            if (wordsCount) wordsCount.textContent = '0';
+                            // Show success message
+                            alert('Chat history cleared successfully');
+                        } else {
+                            throw new Error(data.error || 'Unknown error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Clear history error:', error);
+                        alert('Failed to clear chat history: ' + error.message);
+                    })
+                    .finally(() => {
+                        // Re-enable button
+                        clearChatBtn.disabled = false;
+                        clearChatBtn.textContent = 'Clear Chat';
+                    });
             });
 
             function addMessageToChat(sender, message, cssClass, isMarkdown = false) {
