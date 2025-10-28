@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Context\ChadGPT\Infrastructure\Controller;
 
 use App\Context\ChadGPT\Domain\Model\ChadGptConversation;
+use App\Context\ChadGPT\Domain\Model\ChadGptConversationWordStat;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
 use App\Http\Controllers\Controller;
@@ -64,30 +65,44 @@ final class ChadGptController extends Controller
 
 
             if ($response->successful()) {
-                /** @var mixed[] $responseData */
+                /**
+                 * @var array{
+                 *     is_success: bool,
+                 *     response: string,
+                 *     used_words_count: int,
+                 *     used_tokens_count: int,
+                 *     error_code: ?string,
+                 *     error_message: ?string,
+                 * } $responseData
+                 */
+
                 $responseData = $response->json();
 
                 if ($responseData['is_success']) {
+                    $userWordsCount = $responseData['used_words_count'];
                     try {
                         ChadGptConversation::create([
                             'user_id' => Auth::id(),
                             'model' => $model,
                             'user_message' => $userMessage,
                             'ai_response' => $responseData['response'],
-                            'used_words_count' => $responseData['used_words_count'] ?? 0,
+                            'used_words_count' => $userWordsCount,
                         ]);
+                        $wordStat = ChadGptConversationWordStat::firstOrCreate(['user_id' => Auth::id()]);
+                        $wordStat->words_used += $userWordsCount;
+                        $wordStat->save();
                     } catch (Exception $e) {
                         Log::error('Error saving ChadGPT conversation to database', [
                             'error' => $e->getMessage(),
                             'user_id' => Auth::id(),
-                            'model' => $model
+                            'model' => $model,
                         ]);
                     }
 
                     return response()->json([
                         'success' => true,
                         'response' => $responseData['response'],
-                        'used_words_count' => $responseData['used_words_count'] ?? 0
+                        'used_words_count' => $userWordsCount,
                     ]);
                 }
 

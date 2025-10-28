@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversation whereUsedWordsCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversation whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversation whereUserMessage($value)
+ * @method static \App\Context\ChadGPT\Domain\Factory\ChadGptConversationFactory factory($count = null, $state = [])
  * @mixin \Eloquent
  */
 class ChadGptConversation extends Model
