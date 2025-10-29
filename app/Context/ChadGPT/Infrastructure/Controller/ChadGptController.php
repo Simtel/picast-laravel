@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Context\ChadGPT\Infrastructure\Controller;
 
-use App\Context\ChadGPT\Domain\Model\ChadGptConversation;
-use App\Context\ChadGPT\Domain\Model\ChadGptConversationWordStat;
+use App\Common\CommandBus;
+use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
 use App\Http\Controllers\Controller;
@@ -36,9 +36,10 @@ final class ChadGptController extends Controller
      * Send a message to ChadGPT API and return the response
      *
      * @param SendMessageRequest $request
+     * @param CommandBus $commandBus
      * @return JsonResponse
      */
-    public function sendMessage(SendMessageRequest $request): JsonResponse
+    public function sendMessage(SendMessageRequest $request, CommandBus $commandBus): JsonResponse
     {
         Log::info('ChadGPT sendMessage called', ['request' => $request->all()]);
 
@@ -61,7 +62,7 @@ final class ChadGptController extends Controller
         ];
 
         try {
-            $response = Http::timeout(30)->post($endpoint, $requestData);
+            $response = Http::timeout(60)->post($endpoint, $requestData);
 
 
             if ($response->successful()) {
@@ -81,16 +82,14 @@ final class ChadGptController extends Controller
                 if ($responseData['is_success']) {
                     $userWordsCount = $responseData['used_words_count'];
                     try {
-                        ChadGptConversation::create([
-                            'user_id' => Auth::id(),
-                            'model' => $model,
-                            'user_message' => $userMessage,
-                            'ai_response' => $responseData['response'],
-                            'used_words_count' => $userWordsCount,
-                        ]);
-                        $wordStat = ChadGptConversationWordStat::firstOrCreate(['user_id' => Auth::id()]);
-                        $wordStat->words_used += $userWordsCount;
-                        $wordStat->save();
+                        $command = new CreateChatConversationCommand(
+                            Auth::user(),
+                            $model,
+                            $userMessage,
+                            $responseData['response'],
+                            $userWordsCount,
+                        );
+                        $commandBus->execute($command);
                     } catch (Exception $e) {
                         Log::error('Error saving ChadGPT conversation to database', [
                             'error' => $e->getMessage(),
