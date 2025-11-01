@@ -31,7 +31,6 @@ class CreateChatConversationHandlerTest extends TestCase
 
     public function test_creates_conversation_with_correct_data(): void
     {
-        // Arrange
         $userId = 123;
         $model = 'gpt-4';
         $userMessage = 'Hello, how are you?';
@@ -49,10 +48,9 @@ class CreateChatConversationHandlerTest extends TestCase
 
         Auth::shouldReceive('id')->andReturn($userId);
 
-        // Act
         $this->handler->handle($command);
 
-        // Assert
+
         $this->assertDatabaseHas('chadgpt_conversations', [
             'user_id' => $userId,
             'model' => $model,
@@ -64,7 +62,6 @@ class CreateChatConversationHandlerTest extends TestCase
 
     public function test_creates_new_word_stat_if_not_exists(): void
     {
-        // Arrange
         $userId = 456;
         $wordsCount = 15;
 
@@ -79,10 +76,10 @@ class CreateChatConversationHandlerTest extends TestCase
 
         Auth::shouldReceive('id')->andReturn($userId);
 
-        // Act
+
         $this->handler->handle($command);
 
-        // Assert
+
         $this->assertDatabaseHas('chadgpt_conversations_word_stat', [
             'user_id' => $userId,
             'words_used' => $wordsCount,
@@ -120,7 +117,6 @@ class CreateChatConversationHandlerTest extends TestCase
 
     public function test_handles_zero_words_count(): void
     {
-        // Arrange
         $userId = 111;
         $wordsCount = 0;
 
@@ -135,10 +131,10 @@ class CreateChatConversationHandlerTest extends TestCase
 
         Auth::shouldReceive('id')->andReturn($userId);
 
-        // Act
+
         $this->handler->handle($command);
 
-        // Assert
+
         $this->assertDatabaseHas('chadgpt_conversations', [
             'user_id' => $userId,
             'used_words_count' => 0,
@@ -150,7 +146,6 @@ class CreateChatConversationHandlerTest extends TestCase
 
     public function test_handles_large_words_count(): void
     {
-        // Arrange
         $userId = 222;
         $largeWordsCount = 10000;
 
@@ -166,10 +161,10 @@ class CreateChatConversationHandlerTest extends TestCase
 
         Auth::shouldReceive('id')->andReturn($userId);
 
-        // Act
+
         $this->handler->handle($command);
 
-        // Assert
+
         $this->assertDatabaseHas('chadgpt_conversations', [
             'user_id' => $userId,
             'used_words_count' => $largeWordsCount,
@@ -181,7 +176,6 @@ class CreateChatConversationHandlerTest extends TestCase
 
     public function test_handles_multiple_consecutive_calls(): void
     {
-        // Arrange
         $userId = 333;
         $firstWordsCount = 10;
         $secondWordsCount = 20;
@@ -191,7 +185,7 @@ class CreateChatConversationHandlerTest extends TestCase
 
         Auth::shouldReceive('id')->andReturn($userId);
 
-        // First call
+
         $command1 = Mockery::mock(CreateChatConversationCommand::class);
         $command1->shouldReceive('getUser')->andReturn($user);
         $command1->shouldReceive('getModel')->andReturn('gpt-4');
@@ -199,7 +193,7 @@ class CreateChatConversationHandlerTest extends TestCase
         $command1->shouldReceive('getResponse')->andReturn('First response');
         $command1->shouldReceive('getUserWordsCount')->andReturn($firstWordsCount);
 
-        // Second call
+
         $command2 = Mockery::mock(CreateChatConversationCommand::class);
         $command2->shouldReceive('getUser')->andReturn($user);
         $command2->shouldReceive('getModel')->andReturn('gpt-3.5');
@@ -207,7 +201,7 @@ class CreateChatConversationHandlerTest extends TestCase
         $command2->shouldReceive('getResponse')->andReturn('Second response');
         $command2->shouldReceive('getUserWordsCount')->andReturn($secondWordsCount);
 
-        // Third call
+
         $command3 = Mockery::mock(CreateChatConversationCommand::class);
         $command3->shouldReceive('getUser')->andReturn($user);
         $command3->shouldReceive('getModel')->andReturn('gpt-4');
@@ -215,12 +209,12 @@ class CreateChatConversationHandlerTest extends TestCase
         $command3->shouldReceive('getResponse')->andReturn('Third response');
         $command3->shouldReceive('getUserWordsCount')->andReturn($thirdWordsCount);
 
-        // Act
+
         $this->handler->handle($command1);
         $this->handler->handle($command2);
         $this->handler->handle($command3);
 
-        // Assert
+
         $conversationsCount = ChadGptConversation::where('user_id', $userId)->count();
         $this->assertEquals(3, $conversationsCount);
 
@@ -231,7 +225,6 @@ class CreateChatConversationHandlerTest extends TestCase
 
     public function test_handles_special_characters_in_messages(): void
     {
-        // Arrange
         $userId = 444;
         $specialMessage = 'Test with special chars: <>&"\'';
         $specialResponse = 'Response with émojis 🎉 and unicode ñ';
@@ -247,10 +240,10 @@ class CreateChatConversationHandlerTest extends TestCase
 
         Auth::shouldReceive('id')->andReturn($userId);
 
-        // Act
+
         $this->handler->handle($command);
 
-        // Assert
+
         $this->assertDatabaseHas('chadgpt_conversations', [
             'user_id' => $userId,
             'user_message' => $specialMessage,
