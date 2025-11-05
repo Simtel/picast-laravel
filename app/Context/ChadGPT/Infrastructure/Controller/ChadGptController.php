@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Context\ChadGPT\Infrastructure\Controller;
 
 use App\Common\CommandBus;
+use App\Context\ChadGPT\Application\Dto\ChadGptRequest;
+use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
@@ -15,7 +17,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 final class ChadGptController extends Controller
@@ -37,33 +38,24 @@ final class ChadGptController extends Controller
      *
      * @param SendMessageRequest $request
      * @param CommandBus $commandBus
+     * @param ChadGptRequestService $chadGptRequestService
      * @return JsonResponse
      */
-    public function sendMessage(SendMessageRequest $request, CommandBus $commandBus): JsonResponse
-    {
+    public function sendMessage(
+        SendMessageRequest $request,
+        CommandBus $commandBus,
+        ChadGptRequestService $chadGptRequestService
+    ): JsonResponse {
         Log::info('ChadGPT sendMessage called', ['request' => $request->all()]);
 
-        $apiKey = config('chadgpt.api_key');
-        if (!$apiKey) {
-            Log::error('ChadGPT API key not configured');
-            return response()->json([
-                'error' => 'API key not configured. Please set CHADGPT_API_KEY in your .env file.'
-            ], 400);
-        }
-
-        /** @var string $model */
-        $model = $request->input('model', 'gpt-4o-mini');
-        $userMessage = $request->input('message');
-        $endpoint = config('chadgpt.url') . $model;
-
-        $requestData = [
-            'message' => $userMessage,
-            'api_key' => $apiKey
-        ];
-
         try {
-            $response = Http::timeout(60)->post($endpoint, $requestData);
+            $chadGptRequest = new ChadGptRequest(
+                $request->input('model', 'gpt-4o-mini'),
+                $request->input('message'),
+            );
 
+
+            $response = $chadGptRequestService->request($chadGptRequest);
 
             if ($response->successful()) {
                 /**
@@ -84,8 +76,8 @@ final class ChadGptController extends Controller
                     try {
                         $command = new CreateChatConversationCommand(
                             Auth::user(),
-                            $model,
-                            $userMessage,
+                            $chadGptRequest->getModel(),
+                            $chadGptRequest->getUserMessage(),
                             $responseData['response'],
                             $userWordsCount,
                         );
@@ -94,7 +86,7 @@ final class ChadGptController extends Controller
                         Log::error('Error saving ChadGPT conversation to database', [
                             'error' => $e->getMessage(),
                             'user_id' => Auth::id(),
-                            'model' => $model,
+                            'model' => $chadGptRequest->getModel(),
                         ]);
                     }
 
