@@ -6,6 +6,7 @@ namespace App\Context\ChadGPT\Application\Service;
 
 use App\Context\ChadGPT\Application\Dto\ChadGptRequest;
 use http\Exception\RuntimeException;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +16,9 @@ class ChadGptRequestService
     private const int TIMEOUT = 60;
 
 
+    /**
+     * @throws ConnectionException
+     */
     public function request(ChadGptRequest $chadGptRequest): Response
     {
         $requestData = [

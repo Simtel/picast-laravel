@@ -29,8 +29,7 @@ final class ChadGptController extends Controller
      */
     public function index(ConversationRepository $conversationRepository): View|Factory|Application
     {
-        $conversations = $conversationRepository->findBuUser(Auth::user());
-        return view('personal.chadgpt.index', compact('conversations'));
+        return view('personal.chadgpt.index', ['conversations' => $conversationRepository->findBuUser(Auth::user())]);
     }
 
     /**
