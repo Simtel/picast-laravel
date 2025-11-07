@@ -98,6 +98,7 @@ class CreateChatConversationHandlerTest extends TestCase
         ChadGptConversationWordStat::create([
             'user_id' => $user->getId(),
             'words_used' => $initialWordsCount,
+            'stat_date' => now()->startOfMonth(),
         ]);
 
         $command = Mockery::mock(CreateChatConversationCommand::class);

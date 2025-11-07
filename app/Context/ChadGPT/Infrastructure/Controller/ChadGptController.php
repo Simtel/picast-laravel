@@ -9,6 +9,7 @@ use App\Context\ChadGPT\Application\Dto\ChadGptRequest;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
+use App\Context\ChadGPT\Infrastructure\Repository\StatWordsUsedRepository;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
 use App\Http\Controllers\Controller;
 use Exception;
@@ -25,11 +26,17 @@ final class ChadGptController extends Controller
      * Display the ChadGPT chat page
      *
      * @param ConversationRepository $conversationRepository
+     * @param StatWordsUsedRepository $statWordsUsedRepository
      * @return Application|Factory|View
      */
-    public function index(ConversationRepository $conversationRepository): View|Factory|Application
-    {
-        return view('personal.chadgpt.index', ['conversations' => $conversationRepository->findBuUser(Auth::user())]);
+    public function index(
+        ConversationRepository $conversationRepository,
+        StatWordsUsedRepository $statWordsUsedRepository
+    ): View|Factory|Application {
+        return view('personal.chadgpt.index', [
+            'conversations' => $conversationRepository->findBuUser(Auth::user()),
+            'word_stats' => $statWordsUsedRepository->findByUser(Auth::user()),
+        ]);
     }
 
     /**

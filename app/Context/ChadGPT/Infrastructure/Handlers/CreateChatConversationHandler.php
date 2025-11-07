@@ -26,7 +26,13 @@ class CreateChatConversationHandler implements CommandHandlerInterface
             'ai_response' => $command->getResponse(),
             'used_words_count' => $command->getUserWordsCount()
         ]);
-        $wordStat = ChadGptConversationWordStat::firstOrCreate(['user_id' => Auth::id()]);
+
+        $statDate = now()->startOfMonth();
+        $wordStat = ChadGptConversationWordStat::firstOrCreate([
+            'user_id' => Auth::id(),
+            'stat_date' => $statDate
+        ]);
+
         $wordStat->words_used += $command->getUserWordsCount();
         $wordStat->save();
     }

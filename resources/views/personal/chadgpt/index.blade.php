@@ -8,7 +8,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
                         <h5>Chat with AI Models</h5>
@@ -33,14 +33,33 @@
 
                         <div class="form-group">
                             <label for="messageInput">Your Message:</label>
-                            <textarea class="form-control" id="messageInput" rows="4" placeholder="Type your message here..."></textarea>
+                            <textarea class="form-control" id="messageInput" rows="4"
+                                      placeholder="Type your message here..."></textarea>
                         </div>
 
                         <button id="sendMessageBtn" class="btn btn-primary">Send Message</button>
                         <button id="clearChatBtn" class="btn btn-secondary ml-2">Clear Chat</button>
                     </div>
                 </div>
-
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Usage Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="usageStats">
+                            <p>Words used: </p>
+                            @foreach($word_stats as $word_stat)
+                                {{$word_stat->getStatDate()->format('m-Y')}}: {{$word_stat->getWordsUsed()}}
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <div class="card mt-4">
                     <div class="card-header">
                         <h5>Chat History</h5>
@@ -74,22 +93,26 @@
             max-height: 800px;
             overflow-y: auto;
         }
+
         .user-message {
             background-color: #e3f2fd;
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 10px;
         }
+
         .ai-message {
             background-color: #f5f5f5;
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 10px;
         }
+
         .message-label {
             font-weight: bold;
             margin-bottom: 5px;
         }
+
         .error-message {
             background-color: #ffebee;
             padding: 10px;
@@ -97,6 +120,7 @@
             margin-bottom: 10px;
             color: #c62828;
         }
+
         /* Markdown styling */
         .ai-message-content pre {
             background-color: #f4f4f4;
@@ -105,34 +129,39 @@
             padding: 10px;
             overflow-x: auto;
         }
+
         .ai-message-content code {
             background-color: #f4f4f4;
             padding: 2px 4px;
             border-radius: 3px;
         }
+
         .ai-message-content blockquote {
             border-left: 4px solid #ddd;
             padding-left: 10px;
             margin-left: 0;
             color: #666;
         }
+
         .ai-message-content table {
             border-collapse: collapse;
             width: 100%;
         }
+
         .ai-message-content table,
         .ai-message-content th,
         .ai-message-content td {
             border: 1px solid #ddd;
             padding: 8px;
         }
+
         .ai-message-content th {
             background-color: #f5f5f5;
         }
     </style>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const sendMessageBtn = document.getElementById('sendMessageBtn');
             const clearChatBtn = document.getElementById('clearChatBtn');
             const messageInput = document.getElementById('messageInput');
@@ -150,7 +179,7 @@
                 return;
             }
 
-            sendMessageBtn.addEventListener('click', function() {
+            sendMessageBtn.addEventListener('click', function () {
                 const message = messageInput.value.trim();
                 const model = modelSelect.value;
 
@@ -181,40 +210,40 @@
                         model: model
                     })
                 })
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    if (!response.ok && response.status !== 422) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Response data:', data);
-                    if (data.success) {
-                        // Add AI response to chat with Markdown rendering
-                        addMessageToChat('ChadGPT', data.response, 'ai-message', true);
+                    .then(response => {
+                        console.log('Response status:', response.status);
+                        if (!response.ok && response.status !== 422) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Response data:', data);
+                        if (data.success) {
+                            // Add AI response to chat with Markdown rendering
+                            addMessageToChat('ChadGPT', data.response, 'ai-message', true);
 
-                        // Update word count
-                        totalWords += data.used_words_count || 0;
-                        wordsCount.textContent = totalWords;
-                    } else {
-                        addMessageToChat('Error', JSON.stringify(data.errors) || 'An unknown error occurred', 'error-message');
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.error('Fetch error:', error);
-                    addMessageToChat('Error', 'Failed to communicate with the server: ' + error.message, 'error-message');
-                })
-                .finally(() => {
-                    // Re-enable button
-                    sendMessageBtn.disabled = false;
-                    sendMessageBtn.textContent = 'Send Message';
-                    messageInput.value = '';
-                });
+                            // Update word count
+                            totalWords += data.used_words_count || 0;
+                            wordsCount.textContent = totalWords;
+                        } else {
+                            addMessageToChat('Error', JSON.stringify(data.errors) || 'An unknown error occurred', 'error-message');
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.error('Fetch error:', error);
+                        addMessageToChat('Error', 'Failed to communicate with the server: ' + error.message, 'error-message');
+                    })
+                    .finally(() => {
+                        // Re-enable button
+                        sendMessageBtn.disabled = false;
+                        sendMessageBtn.textContent = 'Send Message';
+                        messageInput.value = '';
+                    });
             });
 
-            clearChatBtn.addEventListener('click', function() {
+            clearChatBtn.addEventListener('click', function () {
                 if (!confirm('Are you sure you want to clear all chat history?')) {
                     return;
                 }
