@@ -7,6 +7,7 @@ namespace App\Context\ChadGPT\Infrastructure\Controller;
 use App\Common\CommandBus;
 use App\Context\ChadGPT\Application\Dto\ChadGptRequest;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
+use App\Context\ChadGPT\Domain\ChatModels;
 use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\ChadGPT\Infrastructure\Repository\StatWordsUsedRepository;
@@ -56,7 +57,7 @@ final class ChadGptController extends Controller
 
         try {
             $chadGptRequest = new ChadGptRequest(
-                $request->input('model', 'gpt-4o-mini'),
+                $request->input('model', ChatModels::GPT_4O_MINI),
                 $request->input('message'),
             );
 
