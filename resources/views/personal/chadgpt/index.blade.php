@@ -17,17 +17,14 @@
                         <div class="form-group">
                             <label for="modelSelect">Select Model:</label>
                             <select class="form-control" id="modelSelect">
-                                <option value="gpt-4o-mini" selected>GPT-4o Mini (Fast & Cheap)</option>
-                                <option value="gpt-4o">GPT-4o (Balanced)</option>
-                                <option value="gpt-5">GPT-5 (Smart)</option>
-                                <option value="gpt-5-mini">GPT-5 Mini</option>
-                                <option value="gpt-5-nano">GPT-5 Nano</option>
-                                <option value="claude-4.1-opus">Claude 4.1 Opus (Most Intelligent)</option>
-                                <option value="claude-4.5-sonnet">Claude 4.5 Sonnet</option>
-                                <option value="claude-3.7-sonnet-thinking">Claude 3.7 Sonnet Thinking</option>
-                                <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
-                                <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-                                <option value="deepseek-v3.1">DeepSeek v3.1</option>
+                                @foreach($models as $model)
+                                    <option
+                                            value="{{ $model->value }}"
+                                            {{ $model->isDefault() ? 'selected' : '' }}
+                                    >
+                                        {{ $model->label() }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -50,9 +47,11 @@
                     <div class="card-body">
                         <div id="usageStats">
                             <p>Words used: </p>
+
                             @foreach($word_stats as $word_stat)
                                 {{$word_stat->getStatDate()->format('m-Y')}}: {{$word_stat->getWordsUsed()}}
                             @endforeach
+                            <p>All used: <span id="wordsCount">{{$word_stats_sum}}</span></p>
                         </div>
                     </div>
                 </div>
@@ -169,7 +168,7 @@
             const chatHistory = document.getElementById('chatHistory');
             const wordsCount = document.getElementById('wordsCount');
 
-            let totalWords = 0;
+            let totalWords = parseInt(wordsCount.textContent);
 
             // Check if CSRF token is available
             const csrfToken = document.querySelector('meta[name="csrf-token"]');

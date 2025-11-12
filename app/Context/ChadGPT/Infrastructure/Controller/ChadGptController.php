@@ -34,9 +34,16 @@ final class ChadGptController extends Controller
         ConversationRepository $conversationRepository,
         StatWordsUsedRepository $statWordsUsedRepository
     ): View|Factory|Application {
+        $wordstat = $statWordsUsedRepository->findByUser(Auth::user());
+        $wordStatSum = 0;
+        foreach ($wordstat as $item) {
+            $wordStatSum += $item->getWordsUsed();
+        }
         return view('personal.chadgpt.index', [
+            'models' => ChatModels::cases(),
             'conversations' => $conversationRepository->findBuUser(Auth::user()),
-            'word_stats' => $statWordsUsedRepository->findByUser(Auth::user()),
+            'word_stats' => $wordstat,
+            'word_stats_sum' => $wordStatSum,
         ]);
     }
 
