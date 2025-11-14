@@ -16,7 +16,7 @@ class CreateImagesTable extends Migration
     public function up()
     {
         if (!Schema::hasTable('images')) {
-            Schema::create('images', function (Blueprint $table) {
+            Schema::create('images', static function (Blueprint $table) {
                 $table->increments('id');
                 $table->char('filename', 250);
                 $table->char('thumb', 250);

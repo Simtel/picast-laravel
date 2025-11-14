@@ -12,7 +12,7 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::table('you_tube_videos', function (Blueprint $table) {
+        Schema::table('you_tube_videos', static function (Blueprint $table) {
             $table->string('title');
             $table->string('thumb');
         });
@@ -23,7 +23,7 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::table('you_tube_videos', function (Blueprint $table) {
+        Schema::table('you_tube_videos', static function (Blueprint $table) {
             $table->dropColumn('title');
             $table->dropColumn('thumb');
         });

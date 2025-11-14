@@ -13,12 +13,12 @@ return new class () extends Migration {
     public function up(): void
     {
         if (!Schema::hasColumn('images', 'directory')) {
-            Schema::table('images', function (Blueprint $table) {
+            Schema::table('images', static function (Blueprint $table) {
                 $table->string('directory');
             });
         }
         if (!Schema::hasColumn('images', 'disk')) {
-            Schema::table('images', function (Blueprint $table) {
+            Schema::table('images', static function (Blueprint $table) {
                 $table->string('disk');
             });
         }
@@ -29,7 +29,7 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::table('images', function (Blueprint $table) {
+        Schema::table('images', static function (Blueprint $table) {
             $table->dropColumn('disk');
         });
     }

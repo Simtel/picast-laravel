@@ -27,7 +27,7 @@ final class DomainFactory extends Factory
     {
         return [
             'name' => $this->faker->domainName(),
-            'user_id' => fn () => User::all()->random()->id,
+            'user_id' => static fn () => User::all()->random()->id,
         ];
     }
 }

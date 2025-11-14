@@ -28,7 +28,7 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::table('chadgpt_conversations_word_stat', function (Blueprint $table) {
+        Schema::table('chadgpt_conversations_word_stat', static function (Blueprint $table) {
             $table->dropColumn('stat_date');
         });
     }

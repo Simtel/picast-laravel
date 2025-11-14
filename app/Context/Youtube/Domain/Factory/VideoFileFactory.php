@@ -22,10 +22,10 @@ final class VideoFileFactory extends Factory
     public function definition(): array
     {
         return [
-            'video_id'    => fn () => Video::factory()->create()->getId(),
+            'video_id'    => static fn () => Video::factory()->create()->getId(),
             'file_link' => fn () => 'file_name_'.$this->faker->randomNumber(3).'.mp4',
             'size' => fn () => $this->faker->randomNumber(5),
-            'format_id' => fn () => VideoFormats::factory()->create()->getId(),
+            'format_id' => static fn () => VideoFormats::factory()->create()->getId(),
         ];
     }
 }

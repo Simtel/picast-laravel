@@ -15,7 +15,7 @@ class CreateInviteCodesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('invite_codes', function (Blueprint $table) {
+        Schema::create('invite_codes', static function (Blueprint $table) {
             $table->id();
             $table->bigInteger('created_by');
             $table->char('code', 6);

@@ -30,7 +30,7 @@ final class WhoisFactory extends Factory
     {
 
         return [
-            'domain_id' => fn () => Domain::factory()->create()->first()->id,
+            'domain_id' => static fn () => Domain::factory()->create()->first()->id,
             'text'      => '% TCI Whois Service. Terms of use:
 % https://tcinet.ru/documents/whois_ru_rf.pdf (in Russian)
 % https://tcinet.ru/documents/whois_su.pdf (in Russian)

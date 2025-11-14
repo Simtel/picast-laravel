@@ -44,7 +44,7 @@ return new class () extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('youtube_video_files');
-        Schema::table('youtube_videos', function (Blueprint $table) {
+        Schema::table('youtube_videos', static function (Blueprint $table) {
             $table->string('file_link');
             $table->string('size');
             $table->boolean('is_download');

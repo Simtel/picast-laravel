@@ -15,7 +15,7 @@ class DomainsTableChange extends Migration
      */
     public function up()
     {
-        Schema::table('domains', function (Blueprint $table) {
+        Schema::table('domains', static function (Blueprint $table) {
             $table->timestamp('expire_at')->nullable();
             $table->text('owner')->nullable();
         });
@@ -28,7 +28,7 @@ class DomainsTableChange extends Migration
      */
     public function down()
     {
-        Schema::table('domains', function (Blueprint $table) {
+        Schema::table('domains', static function (Blueprint $table) {
             $table->dropColumn(['expire_at','owner']);
         });
     }

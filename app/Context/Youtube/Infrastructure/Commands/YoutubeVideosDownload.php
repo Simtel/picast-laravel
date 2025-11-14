@@ -67,7 +67,7 @@ final class YoutubeVideosDownload extends Command implements Isolatable
             $progressBar = $this->getProgressBar();
 
             $this->youtubeDl->onProgress(
-                function (
+                static function (
                     ?string $progressTarget,
                     string $percentage,
                     string $size,
@@ -77,10 +77,10 @@ final class YoutubeVideosDownload extends Command implements Isolatable
                 ) use ($progressBar): void {
                     $percentNumber = (int)rtrim($percentage, '%');
                     $progressBar->setProgress($percentNumber);
-                    $progressBar->setPlaceholderFormatter('size', function ($value) use ($size) {
+                    $progressBar->setPlaceholderFormatter('size', static function ($value) use ($size) {
                         return $size;
                     });
-                    $progressBar->setPlaceholderFormatter('speed', function ($value) use ($speed) {
+                    $progressBar->setPlaceholderFormatter('speed', static function ($value) use ($speed) {
                         return $speed ?? '';
                     });
                 }

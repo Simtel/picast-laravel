@@ -24,14 +24,14 @@ final class ApiVideoControllerTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJson(
-            fn (AssertableJson $json) => $json->whereType('data', 'array')
+            static fn (AssertableJson $json) => $json->whereType('data', 'array')
         );
 
         $response->assertJson(
-            fn (AssertableJson $json) => $json->has('data')
+            static fn (AssertableJson $json) => $json->has('data')
                 ->has(
                     'data.0',
-                    fn (AssertableJson $json) => $json->where('id', $video->getId())
+                    static fn (AssertableJson $json) => $json->where('id', $video->getId())
                         ->where('url', $video->getUrl())
                         ->etc()
                 )
@@ -54,13 +54,13 @@ final class ApiVideoControllerTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJson(
-            fn (AssertableJson $json) => $json->whereType('data', 'array')
+            static fn (AssertableJson $json) => $json->whereType('data', 'array')
         );
 
         $response->assertJson(
-            fn (AssertableJson $json) => $json->has(
+            static fn (AssertableJson $json) => $json->has(
                 'data',
-                fn (AssertableJson $json) => $json->where('id', $video->getId())
+                static fn (AssertableJson $json) => $json->where('id', $video->getId())
                     ->where('url', $video->getUrl())
                     ->where('title', $video->getTitle())
                     ->where('createdAt', $video->getCreatedAt()?->format('Y-m-d H:i:s'))

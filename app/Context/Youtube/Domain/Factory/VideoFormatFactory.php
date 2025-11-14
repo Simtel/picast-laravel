@@ -21,7 +21,7 @@ final class VideoFormatFactory extends Factory
     public function definition(): array
     {
         return [
-            'video_id'    => fn () => Video::factory()->create()->getId(),
+            'video_id'    => static fn () => Video::factory()->create()->getId(),
             'format_id'   => $this->faker->randomNumber(2),
             'format_note' => 'some note for video',
             'format_ext'  => 'mp4',

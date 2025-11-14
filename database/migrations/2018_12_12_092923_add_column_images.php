@@ -16,7 +16,7 @@ class AddColumnImages extends Migration
     public function up()
     {
         if (!Schema::hasColumn('images', 'user_id')) {
-            Schema::table('images', function (Blueprint $table) {
+            Schema::table('images', static function (Blueprint $table) {
                 $table->bigInteger('user_id')->after('id');
             });
         }
@@ -29,7 +29,7 @@ class AddColumnImages extends Migration
      */
     public function down()
     {
-        Schema::table('images', function (Blueprint $table) {
+        Schema::table('images', static function (Blueprint $table) {
             $table->dropColumn('user_id');
         });
     }

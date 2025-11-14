@@ -67,7 +67,7 @@ class ChadGPTControllerTest extends TestCase
         ]);
 
 
-        $this->mock(ConversationRepository::class, function ($mock) {
+        $this->mock(ConversationRepository::class, static function ($mock) {
             $mock->shouldReceive('deleteByUser')
                 ->andThrow(new \Exception('Database error'));
         });

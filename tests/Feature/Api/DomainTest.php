@@ -23,7 +23,7 @@ final class DomainTest extends TestCase
     {
         $response = $this->json('get', route('api.domains.index'));
         $response->assertStatus(401);
-        $response->assertJson(fn (AssertableJson $json) => $json->where('message', 'Unauthenticated'));
+        $response->assertJson(static fn (AssertableJson $json) => $json->where('message', 'Unauthenticated'));
     }
 
     public function test_domains_list(): void
@@ -38,19 +38,19 @@ final class DomainTest extends TestCase
         $response->assertOk();
 
         $response->assertJson(
-            fn (AssertableJson $json) => $json->whereType('data', 'array')
+            static fn (AssertableJson $json) => $json->whereType('data', 'array')
         );
         $response->assertJson(
-            fn (AssertableJson $json) => $json->has('data')
+            static fn (AssertableJson $json) => $json->has('data')
                 ->has(
                     'data.0',
-                    fn (AssertableJson $json) => $json->where('id', $domain1->getId())
+                    static fn (AssertableJson $json) => $json->where('id', $domain1->getId())
                         ->where('name', $domain1->getName())
                         ->etc()
                 )
                 ->has(
                     'data.1',
-                    fn (AssertableJson $json) => $json->where('id', $domain2->getId())
+                    static fn (AssertableJson $json) => $json->where('id', $domain2->getId())
                         ->where('name', $domain2->getName())
                         ->etc()
                 )
@@ -71,13 +71,13 @@ final class DomainTest extends TestCase
         $response->assertOk();
 
         $response->assertJson(
-            fn (AssertableJson $json) => $json->whereType('data', 'array')
+            static fn (AssertableJson $json) => $json->whereType('data', 'array')
         );
         $response->assertJson(
-            fn (AssertableJson $json) => $json->has('data')
+            static fn (AssertableJson $json) => $json->has('data')
                 ->has(
                     'data',
-                    fn (AssertableJson $json) => $json->where('id', $domain->getId())
+                    static fn (AssertableJson $json) => $json->where('id', $domain->getId())
                         ->where('name', $domain->getName())
                         ->etc()
                 )
@@ -90,7 +90,7 @@ final class DomainTest extends TestCase
 
         $response = $this->get(route('api.domains.create', ), ['Authorization' => 'Bearer ' . $user->api_token]);
         $response->assertStatus(403);
-        $response->assertJson(fn (AssertableJson $json) => $json->where('message', 'Not action.'));
+        $response->assertJson(static fn (AssertableJson $json) => $json->where('message', 'Not action.'));
     }
 
     public function test_domain_edit_form(): void
@@ -105,7 +105,7 @@ final class DomainTest extends TestCase
             ['Authorization' => 'Bearer ' . $user->api_token]
         );
         $response->assertStatus(403);
-        $response->assertJson(fn (AssertableJson $json) => $json->where('message', 'Not action.'));
+        $response->assertJson(static fn (AssertableJson $json) => $json->where('message', 'Not action.'));
     }
 
     public function test_domain_store(): void

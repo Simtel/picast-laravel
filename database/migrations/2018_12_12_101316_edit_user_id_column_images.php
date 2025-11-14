@@ -15,7 +15,7 @@ class EditUserIdColumnImages extends Migration
      */
     public function up()
     {
-        Schema::table('images', function (Blueprint $table) {
+        Schema::table('images', static function (Blueprint $table) {
             $table->bigInteger('user_id')->default(0)->change();
         });
     }

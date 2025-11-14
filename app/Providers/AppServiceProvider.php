@@ -41,11 +41,11 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton('whois', function (Application $app) {
+        $this->app->singleton('whois', static function (Application $app) {
             return Factory::get()->createWhois();
         });
 
-        $this->app->singleton(CommandBus::class, function () {
+        $this->app->singleton(CommandBus::class, static function () {
             $bus = new CommandBus();
 
             $bus->register(CreateChatConversationCommand::class, CreateChatConversationHandler::class);

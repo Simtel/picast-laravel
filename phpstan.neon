@@ -6,6 +6,7 @@ parameters:
     paths:
         - app
         - tests
+        - database/migrations
     level: max
     ignoreErrors:
         - identifier: method.nonObject

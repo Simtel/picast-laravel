@@ -12,7 +12,7 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('chadgpt_conversations', function (Blueprint $table) {
+        Schema::create('chadgpt_conversations', static function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->unsigned();
             $table->string('model');

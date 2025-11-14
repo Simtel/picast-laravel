@@ -23,7 +23,7 @@ final class UpdateDomainsCommandTest extends TestCase
 
         $whoisUpdaterMock->expects('update')
             ->twice()
-            ->withArgs(function (Domain $domain) use ($domain1, $domain2) {
+            ->withArgs(static function (Domain $domain) use ($domain1, $domain2) {
                 return in_array($domain->name, [$domain1->getName(), $domain2->getName()], true);
             });
 

@@ -16,7 +16,7 @@ class AddImagesCheckField extends Migration
     public function up()
     {
         if (!Schema::hasColumn('images', 'check')) {
-            Schema::table('images', function (Blueprint $table) {
+            Schema::table('images', static function (Blueprint $table) {
                 $table->boolean('check')->after('width');
             });
         }
@@ -29,7 +29,7 @@ class AddImagesCheckField extends Migration
      */
     public function down()
     {
-        Schema::table('images', function (Blueprint $table) {
+        Schema::table('images', static function (Blueprint $table) {
             $table->dropColumn('check');
         });
     }

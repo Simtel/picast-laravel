@@ -12,17 +12,26 @@ class CreatePermissionTables extends Migration
      * Run the migrations.
      *
      * @return void
+     * @throws Exception
      */
-    public function up()
+    public function up(): void
     {
+        /**
+         * @var array{
+         *     roles: string,
+         *     permissions: string,
+         *     model_has_permissions: string,
+         *     model_has_roles: string,
+         *     role_has_permissions: string,
+         * } $tableNames
+         */
         $tableNames = config('permission.table_names');
+        /**
+         * @var array{model_morph_key: string}
+         */
         $columnNames = config('permission.column_names');
 
-        if (empty($tableNames)) {
-            throw new \Exception('Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');
-        }
-
-        Schema::create($tableNames['permissions'], function (Blueprint $table) {
+        Schema::create($tableNames['permissions'], static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
             $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
@@ -31,7 +40,7 @@ class CreatePermissionTables extends Migration
             $table->unique(['name', 'guard_name']);
         });
 
-        Schema::create($tableNames['roles'], function (Blueprint $table) {
+        Schema::create($tableNames['roles'], static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
             $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
@@ -40,7 +49,7 @@ class CreatePermissionTables extends Migration
             $table->unique(['name', 'guard_name']);
         });
 
-        Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames) {
+        Schema::create($tableNames['model_has_permissions'], static function (Blueprint $table) use ($tableNames, $columnNames) {
             $table->unsignedBigInteger('permission_id');
 
             $table->string('model_type');
@@ -58,7 +67,7 @@ class CreatePermissionTables extends Migration
             );
         });
 
-        Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames) {
+        Schema::create($tableNames['model_has_roles'], static function (Blueprint $table) use ($tableNames, $columnNames) {
             $table->unsignedBigInteger('role_id');
 
             $table->string('model_type');
@@ -76,7 +85,7 @@ class CreatePermissionTables extends Migration
             );
         });
 
-        Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames) {
+        Schema::create($tableNames['role_has_permissions'], static function (Blueprint $table) use ($tableNames) {
             $table->unsignedBigInteger('permission_id');
             $table->unsignedBigInteger('role_id');
 
@@ -102,14 +111,20 @@ class CreatePermissionTables extends Migration
      * Reverse the migrations.
      *
      * @return void
+     * @throws Exception
      */
-    public function down()
+    public function down(): void
     {
+        /**
+         * @var array{
+         *     roles: string,
+         *     permissions: string,
+         *     model_has_permissions: string,
+         *     model_has_roles: string,
+         *     role_has_permissions: string,
+         * } $tableNames
+         */
         $tableNames = config('permission.table_names');
-
-        if (empty($tableNames)) {
-            throw new \Exception('Error: config/permission.php not found and defaults could not be merged. Please publish the package configuration before proceeding, or drop the tables manually.');
-        }
 
         Schema::drop($tableNames['role_has_permissions']);
         Schema::drop($tableNames['model_has_roles']);

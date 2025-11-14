@@ -13,7 +13,7 @@ class CreateDefaultUser extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         $user = User::firstOrNew(
             [
@@ -21,7 +21,7 @@ class CreateDefaultUser extends Migration
             ]
         );
 
-        $user->name = getenv('DEFAULT_USER_NAME');
+        $user->name = (string)getenv('DEFAULT_USER_NAME');
         $user->password = Hash::make(getenv('DEFAULT_USER_PASSWORD'));
         $user->save();
     }
@@ -31,12 +31,15 @@ class CreateDefaultUser extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         try {
             $user = User::findOrFail(['email' => getenv('DEFAULT_USER_EMAIL')]);
-            $user->delete();
-        } catch (ModelNotFoundException | Exception $e) {
+            $user = current($user);
+            if ($user instanceof User) {
+                $user->delete();
+            }
+        } catch (ModelNotFoundException|Exception $e) {
         }
     }
 }

@@ -15,7 +15,7 @@ class CreateWhoisTable extends Migration
      */
     public function up()
     {
-        Schema::create('whois', function (Blueprint $table) {
+        Schema::create('whois', static function (Blueprint $table) {
             $table->id();
             $table->bigInteger('domain_id');
             $table->text('text');

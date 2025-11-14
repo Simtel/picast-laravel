@@ -12,7 +12,7 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('you_tube_videos', function (Blueprint $table) {
+        Schema::create('you_tube_videos', static function (Blueprint $table) {
             $table->id();
             $table->string('url');
             $table->integer('user_id')->unsigned();
