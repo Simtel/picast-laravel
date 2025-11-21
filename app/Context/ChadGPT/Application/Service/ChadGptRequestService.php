@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Context\ChadGPT\Application\Service;
 
 use App\Context\ChadGPT\Application\Dto\ChadGptRequest;
-use http\Exception\RuntimeException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use RuntimeException;
 
 class ChadGptRequestService
 {

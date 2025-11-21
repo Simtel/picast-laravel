@@ -47,7 +47,8 @@
     "phpunit/phpunit": "^12.0",
     "rector/swiss-knife": "^2.3",
     "roave/security-advisories": "dev-latest",
-    "symfony/thanks": "^1.0"
+    "symfony/thanks": "^1.0",
+    "ext-http": "*"
   },
   "autoload": {
     "psr-4": {
