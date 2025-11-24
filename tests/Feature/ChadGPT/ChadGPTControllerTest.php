@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature\ChadGPT;
 
+use App\Common\CommandBus;
+use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
+use App\Context\ChadGPT\Domain\ChatModels;
 use App\Context\ChadGPT\Domain\Model\ChadGptConversation;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\User\Domain\Model\User;
+use Illuminate\Http\Client\Response;
+use Mockery;
 use Tests\TestCase;
 
 class ChadGPTControllerTest extends TestCase
@@ -83,5 +88,46 @@ class ChadGPTControllerTest extends TestCase
             ]);
 
         $this->assertEquals(2, ChadGptConversation::where('user_id', $this->user->id)->count());
+    }
+
+
+    public function testSendMessageSuccessfully(): void
+    {
+        $responseText = 'Тестовый запрос';
+        $usedWordsCount = 100;
+        $this->actingAs($this->user);
+
+        $bus = $this->getMockBuilder(CommandBus::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $bus->expects($this->once())->method('execute');
+
+        app()->instance(CommandBus::class, $bus);
+
+        $service = $this->getMockBuilder(ChadGptRequestService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $response = Mockery::mock(Response::class);
+        $response->shouldReceive('successful')->andReturn(true);
+        $response->shouldReceive('json')->andReturn([
+            'is_success' => true,
+            'response' => $responseText,
+            'used_words_count' => $usedWordsCount,
+            'used_tokens_count' => 20,
+            'error_code' => null,
+            'error_message' => null,
+        ]);
+
+
+
+        $service->expects($this->once())->method('request')->willReturn($response);
+
+        app()->instance(ChadGptRequestService::class, $service);
+
+        $this->postJson(route('chadgpt.send-message'), [
+            'message' => $responseText,
+            'model' => ChatModels::GPT_4O_MINI
+        ]);
     }
 }
