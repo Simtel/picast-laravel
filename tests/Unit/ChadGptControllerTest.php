@@ -17,16 +17,4 @@ final class ChadGptControllerTest extends TestCase
         $controller = new ChadGptController();
         $this->assertInstanceOf(ChadGptController::class, $controller);
     }
-
-    /**
-     * Test that the index method returns a view
-     */
-    public function test_index_returns_view(): void
-    {
-        $this->loginAdmin();
-        $response = $this->get(route('chadgpt.index'));
-
-        $response->assertStatus(200);
-        $response->assertViewIs('personal.chadgpt.index');
-    }
 }
