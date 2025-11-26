@@ -38,11 +38,14 @@ class ChadGPTControllerTest extends TestCase
             ['user_id' => $this->user->id, 'stat_date' => Carbon::now()->firstOfMonth(), 'words_used' => 100]
         );
 
+        ChadGptConversation::factory()->create(['user_id' => $this->user->id]);
+
         $this->actingAs($this->user);
         $response = $this->get(route('chadgpt.index'));
 
         $response->assertStatus(200);
         $response->assertViewIs('personal.chadgpt.index');
+        $response->assertViewHas('conversations');
     }
 
     public function test_clear_history_removes_all_user_conversations(): void
@@ -235,5 +238,43 @@ class ChadGPTControllerTest extends TestCase
         ]);
 
         $response->assertStatus(500);
+    }
+
+    public function test_send_message_validation_failed(): void
+    {
+        $responseText = str_repeat('a', 1001);
+        $usedWordsCount = 100;
+        $this->actingAs($this->user);
+
+        $bus = $this->getMockBuilder(CommandBus::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $bus->expects($this->never())->method('execute');
+
+        app()->instance(CommandBus::class, $bus);
+
+        $service = $this->getMockBuilder(ChadGptRequestService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+
+        $service->expects($this->never())->method('request');
+
+        app()->instance(ChadGptRequestService::class, $service);
+
+        Log::shouldReceive('info')->never();
+        Log::shouldReceive('error')->never();
+
+        $response = $this->postJson(route('chadgpt.send-message'), [
+            'message' => $responseText,
+            'model' => ChatModels::GPT_4O_MINI
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJson([
+            'errors' => [
+                'message' => ['Количество символов в поле message не может превышать 1000.'],
+            ]
+        ]);
     }
 }
