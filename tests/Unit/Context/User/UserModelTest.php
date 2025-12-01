@@ -82,16 +82,17 @@ final class UserModelTest extends TestCase
         $user->refresh();
 
         self::assertNotNull($user->birth_date);
-        self::assertEquals($newBirthDate, $user->birth_date->format('Y-m-d'));
+        self::assertEquals($newBirthDate, $user->getBirthDate()->format('Y-m-d'));
+        self::assertEquals(1985, $user->getBirthdayYear());
     }
 
     public function test_birth_date_can_be_queried(): void
     {
         Event::fake();
         $birthDate = '1990-01-15';
-        $uniqueEmail1 = 'user_query_test_1_' . uniqid() . '@test.com';
-        $uniqueEmail2 = 'user_query_test_2_' . uniqid() . '@test.com';
-        $uniqueEmail3 = 'user_query_test_3_' . uniqid() . '@test.com';
+        $uniqueEmail1 = 'user_query_test_1_' . uniqid('', true) . '@test.com';
+        $uniqueEmail2 = 'user_query_test_2_' . uniqid('', true) . '@test.com';
+        $uniqueEmail3 = 'user_query_test_3_' . uniqid('', true) . '@test.com';
 
         $user1 = User::factory()->create(['birth_date' => $birthDate, 'email' => $uniqueEmail1]);
         $user2 = User::factory()->create(['birth_date' => '1985-12-25', 'email' => $uniqueEmail2]);
