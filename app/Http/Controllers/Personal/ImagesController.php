@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Personal;
 
+use App\Context\Common\Domain\Models\Images;
 use App\Http\Controllers\Controller;
-use App\Models\Images;
 use File;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Foundation\Application;

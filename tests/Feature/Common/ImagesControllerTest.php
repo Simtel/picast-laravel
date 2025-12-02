@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Common;
 
-use App\Models\Images;
+use App\Context\Common\Domain\Models\Images;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;

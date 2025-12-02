@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Auth;
 
+use App\Context\Common\Domain\Models\InviteCode;
 use App\Context\User\Domain\Model\User;
-use App\Models\InviteCode;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
 use Tests\Feature\MakesRequestsFromPage;
+use Tests\TestCase;
 
 final class RegisterTest extends TestCase
 {

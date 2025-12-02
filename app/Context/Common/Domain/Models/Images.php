@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Context\Common\Domain\Models;
 
 use App\Context\User\Domain\Model\User;
 use Eloquent;

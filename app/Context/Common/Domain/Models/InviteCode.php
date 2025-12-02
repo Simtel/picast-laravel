@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Context\Common\Domain\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

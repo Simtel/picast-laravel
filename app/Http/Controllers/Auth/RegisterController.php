@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Context\Common\Domain\Models\InviteCode;
 use App\Context\User\Domain\Model\User;
 use App\Http\Controllers\Controller;
-use App\Models\InviteCode;
 use Exception;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Context;
 
-use App\Models\Images;
+use App\Context\Common\Domain\Models\Images;
 use Tests\TestCase;
 
 final class ImagesTest extends TestCase
