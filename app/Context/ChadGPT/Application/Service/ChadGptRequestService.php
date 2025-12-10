@@ -17,6 +17,8 @@ class ChadGptRequestService
 
 
     /**
+     * @param ChadGptRequest $chadGptRequest
+     * @return Response
      * @throws ConnectionException
      */
     public function request(ChadGptRequest $chadGptRequest): Response
@@ -28,7 +30,9 @@ class ChadGptRequestService
 
         $endpoint = config('chadgpt.url') . $chadGptRequest->getModel();
 
-        return Http::timeout(self::TIMEOUT)->post($endpoint, $requestData);
+        /** @var Response $response */
+        $response = Http::timeout(self::TIMEOUT)->post($endpoint, $requestData);
+        return $response;
     }
 
     private function getApiKEy(): string
