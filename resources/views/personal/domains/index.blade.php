@@ -11,27 +11,91 @@
             </div>
         </div>
 
+        {{-- Поиск и фильтры --}}
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <form method="GET" action="{{ route('domains.index') }}" class="d-flex gap-2">
+                    <input type="text" 
+                           name="search" 
+                           class="form-control" 
+                           placeholder="Поиск по домену..." 
+                           value="{{ $search ?? '' }}">
+                    <input type="hidden" name="sort" value="{{ $currentSort ?? 'name' }}">
+                    <input type="hidden" name="direction" value="{{ $currentDirection ?? 'asc' }}">
+                    <button type="submit" class="btn btn-outline-primary">Найти</button>
+                    @if($search ?? false)
+                        <a href="{{ route('domains.index', ['sort' => $currentSort, 'direction' => $currentDirection]) }}" 
+                           class="btn btn-outline-secondary">Сбросить</a>
+                    @endif
+                </form>
+            </div>
+        </div>
+
         <table class="table">
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Адрес</th>
-                <th scope="col">Добавлено</th>
-                <th scope="col">Истекает</th>
-                <th scope="col">Обновлено</th>
+                <th scope="col">
+                    <a href="{{ route('domains.index', [
+                        'sort' => 'name',
+                        'direction' => ($currentSort ?? 'name') === 'name' && ($currentDirection ?? 'asc') === 'asc' ? 'desc' : 'asc',
+                        'search' => $search ?? null
+                    ]) }}" class="text-decoration-none text-dark">
+                        Адрес
+                        @if(($currentSort ?? 'name') === 'name')
+                            <i class="bi bi-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }}"></i>
+                        @endif
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="{{ route('domains.index', [
+                        'sort' => 'created_at',
+                        'direction' => ($currentSort ?? 'name') === 'created_at' && ($currentDirection ?? 'asc') === 'asc' ? 'desc' : 'asc',
+                        'search' => $search ?? null
+                    ]) }}" class="text-decoration-none text-dark">
+                        Добавлено
+                        @if(($currentSort ?? 'name') === 'created_at')
+                            <i class="bi bi-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }}"></i>
+                        @endif
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="{{ route('domains.index', [
+                        'sort' => 'expire_at',
+                        'direction' => ($currentSort ?? 'name') === 'expire_at' && ($currentDirection ?? 'asc') === 'asc' ? 'desc' : 'asc',
+                        'search' => $search ?? null
+                    ]) }}" class="text-decoration-none text-dark">
+                        Истекает
+                        @if(($currentSort ?? 'name') === 'expire_at')
+                            <i class="bi bi-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }}"></i>
+                        @endif
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="{{ route('domains.index', [
+                        'sort' => 'updated_at',
+                        'direction' => ($currentSort ?? 'name') === 'updated_at' && ($currentDirection ?? 'asc') === 'asc' ? 'desc' : 'asc',
+                        'search' => $search ?? null
+                    ]) }}" class="text-decoration-none text-dark">
+                        Обновлено
+                        @if(($currentSort ?? 'name') === 'updated_at')
+                            <i class="bi bi-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }}"></i>
+                        @endif
+                    </a>
+                </th>
                 <th scope="col">История whois</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
-            @foreach($domains as $domain)
+            @forelse($domains as $domain)
                 <tr>
-                    <th scope="row">{{ $loop->iteration }}</th>
+                    <th scope="row">{{ $loop->iteration + ($domains->currentPage() - 1) * $domains->perPage() }}</th>
                     <td>{{ $domain->name }}</td>
-                    <td>{{ $domain->created_at }}</td>
-                    <td>{{ $domain->expire_at }}</td>
-                    <td>{{ $domain->updated_at }}</td>
+                    <td>{{ $domain->getCreatedAt()?->format('d.m.Y H:i') }}</td>
+                    <td>{{ $domain->getExpireAt()?->format('d.m.Y') }}</td>
+                    <td>{{ $domain->getUpdatedAt()?->format('d.m.Y H:i') }}</td>
                     <td><a href="{{ route('domains.show', ['domain' => $domain->id]) }}">Whois</a></td>
                     <td>
                         {{-- Компонент кнопки удаления --}}
@@ -42,8 +106,19 @@
                         <x-button :route="route('domains.update', ['domain' => $domain->id])" method="PUT" class="btn-success" text="Обновить" />
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="8" class="text-center">Домены не найдены</td>
+                </tr>
+            @endforelse
             </tbody>
         </table>
+
+        {{-- Пагинация --}}
+        @if($domains->hasPages())
+            <div class="d-flex justify-content-center">
+                {{ $domains->links() }}
+            </div>
+        @endif
     </main>
 @endsection

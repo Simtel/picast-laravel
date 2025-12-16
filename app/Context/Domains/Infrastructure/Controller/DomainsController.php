@@ -15,6 +15,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 final class DomainsController extends Controller
 {
@@ -27,12 +28,39 @@ final class DomainsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return Application|Factory|View
      */
-    public function index(): View|Factory|Application
+    public function index(Request $request): View|Factory|Application
     {
-        $domains = Domain::whereUserId(Auth()->id())->paginate(15);
-        return view('personal.domains.index', ['domains' => $domains]);
+        $query = Domain::whereUserId(Auth()->id());
+
+        // Поиск по имени домена
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Сортировка
+        $sortBy = $request->get('sort', 'name');
+        $sortDirection = $request->get('direction', 'asc');
+
+        // Разрешенные колонки для сортировки
+        $allowedSortColumns = ['name', 'created_at', 'updated_at', 'expire_at'];
+
+        if (in_array($sortBy, $allowedSortColumns)) {
+            $query->orderBy($sortBy, $sortDirection === 'desc' ? 'desc' : 'asc');
+        } else {
+            $query->orderBy('name', 'asc');
+        }
+
+        $domains = $query->paginate(15)->withQueryString();
+
+        return view('personal.domains.index', [
+            'domains' => $domains,
+            'currentSort' => $sortBy,
+            'currentDirection' => $sortDirection,
+            'search' => $request->search
+        ]);
     }
 
     /**

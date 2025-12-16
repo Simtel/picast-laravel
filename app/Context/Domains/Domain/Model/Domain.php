@@ -56,6 +56,9 @@ final class Domain extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
+    protected $casts = [
+        'expire_at' => 'date',
+    ];
     protected static string $factory = DomainFactory::class;
 
     public function getId(): int
@@ -96,4 +99,23 @@ final class Domain extends Model
     {
         return $this->user;
     }
+
+    public function getCreatedAt(): ?Carbon
+    {
+        $a = $this->created_at;
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): ?Carbon
+    {
+        return $this->updated_at;
+    }
+
+    public function getExpireAt(): ?Carbon
+    {
+        $b = $this->expire_at;
+        return $this->expire_at;
+    }
+
+
 }
