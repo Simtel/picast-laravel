@@ -1,0 +1,82 @@
+/* Стили для стрелок сортировки */
+.sort-arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+    vertical-align: middle;
+    opacity: 0.3;
+    transition: opacity 0.2s ease;
+}
+
+.sort-arrow:hover {
+    opacity: 0.7;
+}
+
+/* Стрелка вверх (по умолчанию) */
+.sort-arrow-up {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 6px solid #333;
+}
+
+/* Стрелка вниз (по умолчанию) */
+.sort-arrow-down {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid #333;
+}
+
+/* Активная стрелка вверх */
+.sort-arrow-up.active {
+    border-bottom-color: #007bff;
+    opacity: 1;
+}
+
+/* Активная стрелка вниз */
+.sort-arrow-down.active {
+    border-top-color: #007bff;
+    opacity: 1;
+}
+
+/* Альтернативный вариант с SVG иконками */
+.sort-icon {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-left: 5px;
+    vertical-align: middle;
+    opacity: 0.3;
+    transition: opacity 0.2s ease;
+}
+
+.sort-icon:hover {
+    opacity: 0.7;
+}
+
+.sort-icon svg {
+    width: 12px;
+    height: 12px;
+    fill: #333;
+}
+
+.sort-icon.active svg {
+    fill: #007bff;
+    opacity: 1;
+}
+
+.sort-icon.active .inactive {
+    display: none;
+}
+
+.sort-icon .active-arrow {
+    display: none;
+}
+
+.sort-icon.active .active-arrow {
+    display: inline;
+}
+
+.sort-icon:not(.active) .active-arrow {
+    display: none;
+}

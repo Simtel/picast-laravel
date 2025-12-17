@@ -43,7 +43,9 @@
                     ]) }}" class="text-decoration-none text-dark">
                         Адрес
                         @if(($currentSort ?? 'name') === 'name')
-                            <i class="bi bi-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }}"></i>
+                            <span class="sort-arrow sort-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }} active"></span>
+                        @else
+                            <span class="sort-arrow sort-arrow-up"></span>
                         @endif
                     </a>
                 </th>
@@ -55,7 +57,9 @@
                     ]) }}" class="text-decoration-none text-dark">
                         Добавлено
                         @if(($currentSort ?? 'name') === 'created_at')
-                            <i class="bi bi-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }}"></i>
+                            <span class="sort-arrow sort-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }} active"></span>
+                        @else
+                            <span class="sort-arrow sort-arrow-up"></span>
                         @endif
                     </a>
                 </th>
@@ -67,7 +71,9 @@
                     ]) }}" class="text-decoration-none text-dark">
                         Истекает
                         @if(($currentSort ?? 'name') === 'expire_at')
-                            <i class="bi bi-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }}"></i>
+                            <span class="sort-arrow sort-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }} active"></span>
+                        @else
+                            <span class="sort-arrow sort-arrow-up"></span>
                         @endif
                     </a>
                 </th>
@@ -79,7 +85,9 @@
                     ]) }}" class="text-decoration-none text-dark">
                         Обновлено
                         @if(($currentSort ?? 'name') === 'updated_at')
-                            <i class="bi bi-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }}"></i>
+                            <span class="sort-arrow sort-arrow-{{ ($currentDirection ?? 'asc') === 'asc' ? 'up' : 'down' }} active"></span>
+                        @else
+                            <span class="sort-arrow sort-arrow-up"></span>
                         @endif
                     </a>
                 </th>

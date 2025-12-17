@@ -33,6 +33,7 @@
 
 <link rel="stylesheet" href="/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/sort-arrows.css">
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
