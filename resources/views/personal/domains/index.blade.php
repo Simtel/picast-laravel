@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <table class="table">
+        <table class="table table-hover">
             <thead>
             <tr>
                 <th scope="col">#</th>
@@ -107,11 +107,19 @@
                     <td><a href="{{ route('domains.show', ['domain' => $domain->id]) }}">Whois</a></td>
                     <td>
                         {{-- Компонент кнопки удаления --}}
-                        <x-button :route="route('domains.destroy', ['domain' => $domain->id])" method="DELETE" class="btn-warning" text="Удалить" />
+                        <x-button :route="route('domains.destroy', ['domain' => $domain->id])" 
+                                 method="DELETE" 
+                                 class="btn-warning" 
+                                 icon="trash" 
+                                 title="Удалить домен" />
                     </td>
                     <td>
                         {{-- Компонент кнопки обновления --}}
-                        <x-button :route="route('domains.update', ['domain' => $domain->id])" method="PUT" class="btn-success" text="Обновить" />
+                        <x-button :route="route('domains.update', ['domain' => $domain->id])" 
+                                 method="PUT" 
+                                 class="btn-success" 
+                                 icon="rotate-right" 
+                                 title="Обновить WHOIS" />
                     </td>
                 </tr>
             @empty
