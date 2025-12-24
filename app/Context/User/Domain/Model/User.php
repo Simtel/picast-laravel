@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Context\User\Domain\Model;
 
 use App\Context\ChadGPT\Domain\Model\ChadGptConversation;
+use App\Context\Common\Domain\Models\Images;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\User\Domain\Factory\UserFactory;
 use Eloquent;
@@ -126,6 +127,14 @@ final class User extends Authenticatable
     public function chadGptConversations(): HasMany
     {
         return $this->hasMany(ChadGptConversation::class);
+    }
+
+    /**
+     * @return HasMany<Images, $this>
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(Images::class);
     }
 
     public function getEmail(): string

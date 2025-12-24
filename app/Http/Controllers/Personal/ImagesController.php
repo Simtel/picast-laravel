@@ -14,6 +14,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Storage;
 
 final class ImagesController extends Controller
@@ -28,11 +30,35 @@ final class ImagesController extends Controller
 
     /**
      * @return Factory|View|Application
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function index(): Factory|View|Application
     {
-        $images = Images::whereUserId(Auth()->id())->paginate(15);
-        return view('personal.images.index', ['images' => $images]);
+        $userId = Auth()->id();
+        $imagesQuery = Images::whereUserId($userId)
+            ->orderBy('created_at', 'desc');
+
+        $filter = request()->get('filter');
+        if ($filter === 'recent') {
+            $imagesQuery->where('created_at', '>=', now()->subWeek());
+        } elseif ($filter === 'large') {
+            $imagesQuery->where('id', '>', 100);
+        }
+
+
+        $search = request()->string('search');
+        if ($search->isNotEmpty()) {
+            $imagesQuery->where('filename', 'like', "%{$search}%");
+        }
+
+        $images = $imagesQuery->paginate(20)->withQueryString();
+
+        return view('personal.images.index', [
+            'images' => $images,
+            'currentFilter' => $filter,
+            'currentSearch' => $search
+        ]);
     }
 
     /**

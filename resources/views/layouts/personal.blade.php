@@ -35,8 +35,12 @@
 <link rel="stylesheet" href="/css/fontawesome.min.css">
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/sort-arrows.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="/css/gallery.css">
+@stack('styles')
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript" src="/js/marked.min.js"></script>
-</html>
+@stack('scripts')
+</body>

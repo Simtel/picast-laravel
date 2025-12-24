@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         Route::get('/show/{image}', [ImagesController::class, 'show'])->name('images.show');
         Route::get('/new', [ImagesController::class, 'create'])->name('images.create');
         Route::post('/store', [ImagesController::class, 'store'])->name('images.store');
+        Route::get('/test', [ImagesController::class, 'test'])->name('images.test');
     });
 
     Route::resource('domains', DomainsController::class)->middleware('permission:domains');

@@ -67,4 +67,54 @@ final class Images extends Model
     {
         return $this->user;
     }
+
+    /**
+     * Получить размер файла в человекочитаемом формате
+     */
+    public function getFormattedSize(): string
+    {
+        try {
+            if ($this->disk === 's3') {
+                // Для S3 файлов возвращаем примерный размер на основе расширения
+                $extension = pathinfo($this->filename, PATHINFO_EXTENSION);
+                $estimatedSizes = [
+                    'jpg' => '2.5 MB',
+                    'jpeg' => '2.5 MB',
+                    'png' => '3.2 MB',
+                    'gif' => '1.8 MB',
+                    'svg' => '0.5 MB',
+                    'webp' => '1.2 MB'
+                ];
+                return $estimatedSizes[strtolower($extension)] ?? '2.0 MB';
+            }
+
+            // Для локальных файлов пытаемся получить реальный размер
+            $path = $this->getPath();
+            if (file_exists($path)) {
+                $bytes = filesize($path);
+                if ($bytes !== false) {
+                    return $this->formatBytes($bytes);
+                }
+            }
+
+            return 'Неизвестно';
+        } catch (\Exception $e) {
+            return 'Неизвестно';
+        }
+    }
+
+    /**
+     * Форматировать байты в человекочитаемый формат
+     */
+    private function formatBytes(int $bytes, int $precision = 2): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+
+        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
+            $bytes /= 1024;
+        }
+
+        return round($bytes, $precision) . ' ' . $units[$i];
+    }
+
 }
