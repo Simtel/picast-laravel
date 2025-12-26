@@ -1,9 +1,11 @@
 
-// Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+// Import Bootstrap CSS from CDN converted to local
+@import url('/css/bootstrap.min.css');
 
 // Variables
 @import "variables";
 
-// Bootstrap
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+// Custom styles
+body {
+    font-family: 'Nunito', sans-serif;
+}

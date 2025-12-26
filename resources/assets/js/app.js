@@ -5,8 +5,12 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+import './bootstrap';
 
+// Make libraries available globally
+window.$ = window.jQuery = require('jquery');
+require('bootstrap');
+window.marked = require('marked');
 window.Vue = require('vue');
 
 /**
