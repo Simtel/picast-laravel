@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property string $thumb
  * @property int $width
  * @property int $check
+ * @property int $views_count
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string $directory
@@ -40,7 +41,11 @@ use Illuminate\Support\Carbon;
  */
 final class Images extends Model
 {
-    protected $fillable = ['filename', 'user_id', 'thumb', 'width', 'check', 'directory', 'disk'];
+    protected $fillable = ['filename', 'user_id', 'thumb', 'width', 'check', 'directory', 'disk', 'views_count'];
+
+    protected $attributes = [
+        'views_count' => 0,
+    ];
 
     /**
      * Подрубаем пользователя
@@ -66,6 +71,15 @@ final class Images extends Model
     public function getUser(): User
     {
         return $this->user;
+    }
+
+    /**
+     * Увеличить счетчик просмотров на 1
+     */
+    public function incrementViews(): self
+    {
+        $this->increment('views_count');
+        return $this;
     }
 
     /**

@@ -96,6 +96,8 @@ final class ImagesController extends Controller
 
     public function show(Images $image): Factory|View|Application
     {
+        $image->incrementViews();
+
         return view(
             'personal.images.show',
             [

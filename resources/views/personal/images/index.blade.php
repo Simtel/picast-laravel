@@ -83,13 +83,13 @@
                                     {{ $image->filename }}
                                 </div>
                                 <div class="image-meta">
-                                    <span class="image-date">
-                                        {{ $image->created_at->format('d.m.Y') }}
-                                    </span>
-                                    <span class="image-size">
-                                        ID: {{ $image->id }}
-                                    </span>
-                                </div>
+                                <span class="image-date">
+                                    {{ $image->created_at->format('d.m.Y') }}
+                                </span>
+                                <span class="image-views">
+                                    <i class="fas fa-eye"></i> {{ $image->views_count }}
+                                </span>
+                            </div>
                             </div>
                         </div>
                     @endforeach

@@ -169,6 +169,14 @@
                                     {{ $image->updated_at?->format('d.m.Y H:i') ?? 'Неизвестно' }}
                                 </div>
                             </div>
+
+                            <div class="col-12">
+                                <strong>Просмотры:</strong>
+                                <div class="text-muted small">
+                                    <i class="fas fa-eye me-1"></i>
+                                    {{ $image->views_count }} {{ trans_choice('просмотр|просмотра|просмотров', $image->views_count) }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
