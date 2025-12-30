@@ -67,7 +67,8 @@ final class ImagesControllerTest extends TestCase
                 'thumb' => '',
                 'width' => 0,
                 'check' => 1,
-                'disk'  => 's3'
+                'disk'  => 's3',
+                'views_count' => 5
             ]
         );
 
@@ -77,5 +78,54 @@ final class ImagesControllerTest extends TestCase
         $response->assertSee('Изображения');
         $response->assertSee('test.jpg');
         $response->assertSee('Добавить');
+    }
+
+    public function test_image_show_increments_views_count(): void
+    {
+        $this->authUserWithPermissions([], ['edit images']);
+
+        $image = Images::create(
+            [
+                'user_id' => Auth()->id(),
+                'filename' => 'test.jpg',
+                'directory' => 'images',
+                'thumb' => '',
+                'width' => 0,
+                'check' => 1,
+                'disk' => 's3',
+                'views_count' => 10
+            ]
+        );
+
+        $initialViews = $image->views_count;
+
+        $this->get(route('images.show', ['image' => $image->id]));
+
+        $this->assertEquals($initialViews + 1, $image->fresh()->views_count);
+    }
+
+    public function test_image_show_displays_views_count(): void
+    {
+        $this->authUserWithPermissions([], ['edit images']);
+
+        $image = Images::create(
+            [
+                'user_id' => Auth()->id(),
+                'filename' => 'test.jpg',
+                'directory' => 'images',
+                'thumb' => '',
+                'width' => 0,
+                'check' => 1,
+                'disk' => 's3',
+                'views_count' => 5
+            ]
+        );
+
+        $response = $this->get(route('images.show', ['image' => $image->id]));
+
+        // Проверяем, что счётчик просмотров отображается
+        $response->assertSee('Просмотры:');
+        $response->assertSee('fa-eye');
+        $response->assertSee('просмотр');
     }
 }
