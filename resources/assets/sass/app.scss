@@ -1,6 +1,5 @@
 
-// Import Bootstrap CSS from CDN converted to local
-@import url('/css/bootstrap.min.css');
+// Bootstrap CSS is loaded via layout (public/css/bootstrap.min.css)
 
 // Variables
 @import "variables";

@@ -1,103 +1,173 @@
-body {
-  font-size: .875rem;
-}
-
-.feather {
-  width: 16px;
-  height: 16px;
-  vertical-align: text-bottom;
-}
-
-/*
- * Sidebar
- */
-
+/* Sidebar Styles */
 .sidebar {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 100; /* Behind the navbar */
-  padding: 48px 0 0; /* Height of navbar */
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    width: 260px;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
 }
 
-@media (max-width: 767.98px) {
-  .sidebar {
-    top: 5rem;
-  }
+.sidebar-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar-brand:hover {
+    opacity: 0.9;
+}
+
+.sidebar-brand i {
+    font-size: 1.5rem;
+    color: #4f46e5;
 }
 
 .sidebar-sticky {
-  position: relative;
-  top: 0;
-  height: calc(100vh - 48px);
-  padding-top: .5rem;
-  overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    flex: 1;
+    padding: 1rem 0;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-@supports ((position: -webkit-sticky) or (position: sticky)) {
-  .sidebar-sticky {
-    position: -webkit-sticky;
-    position: sticky;
-  }
+.sidebar .nav {
+    gap: 0.25rem;
+    padding: 0 0.75rem;
+}
+
+.sidebar .nav-item {
+    margin-bottom: 0.25rem;
 }
 
 .sidebar .nav-link {
-  font-weight: 500;
-  color: #333;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.75rem 1rem;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
-.sidebar .nav-link .feather {
-  margin-right: 4px;
-  color: #999;
+.sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    transform: translateX(4px);
 }
 
 .sidebar .nav-link.active {
-  color: #007bff;
+    background: linear-gradient(90deg, #4f46e5 0%, #6366f1 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
 }
 
-.sidebar .nav-link:hover .feather,
-.sidebar .nav-link.active .feather {
-  color: inherit;
+.sidebar .nav-icon {
+    width: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
 }
 
-.sidebar-heading {
-  font-size: .75rem;
-  text-transform: uppercase;
+.sidebar .nav-link.active .nav-icon {
+    color: #fff;
 }
 
-/*
- * Navbar
- */
-
-.navbar-brand {
-  padding-top: .75rem;
-  padding-bottom: .75rem;
-  font-size: 1rem;
-  background-color: rgba(0, 0, 0, .25);
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+.sidebar .nav-link:not(.active) .nav-icon {
+    color: #a5b4fc;
 }
 
-.navbar .navbar-toggler {
-  top: .25rem;
-  right: 1rem;
+.sidebar-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.navbar .form-control {
-  padding: .75rem 1rem;
-  border-width: 0;
-  border-radius: 0;
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
 }
 
-.form-control-dark {
-  color: #fff;
-  background-color: rgba(255, 255, 255, .1);
-  border-color: rgba(255, 255, 255, .1);
+.user-avatar {
+    font-size: 1.75rem;
+    color: #6366f1;
 }
 
-.form-control-dark:focus {
-  border-color: transparent;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+.user-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+}
+
+/* Main Content Adjustment */
+.content-wrapper {
+    margin-left: 260px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 991.98px) {
+    .content-wrapper {
+        margin-left: 0;
+    }
+}
+
+/* Navbar Adjustments */
+.navbar {
+    margin-left: 260px;
+    transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 991.98px) {
+    .navbar {
+        margin-left: 0;
+    }
+}
+
+/* Scrollbar Styling */
+.sidebar-sticky::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-sticky::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-sticky::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.sidebar-sticky::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }

@@ -1,11 +1,17 @@
-<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-    <div class="sidebar-sticky pt-3">
+<nav id="sidebarMenu" class="sidebar">
+    <div class="sidebar-header">
+        <a href="/personal" class="sidebar-brand">
+            <i class="fa fa-cube"></i>
+            <span>Picast</span>
+        </a>
+    </div>
+    <div class="sidebar-sticky">
         <ul class="nav flex-column">
             @can('invite user')
                 <li class="nav-item">
                     <a class="nav-link {{request()->routeIs('personal') ? 'active' : ''}}" href="{{route('personal')}}">
-                        <span data-feather="home"></span>
-                        Участники <span class="sr-only">(current)</span>
+                        <i class="fa fa-home nav-icon"></i>
+                        <span>Участники</span>
                     </a>
                 </li>
             @endcan
@@ -13,8 +19,8 @@
                 <li class="nav-item">
                     <a class="nav-link {{request()->routeIs('domains.*') ? 'active' : ''}}"
                        href="{{route('domains.index')}}">
-                        <span data-feather="file"></span>
-                        Домены
+                        <i class="fa fa-globe nav-icon"></i>
+                        <span>Домены</span>
                     </a>
                 </li>
             @endcan
@@ -22,8 +28,8 @@
                 <li class="nav-item">
                     <a class="nav-link {{request()->routeIs('prices.*') ? 'active' : ''}}"
                        href="{{route('prices.index')}}">
-                        <span data-feather="file"></span>
-                        Мониторинг цен
+                        <i class="fa fa-tags nav-icon"></i>
+                        <span>Мониторинг цен</span>
                     </a>
                 </li>
             @endcan
@@ -31,8 +37,8 @@
                 <li class="nav-item">
                     <a class="nav-link {{request()->routeIs('images.*') ? 'active' : ''}}"
                        href="{{route('images.index')}}">
-                        <span data-feather="file"></span>
-                        Изображения
+                        <i class="fa fa-image nav-icon"></i>
+                        <span>Изображения</span>
                     </a>
                 </li>
             @endcan
@@ -40,27 +46,31 @@
                 <li class="nav-item">
                     <a class="nav-link {{request()->routeIs('youtube.*') ? 'active' : ''}}"
                        href="{{route('youtube.index')}}">
-                        <span data-feather="file"></span>
-                        YouTube Videos
+                        <i class="fa fa-youtube nav-icon"></i>
+                        <span>YouTube Videos</span>
                     </a>
                 </li>
             @endcan
             <li class="nav-item">
                 <a class="nav-link {{request()->routeIs('chadgpt.*') ? 'active' : ''}}"
                    href="{{route('chadgpt.index')}}">
-                    <span data-feather="message-circle"></span>
-                    ChadGPT Chat
+                    <i class="fa fa-comments nav-icon"></i>
+                    <span>ChadGPT Chat</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{request()->routeIs('settings') ? 'active' : ''}}"
                    href="{{route('settings')}}">
-                    <span data-feather="file"></span>
-                    Настройки
+                    <i class="fa fa-cog nav-icon"></i>
+                    <span>Настройки</span>
                 </a>
             </li>
         </ul>
-
-
+    </div>
+    <div class="sidebar-footer">
+        <div class="user-info">
+            <i class="fa fa-user-circle user-avatar"></i>
+            <span class="user-name">{{ auth()->user()->name }}</span>
+        </div>
     </div>
 </nav>

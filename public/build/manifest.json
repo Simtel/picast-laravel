@@ -1,1 +1,17 @@
-{"resources/assets/sass/app.scss": {"file": "assets/app.css", "src": "resources/assets/sass/app.scss", "isEntry": true, "css": ["assets/app.css"]}, "resources/assets/sass/fontawesome.scss": {"file": "assets/fontawesome.css", "src": "resources/assets/sass/fontawesome.scss", "isEntry": true, "css": ["assets/fontawesome.css"]}, "resources/assets/js/app.js": {"file": "assets/app.js", "src": "resources/assets/js/app.js", "isEntry": true, "imports": ["resources/assets/js/bootstrap.js"]}}
+{
+  "resources/assets/js/app.js": {
+    "file": "assets/app-q7ZC69-R.js",
+    "name": "app",
+    "src": "resources/assets/js/app.js",
+    "isEntry": true
+  },
+  "resources/assets/sass/app.scss": {
+    "file": "assets/app-Df2m1gps.css",
+    "src": "resources/assets/sass/app.scss",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  }
+}
