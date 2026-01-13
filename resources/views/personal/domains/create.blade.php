@@ -2,31 +2,31 @@
 @section('title','Личный кабинет')
 
 @section('content')
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Домены</h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-                <a href="{{route('domains.create')}}" class="btn btn-primary">Добавить</a>
-            </div>
+    <div class="main-content-header">
+        <h1 class="h2">Домены</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <a href="{{route('domains.create')}}" class="btn btn-primary">Добавить</a>
         </div>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-        {{ Html::form('POST', route('domains.store'))->open() }}
+    </div>
 
-        <div class="form-group">
-            {{ Html::label('Название', 'name') }}
-            {{ Html::text('name')->class('form-control')}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
+    @endif
 
-        {{ Html::submit('Сохранить домен')->class('btn btn-primary')}}
+    {{ Html::form('POST', route('domains.store'))->open() }}
 
-        {{ Html::form()->close() }}
-    </main>
+    <div class="form-group">
+        {{ Html::label('Название', 'name') }}
+        {{ Html::text('name')->class('form-control')}}
+    </div>
+
+    {{ Html::submit('Сохранить домен')->class('btn btn-primary')}}
+
+    {{ Html::form()->close() }}
 @endsection
