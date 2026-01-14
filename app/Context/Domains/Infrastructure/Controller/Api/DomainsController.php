@@ -103,6 +103,7 @@ final class DomainsController extends Controller
             ]
         );
         $domain->expire_at = Carbon::createFromTimestamp($whois->expirationDate);
+        $domain->updated_at = Carbon::now();
         $domain->save();
         return ['success' => true];
     }

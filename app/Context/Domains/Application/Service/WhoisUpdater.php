@@ -27,6 +27,7 @@ final readonly class WhoisUpdater implements \App\Context\Domains\Application\Co
             ]
         );
         $domain->expire_at = Carbon::createFromTimestamp($whois->expirationDate);
+        $domain->updated_at = Carbon::now();
         $domain->owner = $whois->owner;
         $domain->save();
     }

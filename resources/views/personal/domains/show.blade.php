@@ -52,4 +52,5 @@
             </tbody>
         </table>
         {{ $whois->links() }}
+    </div>
 @endsection

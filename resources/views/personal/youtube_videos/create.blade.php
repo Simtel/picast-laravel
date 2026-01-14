@@ -25,8 +25,8 @@
             {{ Html::text('url')->class('form-control')}}
         </div>
 
-        {{ Html::submit('Сохранить видео')->class('btn btn-primary')}}
+        {{ Html::submit('Сохранить видео')->class('btn btn-primary') }}
 
         {{ Html::form()->close() }}
-    </main>
+    </div>
 @endsection
