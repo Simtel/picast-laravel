@@ -160,7 +160,7 @@ Once started, the following services will be available:
 | Application | [http://localhost](http://localhost) | Main application |
 | Adminer | [http://localhost:8080](http://localhost:8080) | Database administration |
 | MailHog | [http://localhost:8025](http://localhost:8025) | Email testing interface |
-| API Documentation | [http://localhost/docs](http://localhost/docs) | Interactive API docs |
+| API Documentation | [http://localhost/api/documentation](http://localhost/docs) | Interactive API docs |
 
 ### Available Make Commands
 

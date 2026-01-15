@@ -6,7 +6,21 @@ namespace App\Context\Domains\Domain\Resource;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use OpenApi\Attributes as OA;
 
+/**
+ * Domain resource for API documentation
+ */
+#[OA\Schema(
+    schema: 'DomainResource',
+    description: 'Domain resource with WHOIS info',
+    properties: [
+        new OA\Property(property: 'id', description: 'Domain ID', type: 'integer'),
+        new OA\Property(property: 'name', description: 'Domain name', type: 'string', example: 'example.com'),
+        new OA\Property(property: 'expire_at', description: 'Expiration date', type: 'string', format: 'date-time'),
+        new OA\Property(property: 'whois', description: 'WHOIS information', type: 'array', items: new OA\Items(type: 'string'))
+    ]
+)]
 /**
  * @property integer $id
  * @property string $name
@@ -23,9 +37,9 @@ final class DomainResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'expire_at' => $this->expire_at,
+            'id' => $this->resource->id,
+            'name' => $this->resource->name,
+            'expire_at' => $this->resource->expire_at,
             'whois' => []
         ];
     }

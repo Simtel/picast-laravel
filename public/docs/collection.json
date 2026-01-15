@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Picast",
-        "_postman_id": "26985e9a-9c3a-4fc4-a2a1-8834a9257024",
+        "_postman_id": "496d6d62-82ef-449f-896d-a4adfb98bce3",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -19,6 +19,94 @@
             "name": "Endpoints",
             "description": "",
             "item": [
+                {
+                    "name": "Handles the API request and renders the Swagger documentation view.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/documentation",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/documentation"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>ArmiSimtel Api Docs<\/title>\n    <link rel=\"stylesheet\" type=\"text\/css\" href=\"https:\/\/picast.lc\/docs\/asset\/swagger-ui.css?v=295c0e8b75154a3a99d297333d3e9cb9\">\n    <link rel=\"icon\" type=\"image\/png\" href=\"https:\/\/picast.lc\/docs\/asset\/favicon-32x32.png?v=40d4f2c38d1cd854ad463f16373cbcb6\" sizes=\"32x32\"\/>\n    <link rel=\"icon\" type=\"image\/png\" href=\"https:\/\/picast.lc\/docs\/asset\/favicon-16x16.png?v=f0ae831196d55d8f4115b6c5e8ec5384\" sizes=\"16x16\"\/>\n    <style>\n    html\n    {\n        box-sizing: border-box;\n        overflow: -moz-scrollbars-vertical;\n        overflow-y: scroll;\n    }\n    *,\n    *:before,\n    *:after\n    {\n        box-sizing: inherit;\n    }\n\n    body {\n      margin:0;\n      background: #fafafa;\n    }\n    <\/style>\n    <\/head>\n\n<body >\n<div id=\"swagger-ui\"><\/div>\n\n<script src=\"https:\/\/picast.lc\/docs\/asset\/swagger-ui-bundle.js?v=3abe734b0cfda5cb259bd02f796042d1\"><\/script>\n<script src=\"https:\/\/picast.lc\/docs\/asset\/swagger-ui-standalone-preset.js?v=e309748b3af627b5137cb7a559853117\"><\/script>\n<script>\n    window.onload = function() {\n        const urls = [];\n\n                    urls.push({name: \"ArmiSimtel Api Docs\", url: \"https:\/\/picast.lc\/docs?api-docs.json\"});\n        \n        \/\/ Build a system\n        const ui = SwaggerUIBundle({\n            dom_id: '#swagger-ui',\n            urls: urls,\n            \"urls.primaryName\": \"ArmiSimtel Api Docs\",\n            operationsSorter: null,\n            configUrl: null,\n            validatorUrl: null,\n            oauth2RedirectUrl: \"https:\/\/picast.lc\/api\/oauth2-callback\",\n\n            requestInterceptor: function(request) {\n                request.headers['X-CSRF-TOKEN'] = '';\n                return request;\n            },\n\n            presets: [\n                SwaggerUIBundle.presets.apis,\n                SwaggerUIStandalonePreset\n            ],\n\n            plugins: [\n                SwaggerUIBundle.plugins.DownloadUrl\n            ],\n\n            layout: \"StandaloneLayout\",\n            docExpansion : \"none\",\n            deepLinking: true,\n            filter: true,\n            persistAuthorization: \"false\",\n\n        })\n\n        window.ui = ui\n\n            }\n<\/script>\n<\/body>\n<\/html>\n",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Handles the OAuth2 callback and retrieves the required file for the redirect.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/oauth2-callback",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/oauth2-callback"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                },
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "<!doctype html>\n<html lang=\"en-US\">\n<body>\n<script src=\"oauth2-redirect.js\"><\/script>\n<\/body>\n<\/html>\n",
+                            "name": ""
+                        }
+                    ]
+                },
                 {
                     "name": "GET api\/{fallbackPlaceholder}",
                     "request": {
@@ -31,7 +119,7 @@
                                 {
                                     "id": "fallbackPlaceholder",
                                     "key": "fallbackPlaceholder",
-                                    "value": "Z",
+                                    "value": "BR%29",
                                     "description": ""
                                 }
                             ]
@@ -168,7 +256,7 @@
                     ]
                 },
                 {
-                    "name": "GET api\/v1\/domains\/create",
+                    "name": "Create domain (not implemented)",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -212,7 +300,7 @@
                     ]
                 },
                 {
-                    "name": "POST api\/v1\/domains",
+                    "name": "Store new domain",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -233,9 +321,9 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"qhsangxkquymef\"}"
+                            "raw": "{\"name\":\"x\"}"
                         },
-                        "description": "",
+                        "description": "Store new domain for authenticated user",
                         "auth": {
                             "type": "noauth"
                         }
@@ -254,7 +342,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "3",
+                                    "value": "104",
                                     "description": "The ID of the domain."
                                 }
                             ]
@@ -295,7 +383,7 @@
                     ]
                 },
                 {
-                    "name": "GET api\/v1\/domains\/{domain_id}\/edit",
+                    "name": "Edit domain (not implemented)",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -306,7 +394,7 @@
                                 {
                                     "id": "domain_id",
                                     "key": "domain_id",
-                                    "value": "3",
+                                    "value": "104",
                                     "description": "The ID of the domain."
                                 }
                             ]
@@ -347,7 +435,7 @@
                     ]
                 },
                 {
-                    "name": "PUT api\/v1\/domains\/{id}",
+                    "name": "Update domain WHOIS info",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -358,8 +446,248 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "3",
+                                    "value": "104",
                                     "description": "The ID of the domain."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Update domain WHOIS information and expiration date",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete domain",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/domains\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/domains\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "104",
+                                    "description": "The ID of the domain."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Delete domain and associated WHOIS history",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Show all user videos",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/video",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/video"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Create video (not implemented)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/video\/create",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/video\/create"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Store new video (not implemented)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/video",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/video"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Show video details",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/video\/:video_id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/video\/:video_id",
+                            "variable": [
+                                {
+                                    "id": "video_id",
+                                    "key": "video_id",
+                                    "value": "25",
+                                    "description": "The ID of the video."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update video (not implemented)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/video\/:video",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/video\/:video",
+                            "variable": [
+                                {
+                                    "id": "video",
+                                    "key": "video",
+                                    "value": "ullam",
+                                    "description": "The video."
                                 }
                             ]
                         },
@@ -383,19 +711,19 @@
                     "response": []
                 },
                 {
-                    "name": "DELETE api\/v1\/domains\/{id}",
+                    "name": "Delete video (not implemented)",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/domains\/:id",
+                            "path": "api\/v1\/video\/:video",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/domains\/:id",
+                            "raw": "{{baseUrl}}\/api\/v1\/video\/:video",
                             "variable": [
                                 {
-                                    "id": "id",
-                                    "key": "id",
-                                    "value": "3",
-                                    "description": "The ID of the domain."
+                                    "id": "video",
+                                    "key": "video",
+                                    "value": "sequi",
+                                    "description": "The video."
                                 }
                             ]
                         },

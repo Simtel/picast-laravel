@@ -11,6 +11,7 @@
     "php": ">=8.4",
     "alaouy/youtube": "^2.2",
     "barryvdh/laravel-ide-helper": "^3.1",
+    "darkaonline/l5-swagger": "^10.0",
     "doctrine/dbal": "^4.0",
     "guzzlehttp/guzzle": "^7.0.1",
     "illuminate/http": "*",
@@ -81,7 +82,8 @@
       "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
       "@php artisan package:discover",
       "@php artisan ide-helper:generate",
-      "@php artisan ide-helper:meta"
+      "@php artisan ide-helper:meta",
+      "@php artisan l5-swagger:generate"
     ],
     "post-root-package-install": [
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

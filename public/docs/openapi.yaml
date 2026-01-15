@@ -6,7 +6,45 @@ info:
 servers:
   -
     url: 'https://picast.lc'
+tags:
+  -
+    name: Endpoints
+    description: ''
 paths:
+  /api/documentation:
+    get:
+      summary: 'Handles the API request and renders the Swagger documentation view.'
+      operationId: handlesTheAPIRequestAndRendersTheSwaggerDocumentationView
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>ArmiSimtel Api Docs</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://picast.lc/docs/asset/swagger-ui.css?v=295c0e8b75154a3a99d297333d3e9cb9\">\n    <link rel=\"icon\" type=\"image/png\" href=\"https://picast.lc/docs/asset/favicon-32x32.png?v=40d4f2c38d1cd854ad463f16373cbcb6\" sizes=\"32x32\"/>\n    <link rel=\"icon\" type=\"image/png\" href=\"https://picast.lc/docs/asset/favicon-16x16.png?v=f0ae831196d55d8f4115b6c5e8ec5384\" sizes=\"16x16\"/>\n    <style>\n    html\n    {\n        box-sizing: border-box;\n        overflow: -moz-scrollbars-vertical;\n        overflow-y: scroll;\n    }\n    *,\n    *:before,\n    *:after\n    {\n        box-sizing: inherit;\n    }\n\n    body {\n      margin:0;\n      background: #fafafa;\n    }\n    </style>\n    </head>\n\n<body >\n<div id=\"swagger-ui\"></div>\n\n<script src=\"https://picast.lc/docs/asset/swagger-ui-bundle.js?v=3abe734b0cfda5cb259bd02f796042d1\"></script>\n<script src=\"https://picast.lc/docs/asset/swagger-ui-standalone-preset.js?v=e309748b3af627b5137cb7a559853117\"></script>\n<script>\n    window.onload = function() {\n        const urls = [];\n\n                    urls.push({name: \"ArmiSimtel Api Docs\", url: \"https://picast.lc/docs?api-docs.json\"});\n        \n        // Build a system\n        const ui = SwaggerUIBundle({\n            dom_id: '#swagger-ui',\n            urls: urls,\n            \"urls.primaryName\": \"ArmiSimtel Api Docs\",\n            operationsSorter: null,\n            configUrl: null,\n            validatorUrl: null,\n            oauth2RedirectUrl: \"https://picast.lc/api/oauth2-callback\",\n\n            requestInterceptor: function(request) {\n                request.headers['X-CSRF-TOKEN'] = '';\n                return request;\n            },\n\n            presets: [\n                SwaggerUIBundle.presets.apis,\n                SwaggerUIStandalonePreset\n            ],\n\n            plugins: [\n                SwaggerUIBundle.plugins.DownloadUrl\n            ],\n\n            layout: \"StandaloneLayout\",\n            docExpansion : \"none\",\n            deepLinking: true,\n            filter: true,\n            persistAuthorization: \"false\",\n\n        })\n\n        window.ui = ui\n\n            }\n</script>\n</body>\n</html>\n"
+      tags:
+        - Endpoints
+      security: []
+  /api/oauth2-callback:
+    get:
+      summary: 'Handles the OAuth2 callback and retrieves the required file for the redirect.'
+      operationId: handlesTheOAuth2CallbackAndRetrievesTheRequiredFileForTheRedirect
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!doctype html>\n<html lang=\"en-US\">\n<body>\n<script src=\"oauth2-redirect.js\"></script>\n</body>\n</html>\n"
+      tags:
+        - Endpoints
+      security: []
   '/api/{fallbackPlaceholder}':
     get:
       summary: ''
@@ -34,7 +72,7 @@ paths:
         in: path
         name: fallbackPlaceholder
         description: ''
-        example: Z
+        example: BR)
         required: true
         schema:
           type: string
@@ -83,9 +121,9 @@ paths:
         - Endpoints
       security: []
     post:
-      summary: ''
-      operationId: postApiV1Domains
-      description: ''
+      summary: 'Store new domain'
+      operationId: storeNewDomain
+      description: 'Store new domain for authenticated user'
       parameters: []
       responses: {  }
       tags:
@@ -100,15 +138,14 @@ paths:
                 name:
                   type: string
                   description: 'Количество символов в поле value не может превышать 225.'
-                  example: qhsangxkquymef
-                  nullable: false
+                  example: x
               required:
                 - name
       security: []
   /api/v1/domains/create:
     get:
-      summary: ''
-      operationId: getApiV1DomainsCreate
+      summary: 'Create domain (not implemented)'
+      operationId: createDomainnotImplemented
       description: ''
       parameters: []
       responses:
@@ -150,18 +187,18 @@ paths:
         - Endpoints
       security: []
     put:
-      summary: ''
-      operationId: putApiV1DomainsId
-      description: ''
+      summary: 'Update domain WHOIS info'
+      operationId: updateDomainWHOISInfo
+      description: 'Update domain WHOIS information and expiration date'
       parameters: []
       responses: {  }
       tags:
         - Endpoints
       security: []
     delete:
-      summary: ''
-      operationId: deleteApiV1DomainsId
-      description: ''
+      summary: 'Delete domain'
+      operationId: deleteDomain
+      description: 'Delete domain and associated WHOIS history'
       parameters: []
       responses: {  }
       tags:
@@ -172,14 +209,14 @@ paths:
         in: path
         name: id
         description: 'The ID of the domain.'
-        example: 3
+        example: 104
         required: true
         schema:
           type: integer
   '/api/v1/domains/{domain_id}/edit':
     get:
-      summary: ''
-      operationId: getApiV1DomainsDomain_idEdit
+      summary: 'Edit domain (not implemented)'
+      operationId: editDomainnotImplemented
       description: ''
       parameters: []
       responses:
@@ -203,11 +240,119 @@ paths:
         in: path
         name: domain_id
         description: 'The ID of the domain.'
-        example: 3
+        example: 104
         required: true
         schema:
           type: integer
-tags:
-  -
-    name: Endpoints
-    description: ''
+  /api/v1/video:
+    get:
+      summary: 'Show all user videos'
+      operationId: showAllUserVideos
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: 'Store new video (not implemented)'
+      operationId: storeNewVideonotImplemented
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/video/create:
+    get:
+      summary: 'Create video (not implemented)'
+      operationId: createVideonotImplemented
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated
+      tags:
+        - Endpoints
+      security: []
+  '/api/v1/video/{video_id}':
+    get:
+      summary: 'Show video details'
+      operationId: showVideoDetails
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: video_id
+        description: 'The ID of the video.'
+        example: 25
+        required: true
+        schema:
+          type: integer
+  '/api/v1/video/{video}':
+    put:
+      summary: 'Update video (not implemented)'
+      operationId: updateVideonotImplemented
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: 'Delete video (not implemented)'
+      operationId: deleteVideonotImplemented
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: video
+        description: 'The video.'
+        example: ullam
+        required: true
+        schema:
+          type: string

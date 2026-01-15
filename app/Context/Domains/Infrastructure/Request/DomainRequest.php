@@ -9,6 +9,7 @@ use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
+use Knuckles\Scribe\Attributes\BodyParam;
 
 final class DomainRequest extends FormRequest
 {
@@ -39,6 +40,24 @@ final class DomainRequest extends FormRequest
                         ->where('user_id', Auth::id());
                 })
             ]
+        ];
+    }
+
+    /**
+     * Body parameters for Scribe documentation
+     *
+     * @return array<int, BodyParam>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            new BodyParam(
+                name: 'name',
+                type: 'string',
+                description: 'Domain name to add',
+                required: true,
+                example: 'example.com'
+            )
         ];
     }
 }
