@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use OpenApi\Attributes as OA;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,6 +13,29 @@ declare(strict_types=1);
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+/**
+ * @OA\Info(
+ *     title="Picast Laravel API",
+ *     version="1.0.0",
+ *     description="API для управления доменами и YouTube видео",
+ *     contact={
+ *         "name": "API Support",
+ *         "email": "support@picast.com"
+ *     }
+ * )
+ * @OA\Server(
+ *     url="http://localhost",
+ *     description="Локальный сервер разработки"
+ * )
+ * @OA\SecurityScheme(
+ *     securityScheme="sanctum",
+ *     type="apiKey",
+ *     in="header",
+ *     name="Authorization",
+ *     description="Bearer token для аутентификации"
+ * )
+ */
 
 
 use App\Context\Domains\Infrastructure\Controller\Api\DomainsController;

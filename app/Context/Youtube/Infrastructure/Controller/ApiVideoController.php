@@ -12,6 +12,26 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use OpenApi\Attributes as OA;
 
+#[OA\Info(
+    title: "Picast Laravel API",
+    version: "1.0.0",
+    description: "API для управления доменами и YouTube видео",
+    contact: new OA\Contact(
+        name: "API Support",
+        email: "support@picast.com"
+    )
+)]
+#[OA\Server(
+    url: "http://localhost",
+    description: "Локальный сервер разработки"
+)]
+#[OA\SecurityScheme(
+    securityScheme: "sanctum",
+    type: "apiKey",
+    in: "header",
+    name: "Authorization",
+    description: "Bearer token для аутентификации"
+)]
 final class ApiVideoController extends Controller
 {
     public function __construct()

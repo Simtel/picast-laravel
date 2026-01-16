@@ -1,0 +1,475 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Picast Laravel API",
+        "description": "API для управления доменами и YouTube видео",
+        "contact": {
+            "name": "API Support",
+            "email": "support@picast.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost",
+            "description": "Локальный сервер разработки"
+        }
+    ],
+    "paths": {
+        "/api/v1/domains": {
+            "get": {
+                "tags": [
+                    "Domains"
+                ],
+                "summary": "Get all user domains",
+                "description": "Show all user domains\n\nShow all user domains without whois history",
+                "operationId": "16df26494f7664a293dc215ab81741ce",
+                "responses": {
+                    "200": {
+                        "description": "List of user domains",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DomainResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Domains"
+                ],
+                "summary": "Create new domain",
+                "description": "Store new domain\n\nStore new domain for authenticated user",
+                "operationId": "00a8b9af9754e614f32f5cc29a4944b6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Domain name",
+                                        "type": "string",
+                                        "example": "example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Domain created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/domains/{id}": {
+            "get": {
+                "tags": [
+                    "Domains"
+                ],
+                "summary": "Get domain details",
+                "description": "Show once domain info\n\nShow once domain info with whois",
+                "operationId": "a6b80d711f984d4ba80bbeef0dba488b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Domain ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Domain details with whois",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DomainResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Domain not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Domains"
+                ],
+                "summary": "Update domain WHOIS info",
+                "description": "Update domain WHOIS info\n\nUpdate domain WHOIS information and expiration date",
+                "operationId": "d14ff0419c757eeeba3b8b6b7bb202cc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Domain ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "WHOIS info updated successfully"
+                    },
+                    "404": {
+                        "description": "Domain not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Domains"
+                ],
+                "summary": "Delete domain",
+                "description": "Delete domain\n\nDelete domain and associated WHOIS history",
+                "operationId": "8b38cc69f63d6d243271870316f67a39",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Domain ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Domain deleted successfully"
+                    },
+                    "404": {
+                        "description": "Domain not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/domains/{id}/edit": {
+            "put": {
+                "tags": [
+                    "Domains"
+                ],
+                "summary": "Edit domain (not implemented)",
+                "description": "Edit domain (not implemented)",
+                "operationId": "141e90e0ec36375951b5e2f3fffe38d5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Domain ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "403": {
+                        "description": "Not implemented"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/video": {
+            "get": {
+                "tags": [
+                    "Videos"
+                ],
+                "summary": "Get all user videos",
+                "description": "Show all user videos",
+                "operationId": "3617199c60e8e5941ceaae14849b7972",
+                "responses": {
+                    "200": {
+                        "description": "List of user videos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Videos"
+                ],
+                "summary": "Create new video (not implemented)",
+                "description": "Store new video (not implemented)",
+                "operationId": "ce41898c1552e509cf7889dfdfef37f1",
+                "responses": {
+                    "403": {
+                        "description": "Not implemented"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/video/{id}": {
+            "get": {
+                "tags": [
+                    "Videos"
+                ],
+                "summary": "Get video details",
+                "description": "Show video details",
+                "operationId": "51b10b984a21907cbb798171b0820583",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Video ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Video details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VideoFullResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Video not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Videos"
+                ],
+                "summary": "Update video (not implemented)",
+                "description": "Update video (not implemented)",
+                "operationId": "2a106bb3cd7d4e60cc0eb9d9752c22aa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Video ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "403": {
+                        "description": "Not implemented"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Videos"
+                ],
+                "summary": "Delete video (not implemented)",
+                "description": "Delete video (not implemented)",
+                "operationId": "d3a7ba5c150c501c0e484982db126ccd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Video ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "403": {
+                        "description": "Not implemented"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "DomainResource": {
+                "description": "Domain resource with WHOIS info",
+                "properties": {
+                    "id": {
+                        "description": "Domain ID",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Domain name",
+                        "type": "string",
+                        "example": "example.com"
+                    },
+                    "expire_at": {
+                        "description": "Expiration date",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "whois": {
+                        "description": "WHOIS information",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "VideoFullResource": {
+                "title": "Video Full Resource",
+                "description": "Полный ресурс видео",
+                "required": [
+                    "id",
+                    "url"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID видео",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "description": "Заголовок видео",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "URL видео",
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "description": "Дата создания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "description": "Дата обновления",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "VideoResource": {
+                "title": "Video Resource",
+                "description": "Ресурс видео",
+                "required": [
+                    "id",
+                    "url"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID видео",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "URL видео",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Bearer token для аутентификации",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Domains",
+            "description": "Domains"
+        },
+        {
+            "name": "Videos",
+            "description": "Videos"
+        }
+    ]
+}

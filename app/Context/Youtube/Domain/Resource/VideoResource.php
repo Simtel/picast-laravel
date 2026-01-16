@@ -6,7 +6,19 @@ namespace App\Context\Youtube\Domain\Resource;
 
 use App\Context\Youtube\Domain\Model\Video;
 use Illuminate\Http\Resources\Json\JsonResource;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: 'VideoResource',
+    title: 'Video Resource',
+    description: 'Ресурс видео',
+    required: ['id', 'url'],
+    properties: [
+        new OA\Property(property: 'id', description: 'ID видео', type: 'integer'),
+        new OA\Property(property: 'url', description: 'URL видео', type: 'string'),
+    ],
+    type: 'object'
+)]
 final class VideoResource extends JsonResource
 {
     /**

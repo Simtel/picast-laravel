@@ -4,6 +4,29 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Infrastructure\Controller\Api;
 
+/**
+ * @OA\Info(
+ *     title="Picast Laravel API",
+ *     version="1.0.0",
+ *     description="API для управления доменами и YouTube видео",
+ *     contact={
+ *         "name": "API Support",
+ *         "email": "support@picast.com"
+ *     }
+ * )
+ * @OA\Server(
+ *     url="http://localhost",
+ *     description="Локальный сервер разработки"
+ * )
+ * @OA\SecurityScheme(
+ *     securityScheme="sanctum",
+ *     type="apiKey",
+ *     in="header",
+ *     name="Authorization",
+ *     description="Bearer token для аутентификации"
+ * )
+ */
+
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Domain\Model\Whois as WhoisModel;
 use App\Context\Domains\Domain\Resource\DomainResource;
