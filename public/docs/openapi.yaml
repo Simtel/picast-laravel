@@ -59,11 +59,11 @@ paths:
               schema:
                 type: object
                 example:
-                  message: 'Page Not Found'
+                  message: 'The route api could not be found.'
                 properties:
                   message:
                     type: string
-                    example: 'Page Not Found'
+                    example: 'The route api could not be found.'
       tags:
         - Endpoints
       security: []
@@ -72,7 +72,7 @@ paths:
         in: path
         name: fallbackPlaceholder
         description: ''
-        example: BR)
+        example: ''
         required: true
         schema:
           type: string
@@ -138,7 +138,7 @@ paths:
                 name:
                   type: string
                   description: 'Количество символов в поле value не может превышать 225.'
-                  example: x
+                  example: ajniqqpeuvynjwxahbrejasr
               required:
                 - name
       security: []
@@ -352,7 +352,7 @@ paths:
         in: path
         name: video
         description: 'The video.'
-        example: ullam
+        example: sunt
         required: true
         schema:
           type: string

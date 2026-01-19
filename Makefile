@@ -50,5 +50,8 @@ test-coverage:
 worker:
 	docker exec -it picast_php sh -c "/usr/bin/supervisord -c /etc/supervisor/conf.d/laravel-worker.conf"
 
+scribe-generate: ##Generate API documentation
+	docker exec -it picast_php sh -c "php artisan scribe:generate"
+
 composer-install: ##Install composer packages
 	docker exec -it picast_php sh -c "composer install"

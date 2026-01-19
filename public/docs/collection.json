@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Picast",
-        "_postman_id": "496d6d62-82ef-449f-896d-a4adfb98bce3",
+        "_postman_id": "83ffd316-9fb8-4327-9929-f2a255906eb4",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -119,7 +119,7 @@
                                 {
                                     "id": "fallbackPlaceholder",
                                     "key": "fallbackPlaceholder",
-                                    "value": "BR%29",
+                                    "value": "",
                                     "description": ""
                                 }
                             ]
@@ -151,18 +151,10 @@
                                 {
                                     "key": "content-type",
                                     "value": "application\/json"
-                                },
-                                {
-                                    "key": "x-ratelimit-limit",
-                                    "value": "60"
-                                },
-                                {
-                                    "key": "x-ratelimit-remaining",
-                                    "value": "59"
                                 }
                             ],
                             "code": 404,
-                            "body": "{\"message\":\"Page Not Found\"}",
+                            "body": "{\n    \"message\": \"The route api could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -321,7 +313,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"x\"}"
+                            "raw": "{\"name\":\"ajniqqpeuvynjwxahbrejasr\"}"
                         },
                         "description": "Store new domain for authenticated user",
                         "auth": {
@@ -686,7 +678,7 @@
                                 {
                                     "id": "video",
                                     "key": "video",
-                                    "value": "ullam",
+                                    "value": "sunt",
                                     "description": "The video."
                                 }
                             ]
@@ -722,7 +714,7 @@
                                 {
                                     "id": "video",
                                     "key": "video",
-                                    "value": "sequi",
+                                    "value": "numquam",
                                     "description": "The video."
                                 }
                             ]

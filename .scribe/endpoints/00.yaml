@@ -187,14 +187,14 @@ endpoints:
         name: fallbackPlaceholder
         description: ''
         required: true
-        example: BR)
+        example: ''
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      fallbackPlaceholder: BR)
+      fallbackPlaceholder: ''
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -204,12 +204,13 @@ endpoints:
       -
         custom: []
         status: 404
-        content: '{"message":"Page Not Found"}'
+        content: |-
+          {
+              "message": "The route api could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '59'
         description: null
     responseFields: []
     auth: []
@@ -361,14 +362,14 @@ endpoints:
         name: name
         description: 'Количество символов в поле value не может превышать 225.'
         required: true
-        example: x
+        example: ajniqqpeuvynjwxahbrejasr
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      name: x
+      name: ajniqqpeuvynjwxahbrejasr
     fileParameters: []
     responses: []
     responseFields: []
@@ -750,14 +751,14 @@ endpoints:
         name: video
         description: 'The video.'
         required: true
-        example: ullam
+        example: sunt
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      video: ullam
+      video: sunt
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -793,14 +794,14 @@ endpoints:
         name: video
         description: 'The video.'
         required: true
-        example: sequi
+        example: numquam
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      video: sequi
+      video: numquam
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
