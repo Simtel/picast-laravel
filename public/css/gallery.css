@@ -44,7 +44,6 @@
     transition: all 0.3s ease;
     cursor: pointer;
     group: hover;
-    height:200px;
 }
 
 .gallery-item:hover {
@@ -56,7 +55,7 @@
 .image-container {
     position: relative !important;
     width: 100% !important;
-    height: 250px !important;
+    aspect-ratio: 4/3 !important;
     overflow: hidden !important;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
 }
@@ -292,7 +291,7 @@
     }
     
     .image-container {
-        height: 200px;
+        aspect-ratio: 4/3;
     }
     
     .gallery-title {
@@ -307,7 +306,7 @@
     }
     
     .image-container {
-        height: 180px;
+        aspect-ratio: 4/3;
     }
     
     .gallery-title {
