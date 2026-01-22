@@ -31,7 +31,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     grid-gap: 20px;
-    grid-auto-rows: 10px;
     margin-top: 20px;
 }
 
@@ -82,7 +81,6 @@
     display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
     grid-gap: 20px !important;
-    grid-auto-rows: 10px !important;
     margin-top: 20px !important;
 }
 
