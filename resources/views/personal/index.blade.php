@@ -95,7 +95,7 @@
                         @endforeach
                     </td>
                     <td>
-                        <a href="{{route('user.edit',[$user])}}" class="btn btn-sm btn-primary">
+                        <a href="{{route('user.edit',[$user])}}" class="btn btn-sm btn-primary text-white">
                             <i class="fa fa-edit mr-1"></i>Редактировать
                         </a>
                     </td>
