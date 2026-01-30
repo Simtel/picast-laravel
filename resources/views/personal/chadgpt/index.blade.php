@@ -1,20 +1,20 @@
 @extends('layouts.personal')
-@section('title','ChadGPT Chat')
+@section('title','Чат ChadGPT')
 
 @section('content')
     <div class="main-content-header">
-        <h1 class="h2">ChadGPT Chat</h1>
+        <h1 class="h2">Чат ChadGPT</h1>
     </div>
 
     <div class="row">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Chat with AI Models</h5>
+                        <h5>Чат с ИИ моделями</h5>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="modelSelect">Select Model:</label>
+                            <label for="modelSelect">Выберите модель:</label>
                             <select class="form-control" id="modelSelect">
                                 @foreach($models as $model)
                                     <option
@@ -28,29 +28,29 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="messageInput">Your Message:</label>
+                            <label for="messageInput">Ваше сообщение:</label>
                             <textarea class="form-control" id="messageInput" rows="4"
-                                      placeholder="Type your message here..."></textarea>
+                                      placeholder="Введите ваше сообщение здесь..."></textarea>
                         </div>
 
-                        <button id="sendMessageBtn" class="btn btn-primary">Send Message</button>
-                        <button id="clearChatBtn" class="btn btn-secondary ml-2">Clear Chat</button>
+                        <button id="sendMessageBtn" class="btn btn-primary">Отправить сообщение</button>
+                        <button id="clearChatBtn" class="btn btn-secondary ml-2">Очистить чат</button>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Usage Statistics</h5>
+                        <h5>Статистика использования</h5>
                     </div>
                     <div class="card-body">
                         <div id="usageStats">
-                            <p>Words used: </p>
+                            <p>Использовано слов: </p>
 
                             @foreach($word_stats as $word_stat)
                                 {{$word_stat->getStatDate()->format('m-Y')}}: {{$word_stat->getWordsUsed()}}
                             @endforeach
-                            <p>All used: <span id="wordsCount">{{$word_stats_sum}}</span></p>
+                            <p>Всего использовано: <span id="wordsCount">{{$word_stats_sum}}</span></p>
                         </div>
                     </div>
                 </div>
@@ -60,14 +60,14 @@
             <div class="col-md-12">
                 <div class="card mt-4">
                     <div class="card-header">
-                        <h5>Chat History</h5>
+                        <h5>История чата</h5>
                     </div>
                     <div class="card-body">
                         <div id="chatHistory" class="chat-history">
                             @if($conversations->count() > 0)
                                 @foreach($conversations->reverse() as $conversation)
                                     <div class="user-message">
-                                        <div class="message-label">You ({{ $conversation->model }}):</div>
+                                        <div class="message-label">Вы ({{ $conversation->model }}):</div>
                                         <div>{{ $conversation->user_message }}</div>
                                     </div>
                                     <div class="ai-message">
@@ -76,7 +76,7 @@
                                     </div>
                                 @endforeach
                             @else
-                                <div class="alert alert-info">Your conversation with ChadGPT will appear here.</div>
+                                <div class="alert alert-info">Ваш разговор с ChadGPT появится здесь.</div>
                             @endif
                         </div>
                     </div>
@@ -172,7 +172,7 @@
             const csrfToken = document.querySelector('meta[name="csrf-token"]');
             if (!csrfToken) {
                 console.error('CSRF token not found');
-                addMessageToChat('System', 'Error: CSRF token not found. Please refresh the page.', 'error-message');
+                addMessageToChat('Система', 'Ошибка: CSRF токен не найден. Пожалуйста, обновите страницу.', 'error-message');
                 return;
             }
 
@@ -181,16 +181,16 @@
                 const model = modelSelect.value;
 
                 if (!message) {
-                    alert('Please enter a message');
+                    alert('Пожалуйста, введите сообщение');
                     return;
                 }
 
                 // Add user message to chat
-                addMessageToChat('You (' + model + ')', message, 'user-message');
+                addMessageToChat('Вы (' + model + ')', message, 'user-message');
 
                 // Disable button and show loading
                 sendMessageBtn.disabled = true;
-                sendMessageBtn.textContent = 'Sending...';
+                sendMessageBtn.textContent = 'Отправка...';
 
                 // Send request to our backend
                 const url = '{{ route("chadgpt.send-message") }}';
@@ -224,30 +224,30 @@
                             totalWords += data.used_words_count || 0;
                             wordsCount.textContent = totalWords;
                         } else {
-                            addMessageToChat('Error', JSON.stringify(data.errors) || 'An unknown error occurred', 'error-message');
+                            addMessageToChat('Ошибка', JSON.stringify(data.errors) || 'Произошла неизвестная ошибка', 'error-message');
                         }
                     })
                     .catch(error => {
                         console.log(error);
                         console.error('Fetch error:', error);
-                        addMessageToChat('Error', 'Failed to communicate with the server: ' + error.message, 'error-message');
+                        addMessageToChat('Ошибка', 'Не удалось связаться с сервером: ' + error.message, 'error-message');
                     })
                     .finally(() => {
                         // Re-enable button
                         sendMessageBtn.disabled = false;
-                        sendMessageBtn.textContent = 'Send Message';
+                        sendMessageBtn.textContent = 'Отправить сообщение';
                         messageInput.value = '';
                     });
             });
 
             clearChatBtn.addEventListener('click', function () {
-                if (!confirm('Are you sure you want to clear all chat history?')) {
+                if (!confirm('Вы уверены, что хотите очистить всю историю чата?')) {
                     return;
                 }
 
                 // Disable button during request
                 clearChatBtn.disabled = true;
-                clearChatBtn.textContent = 'Clearing...';
+                clearChatBtn.textContent = 'Очистка...';
 
                 fetch('{{ route("chadgpt.clear-history") }}', {
                     method: 'DELETE',
@@ -260,23 +260,23 @@
                     .then(data => {
                         if (data.success) {
                             // Clear chat display
-                            chatHistory.innerHTML = '<div class="alert alert-info">Your conversation with ChadGPT will appear here.</div>';
+                            chatHistory.innerHTML = '<div class="alert alert-info">Ваш разговор с ChadGPT появится здесь.</div>';
                             // Reset word count if exists
                             if (wordsCount) wordsCount.textContent = '0';
                             // Show success message
-                            alert('Chat history cleared successfully');
+                            alert('История чата успешно очищена');
                         } else {
-                            throw new Error(data.error || 'Unknown error');
+                            throw new Error(data.error || 'Неизвестная ошибка');
                         }
                     })
                     .catch(error => {
                         console.error('Clear history error:', error);
-                        alert('Failed to clear chat history: ' + error.message);
+                        alert('Не удалось очистить историю чата: ' + error.message);
                     })
                     .finally(() => {
                         // Re-enable button
                         clearChatBtn.disabled = false;
-                        clearChatBtn.textContent = 'Clear Chat';
+                        clearChatBtn.textContent = 'Очистить чат';
                     });
             });
 

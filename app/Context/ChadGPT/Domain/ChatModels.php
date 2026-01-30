@@ -31,12 +31,12 @@ enum ChatModels: string
     public function label(): string
     {
         return match($this) {
-            self::GPT_4O_MINI => 'GPT-4o Mini (Fast & Cheap)',
-            self::GPT_4O => 'GPT-4o (Balanced)',
-            self::GPT_5 => 'GPT-5 (Smart)',
+            self::GPT_4O_MINI => 'GPT-4o Mini (Быстро и дёшево)',
+            self::GPT_4O => 'GPT-4o (Сбалансированная)',
+            self::GPT_5 => 'GPT-5 (Умная)',
             self::GPT_5_MINI => 'GPT-5 Mini',
             self::GPT_5_NANO => 'GPT-5 Nano',
-            self::CLAUDE_4_1_OPUS => 'Claude 4.1 Opus (Most Intelligent)',
+            self::CLAUDE_4_1_OPUS => 'Claude 4.1 Opus (Самая умная)',
             self::CLAUDE_4_5_SONNET => 'Claude 4.5 Sonnet',
             self::CLAUDE_3_7_SONNET_THINKING => 'Claude 3.7 Sonnet Thinking',
             self::GEMINI_2_5_PRO => 'Gemini 2.5 Pro',
