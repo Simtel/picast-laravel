@@ -13,11 +13,16 @@ declare(strict_types=1);
 |
 */
 
+// Включаем тестовые маршруты
+require __DIR__ . '/simple-test.php';
+require __DIR__ . '/test-webcams.php';
+
 
 use App\Context\ChadGPT\Infrastructure\Controller\ChadGptController;
 use App\Context\Domains\Infrastructure\Controller\DomainsController;
 use App\Context\Domains\Infrastructure\Controller\WhoisController;
 use App\Context\Youtube\Infrastructure\Controller\YouTubeVideoController;
+use App\Context\Webcams\Infrastructure\Controllers\WebcamWebController;
 use App\Http\Controllers\Personal\ImagesController;
 use App\Http\Controllers\Personal\IndexController;
 use App\Http\Controllers\Personal\InviteController;
@@ -63,6 +68,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
     });
 
     Route::resource('domains', DomainsController::class)->middleware('permission:domains');
+
+    // Веб-камеры Ульяновска
+    Route::group(['prefix' => 'webcams'], static function () {
+        Route::get('/', [WebcamWebController::class, 'index'])->name('webcams.index');
+        Route::get('/{id}', [WebcamWebController::class, 'show'])->name('webcams.show');
+    });
 
     Route::group(['prefix' => 'youtube','middleware' => ['permission:edit youtube']], static function () {
         Route::get('/', [YouTubeVideoController::class, 'index'])->name('youtube.index');

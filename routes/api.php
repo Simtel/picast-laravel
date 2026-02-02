@@ -40,6 +40,7 @@ use OpenApi\Attributes as OA;
 
 use App\Context\Domains\Infrastructure\Controller\Api\DomainsController;
 use App\Context\Youtube\Infrastructure\Controller\ApiVideoController;
+use App\Context\Webcams\Infrastructure\Controllers\WebcamController;
 
 Route::fallback(static function () {
     return response()->json(['message' => 'Page Not Found'], 404);
@@ -53,4 +54,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], static function () 
     Route::resource('domains', DomainsController::class)->names('api.domains');
 
     Route::resource('video', ApiVideoController::class)->names('api.videos');
+
+    Route::resource('webcams', WebcamController::class)->names('api.webcams');
+    Route::get('webcams/by-location', [WebcamController::class, 'byLocation'])->name('api.webcams.by-location');
 });

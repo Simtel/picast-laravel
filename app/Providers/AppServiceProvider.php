@@ -9,6 +9,8 @@ use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
 use App\Context\ChadGPT\Infrastructure\Handlers\CreateChatConversationHandler;
 use App\Context\Domains\Application\Contract\WhoisService;
 use App\Context\Domains\Application\Contract\WhoisUpdater;
+use App\Context\Webcams\Application\Contracts\WebcamServiceInterface;
+use App\Context\Webcams\Application\Services\WebcamService;
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -21,7 +23,8 @@ final class AppServiceProvider extends ServiceProvider
      */
     public array $singletons = [
         WhoisUpdater::class => \App\Context\Domains\Application\Service\WhoisUpdater::class,
-        WhoisService::class => \App\Context\Domains\Application\Service\WhoisService::class
+        WhoisService::class => \App\Context\Domains\Application\Service\WhoisService::class,
+        WebcamServiceInterface::class => WebcamService::class,
     ];
 
     /**
