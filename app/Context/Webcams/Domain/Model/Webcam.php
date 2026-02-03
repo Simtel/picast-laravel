@@ -6,6 +6,7 @@ namespace App\Context\Webcams\Domain\Model;
 
 use App\Context\Webcams\Infrastructure\Factory\WebcamFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -22,22 +23,23 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @method static \App\Context\Webcams\Infrastructure\Factory\WebcamFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static> whereActive()
- * @method static \Illuminate\Database\Eloquent\Builder<static> newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static> newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static> query()
- * @method static \Illuminate\Database\Eloquent\Builder<static> whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static> whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static> whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static> whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static> whereLocation($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static> whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static> wherePreviewUrl($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static> whereStreamUrl($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static> whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam wherePreviewUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam whereStreamUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Webcam whereUpdatedAt($value)
  * @mixin Eloquent
  */
 final class Webcam extends Model
 {
+    /** @use HasFactory<WebcamFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -101,10 +103,11 @@ final class Webcam extends Model
     }
 
     /**
-     * Scope для получения только активных камер
+     * @param Builder<Webcam> $builder
+     * @return Builder<Webcam>
      */
-    public function scopeWhereActive($query)
+    public function scopeWhereActive(Builder $builder): Builder
     {
-        return $query->where('is_active', true);
+        return $builder->where('is_active', true);
     }
 }

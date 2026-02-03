@@ -41,6 +41,9 @@ class WebcamDto
 
     /**
      * Создать DTO из массива данных
+     *
+     * @param array<string, mixed> $data
+     * @return self
      */
     public static function fromArray(array $data): self
     {
@@ -59,6 +62,8 @@ class WebcamDto
 
     /**
      * Преобразовать в массив
+     *
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {

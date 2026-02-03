@@ -13,6 +13,8 @@ interface WebcamServiceInterface
 {
     /**
      * Получить все активные веб-камеры
+     *
+     * @return Collection<int, Webcam>
      */
     public function getAllActiveWebcams(): Collection;
 
@@ -38,6 +40,8 @@ interface WebcamServiceInterface
 
     /**
      * Получить веб-камеры по локации
+     *
+     * @return Collection<int, Webcam>
      */
     public function getWebcamsByLocation(string $location): Collection;
 }

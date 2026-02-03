@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Context\Webcams\Infrastructure\Factory;
 
+use App\Context\Webcams\Domain\Model\Webcam;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Context\Webcams\Domain\Model\Webcam>
+ * @extends Factory<Webcam>
  */
 class WebcamFactory extends Factory
 {
