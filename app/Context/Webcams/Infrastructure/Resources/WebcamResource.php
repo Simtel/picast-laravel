@@ -13,7 +13,7 @@ class WebcamResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray($request): array
     {
@@ -21,16 +21,19 @@ class WebcamResource extends JsonResource
             return $this->resource->toArray();
         }
 
+        /** @var \App\Context\Webcams\Domain\Model\Webcam $webcam */
+        $webcam = $this->resource;
+
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'location' => $this->location,
-            'stream_url' => $this->stream_url,
-            'preview_url' => $this->preview_url,
-            'description' => $this->description,
-            'is_active' => $this->is_active,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'id' => $webcam->getId(),
+            'name' => $webcam->getName(),
+            'location' => $webcam->getLocation(),
+            'stream_url' => $webcam->getStreamUrl(),
+            'preview_url' => $webcam->getPreviewUrl(),
+            'description' => $webcam->getDescription(),
+            'is_active' => $webcam->isActive(),
+            'created_at' => $webcam->getCreatedAt()?->toISOString(),
+            'updated_at' => $webcam->getUpdatedAt()?->toISOString(),
         ];
     }
 }

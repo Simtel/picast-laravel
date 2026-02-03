@@ -13,11 +13,6 @@ declare(strict_types=1);
 |
 */
 
-// Включаем тестовые маршруты
-require __DIR__ . '/simple-test.php';
-require __DIR__ . '/test-webcams.php';
-
-
 use App\Context\ChadGPT\Infrastructure\Controller\ChadGptController;
 use App\Context\Domains\Infrastructure\Controller\DomainsController;
 use App\Context\Domains\Infrastructure\Controller\WhoisController;
