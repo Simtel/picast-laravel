@@ -19,6 +19,8 @@ class WebcamService implements WebcamServiceInterface
 
     /**
      * Получить все активные веб-камеры Ульяновска
+     *
+     * @return Collection<int, Webcam>
      */
     public function getAllActiveWebcams(): Collection
     {
@@ -104,6 +106,8 @@ class WebcamService implements WebcamServiceInterface
 
     /**
      * Получить веб-камеры по локации
+     *
+     * @return Collection<int, Webcam>
      */
     public function getWebcamsByLocation(string $location): Collection
     {

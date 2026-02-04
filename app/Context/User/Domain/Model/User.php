@@ -65,6 +65,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutRole($roles, $guard = null)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutTrashed()
  * @property-read int|null $chad_gpt_conversations_count
+ * @property-read Collection<int, Images> $images
+ * @property-read int|null $images_count
  * @mixin Eloquent
  */
 final class User extends Authenticatable

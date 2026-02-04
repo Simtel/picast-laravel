@@ -37,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Images whereUpdatedAt($value)
  * @method static Builder<static>|Images whereUserId($value)
  * @method static Builder<static>|Images whereWidth($value)
+ * @method static Builder<static>|Images whereViewsCount($value)
  * @mixin Eloquent
  */
 final class Images extends Model

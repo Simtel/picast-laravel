@@ -8,7 +8,9 @@ use App\Context\Webcams\Application\Contracts\WebcamServiceInterface;
 use App\Context\Webcams\Application\Dto\CreateWebcamDto;
 use App\Context\Webcams\Application\Dto\UpdateWebcamDto;
 use App\Context\Webcams\Application\Dto\WebcamDto;
+use App\Context\Webcams\Domain\Model\Webcam;
 use App\Context\Webcams\Infrastructure\Resources\WebcamResource;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -45,22 +47,9 @@ class WebcamController extends Controller
     /**
      * Получить веб-камеру по ID
      */
-    public function show(int $id): WebcamResource
+    public function show(Webcam $webcam): WebcamResource|Response
     {
-        try {
-            $webcam = $this->webcamService->getWebcamById($id);
-
-            if (!$webcam) {
-                return response()->json(['message' => 'Веб-камера не найдена'], Response::HTTP_NOT_FOUND);
-            }
-
-            $webcamDto = WebcamDto::fromModel($webcam);
-
-            return new WebcamResource($webcamDto);
-        } catch (\Exception $e) {
-            Log::error('Ошибка при получении веб-камеры', ['id' => $id, 'error' => $e->getMessage()]);
-            throw $e;
-        }
+        return new WebcamResource($webcam);
     }
 
     /**
@@ -86,7 +75,7 @@ class WebcamController extends Controller
     /**
      * Обновить веб-камеру
      */
-    public function update(Request $request, int $id): WebcamResource
+    public function update(Request $request, int $id): JsonResponse
     {
         try {
             $dto = UpdateWebcamDto::fromArray($request->all());
@@ -94,12 +83,10 @@ class WebcamController extends Controller
             $webcam = $this->webcamService->updateWebcam($id, $dto);
 
             if (!$webcam) {
-                return response()->json(['message' => 'Веб-камера не найдена'], Response::HTTP_NOT_FOUND);
+                return new JsonResponse(['message' => 'Веб-камера не найдена'], Response::HTTP_NOT_FOUND);
             }
 
-            $webcamDto = WebcamDto::fromModel($webcam);
-
-            return new WebcamResource($webcamDto);
+            return response()->json(['success' => true]);
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {
@@ -111,16 +98,16 @@ class WebcamController extends Controller
     /**
      * Удалить веб-камеру
      */
-    public function destroy(int $id): Response
+    public function destroy(int $id): JsonResponse
     {
         try {
             $deleted = $this->webcamService->deleteWebcam($id);
 
             if (!$deleted) {
-                return response()->json(['message' => 'Веб-камера не найдена'], Response::HTTP_NOT_FOUND);
+                return new JsonResponse(['message' => 'Веб-камера не найдена'], Response::HTTP_NOT_FOUND);
             }
 
-            return response()->noContent();
+            return  response()->json(['success' => true]);
         } catch (\Exception $e) {
             Log::error('Ошибка при удалении веб-камеры', ['id' => $id, 'error' => $e->getMessage()]);
             throw $e;
@@ -146,7 +133,10 @@ class WebcamController extends Controller
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {
-            Log::error('Ошибка при поиске веб-камер по локации', ['location' => $request->input('location'), 'error' => $e->getMessage()]);
+            Log::error(
+                'Ошибка при поиске веб-камер по локации',
+                ['location' => $request->input('location'), 'error' => $e->getMessage()]
+            );
             throw $e;
         }
     }
