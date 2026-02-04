@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeds;
+namespace Database\Seeders;
 
+use App\Context\Webcams\Domain\Model\Webcam;
 use Illuminate\Database\Seeder;
 
 class WebcamSeeder extends Seeder
@@ -128,10 +129,15 @@ class WebcamSeeder extends Seeder
             ],
         ];
 
+        $count = 0;
+        $exists = Webcam::pluck('name', 'stream_url')->all();
         foreach ($webcams as $webcamData) {
-            \App\Context\Webcams\Domain\Model\Webcam::create($webcamData);
+            if (!array_key_exists($webcamData['stream_url'], $exists)) {
+                ++$count;
+                Webcam::create($webcamData);
+            }
         }
 
-        $this->command->info('Сидер веб-камер Ульяновска выполнен успешно. Добавлено ' . count($webcams) . ' камер.');
+        $this->command->info('Сидер веб-камер Ульяновска выполнен успешно. Добавлено ' . $count . ' камер.');
     }
 }
