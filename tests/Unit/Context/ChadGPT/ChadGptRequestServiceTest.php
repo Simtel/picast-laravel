@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Context\ChadGPT;
+namespace Tests\Unit\Context\ChadGPT;
 
 use App\Context\ChadGPT\Application\Dto\ChadGptRequest;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;

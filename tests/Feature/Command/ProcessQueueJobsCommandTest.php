@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Console\Commands;
+namespace Tests\Feature\Command;
 
 use Illuminate\Testing\PendingCommand;
 use Tests\TestCase;

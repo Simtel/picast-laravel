@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Context\ChadGPT;
+namespace Tests\Unit\Context\ChadGPT;
 
 use App\Context\ChadGPT\Domain\Model\ChadGptConversationWordStat;
 use App\Context\User\Domain\Model\User;

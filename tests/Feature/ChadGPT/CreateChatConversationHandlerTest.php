@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ChadGPT;
+namespace Tests\Feature\ChadGPT;
 
 use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
 use App\Context\ChadGPT\Domain\Model\ChadGptConversation;

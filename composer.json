@@ -33,10 +33,10 @@
     "spatie/laravel-html": "*",
     "spatie/laravel-ignition": "^2.0",
     "spatie/laravel-permission": "^6.9",
-    "symfony/dom-crawler": "^7.0"
+    "symfony/dom-crawler": "^8.0"
   },
   "require-dev": {
-    "barryvdh/laravel-debugbar": "^3.14",
+    "barryvdh/laravel-debugbar": "^4.0",
     "ergebnis/composer-normalize": "^2.30",
     "fakerphp/faker": "^1.0",
     "filp/whoops": "~2.0",

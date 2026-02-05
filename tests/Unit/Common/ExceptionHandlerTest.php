@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common;
+namespace Tests\Unit\Common;
 
 use App\Exceptions\Handler;
 use Illuminate\Auth\AuthenticationException;
