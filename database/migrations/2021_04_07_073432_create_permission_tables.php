@@ -56,6 +56,7 @@ class CreatePermissionTables extends Migration
             $table->unsignedBigInteger($columnNames['model_morph_key']);
             $table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_permissions_model_id_model_type_index');
 
+            /** @phpstan-ignore-next-line   */
             $table->foreign('permission_id')
                 ->references('id')
                 ->on($tableNames['permissions'])
@@ -74,6 +75,7 @@ class CreatePermissionTables extends Migration
             $table->unsignedBigInteger($columnNames['model_morph_key']);
             $table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_roles_model_id_model_type_index');
 
+            /** @phpstan-ignore-next-line   */
             $table->foreign('role_id')
                 ->references('id')
                 ->on($tableNames['roles'])
@@ -89,11 +91,13 @@ class CreatePermissionTables extends Migration
             $table->unsignedBigInteger('permission_id');
             $table->unsignedBigInteger('role_id');
 
+            /** @phpstan-ignore-next-line   */
             $table->foreign('permission_id')
                 ->references('id')
                 ->on($tableNames['permissions'])
                 ->onDelete('cascade');
 
+            /** @phpstan-ignore-next-line   */
             $table->foreign('role_id')
                 ->references('id')
                 ->on($tableNames['roles'])

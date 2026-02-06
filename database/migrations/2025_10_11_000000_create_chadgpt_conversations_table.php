@@ -21,6 +21,7 @@ return new class () extends Migration {
             $table->integer('used_words_count')->default(0);
             $table->timestamps();
 
+            /** @phpstan-ignore-next-line   */
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

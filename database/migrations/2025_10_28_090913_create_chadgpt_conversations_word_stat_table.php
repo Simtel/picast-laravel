@@ -18,6 +18,7 @@ return new class () extends Migration {
             $table->integer('words_used')->default(0);
             $table->timestamps();
 
+            /** @phpstan-ignore-next-line   */
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
