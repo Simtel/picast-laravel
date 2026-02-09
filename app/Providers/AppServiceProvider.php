@@ -15,6 +15,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Iodev\Whois\Factory;
+use GuzzleHttp\Client;
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -53,6 +54,10 @@ final class AppServiceProvider extends ServiceProvider
 
             $bus->register(CreateChatConversationCommand::class, CreateChatConversationHandler::class);
             return $bus;
+        });
+
+        $this->app->singleton(Client::class, static function ($app) {
+            return new Client();
         });
     }
 }
