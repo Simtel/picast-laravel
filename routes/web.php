@@ -91,6 +91,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         Route::delete('/clear-history', [ChadGptController::class, 'clearHistory'])->name('chadgpt.clear-history');
     });
 
+    Route::get('/tournaments', [App\Context\Tournaments\Infrastructure\Controllers\TournamentController::class, 'index'])->name('tournaments.index');
+
 
 
 

@@ -66,6 +66,13 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{request()->routeIs('tournaments.index') ? 'active' : ''}}"
+                   href="{{route('tournaments.index')}}">
+                    <i class="fa fa-trophy nav-icon"></i>
+                    <span>Турниры</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{request()->routeIs('settings') ? 'active' : ''}}"
                    href="{{route('settings')}}">
                     <i class="fa fa-cog nav-icon"></i>
