@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace App\Context\Tournaments\Infrastructure\Controllers;
 
+use App\Context\Tournaments\Domain\Model\Tournament;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Contracts\View\Factory;
-use App\Context\Tournaments\Application\Services\DancemanagerScraper;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TournamentController extends Controller
 {
-    protected DancemanagerScraper $scraper;
-
-    public function __construct(DancemanagerScraper $scraper)
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|View
     {
-        $this->scraper = $scraper;
-    }
+        $query = Tournament::query();
 
-    /**
-     * @throws GuzzleException
-     */
-    public function index(): Factory|\Illuminate\Contracts\View\View|View
-    {
-        $tournaments = $this->scraper->getTournaments(true);
-        return view('tournaments.index', compact('tournaments'));
+
+        $sortBy = $request->get('sort_by', 'date');
+        $sortOrder = $request->get('sort_order', 'asc');
+
+        $query->orderBy($sortBy, $sortOrder);
+
+        $tournaments = $query->paginate(10);
+
+        return view('tournaments.index', compact('tournaments', 'sortBy', 'sortOrder'));
     }
 }
