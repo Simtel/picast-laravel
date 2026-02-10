@@ -30,6 +30,7 @@ final class Kernel extends ConsoleKernel
         $schedule->command('domains:whois')->daily();
         $schedule->command('youtube:download')->everyMinute();
         $schedule->job(new CheckExpireDomains())->daily();
+        $schedule->command('tournaments:fetch')->daily(); // Добавляем команду для получения турниров
     }
 
     /**
