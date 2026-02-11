@@ -53,6 +53,9 @@
                     @if($tournament->date)
                         <i class="fa fa-calendar-alt mr-1 text-muted"></i>
                         {{ \Carbon\Carbon::parse($tournament->date)->format('d.m.Y') }}
+                        @if($tournament->date_end && $tournament->date_end != $tournament->date)
+                            <br>{{ \Carbon\Carbon::parse($tournament->date_end)->format('d.m.Y') }}
+                        @endif
                     @else
                         <span class="text-muted">Не указана</span>
                     @endif

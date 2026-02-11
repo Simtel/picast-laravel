@@ -23,6 +23,7 @@ use App\Http\Controllers\Personal\IndexController;
 use App\Http\Controllers\Personal\InviteController;
 use App\Http\Controllers\Personal\SettingsController;
 use App\Http\Controllers\Personal\UsersController;
+use App\Context\Tournaments\Infrastructure\Controllers\TournamentController; // Добавляем use-оператор для TournamentController
 
 Auth::routes();
 Route::get('/', static function () {
@@ -91,9 +92,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         Route::delete('/clear-history', [ChadGptController::class, 'clearHistory'])->name('chadgpt.clear-history');
     });
 
-    Route::get('/tournaments', [App\Context\Tournaments\Infrastructure\Controllers\TournamentController::class, 'index'])->name('tournaments.index');
-
-
-
-
+    Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournaments.index');
 });
