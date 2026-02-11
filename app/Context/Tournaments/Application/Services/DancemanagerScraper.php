@@ -20,7 +20,7 @@ class DancemanagerScraper
 
     /**
      * @param bool $useCache
-     * @return list<array{title: string, date: mixed, link: non-falsy-string}>
+     * @return list<array{title: string, date: mixed, date_end: mixed, link: non-falsy-string}>
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getTournaments(bool $useCache = true): array
@@ -35,7 +35,7 @@ class DancemanagerScraper
     }
 
     /**
-     * @return list<array{title: string, date: mixed, link: non-falsy-string}>
+     * @return list<array{title: string, date: mixed, date_end: mixed, link: non-falsy-string}>
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function fetchTournaments(): array
@@ -60,11 +60,12 @@ class DancemanagerScraper
             $link = $this->baseUrl . '/competitions?guid=' . $guid;
 
             // Since the main page doesn't show dates, we need to extract them from the competition page
-            $date = $this->extractDateFromCompetitionPage($link);
+            $dates = $this->extractDatesFromCompetitionPage($link);
 
             $tournaments[] = [
                 'title' => $title,
-                'date' => $date,
+                'date' => $dates['start'] ?? 'N/A',
+                'date_end' => $dates['end'] ?? null,
                 'link' => $link,
             ];
         }
@@ -105,12 +106,13 @@ class DancemanagerScraper
                         $title = trim($eventNode->text());
                         $link = $this->baseUrl . '/competitions?guid=' . $guid;
 
-                        // Extract date from the competition page
-                        $date = $this->extractDateFromCompetitionPage($link);
+                        // Extract dates from the competition page
+                        $dates = $this->extractDatesFromCompetitionPage($link);
 
                         $tournaments[] = [
                             'title' => $title,
-                            'date' => $date,
+                            'date' => $dates['start'] ?? 'N/A',
+                            'date_end' => $dates['end'] ?? null,
                             'link' => $link,
                         ];
                     }
@@ -160,7 +162,10 @@ class DancemanagerScraper
         return $uniqueTournaments;
     }
 
-    private function extractDateFromCompetitionPage(string $url): string
+    /**
+     * @return array{start: string|null, end: string|null}
+     */
+    private function extractDatesFromCompetitionPage(string $url): array
     {
         try {
             $response = $this->client->get($url);
@@ -170,30 +175,42 @@ class DancemanagerScraper
             // Look for date information in the page content
             $content = $crawler->filter('body')->text();
 
-            // Look for Russian date patterns
-            // Pattern for day month year format (e.g., 15 февраля 2026)
-            $dayMonthYearPattern = '/\b(0?[1-9]|[12][0-9]|3[01])\s+(января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\s+\d{4}\b/i';
-            if (preg_match($dayMonthYearPattern, $content, $matches)) {
-                return trim($matches[0]);
+            // Russian months map
+            $monthMap = [
+                'января' => '01', 'февраля' => '02', 'марта' => '03', 'апреля' => '04',
+                'мая' => '05', 'июня' => '06', 'июля' => '07', 'августа' => '08',
+                'сентября' => '09', 'октября' => '10', 'ноября' => '11', 'декабря' => '12',
+            ];
+
+            // Look for two dates pattern: DD.MM.YYYY<br>DD.MM.YYYY
+            $twoDatesPattern = '/\b(0?[1-9]|[12][0-9]|3[01])[\.\/\-](0?[1-9]|1[0-2])[\.\/\-](\d{4})\s*<br>\s*(0?[1-9]|[12][0-9]|3[01])[\.\/\-](0?[1-9]|1[0-2])[\.\/\-](\d{4})\b/i';
+            if (preg_match($twoDatesPattern, $content, $matches)) {
+                return [
+                    'start' => sprintf('%02d.%02d.%s', (int)$matches[1], (int)$matches[2], $matches[3]),
+                    'end' => sprintf('%02d.%02d.%s', (int)$matches[4], (int)$matches[5], $matches[6]),
+                ];
             }
 
-            // Pattern for month year format (e.g., февраль 2026)
-            $monthYearPattern = '/\b(января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\s+\d{4}\b/i';
-            if (preg_match($monthYearPattern, $content, $matches)) {
-                return trim($matches[0]);
-            }
-
-            // Pattern for day.month.year format (e.g., 15.02.2026)
-            $dmyPattern = '/\b(0?[1-9]|[12][0-9]|3[01])[\.\/\-](0?[1-9]|1[0-2])[\.\/\-]\d{2,4}\b/';
+            // Look for single date pattern: DD.MM.YYYY
+            $dmyPattern = '/\b(0?[1-9]|[12][0-9]|3[01])[\.\/\-](0?[1-9]|1[0-2])[\.\/\-](\d{4})\b/';
             if (preg_match($dmyPattern, $content, $matches)) {
-                return trim($matches[0]);
+                $date = sprintf('%02d.%02d.%s', (int)$matches[1], (int)$matches[2], $matches[3]);
+                return ['start' => $date, 'end' => null];
             }
 
-            // If no specific date found, return 'N/A'
-            return 'N/A';
+            // Look for Russian date pattern: DD month YYYY
+            $dayMonthYearPattern = '/\b(0?[1-9]|[12][0-9]|3[01])\s+(января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\s+(\d{4})\b/i';
+            if (preg_match($dayMonthYearPattern, $content, $matches)) {
+                $month = $monthMap[mb_strtolower($matches[2])] ?? '01';
+                $date = sprintf('%02d.%02d.%s', (int)$matches[1], (int)$month, $matches[3]);
+                return ['start' => $date, 'end' => null];
+            }
+
+            // If no specific date found, return null
+            return ['start' => null, 'end' => null];
         } catch (\Exception $e) {
-            // If there's an error fetching the competition page, return 'N/A'
-            return 'N/A';
+            // If there's an error fetching the competition page, return null
+            return ['start' => null, 'end' => null];
         }
     }
 }

@@ -6,6 +6,7 @@ namespace App\Context\Tournaments\Infrastructure\Command;
 
 use App\Context\Tournaments\Application\Services\DancemanagerScraper;
 use App\Context\Tournaments\Domain\Model\Tournament;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -42,8 +43,14 @@ class FetchTournamentsCommand extends Command
     {
         $this->info('Fetching tournaments...');
         try {
-            $tournaments = $this->scraper->getTournaments(false);
+            try {
+                $tournaments = $this->scraper->getTournaments(false);
+            } catch (GuzzleException $e) {
+                $this->error($e->getMessage());
+                return;
+            }
 
+            $this->info('Загрузили ' . count($tournaments) . ' турниров...');
             foreach ($tournaments as $tournamentData) {
                 $linkParts = parse_url($tournamentData['link']);
                 parse_str($linkParts['query'] ?? '', $query);
@@ -59,7 +66,8 @@ class FetchTournamentsCommand extends Command
                     [
                         'title' => $tournamentData['title'],
                         'link' => $tournamentData['link'],
-                        'date' => $tournamentData['date'],
+                        'date' => $tournamentData['date'] !== 'N/A' ? $tournamentData['date'] : null,
+                        'date_end' => $tournamentData['date_end'],
                     ]
                 );
             }
