@@ -11,8 +11,8 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property string $title
  * @property string $link
- * @property string|null $date
- * @property string|null $date_end
+ * @property Carbon|null $date
+ * @property Carbon|null $date_end
  * @property string $guid
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -44,6 +44,16 @@ class Tournament extends Model
         'guid',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'date' => 'date',
+        'date_end' => 'date',
+    ];
+
     public function getId(): int
     {
         return $this->id;
@@ -59,12 +69,12 @@ class Tournament extends Model
         return $this->link;
     }
 
-    public function getDate(): ?string
+    public function getDate(): ?Carbon
     {
         return $this->date;
     }
 
-    public function getDateEnd(): ?string
+    public function getDateEnd(): ?Carbon
     {
         return $this->date_end;
     }

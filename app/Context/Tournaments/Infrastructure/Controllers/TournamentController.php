@@ -6,6 +6,7 @@ namespace App\Context\Tournaments\Infrastructure\Controllers;
 
 use App\Context\Tournaments\Domain\Model\Tournament;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -20,6 +21,7 @@ class TournamentController extends Controller
         $sortOrder = $request->get('sort_order', 'asc');
 
         $query->orderBy($sortBy, $sortOrder);
+        $query->whereDate('date', '>', Carbon::now());
 
         $tournaments = $query->paginate(10);
 
