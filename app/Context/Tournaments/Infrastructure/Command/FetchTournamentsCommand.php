@@ -68,6 +68,8 @@ class FetchTournamentsCommand extends Command
                         'link' => $tournamentData['link'],
                         'date' => $tournamentData['date'] !== 'N/A' ? $tournamentData['date'] : null,
                         'date_end' => $tournamentData['date_end'],
+                        'city' => $tournamentData['city'],
+                        'organizer' => $tournamentData['organizer'],
                     ]
                 );
             }
