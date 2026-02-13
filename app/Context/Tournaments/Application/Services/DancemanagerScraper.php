@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Context\Tournaments\Application\Services;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Facades\Cache;
 
@@ -20,7 +21,7 @@ class DancemanagerScraper
 
     /**
      * @param bool $useCache
-     * @return list<array{title: string, date: mixed, date_end: mixed, link: non-falsy-string}>
+     * @return list<array{title: string, date: mixed, date_end: mixed, link: non-falsy-string, city: ?string, organizer: ?string}>
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getTournaments(bool $useCache = true): array
@@ -35,7 +36,7 @@ class DancemanagerScraper
     }
 
     /**
-     * @return list<array{title: string, date: mixed, date_end: mixed, link: non-falsy-string}>
+     * @return list<array{title: string, date: mixed, date_end: mixed, link: non-falsy-string, city: ?string, organizer: ?string}>
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function fetchTournaments(): array
@@ -59,6 +60,9 @@ class DancemanagerScraper
             $title = trim($eventNode->text());
             $link = $this->baseUrl . '/competitions?guid=' . $guid;
 
+            $information = $eventNode->nextAll()->eq(0)->text();
+
+            $info = $this->splitLocationAndName($information);
             // Since the main page doesn't show dates, we need to extract them from the competition page
             $dates = $this->extractDatesFromCompetitionPage($link);
 
@@ -67,6 +71,8 @@ class DancemanagerScraper
                 'date' => $dates['start'] ?? 'N/A',
                 'date_end' => $dates['end'] ?? null,
                 'link' => $link,
+                'city' => $info['city'] !== '' ? $info['city'] : null,
+                'organizer' => $info['organizer'] !== '' ? $info['organizer'] : null,
             ];
         }
 
@@ -106,6 +112,10 @@ class DancemanagerScraper
                         $title = trim($eventNode->text());
                         $link = $this->baseUrl . '/competitions?guid=' . $guid;
 
+                        $information = $eventNode->nextAll()->eq(0)->text();
+
+                        $info = $this->splitLocationAndName($information);
+
                         // Extract dates from the competition page
                         $dates = $this->extractDatesFromCompetitionPage($link);
 
@@ -114,6 +124,8 @@ class DancemanagerScraper
                             'date' => $dates['start'] ?? 'N/A',
                             'date_end' => $dates['end'] ?? null,
                             'link' => $link,
+                            'city' => $info['city'] !== '' ? $info['city'] : null,
+                            'organizer' => $info['organizer'] !== '' ? $info['organizer'] : null,
                         ];
                     }
 
@@ -163,7 +175,9 @@ class DancemanagerScraper
     }
 
     /**
+     * @param string $url
      * @return array{start: string|null, end: string|null}
+     * @throws GuzzleException
      */
     private function extractDatesFromCompetitionPage(string $url): array
     {
@@ -177,9 +191,18 @@ class DancemanagerScraper
 
             // Russian months map
             $monthMap = [
-                'января' => '01', 'февраля' => '02', 'марта' => '03', 'апреля' => '04',
-                'мая' => '05', 'июня' => '06', 'июля' => '07', 'августа' => '08',
-                'сентября' => '09', 'октября' => '10', 'ноября' => '11', 'декабря' => '12',
+                'января' => '01',
+                'февраля' => '02',
+                'марта' => '03',
+                'апреля' => '04',
+                'мая' => '05',
+                'июня' => '06',
+                'июля' => '07',
+                'августа' => '08',
+                'сентября' => '09',
+                'октября' => '10',
+                'ноября' => '11',
+                'декабря' => '12',
             ];
 
             // Look for two dates pattern: DD.MM.YYYY<br>DD.MM.YYYY
@@ -212,5 +235,19 @@ class DancemanagerScraper
             // If there's an error fetching the competition page, return null
             return ['start' => null, 'end' => null];
         }
+    }
+
+    /**
+     * @param string $input
+     * @return array{city: string, organizer: string}
+     */
+    private function splitLocationAndName(string $input): array
+    {
+        $parts = explode(',', $input, 2);
+
+        return [
+            'city' => trim($parts[0]),
+            'organizer' => isset($parts[1]) ? trim($parts[1]) : '',
+        ];
     }
 }

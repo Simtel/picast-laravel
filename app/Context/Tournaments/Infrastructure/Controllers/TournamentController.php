@@ -7,12 +7,13 @@ namespace App\Context\Tournaments\Infrastructure\Controllers;
 use App\Context\Tournaments\Domain\Model\Tournament;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TournamentController extends Controller
 {
-    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|View
+    public function index(Request $request): Factory|\Illuminate\Contracts\View\View|View
     {
         $query = Tournament::query();
 
