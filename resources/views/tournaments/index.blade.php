@@ -39,6 +39,8 @@
                     @endif
                 </a>
             </th>
+            <th scope="col">Город</th>
+            <th scope="col">Организатор</th>
             <th scope="col">Ссылка</th>
         </tr>
         </thead>
@@ -58,6 +60,22 @@
                         @endif
                     @else
                         <span class="text-muted">Не указана</span>
+                    @endif
+                </td>
+                <td>
+                    @if($tournament->city)
+                        <i class="fa fa-map-marker-alt mr-1 text-muted"></i>
+                        {{ $tournament->city }}
+                    @else
+                        <span class="text-muted">—</span>
+                    @endif
+                </td>
+                <td>
+                    @if($tournament->organizer)
+                        <i class="fa fa-user mr-1 text-muted"></i>
+                        {{ $tournament->organizer }}
+                    @else
+                        <span class="text-muted">—</span>
                     @endif
                 </td>
                 <td>
