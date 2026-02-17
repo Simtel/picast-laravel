@@ -28,4 +28,11 @@ class TournamentController extends Controller
 
         return view('tournaments.index', compact('tournaments', 'sortBy', 'sortOrder'));
     }
+
+    public function show(int $id): Factory|\Illuminate\Contracts\View\View|View
+    {
+        $tournament = Tournament::findOrFail($id);
+
+        return view('tournaments.show', compact('tournament'));
+    }
 }
