@@ -93,4 +93,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
     });
 
     Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournaments.index');
+    Route::get('/tournaments/{id}', [TournamentController::class, 'show'])->name('tournaments.show');
 });

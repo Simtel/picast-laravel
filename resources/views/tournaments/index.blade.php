@@ -49,7 +49,9 @@
             <tr>
                 <th scope="row">{{ $tournaments->firstItem() + $loop->iteration - 1 }}</th>
                 <td>
-                    <strong>{{ $tournament->title }}</strong>
+                    <a href="{{ route('tournaments.show', ['id' => $tournament->id]) }}" class="text-decoration-none fw-bold">
+                        {{ $tournament->title }}
+                    </a>
                 </td>
                 <td>
                     @if($tournament->date)
