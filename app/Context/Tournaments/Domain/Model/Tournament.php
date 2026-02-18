@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Context\Tournaments\Domain\Model;
 
+use App\Context\Tournaments\Domain\Factory\TournamentFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -31,10 +33,14 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tournament whereOrganizer($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tournament whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tournament whereUpdatedAt($value)
+ * @method static \App\Context\Tournaments\Domain\Factory\TournamentFactory factory($count = null, $state = [])
  * @mixin \Eloquent
  */
 class Tournament extends Model
 {
+    /** @use HasFactory<TournamentFactory> */
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -59,6 +65,8 @@ class Tournament extends Model
         'date' => 'date',
         'date_end' => 'date',
     ];
+
+    protected static string $factory = TournamentFactory::class;
 
     public function getId(): int
     {
