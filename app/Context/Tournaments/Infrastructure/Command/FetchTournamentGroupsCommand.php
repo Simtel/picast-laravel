@@ -7,7 +7,9 @@ namespace App\Context\Tournaments\Infrastructure\Command;
 use App\Context\Tournaments\Application\Services\TournamentGroupScrapper;
 use App\Context\Tournaments\Domain\Model\Tournament;
 use Carbon\Carbon;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
+use Log;
 
 class FetchTournamentGroupsCommand extends Command
 {
@@ -27,8 +29,12 @@ class FetchTournamentGroupsCommand extends Command
     {
         parent::__construct();
         $this->scraper = $scraper;
+        $this->scraper->setLogger(Log::channel('console'));
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function handle(): void
     {
         $tournamentId = $this->argument('tournament');
@@ -50,6 +56,9 @@ class FetchTournamentGroupsCommand extends Command
         $this->fetchForTournament($tournament);
     }
 
+    /**
+     * @throws GuzzleException
+     */
     private function fetchAllTournaments(): void
     {
         $query = Tournament::query();
@@ -62,8 +71,12 @@ class FetchTournamentGroupsCommand extends Command
         }
     }
 
+    /**
+     * @throws GuzzleException
+     */
     private function fetchForTournament(Tournament $tournament): void
     {
         $this->info('Getting groups for ' . $tournament->getTitle());
+        $this->scraper->getGroups($tournament);
     }
 }
