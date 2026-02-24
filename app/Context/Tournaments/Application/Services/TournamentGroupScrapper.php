@@ -16,6 +16,8 @@ class TournamentGroupScrapper
 {
     private LoggerInterface $logger;
 
+    private string $partUrl = 'https://dancemanager.ru/part?eventGuid=%s8&partGuid=%s&isShowUnconfirmed=1';
+
     /**
      * @param Client $client
      * @param LoggerInterface|null $logger
@@ -46,14 +48,44 @@ class TournamentGroupScrapper
         $parts = $crawler->filter('a[data-partguid]');
 
         $this->logger->info('Найдено отделений:' . $parts->count());
-
+        $groups = [];
         foreach ($parts as $part) {
             $partNode = new Crawler($part);
-            $this->logger->info('Получение данных для '.trim($partNode->text()));
+            $partGuid = $partNode->attr('data-partguid');
+            $this->logger->info('Получение данных для ' . trim($partNode->text()) . ' (partId:' . $partGuid . ')');
+            $groups = $this->scrapePart($this->getPartUrl($tournament->getGuid(), $partGuid));
         }
 
-        return [];
+        return $groups;
     }
 
+    private function getPartUrl(string $eventGuid, string $partGuid): string
+    {
+        return sprintf($this->partUrl, $eventGuid, $partGuid);
+    }
+
+    /**
+     * @return TournamentGroupDto[]
+     * @throws GuzzleException
+     */
+    private function scrapePart(string $url): array
+    {
+        $response = $this->client->get($url);
+        $html = $response->getBody()->getContents();
+        $crawler = new Crawler($html);
+
+        $groups = $crawler->filter('a[data-competitionguid]');
+        $this->logger->info('Найдено групп:' . $groups->count());
+        $outGroups = [];
+        foreach ($groups as $group) {
+            $groupNode = new Crawler($group);
+            $text = $groupNode->text();
+            $textGroup = explode('.', $text, 2);
+            $this->logger->info('Группа: ' . $text);
+            $outGroups[] = new TournamentGroupDto((int)$textGroup[0], $textGroup[1]);
+        }
+
+        return $outGroups;
+    }
 
 }
