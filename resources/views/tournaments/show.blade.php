@@ -109,4 +109,129 @@
         </div>
     </div>
 </div>
+
+<!-- Группы турнира -->
+<div class="main-content-header mt-4">
+    <h2 class="h4">
+        <i class="fa fa-users mr-2 text-info"></i>
+        Группы турнира
+    </h2>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <form method="GET" action="{{ route('tournaments.show', ['id' => $tournament->id]) }}" class="row g-3">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    <input type="text" 
+                           name="search" 
+                           class="form-control" 
+                           placeholder="Поиск по названию группы..." 
+                           value="{{ request('search', '') }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa fa-hashtag"></i></span>
+                    <input type="number" 
+                           name="number" 
+                           class="form-control" 
+                           placeholder="Номер группы" 
+                           min="1"
+                           value="{{ request('number', '') }}">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fa fa-filter mr-1"></i>Фильтр
+                </button>
+            </div>
+            <div class="col-md-2">
+                <a href="{{ route('tournaments.show', ['id' => $tournament->id]) }}" class="btn btn-outline-secondary w-100">
+                    <i class="fa fa-times mr-1"></i>Сброс
+                </a>
+            </div>
+            <div class="col-md-1">
+                <input type="hidden" name="sort_by" value="{{ $sortBy }}">
+                <input type="hidden" name="sort_order" value="{{ $sortOrder }}">
+            </div>
+        </form>
+    </div>
+    <div class="card-body p-0">
+        @if($groups->isEmpty())
+            <div class="text-center py-5 text-muted">
+                <i class="fa fa-inbox fa-3x mb-3"></i>
+                <p class="mb-0">Группы не найдены</p>
+            </div>
+        @else
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="border-0">
+                                <a href="{{ route('tournaments.show', array_merge(request()->query(), ['id' => $tournament->id, 'sort_by' => 'number', 'sort_order' => ($sortBy === 'number' && $sortOrder === 'asc') ? 'desc' : 'asc'])) }}" class="d-flex align-items-center gap-1 text-decoration-none">
+                                    №
+                                    @if ($sortBy === 'number')
+                                        <i class="fa fa-sort-{{ $sortOrder === 'asc' ? 'up' : 'down' }}"></i>
+                                    @else
+                                        <i class="fa fa-sort text-muted"></i>
+                                    @endif
+                                </a>
+                            </th>
+                            <th scope="col" class="border-0">
+                                <a href="{{ route('tournaments.show', array_merge(request()->query(), ['id' => $tournament->id, 'sort_by' => 'name', 'sort_order' => ($sortBy === 'name' && $sortOrder === 'asc') ? 'desc' : 'asc'])) }}" class="d-flex align-items-center gap-1 text-decoration-none">
+                                    Название группы
+                                    @if ($sortBy === 'name')
+                                        <i class="fa fa-sort-{{ $sortOrder === 'asc' ? 'up' : 'down' }}"></i>
+                                    @else
+                                        <i class="fa fa-sort text-muted"></i>
+                                    @endif
+                                </a>
+                            </th>
+                            <th scope="col" class="border-0">
+                                <a href="{{ route('tournaments.show', array_merge(request()->query(), ['id' => $tournament->id, 'sort_by' => 'registrations', 'sort_order' => ($sortBy === 'registrations' && $sortOrder === 'asc') ? 'desc' : 'asc'])) }}" class="d-flex align-items-center gap-1 text-decoration-none">
+                                    Регистраций
+                                    @if ($sortBy === 'registrations')
+                                        <i class="fa fa-sort-{{ $sortOrder === 'asc' ? 'up' : 'down' }}"></i>
+                                    @else
+                                        <i class="fa fa-sort text-muted"></i>
+                                    @endif
+                                </a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($groups as $group)
+                            <tr>
+                                <td>
+                                    <span class="badge bg-secondary">{{ $group->number }}</span>
+                                </td>
+                                <td>
+                                    <span class="fw-medium">{{ $group->name }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        <i class="fa fa-user mr-1"></i>
+                                        {{ $group->registrations }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
+    @if($groups->hasPages())
+        <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted">
+                    Показано {{ $groups->firstItem() ?? 0 }} - {{ $groups->lastItem() ?? 0 }} из {{ $groups->total() }} групп
+                </div>
+                {{ $groups->links() }}
+            </div>
+        </div>
+    @endif
+</div>
 @endsection

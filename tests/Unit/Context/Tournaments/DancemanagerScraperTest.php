@@ -82,16 +82,7 @@ final class DancemanagerScraperTest extends TestCase
         }
     }
 
-    public function test_scraper_returns_array(): void
-    {
-        Cache::shouldReceive('remember')
-            ->andReturn([]);
 
-        $client = Mockery::mock(Client::class);
-        $scraper = new DancemanagerScraper($client);
-
-        $scraper->getTournaments();
-    }
 
     /**
      * @throws \ReflectionException

@@ -6,6 +6,7 @@ namespace App\Context\Tournaments\Infrastructure\Command;
 
 use App\Context\Tournaments\Application\Services\TournamentGroupScrapper;
 use App\Context\Tournaments\Domain\Model\Tournament;
+use App\Context\Tournaments\Domain\Model\TournamentGroup;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
@@ -45,11 +46,14 @@ class FetchTournamentGroupsCommand extends Command
 
         if ($tournamentId === null) {
             $this->fetchAllTournaments();
+
+            return;
         }
 
         $tournament = Tournament::find($tournamentId);
         if ($tournament === null) {
             $this->error('Tournament not found');
+
             return;
         }
 
@@ -77,6 +81,27 @@ class FetchTournamentGroupsCommand extends Command
     private function fetchForTournament(Tournament $tournament): void
     {
         $this->info('Getting groups for ' . $tournament->getTitle());
-        $this->scraper->getGroups($tournament);
+        $groups = $this->scraper->getGroups($tournament);
+
+        $this->saveGroups($tournament, $groups);
+
+        $this->info(sprintf('Saved %d groups for %s', count($groups), $tournament->getTitle()));
+    }
+
+    /**
+     * @param TournamentGroup[] $groups
+     */
+    private function saveGroups(Tournament $tournament, array $groups): void
+    {
+        TournamentGroup::where('tournament_id', $tournament->getId())->delete();
+
+        foreach ($groups as $group) {
+            TournamentGroup::create([
+                'tournament_id' => $tournament->getId(),
+                'number' => $group->getNumber(),
+                'name' => $group->getName(),
+                'registrations' => $group->getRegistrations(),
+            ]);
+        }
     }
 }

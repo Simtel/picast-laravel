@@ -9,6 +9,7 @@ readonly class TournamentGroupDto
     public function __construct(
         private int $number,
         private string $name,
+        private int $registrations,
     ) {
     }
 
@@ -20,6 +21,11 @@ readonly class TournamentGroupDto
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getRegistrations(): int
+    {
+        return $this->registrations;
     }
 
 
