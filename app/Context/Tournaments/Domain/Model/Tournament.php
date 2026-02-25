@@ -7,6 +7,7 @@ namespace App\Context\Tournaments\Domain\Model;
 use App\Context\Tournaments\Domain\Factory\TournamentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -34,6 +35,8 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tournament whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tournament whereUpdatedAt($value)
  * @method static \App\Context\Tournaments\Domain\Factory\TournamentFactory factory($count = null, $state = [])
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Context\Tournaments\Domain\Model\TournamentGroup> $groups
+ * @property-read int|null $groups_count
  * @mixin \Eloquent
  */
 class Tournament extends Model
@@ -118,5 +121,11 @@ class Tournament extends Model
         return $this->updated_at;
     }
 
-
+    /**
+     * @return HasMany<TournamentGroup, $this>
+     */
+    public function groups(): HasMany
+    {
+        return $this->hasMany(TournamentGroup::class);
+    }
 }

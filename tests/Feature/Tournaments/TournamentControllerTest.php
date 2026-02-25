@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests\Feature\Tournaments;
 
 use App\Context\Tournaments\Domain\Model\Tournament;
+use App\Context\Tournaments\Domain\Model\TournamentGroup;
+use App\Context\Tournaments\Infrastructure\Controllers\TournamentController;
 use Carbon\Carbon;
 use Tests\TestCase;
 
@@ -207,5 +209,158 @@ final class TournamentControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee($tournament->getTitle());
+    }
+
+    public function test_show_displays_tournament_groups(): void
+    {
+        $this->loginAdmin();
+
+        $tournament = Tournament::factory()->create();
+        TournamentGroup::create([
+            'tournament_id' => $tournament->getId(),
+            'number' => 1,
+            'name' => 'Юниоры 1',
+            'registrations' => 12,
+        ]);
+        TournamentGroup::create([
+            'tournament_id' => $tournament->getId(),
+            'number' => 2,
+            'name' => 'Юниоры 2',
+            'registrations' => 15,
+        ]);
+
+        $response = $this->get(route('tournaments.show', $tournament->getId()));
+
+        $response->assertStatus(200);
+        $response->assertViewHas('groups');
+        $response->assertSee('Юниоры 1');
+        $response->assertSee('Юниоры 2');
+        $response->assertSee('12');
+        $response->assertSee('15');
+    }
+
+    public function test_show_groups_can_be_filtered_by_search(): void
+    {
+        $this->loginAdmin();
+
+        $tournament = Tournament::factory()->create();
+        TournamentGroup::create([
+            'tournament_id' => $tournament->getId(),
+            'number' => 1,
+            'name' => 'Adults Standard',
+            'registrations' => 10,
+        ]);
+        TournamentGroup::create([
+            'tournament_id' => $tournament->getId(),
+            'number' => 2,
+            'name' => 'Youth Latin',
+            'registrations' => 8,
+        ]);
+
+        $response = $this->get(route('tournaments.show', [
+            'id' => $tournament->getId(),
+            'search' => 'Standard',
+        ]));
+
+        $response->assertStatus(200);
+        $groups = $response->viewData('groups');
+        $this->assertCount(1, $groups);
+        $this->assertEquals('Adults Standard', $groups->first()->getName());
+    }
+
+    public function test_show_groups_can_be_filtered_by_number(): void
+    {
+        $this->loginAdmin();
+
+        $tournament = Tournament::factory()->create();
+        TournamentGroup::create([
+            'tournament_id' => $tournament->getId(),
+            'number' => 1,
+            'name' => 'Group A',
+            'registrations' => 10,
+        ]);
+        TournamentGroup::create([
+            'tournament_id' => $tournament->getId(),
+            'number' => 2,
+            'name' => 'Group B',
+            'registrations' => 8,
+        ]);
+
+        $response = $this->get(route('tournaments.show', [
+            'id' => $tournament->getId(),
+            'number' => 1,
+        ]));
+
+        $response->assertStatus(200);
+        $groups = $response->viewData('groups');
+        $this->assertCount(1, $groups);
+        $this->assertEquals(1, $groups->first()->getNumber());
+    }
+
+    public function test_show_groups_can_be_sorted(): void
+    {
+        $this->loginAdmin();
+
+        $tournament = Tournament::factory()->create();
+        TournamentGroup::create([
+            'tournament_id' => $tournament->getId(),
+            'number' => 2,
+            'name' => 'Group B',
+            'registrations' => 20,
+        ]);
+        TournamentGroup::create([
+            'tournament_id' => $tournament->getId(),
+            'number' => 1,
+            'name' => 'Group A',
+            'registrations' => 10,
+        ]);
+
+        $response = $this->get(route('tournaments.show', [
+            'id' => $tournament->getId(),
+            'sort_by' => 'name',
+            'sort_order' => 'asc',
+        ]));
+
+        $response->assertStatus(200);
+        $response->assertViewHas('sortBy', 'name');
+        $response->assertViewHas('sortOrder', 'asc');
+        $groups = $response->viewData('groups');
+        $this->assertEquals('Group A', $groups->first()->getName());
+    }
+
+    public function test_show_groups_pagination_works(): void
+    {
+        $this->loginAdmin();
+
+        $tournament = Tournament::factory()->create();
+        for ($i = 1; $i <= TournamentController::GROUPS_PER_PAGE + 2; $i++) {
+            TournamentGroup::create([
+                'tournament_id' => $tournament->getId(),
+                'number' => $i,
+                'name' => "Group {$i}",
+                'registrations' => 10,
+            ]);
+        }
+
+        $response = $this->get(route('tournaments.show', $tournament->getId()));
+
+        $response->assertStatus(200);
+        $groups = $response->viewData('groups');
+        $this->assertCount(TournamentController::GROUPS_PER_PAGE, $groups->items());
+        $this->assertTrue($groups->hasMorePages());
+    }
+
+    public function test_show_groups_returns_empty_when_no_groups(): void
+    {
+        $this->loginAdmin();
+
+        $tournament = Tournament::factory()->create();
+
+        $response = $this->get(route('tournaments.show', $tournament->getId()));
+
+        $response->assertStatus(200);
+        $groups = $response->viewData('groups');
+        $this->assertCount(0, $groups);
+        $response->assertSee('Группы не найдены');
     }
 }

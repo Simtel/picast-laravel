@@ -48,15 +48,16 @@ class TournamentGroupScrapper
         $parts = $crawler->filter('a[data-partguid]');
 
         $this->logger->info('Найдено отделений:' . $parts->count());
-        $groups = [];
+        $allGroups = [];
         foreach ($parts as $part) {
             $partNode = new Crawler($part);
             $partGuid = $partNode->attr('data-partguid');
             $this->logger->info('Получение данных для ' . trim($partNode->text()) . ' (partId:' . $partGuid . ')');
             $groups = $this->scrapePart($this->getPartUrl($tournament->getGuid(), $partGuid));
+            $allGroups = array_merge($allGroups, $groups);
         }
 
-        return $groups;
+        return $allGroups;
     }
 
     private function getPartUrl(string $eventGuid, string $partGuid): string
@@ -78,11 +79,20 @@ class TournamentGroupScrapper
         $this->logger->info('Найдено групп:' . $groups->count());
         $outGroups = [];
         foreach ($groups as $group) {
+            $registrations = 0;
             $groupNode = new Crawler($group);
             $text = $groupNode->text();
             $textGroup = explode('.', $text, 2);
             $this->logger->info('Группа: ' . $text);
-            $outGroups[] = new TournamentGroupDto((int)$textGroup[0], $textGroup[1]);
+            if (preg_match('/(\d+)$/', $text, $matches)) {
+                $registrations = (int)$matches[1];
+            }
+
+            $outGroups[] = new TournamentGroupDto(
+                (int)$textGroup[0],
+                rtrim(preg_replace('/\d+$/', '', $textGroup[1])),
+                $registrations
+            );
         }
 
         return $outGroups;
