@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Context\Domains\Infrastructure\Job\CheckExpireDomains;
+use Artisan;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -28,9 +29,13 @@ final class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('domains:whois')->daily();
-        $schedule->command('youtube:download')->everyMinute();
+        // $schedule->command('youtube:download')->everyMinute();
         $schedule->job(new CheckExpireDomains())->daily();
-        $schedule->command('tournaments:fetch')->daily(); // Добавляем команду для получения турниров
+        $schedule->command('tournaments:fetch')->everyMinute()->then(
+            static function () {
+                Artisan::call('tournaments:groups:fetch', ["tournament" => 0]);
+            }
+        )->runInBackground();
     }
 
     /**
