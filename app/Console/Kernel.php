@@ -31,7 +31,7 @@ final class Kernel extends ConsoleKernel
         $schedule->command('domains:whois')->daily();
         // $schedule->command('youtube:download')->everyMinute();
         $schedule->job(new CheckExpireDomains())->daily();
-        $schedule->command('tournaments:fetch')->everyMinute()->then(
+        $schedule->command('tournaments:fetch')->daily()->then(
             static function () {
                 Artisan::call('tournaments:groups:fetch', ["tournament" => 0]);
             }
