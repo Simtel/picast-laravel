@@ -44,7 +44,7 @@ class FetchTournamentGroupsCommand extends Command
             return;
         }
 
-        if ($tournamentId === null) {
+        if ($tournamentId === null || (int)$tournamentId === 0) {
             $this->fetchAllTournaments();
 
             return;
@@ -68,6 +68,7 @@ class FetchTournamentGroupsCommand extends Command
         $query = Tournament::query();
         $query->whereDate('date', '>', Carbon::now());
         $tournaments = $query->get();
+        $query->doesntHave('groups');
         $this->info(sprintf('Getted %d tournaments from database', $tournaments->count()));
 
         foreach ($tournaments as $tournament) {
