@@ -12,6 +12,22 @@
             Всего турниров: <strong>{{ $tournaments->total() }}</strong>
         </span>
     </div>
+
+    <!-- Фильтр по городам -->
+    <div class="mt-3">
+        <form method="GET" action="{{ route('tournaments.index') }}" class="form-inline">
+            <div class="input-group">
+                <select name="city" class="form-control" onchange="this.form.submit()">
+                    <option value="">Все города</option>
+                    @foreach($cities as $city)
+                        <option value="{{ $city }}" {{ $selectedCity == $city ? 'selected' : '' }}>{{ $city }}</option>
+                    @endforeach
+                </select>
+                <input type="hidden" name="sort_by" value="{{ $sortBy }}">
+                <input type="hidden" name="sort_order" value="{{ $sortOrder }}">
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="table-responsive">

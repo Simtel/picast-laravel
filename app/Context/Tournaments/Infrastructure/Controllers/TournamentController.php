@@ -18,17 +18,22 @@ class TournamentController extends Controller
     public function index(Request $request): Factory|\Illuminate\Contracts\View\View|View
     {
         $query = Tournament::query();
-
+        $query->whereDate('date', '>', Carbon::now());
 
         $sortBy = $request->get('sort_by', 'date');
         $sortOrder = $request->get('sort_order', 'asc');
-
         $query->orderBy($sortBy, $sortOrder);
-        $query->whereDate('date', '>', Carbon::now());
+
+        $cities = Tournament::whereDate('date', '>', Carbon::now())->pluck('city')->unique()->filter()->sort();
+        $selectedCity = $request->get('city');
+
+        if ($selectedCity) {
+            $query->where('city', $selectedCity);
+        }
 
         $tournaments = $query->paginate(10);
 
-        return view('tournaments.index', compact('tournaments', 'sortBy', 'sortOrder'));
+        return view('tournaments.index', compact('tournaments', 'sortBy', 'sortOrder', 'cities', 'selectedCity'));
     }
 
     public function show(Request $request, int $id): Factory|\Illuminate\Contracts\View\View|View
