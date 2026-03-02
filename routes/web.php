@@ -17,7 +17,6 @@ use App\Context\ChadGPT\Infrastructure\Controller\ChadGptController;
 use App\Context\Domains\Infrastructure\Controller\DomainsController;
 use App\Context\Domains\Infrastructure\Controller\WhoisController;
 use App\Context\Youtube\Infrastructure\Controller\YouTubeVideoController;
-use App\Context\Webcams\Infrastructure\Controllers\WebcamWebController;
 use App\Http\Controllers\Personal\ImagesController;
 use App\Http\Controllers\Personal\IndexController;
 use App\Http\Controllers\Personal\InviteController;
