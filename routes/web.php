@@ -65,11 +65,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
 
     Route::resource('domains', DomainsController::class)->middleware('permission:domains');
 
-    // Веб-камеры Ульяновска
-    Route::group(['prefix' => 'webcams'], static function () {
-        Route::get('/', [WebcamWebController::class, 'index'])->name('webcams.index');
-        Route::get('/{id}', [WebcamWebController::class, 'show'])->name('webcams.show');
-    });
+
 
     Route::group(['prefix' => 'youtube','middleware' => ['permission:edit youtube']], static function () {
         Route::get('/', [YouTubeVideoController::class, 'index'])->name('youtube.index');

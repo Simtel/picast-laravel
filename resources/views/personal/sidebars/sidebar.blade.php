@@ -51,13 +51,7 @@
                     </a>
                 </li>
             @endcan
-            <li class="nav-item">
-                <a class="nav-link {{request()->routeIs('webcams.*') ? 'active' : ''}}"
-                   href="{{route('webcams.index')}}">
-                    <i class="fa fa-video nav-icon"></i>
-                    <span>Веб-камеры</span>
-                </a>
-            </li>
+
             <li class="nav-item">
                 <a class="nav-link {{request()->routeIs('chadgpt.*') ? 'active' : ''}}"
                    href="{{route('chadgpt.index')}}">
