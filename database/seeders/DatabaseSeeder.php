@@ -16,6 +16,5 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(YouTubeVideoStatusSeeder::class);
-        $this->call(WebcamSeeder::class);
     }
 }
