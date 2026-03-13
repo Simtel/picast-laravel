@@ -23,7 +23,11 @@ final class ScheduleTest extends TestCase
         $actual = [];
 
         foreach ($events as $event) {
-            $actual[$event->description ?? $event->command] = $event->getExpression();
+            $key = $event->description ?? $event->command;
+            if ($key === null) {
+                $key = 'no';
+            }
+            $actual[$key] = $event->getExpression();
         }
         $this->assertEquals(sort($expected), sort($actual));
     }
