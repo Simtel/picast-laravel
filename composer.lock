@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11c9dbb7d0f84a712646f520483e3f84",
+    "content-hash": "ecd353b22713551fe0a5fadddee57841",
     "packages": [
         {
             "name": "alaouy/youtube",
@@ -6487,6 +6487,58 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.9.2"
             },
             "time": "2025-12-14T04:43:48+00:00"
+        },
+        {
+            "name": "simtel/dancemanager-scraper",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Simtel/dancemanager-scraper.git",
+                "reference": "106e583fac4748b9a441035c8b386386899390fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Simtel/dancemanager-scraper/zipball/106e583fac4748b9a441035c8b386386899390fd",
+                "reference": "106e583fac4748b9a441035c8b386386899390fd",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0.1",
+                "php": ">=8.4",
+                "psr/cache": "*",
+                "psr/log": "*",
+                "symfony/dom-crawler": "^8.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.2",
+                "phpstan/phpstan": "^2.0",
+                "phpunit/php-code-coverage": "^12.5",
+                "phpunit/phpunit": "^12.0",
+                "symfony/css-selector": "^7.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Simtel\\DanceManagerScraper\\": "src/",
+                    "Simtel\\DanceManagerScraper\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simtel",
+                    "email": "simuls@gmail.com"
+                }
+            ],
+            "description": "Scraper tournaments and groups from dancemanager.ru",
+            "support": {
+                "issues": "https://github.com/Simtel/dancemanager-scraper/issues",
+                "source": "https://github.com/Simtel/dancemanager-scraper/tree/v1.0.1"
+            },
+            "time": "2026-03-13T05:59:12+00:00"
         },
         {
             "name": "spatie/backtrace",

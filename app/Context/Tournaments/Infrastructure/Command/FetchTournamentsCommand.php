@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Context\Tournaments\Infrastructure\Command;
 
-use App\Context\Tournaments\Application\Services\DancemanagerScraper;
 use App\Context\Tournaments\Domain\Model\Tournament;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Simtel\DanceManagerScraper\DancemanagerScraper;
 
 // Предполагается, что модель Tournament находится в корневом пространстве имен App
 
@@ -44,32 +44,37 @@ class FetchTournamentsCommand extends Command
         $this->info('Fetching tournaments...');
         try {
             try {
-                $tournaments = $this->scraper->getTournaments(false);
+                $tournaments = $this->scraper->getTournaments();
             } catch (GuzzleException $e) {
                 $this->error($e->getMessage());
                 return;
             }
 
             $this->info('Загрузили ' . count($tournaments) . ' турниров...');
-            foreach ($tournaments as $tournamentData) {
-                $linkParts = parse_url($tournamentData['link']);
+            foreach ($tournaments as $tournament) {
+                $linkParts = parse_url($tournament->getLink());
                 parse_str($linkParts['query'] ?? '', $query);
                 $guid = $query['guid'] ?? null;
 
                 if (!$guid) {
-                    Log::warning('Skipping tournament due to missing GUID: ' . json_encode($tournamentData));
+                    Log::warning(
+                        'Skipping tournament due to missing GUID: ' . json_encode(
+                            $tournament->getGuid(),
+                            JSON_THROW_ON_ERROR
+                        )
+                    );
                     continue;
                 }
 
                 Tournament::updateOrCreate(
                     ['guid' => $guid],
                     [
-                        'title' => $tournamentData['title'],
-                        'link' => $tournamentData['link'],
-                        'date' => $tournamentData['date'] !== 'N/A' ? $tournamentData['date'] : null,
-                        'date_end' => $tournamentData['date_end'],
-                        'city' => $tournamentData['city'],
-                        'organizer' => $tournamentData['organizer'],
+                        'title' => $tournament->getTitle(),
+                        'link' => $tournament->getLink(),
+                        'date' => $tournament->getDate() !== 'N/A' ? $tournament->getDate() : null,
+                        'date_end' => $tournament->getDateEnd(),
+                        'city' => $tournament->getCity(),
+                        'organizer' => $tournament->getOrganizer(),
                     ]
                 );
             }
