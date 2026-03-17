@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Context\Tournaments\Infrastructure\Command;
 
-use App\Context\Tournaments\Application\Services\TournamentGroupScrapper;
 use App\Context\Tournaments\Domain\Model\Tournament;
 use App\Context\Tournaments\Domain\Model\TournamentGroup;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Log;
+use Simtel\DanceManagerScraper\TournamentDto;
+use Simtel\DanceManagerScraper\TournamentGroupDto;
+use Simtel\DanceManagerScraper\TournamentGroupScrapper;
 
 class FetchTournamentGroupsCommand extends Command
 {
@@ -82,7 +84,9 @@ class FetchTournamentGroupsCommand extends Command
     private function fetchForTournament(Tournament $tournament): void
     {
         $this->info('Getting groups for ' . $tournament->getTitle());
-        $groups = $this->scraper->getGroups($tournament);
+        $groups = $this->scraper->getGroups(
+            TournamentDto::fromArray($tournament->toArray())
+        );
 
         $this->saveGroups($tournament, $groups);
 
@@ -90,7 +94,7 @@ class FetchTournamentGroupsCommand extends Command
     }
 
     /**
-     * @param TournamentGroup[] $groups
+     * @param TournamentGroupDto[] $groups
      */
     private function saveGroups(Tournament $tournament, array $groups): void
     {
