@@ -69,7 +69,7 @@ final class VideoFile extends Model
     {
         $filePath = 'videos/' . $this->file_link;
         if (!Storage::disk('s3')->exists($filePath)) {
-            Log::debug('File not found on S3: ' . $filePath);
+            Log::debug('Файл не найден в S3: ' . $filePath);
             return;
         }
         Storage::disk('s3')->delete($filePath);

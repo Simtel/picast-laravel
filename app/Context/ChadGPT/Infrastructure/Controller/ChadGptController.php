@@ -121,7 +121,7 @@ final class ChadGptController extends Controller
                 'message' => 'Chat history cleared successfully',
             ]);
         } catch (Throwable $e) {
-            Log::error('ChadGPT: failed to clear history', [
+            Log::error('ChadGPT: не удалось очистить историю', [
                 'error' => $e->getMessage(),
                 'user_id' => Auth::id(),
             ]);

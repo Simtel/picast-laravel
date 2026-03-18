@@ -44,7 +44,7 @@ class ChadGptRequestService
         }
 
         if (!is_string($apiKey)) {
-            Log::error('ChadGPT API key must be a string');
+            Log::error('API ключ ChadGPT должен быть строкой');
             throw new RuntimeException('ChadGPT API key must be a string');
         }
 

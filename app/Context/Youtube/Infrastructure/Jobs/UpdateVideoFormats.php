@@ -29,7 +29,7 @@ final class UpdateVideoFormats implements ShouldQueue
      */
     public function handle(RefreshVideoFormatsService $refreshVideoFormatsService): void
     {
-        Log::info('Start download video formats:' . $this->video->title);
+        Log::info('Начало загрузки форматов видео: ' . $this->video->title);
 
         $refreshVideoFormatsService->refresh($this->video);
     }
