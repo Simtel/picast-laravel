@@ -23,7 +23,7 @@ final class UpdateVideoFormatsTest extends TestCase
         Event::fake();
 
         $video = Video::factory()->create();
-        Log::shouldReceive('info')->once()->with('Start download video formats:' . $video->title);
+        Log::shouldReceive('info')->once()->with('Начало загрузки форматов видео:' . $video->title);
 
         /** @var RefreshVideoFormatsService $refreshVideoFormatsService */
         $refreshVideoFormatsService = Mockery::mock(RefreshVideoFormatsService::class)

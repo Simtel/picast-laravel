@@ -151,7 +151,7 @@ class ChadGptRequestServiceTest extends TestCase
 
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('ChadGPT API key must be a string');
+        $this->expectExceptionMessage('API ключ ChadGPT должен быть строкой');
 
 
         $this->service->request($chadGptRequest);
