@@ -147,11 +147,11 @@ class ChadGptRequestServiceTest extends TestCase
 
         Log::shouldReceive('error')
             ->once()
-            ->with('ChadGPT API key must be a string');
+            ->with('API ключ ChadGPT должен быть строкой');
 
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('API ключ ChadGPT должен быть строкой');
+        $this->expectExceptionMessage('ChadGPT API key must be a string');
 
 
         $this->service->request($chadGptRequest);
