@@ -7,14 +7,18 @@ namespace App\Context\Domains\Application\Service;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Infrastructure\Facades\Whois;
 use Illuminate\Support\Carbon;
+use Iodev\Whois\Exceptions\ConnectionException;
+use Iodev\Whois\Exceptions\ServerMismatchException;
+use Iodev\Whois\Exceptions\WhoisException;
 use Override;
-use Telegram\Bot\Exceptions\TelegramSDKException;
 
 final readonly class WhoisUpdater implements \App\Context\Domains\Application\Contract\WhoisUpdater
 {
     /**
      * @param Domain $domain
-     * @throws TelegramSDKException
+     * @throws ConnectionException
+     * @throws ServerMismatchException
+     * @throws WhoisException
      */
     #[Override]
     public function update(Domain $domain): void
