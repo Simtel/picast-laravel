@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Personal;
 
 use App\Context\Common\Domain\Models\InviteCode;
 use App\Context\User\Infrastructure\Mail\InviteUserNotify;
+use App\Context\User\Infrastructure\Request\InviteRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\InviteRequest;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;

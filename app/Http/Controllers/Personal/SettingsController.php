@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Personal;
 
+use App\Context\User\Infrastructure\Request\ChangePasswordRequest;
+use App\Context\User\Infrastructure\Request\UpdateProfileRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ChangePasswordRequest;
-use App\Http\Requests\UpdateProfileRequest;
 use Auth;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Foundation\Application;

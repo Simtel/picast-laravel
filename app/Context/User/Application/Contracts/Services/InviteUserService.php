@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Contracts\Services;
+namespace App\Context\User\Application\Contracts\Services;
 
 interface InviteUserService
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests;
+namespace App\Context\User\Infrastructure\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
@@ -18,7 +18,7 @@ final class ChangePasswordRequest extends FormRequest
     }
 
     /**
-     * @return array<string, array<int,Password|string>>
+     * @return array<string, array<int, Password|string>>
      */
     public function rules(): array
     {

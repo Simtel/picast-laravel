@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Api\V1;
+namespace App\Context\User\Infrastructure\Resources\Api\V1;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;

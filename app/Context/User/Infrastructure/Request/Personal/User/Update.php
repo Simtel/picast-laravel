@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Personal\User;
+namespace App\Context\User\Infrastructure\Request\Personal\User;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 final class Update extends FormRequest
 {
