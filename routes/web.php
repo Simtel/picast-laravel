@@ -16,13 +16,14 @@ declare(strict_types=1);
 use App\Context\ChadGPT\Infrastructure\Controller\ChadGptController;
 use App\Context\Domains\Infrastructure\Controller\DomainsController;
 use App\Context\Domains\Infrastructure\Controller\WhoisController;
+use App\Context\Tournaments\Infrastructure\Controllers\TournamentController;
+use App\Context\User\Infrastructure\Controller\InviteController;
+use App\Context\User\Infrastructure\Controller\SettingsController;
+use App\Context\User\Infrastructure\Controller\UsersController;
 use App\Context\Youtube\Infrastructure\Controller\YouTubeVideoController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Personal\ImagesController;
 use App\Http\Controllers\Personal\IndexController;
-use App\Http\Controllers\Personal\InviteController;
-use App\Http\Controllers\Personal\SettingsController;
-use App\Http\Controllers\Personal\UsersController;
-use App\Context\Tournaments\Infrastructure\Controllers\TournamentController; // Добавляем use-оператор для TournamentController
 
 Auth::routes();
 Route::get('/', static function () {
@@ -33,8 +34,7 @@ Route::get('/', static function () {
 })->name('home');
 
 
-
-Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+Route::get('logout', [LoginController::class, 'logout']);
 
 
 //личный кабинет
@@ -65,14 +65,17 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
     Route::resource('domains', DomainsController::class)->middleware('permission:domains');
 
 
-
-    Route::group(['prefix' => 'youtube','middleware' => ['permission:edit youtube']], static function () {
+    Route::group(['prefix' => 'youtube', 'middleware' => ['permission:edit youtube']], static function () {
         Route::get('/', [YouTubeVideoController::class, 'index'])->name('youtube.index');
         Route::delete('/{video}', [YouTubeVideoController::class, 'destroy'])->name('youtube.destroy');
         Route::get('/create', [YouTubeVideoController::class, 'create'])->name('youtube.create');
         Route::post('/store', [YouTubeVideoController::class, 'store'])->name('youtube.store');
-        Route::post('/{video}/refresh-formats', [YouTubeVideoController::class, 'refreshFormats'])->name('youtube.refresh_formats');
-        Route::post('/{video}/queue-download', [YouTubeVideoController::class, 'queueDownload'])->name('youtube.queue-download');
+        Route::post('/{video}/refresh-formats', [YouTubeVideoController::class, 'refreshFormats'])->name(
+            'youtube.refresh_formats'
+        );
+        Route::post('/{video}/queue-download', [YouTubeVideoController::class, 'queueDownload'])->name(
+            'youtube.queue-download'
+        );
     });
 
     Route::post(
