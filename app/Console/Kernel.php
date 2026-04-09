@@ -46,9 +46,11 @@ final class Kernel extends ConsoleKernel
     protected function commands(): void
     {
         $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__ . '/../Context/Common/Infrastructure/Command');
         $this->load(__DIR__ . '/../Context/Youtube/Infrastructure/Commands');
         $this->load(__DIR__ . '/../Context/Domains/Infrastructure/Command');
         $this->load(__DIR__ . '/../Context/Tournaments/Infrastructure/Command');
+
 
         require base_path('routes/console.php');
     }
