@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Personal;
+namespace App\Context\User\Infrastructure\Controller;
 
 use App\Context\Common\Domain\Models\Images;
 use App\Http\Controllers\Controller;

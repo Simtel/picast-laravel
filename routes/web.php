@@ -17,13 +17,13 @@ use App\Context\ChadGPT\Infrastructure\Controller\ChadGptController;
 use App\Context\Domains\Infrastructure\Controller\DomainsController;
 use App\Context\Domains\Infrastructure\Controller\WhoisController;
 use App\Context\Tournaments\Infrastructure\Controllers\TournamentController;
+use App\Context\User\Infrastructure\Controller\ImagesController;
+use App\Context\User\Infrastructure\Controller\IndexController;
 use App\Context\User\Infrastructure\Controller\InviteController;
 use App\Context\User\Infrastructure\Controller\SettingsController;
 use App\Context\User\Infrastructure\Controller\UsersController;
 use App\Context\Youtube\Infrastructure\Controller\YouTubeVideoController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Personal\ImagesController;
-use App\Http\Controllers\Personal\IndexController;
 
 Auth::routes();
 Route::get('/', static function () {
