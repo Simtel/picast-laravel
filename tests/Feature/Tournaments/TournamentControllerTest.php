@@ -8,6 +8,7 @@ use App\Context\Tournaments\Domain\Model\Tournament;
 use App\Context\Tournaments\Domain\Model\TournamentGroup;
 use App\Context\Tournaments\Infrastructure\Controllers\TournamentController;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Tests\TestCase;
 
 final class TournamentControllerTest extends TestCase
@@ -106,6 +107,7 @@ final class TournamentControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewHas('tournaments');
         $tournaments = $response->viewData('tournaments');
+        $this->assertInstanceOf(LengthAwarePaginator::class, $tournaments);
         $this->assertCount(10, $tournaments->items());
         $this->assertTrue($tournaments->hasMorePages());
     }
@@ -346,6 +348,7 @@ final class TournamentControllerTest extends TestCase
 
         $response->assertStatus(200);
         $groups = $response->viewData('groups');
+        $this->assertInstanceOf(LengthAwarePaginator::class, $groups);
         $this->assertCount(TournamentController::GROUPS_PER_PAGE, $groups->items());
         $this->assertTrue($groups->hasMorePages());
     }

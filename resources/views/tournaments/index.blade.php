@@ -23,8 +23,8 @@
                         <option value="{{ $city }}" {{ $selectedCity == $city ? 'selected' : '' }}>{{ $city }}</option>
                     @endforeach
                 </select>
-                <input type="hidden" name="sort_by" value="{{ $sortBy }}">
-                <input type="hidden" name="sort_order" value="{{ $sortOrder }}">
+                <input type="hidden" name="sort_by" value="{{ request('sort_by', 'date') }}">
+                <input type="hidden" name="sort_order" value="{{ request('sort_order', 'asc') }}">
             </div>
         </form>
     </div>
@@ -72,9 +72,9 @@
                 <td>
                     @if($tournament->date)
                         <i class="fa fa-calendar-alt mr-1 text-muted"></i>
-                        {{ \Carbon\Carbon::parse($tournament->date)->format('d.m.Y') }}
-                        @if($tournament->date_end && $tournament->date_end != $tournament->date)
-                            <br>{{ \Carbon\Carbon::parse($tournament->date_end)->format('d.m.Y') }}
+                        {{ $tournament->date->format('d.m.Y') }}
+                        @if($tournament->dateEnd && $tournament->dateEnd != $tournament->date)
+                            <br>{{ $tournament->dateEnd->format('d.m.Y') }}
                         @endif
                     @else
                         <span class="text-muted">Не указана</span>
@@ -117,7 +117,7 @@
         Показано {{ $tournaments->firstItem() ?? 0 }} - {{ $tournaments->lastItem() ?? 0 }} из {{ $tournaments->total() }} записей
     </div>
     <div>
-        {{ $tournaments->appends(['sort_by' => $sortBy, 'sort_order' => $sortOrder])->links() }}
+        {{ $tournaments->links() }}
     </div>
 </div>
 @endsection

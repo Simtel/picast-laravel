@@ -4,61 +4,76 @@ declare(strict_types=1);
 
 namespace App\Context\Tournaments\Infrastructure\Controllers;
 
+use App\Context\Tournaments\Application\Query\GetTournamentDetailQuery;
+use App\Context\Tournaments\Application\Query\GetTournamentsQuery;
+use App\Context\Tournaments\Application\QueryHandler\GetTournamentDetailQueryHandler;
+use App\Context\Tournaments\Application\QueryHandler\GetTournamentsQueryHandler;
 use App\Context\Tournaments\Domain\Model\Tournament;
-use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class TournamentController extends Controller
+/**
+ * Контроллер для управления турнирами.
+ * Использует CQRS паттерн через Query Handlers.
+ */
+final class TournamentController
 {
     public const int GROUPS_PER_PAGE = 25;
 
-    public function index(Request $request): Factory|\Illuminate\Contracts\View\View|View
-    {
-        $query = Tournament::query();
-        $query->whereDate('date', '>', Carbon::now());
-
-        $sortBy = $request->get('sort_by', 'date');
-        $sortOrder = $request->get('sort_order', 'asc');
-        $query->orderBy($sortBy, $sortOrder);
-
-        $cities = Tournament::whereDate('date', '>', Carbon::now())->pluck('city')->unique()->filter()->sort();
-        $selectedCity = $request->get('city');
-
-        if ($selectedCity) {
-            $query->where('city', $selectedCity);
-        }
-
-        $tournaments = $query->paginate(10);
-
-        return view('tournaments.index', compact('tournaments', 'sortBy', 'sortOrder', 'cities', 'selectedCity'));
+    public function __construct(
+        private readonly GetTournamentsQueryHandler $tournamentsQueryHandler,
+        private readonly GetTournamentDetailQueryHandler $tournamentDetailQueryHandler,
+    ) {
     }
 
-    public function show(Request $request, int $id): Factory|\Illuminate\Contracts\View\View|View
+    /**
+     * Отображение списка турниров.
+     *
+     * @param Request $request
+     * @return Factory|View
+     */
+    public function index(Request $request): Factory|View
     {
-        $tournament = Tournament::findOrFail($id);
+        $query = GetTournamentsQuery::fromRequest($request->query());
+        $response = $this->tournamentsQueryHandler->handle($query);
 
-        $groupsQuery = $tournament->groups();
+        return view('tournaments.index', [
+            'tournaments' => $response->tournaments,
+            'cities' => $response->cities,
+            'selectedCity' => $response->selectedCity,
+            'sortBy' => $query->sortBy,
+            'sortOrder' => $query->sortOrder,
+        ]);
+    }
 
+    /**
+     * Отображение деталей турнира.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return Factory|View
+     * @throws ModelNotFoundException<Tournament>
+     */
+    public function show(Request $request, int $id): Factory|View
+    {
+        $query = new GetTournamentDetailQuery(
+            id: $id,
+            search: $request->input('search', ''),
+            number: $request->integer('number', 0),
+            sortBy: $request->input('sort_by', 'number'),
+            sortOrder: $request->input('sort_order', 'asc'),
+            page: $request->integer('page', 1),
+        );
 
-        $search = $request->input('search', '');
-        if (is_string($search)) {
-            $groupsQuery->where('name', 'like', "%{$search}%");
-        }
+        $response = $this->tournamentDetailQueryHandler->handle($query);
 
-        $number = $request->integer('number', 0);
-        if ($number > 0) {
-            $groupsQuery->where('number', (int)$number);
-        }
-
-        $sortBy = $request->get('sort_by', 'number');
-        $sortOrder = $request->get('sort_order', 'asc');
-        $groupsQuery->orderBy($sortBy, $sortOrder);
-
-        $groups = $groupsQuery->paginate(self::GROUPS_PER_PAGE)->appends($request->query());
-
-        return view('tournaments.show', compact('tournament', 'groups', 'sortBy', 'sortOrder'));
+        return view('tournaments.show', [
+            'tournament' => $response->tournament,
+            'groups' => $response->groups,
+            'sortBy' => $query->sortBy,
+            'sortOrder' => $query->sortOrder,
+        ]);
     }
 }

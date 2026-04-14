@@ -31,13 +31,13 @@
                         @if($tournament->date)
                             <span class="badge badge-primary fs-6">
                                 <i class="fa fa-calendar-alt mr-1"></i>
-                                {{ \Carbon\Carbon::parse($tournament->date)->format('d.m.Y') }}
+                                {{ $tournament->date->format('d.m.Y') }}
                             </span>
-                            @if($tournament->date_end && $tournament->date_end != $tournament->date)
+                            @if($tournament->dateEnd && $tournament->dateEnd != $tournament->date)
                                 <span class="mx-2">—</span>
                                 <span class="badge badge-primary fs-6">
                                     <i class="fa fa-calendar-check mr-1"></i>
-                                    {{ \Carbon\Carbon::parse($tournament->date_end)->format('d.m.Y') }}
+                                    {{ $tournament->dateEnd->format('d.m.Y') }}
                                 </span>
                             @endif
                         @else
@@ -92,16 +92,6 @@
                         <div class="mb-2">
                             <small class="text-muted">GUID:</small>
                             <code>{{ $tournament->guid }}</code>
-                        </div>
-
-                        <div class="mb-2">
-                            <small class="text-muted">Создан:</small>
-                            <div>{{ \Carbon\Carbon::parse($tournament->created_at)->format('d.m.Y H:i') }}</div>
-                        </div>
-
-                        <div>
-                            <small class="text-muted">Обновлён:</small>
-                            <div>{{ \Carbon\Carbon::parse($tournament->updated_at)->format('d.m.Y H:i') }}</div>
                         </div>
                     </div>
                 </div>
