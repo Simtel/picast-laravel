@@ -18,8 +18,6 @@ use Illuminate\Support\Facades\Request;
  */
 final class GetTournamentsQueryHandler
 {
-    private const int DEFAULT_PER_PAGE = 10;
-
     /**
      * @param GetTournamentsQuery $query
      * @return GetTournamentsQueryResponse
@@ -38,7 +36,7 @@ final class GetTournamentsQueryHandler
         $queryBuilder->orderBy($query->sortBy, $query->sortOrder);
 
         // Пагинация
-        $paginatedTournaments = $queryBuilder->paginate(self::DEFAULT_PER_PAGE);
+        $paginatedTournaments = $queryBuilder->paginate($query->perPage);
 
         // Преобразование в DTO
         $tournamentsDto = $paginatedTournaments->map(
