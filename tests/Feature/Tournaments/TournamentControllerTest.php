@@ -98,7 +98,7 @@ final class TournamentControllerTest extends TestCase
     {
         $this->loginAdmin();
 
-        Tournament::factory()->count(15)->create([
+        Tournament::factory()->count(30)->create([
             'date' => Carbon::now()->addWeek(),
         ]);
 
@@ -108,7 +108,7 @@ final class TournamentControllerTest extends TestCase
         $response->assertViewHas('tournaments');
         $tournaments = $response->viewData('tournaments');
         $this->assertInstanceOf(LengthAwarePaginator::class, $tournaments);
-        $this->assertCount(10, $tournaments->items());
+        $this->assertCount(25, $tournaments->items());
         $this->assertTrue($tournaments->hasMorePages());
     }
 
