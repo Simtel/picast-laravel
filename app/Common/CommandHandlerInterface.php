@@ -6,5 +6,5 @@ namespace App\Common;
 
 interface CommandHandlerInterface
 {
-    public function handle(CommandInterface $command): void;
+    public function handle(CommandInterface $command): mixed;
 }
