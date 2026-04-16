@@ -18,7 +18,11 @@ class CommandBus
         $this->handlers[$commandClass] = $handlerClass;
     }
 
-    public function execute(object $command): void
+    /**
+     * @param object $command
+     * @return mixed
+     */
+    public function execute(object $command): mixed
     {
         $commandClass = get_class($command);
 
@@ -26,6 +30,6 @@ class CommandBus
             throw new \RuntimeException("Handler not found for {$commandClass}");
         }
 
-        App::make($this->handlers[$commandClass])->handle($command);
+        return App::make($this->handlers[$commandClass])->handle($command);
     }
 }
