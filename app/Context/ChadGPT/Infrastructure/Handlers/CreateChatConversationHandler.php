@@ -15,9 +15,8 @@ class CreateChatConversationHandler implements CommandHandlerInterface
 {
     /**
      * @param CreateChatConversationCommand $command
-     * @return void
      */
-    public function handle(CommandInterface $command): void
+    public function handle(CommandInterface $command): mixed
     {
         ChadGptConversation::create([
             'user_id' => $command->getUser()->getId(),
@@ -35,6 +34,8 @@ class CreateChatConversationHandler implements CommandHandlerInterface
 
         $wordStat->words_used += $command->getUserWordsCount();
         $wordStat->save();
+
+        return null;
     }
 
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Infrastructure\Controller;
 
+use App\Common\CommandBus;
 use App\Context\Domains\Application\Contract\WhoisUpdater;
+use App\Context\Domains\Domain\Command\ListDomainsQuery;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Domain\Model\Whois;
 use App\Context\Domains\Infrastructure\Request\DomainRequest;
@@ -33,32 +35,20 @@ final class DomainsController extends Controller
      */
     public function index(Request $request): View|Factory|Application
     {
-        $query = Domain::whereUserId(Auth()->id());
+        $query = new ListDomainsQuery(
+            user: Auth::user(),
+            search: $request->filled('search') ? $request->search : null,
+            sortBy: $request->get('sort', 'name'),
+            sortDirection: $request->get('direction', 'asc'),
+            perPage: 15,
+        );
 
-        // Поиск по имени домена
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        // Сортировка
-        $sortBy = $request->get('sort', 'name');
-        $sortDirection = $request->get('direction', 'asc');
-
-        // Разрешенные колонки для сортировки
-        $allowedSortColumns = ['name', 'created_at', 'updated_at', 'expire_at'];
-
-        if (in_array($sortBy, $allowedSortColumns)) {
-            $query->orderBy($sortBy, $sortDirection === 'desc' ? 'desc' : 'asc');
-        } else {
-            $query->orderBy('name', 'asc');
-        }
-
-        $domains = $query->paginate(15)->withQueryString();
+        $domains = app(CommandBus::class)->execute($query);
 
         return view('personal.domains.index', [
             'domains' => $domains,
-            'currentSort' => $sortBy,
-            'currentDirection' => $sortDirection,
+            'currentSort' => $query->getSortBy(),
+            'currentDirection' => $query->getSortDirection(),
             'search' => $request->search
         ]);
     }
