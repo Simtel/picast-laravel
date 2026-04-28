@@ -6,7 +6,6 @@ namespace Tests;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Console\Kernel;
 
 trait CreatesApplication
@@ -24,7 +23,7 @@ trait CreatesApplication
 
         $app->make(Kernel::class)->bootstrap();
 
-        Hash::setRounds(4);
+        app('config')->set('hashing.bcrypt.rounds', 4);
 
         return $app;
     }

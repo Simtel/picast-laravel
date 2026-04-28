@@ -8,8 +8,8 @@ use App\Exceptions\Handler;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Mockery;
 use Tests\TestCase;
 
@@ -38,8 +38,7 @@ class ExceptionHandlerTest extends TestCase
 
         $response = $handler->render($request, new AuthenticationException());
 
-        self::assertInstanceOf(RedirectResponse::class, $response);
-        self::assertEquals(302, $response->getStatusCode());
-        self::assertEquals(route('login'), $response->getTargetUrl());
+        self::assertInstanceOf(Response::class, $response);
+        self::assertEquals(401, $response->getStatusCode());
     }
 }
