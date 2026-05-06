@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Infrastructure\Controller;
 
-use App\Common\CommandBus;
+use App\Context\Common\Infrastructure\CommandBus;
 use App\Context\Domains\Application\Contract\WhoisUpdater;
 use App\Context\Domains\Domain\Command\ListDomainsQuery;
 use App\Context\Domains\Domain\Model\Domain;

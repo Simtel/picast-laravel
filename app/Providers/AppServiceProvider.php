@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Common\CommandBus;
 use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
 use App\Context\ChadGPT\Infrastructure\Handlers\CreateChatConversationHandler;
-use App\Context\Domains\Domain\Command\ListDomainsQuery;
-use App\Context\Domains\Infrastructure\Handlers\ListDomainsQueryHandler;
+use App\Context\Common\Infrastructure\CommandBus;
 use App\Context\Domains\Application\Contract\WhoisService;
 use App\Context\Domains\Application\Contract\WhoisUpdater;
+use App\Context\Domains\Domain\Command\ListDomainsQuery;
+use App\Context\Domains\Infrastructure\Handlers\ListDomainsQueryHandler;
+use GuzzleHttp\Client;
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Iodev\Whois\Factory;
-use GuzzleHttp\Client;
 
 final class AppServiceProvider extends ServiceProvider
 {

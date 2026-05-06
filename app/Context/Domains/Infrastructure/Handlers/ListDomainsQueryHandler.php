@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Infrastructure\Handlers;
 
-use App\Common\CommandHandlerInterface;
-use App\Common\CommandInterface;
+use App\Context\Common\Infrastructure\CommandHandlerInterface;
+use App\Context\Common\Infrastructure\CommandInterface;
 use App\Context\Domains\Domain\Command\ListDomainsQuery;
 use App\Context\Domains\Domain\Model\Domain;
 use Illuminate\Pagination\LengthAwarePaginator;

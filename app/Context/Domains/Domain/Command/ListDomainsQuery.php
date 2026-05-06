@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Domain\Command;
 
-use App\Common\CommandInterface;
+use App\Context\Common\Infrastructure\CommandInterface;
 use App\Context\User\Domain\Model\User;
 
 final class ListDomainsQuery implements CommandInterface

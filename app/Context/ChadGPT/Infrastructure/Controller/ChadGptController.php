@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\ChadGPT\Infrastructure\Controller;
 
-use App\Common\CommandBus;
+use App\Context\Common\Infrastructure\CommandBus;
 use App\Context\ChadGPT\Application\Dto\ChadGptRequest;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use App\Context\ChadGPT\Domain\ChatModels;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Context\ChadGPT\Infrastructure\Handlers;
 
-use App\Common\CommandHandlerInterface;
-use App\Common\CommandInterface;
+use App\Context\Common\Infrastructure\CommandHandlerInterface;
+use App\Context\Common\Infrastructure\CommandInterface;
 use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
 use App\Context\ChadGPT\Domain\Model\ChadGptConversation;
 use App\Context\ChadGPT\Domain\Model\ChadGptConversationWordStat;

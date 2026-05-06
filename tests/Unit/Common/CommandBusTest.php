@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Common;
 
 use App;
-use App\Common\CommandBus;
+use App\Context\Common\Infrastructure\CommandBus;
 use Illuminate\Contracts\Container\Container;
 use Mockery;
 use Tests\TestCase;
@@ -33,8 +33,8 @@ class CommandBusTest extends TestCase
     public function test_register_and_execute_command_successfully(): void
     {
 
-        $command = $this->getMockBuilder(App\Common\CommandInterface::class)->getMock();
-        $handler = $this->getMockBuilder(App\Common\CommandHandlerInterface::class)->getMock();
+        $command = $this->getMockBuilder(App\Context\Common\Infrastructure\CommandInterface::class)->getMock();
+        $handler = $this->getMockBuilder(App\Context\Common\Infrastructure\CommandHandlerInterface::class)->getMock();
         $handler->expects($this->once())->method('handle')->with($command);
 
         App::shouldReceive('make')->with('TestHandler')->andReturn($handler)->once();
@@ -58,13 +58,13 @@ class CommandBusTest extends TestCase
     public function test_execute_calls_correct_handler_for_registered_command(): void
     {
 
-        $command1 = new class () implements App\Common\CommandInterface {};
-        $command2 = new class () implements App\Common\CommandInterface {};
+        $command1 = new class () implements App\Context\Common\Infrastructure\CommandInterface {};
+        $command2 = new class () implements App\Context\Common\Infrastructure\CommandInterface {};
 
-        $handler1 = $this->getMockBuilder(App\Common\CommandHandlerInterface::class)->getMock();
+        $handler1 = $this->getMockBuilder(App\Context\Common\Infrastructure\CommandHandlerInterface::class)->getMock();
         $handler1->expects($this->once())->method('handle')->with($command1);
 
-        $handler2 = $this->getMockBuilder(App\Common\CommandHandlerInterface::class)->getMock();
+        $handler2 = $this->getMockBuilder(App\Context\Common\Infrastructure\CommandHandlerInterface::class)->getMock();
         $handler2->expects($this->once())->method('handle')->with($command2);
 
         App::shouldReceive('make')->with('Handler1')->andReturn($handler1)->once();
