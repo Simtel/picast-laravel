@@ -67,6 +67,10 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $chad_gpt_conversations_count
  * @property-read Collection<int, Images> $images
  * @property-read int|null $images_count
+ * @property-read Collection<int, Permission> $teams
+ * @property-read int|null $teams_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User team($teams, bool $without = false)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutTeam($teams)
  * @mixin Eloquent
  */
 final class User extends Authenticatable
