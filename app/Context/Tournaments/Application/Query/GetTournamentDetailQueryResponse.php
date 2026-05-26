@@ -12,11 +12,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 final readonly class GetTournamentDetailQueryResponse
 {
     /**
-     * @param \App\Context\Tournaments\Application\Dto\TournamentDetailDto $tournament
-     * @param LengthAwarePaginator<int, \App\Context\Tournaments\Application\Dto\TournamentGroupDto> $groups
+     * @param \App\Context\Tournaments\Application\Data\TournamentDetailData $tournament
+     * @param LengthAwarePaginator<int, \App\Context\Tournaments\Application\Data\TournamentGroupData> $groups
      */
     public function __construct(
-        public \App\Context\Tournaments\Application\Dto\TournamentDetailDto $tournament,
+        public \App\Context\Tournaments\Application\Data\TournamentDetailData $tournament,
         public LengthAwarePaginator $groups,
     ) {
     }

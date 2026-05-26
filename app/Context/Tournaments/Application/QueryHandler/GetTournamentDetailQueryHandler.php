@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Context\Tournaments\Application\QueryHandler;
 
-use App\Context\Tournaments\Application\Dto\TournamentDetailDto;
-use App\Context\Tournaments\Application\Dto\TournamentGroupDto;
+use App\Context\Tournaments\Application\Data\TournamentDetailData;
+use App\Context\Tournaments\Application\Data\TournamentGroupData;
 use App\Context\Tournaments\Application\Query\GetTournamentDetailQuery;
 use App\Context\Tournaments\Application\Query\GetTournamentDetailQueryResponse;
 use App\Context\Tournaments\Domain\Model\Tournament;
@@ -49,21 +49,21 @@ final class GetTournamentDetailQueryHandler
         // Пагинация
         $paginatedGroups = $groupsQuery->paginate(self::GROUPS_PER_PAGE);
 
-        // Преобразование групп в DTO
-        $groupsDto = $paginatedGroups->map(
-            static fn (TournamentGroup $group): TournamentGroupDto =>
-            TournamentGroupDto::fromArray([
+        // Преобразование групп в Data объекты
+        $groupsData = $paginatedGroups->map(
+            static fn (TournamentGroup $group): TournamentGroupData =>
+            TournamentGroupData::from([
                 'id' => $group->id,
-                'tournament_id' => $group->tournament_id,
+                'tournamentId' => $group->tournament_id,
                 'number' => $group->number,
                 'name' => $group->name,
                 'registrations' => $group->registrations,
             ])
         );
 
-        // Создание новой LengthAwarePaginator с DTO
+        // Создание новой LengthAwarePaginator с Data объектами
         $groupsPaginator = new LengthAwarePaginator(
-            $groupsDto,
+            $groupsData,
             $paginatedGroups->total(),
             $paginatedGroups->perPage(),
             $paginatedGroups->currentPage(),
@@ -73,20 +73,22 @@ final class GetTournamentDetailQueryHandler
             ]
         );
 
-        // Создание DTO турнира
-        $tournamentDto = TournamentDetailDto::fromArray([
+        // Создание Data объекта турнира
+        $groupsDataArray = $groupsData->all();
+        $tournamentData = TournamentDetailData::from([
             'id' => $tournament->id,
             'title' => $tournament->title,
             'link' => $tournament->link,
             'date' => $tournament->date?->toDateString(),
-            'date_end' => $tournament->date_end?->toDateString(),
+            'dateEnd' => $tournament->date_end?->toDateString(),
             'city' => $tournament->city,
             'organizer' => $tournament->organizer,
             'guid' => $tournament->guid,
-        ], []);
+            'groups' => $groupsDataArray,
+        ]);
 
         return new GetTournamentDetailQueryResponse(
-            tournament: $tournamentDto,
+            tournament: $tournamentData,
             groups: $groupsPaginator
         );
     }

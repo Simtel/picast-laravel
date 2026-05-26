@@ -7,7 +7,7 @@ namespace Tests\Unit\Context\Youtube;
 use Alaouy\Youtube\Facades\Youtube;
 use App\Context\Youtube\Application\Service\GetVideoFormatsService;
 use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;
-use App\Context\Youtube\Domain\Dto\FormatVideoDto;
+use App\Context\Youtube\Domain\Data\FormatVideoData;
 use App\Context\Youtube\Domain\Model\Video;
 use App\Context\Youtube\Domain\Model\VideoFormats;
 use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
@@ -27,13 +27,13 @@ final class RefreshVideoFormatsServiceTest extends TestCase
         $getVideoFormatsService = Mockery::mock(GetVideoFormatsService::class)
             ->expects('getVideoFormats')
             ->andReturn([
-                new FormatVideoDto(
-                    132,
-                    'some note for video',
-                    'mp4',
-                    'libx264',
-                    '1280x720',
-                )
+                FormatVideoData::from([
+                    'formatId' => 132,
+                    'formatNote' => 'some note for video',
+                    'videoExt' => 'mp4',
+                    'vCodec' => 'libx264',
+                    'resolution' => '1280x720',
+                ])
             ])->getMock();
 
         $video = Video::factory()->create(['url' => 'https://www.youtube.com/watch?v=BRCsU4D852M']);

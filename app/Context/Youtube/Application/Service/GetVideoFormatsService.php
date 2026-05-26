@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Youtube\Application\Service;
 
-use App\Context\Youtube\Domain\Dto\FormatVideoDto;
+use App\Context\Youtube\Domain\Data\FormatVideoData;
 use App\Context\Youtube\Domain\Model\Video;
 use Exception;
 use Illuminate\Support\Facades\Process;
@@ -14,7 +14,7 @@ use RuntimeException;
 class GetVideoFormatsService
 {
     /**
-     * @return FormatVideoDto[]
+     * @return FormatVideoData[]
      * @throws Exception
      */
     public function getVideoFormats(Video $video): array
@@ -61,23 +61,23 @@ class GetVideoFormatsService
 
     /**
      * @param array<int, array<string, mixed>> $formats
-     * @return FormatVideoDto[]
+     * @return FormatVideoData[]
      */
     private function extractFormats(array $formats): array
     {
-        $dto = [];
+        $formatsData = [];
         foreach ($formats as $format) {
             if (isset($format['height']) && $format['height'] >= 720) {
-                $dto[] = new FormatVideoDto(
-                    intval($format['format_id']),
-                    $format['format_note'] ?? '',
-                    $format['video_ext'] ?? '',
-                    $format['vcodec'] ?? '',
-                    $format['resolution'] ?? ''
-                );
+                $formatsData[] = FormatVideoData::from([
+                    'formatId' => intval($format['format_id']),
+                    'formatNote' => $format['format_note'] ?? '',
+                    'videoExt' => $format['video_ext'] ?? '',
+                    'vCodec' => $format['vcodec'] ?? '',
+                    'resolution' => $format['resolution'] ?? '',
+                ]);
             }
         }
 
-        return $dto;
+        return $formatsData;
     }
 }

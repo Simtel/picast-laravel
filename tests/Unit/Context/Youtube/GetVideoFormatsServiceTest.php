@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Context\Youtube;
 
 use App\Context\Youtube\Application\Service\GetVideoFormatsService;
-use App\Context\Youtube\Domain\Dto\FormatVideoDto;
+use App\Context\Youtube\Domain\Data\FormatVideoData;
 use App\Context\Youtube\Domain\Model\Video;
 use Exception;
 use Illuminate\Support\Facades\Process;
@@ -31,13 +31,13 @@ final class GetVideoFormatsServiceTest extends TestCase
 
 
         $expected = [
-            new FormatVideoDto(
-                12,
-                'some note for video',
-                'mp4',
-                'libx264',
-                '1280x720',
-            )
+            FormatVideoData::from([
+                'formatId' => 12,
+                'formatNote' => 'some note for video',
+                'videoExt' => 'mp4',
+                'vCodec' => 'libx264',
+                'resolution' => '1280x720',
+            ])
         ];
         self::assertEquals($expected, $service->getVideoFormats($video));
     }

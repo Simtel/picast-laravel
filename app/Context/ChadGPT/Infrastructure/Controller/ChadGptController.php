@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Context\ChadGPT\Infrastructure\Controller;
 
 use App\Context\Common\Infrastructure\CommandBus;
-use App\Context\ChadGPT\Application\Dto\ChadGptRequest;
+use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use App\Context\ChadGPT\Domain\ChatModels;
 use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
@@ -45,12 +45,12 @@ final class ChadGptController extends Controller
         Log::info('ChadGPT: sending message', ['request' => $request->all()]);
 
         try {
-            $chadGptRequest = new ChadGptRequest(
-                $request->input('model', 'gpt-4o-mini'),
-                $request->string('message')->value(),
-            );
+            $chadGptRequestData = ChadGptRequestData::from([
+                'model' => $request->input('model', 'gpt-4o-mini'),
+                'userMessage' => $request->string('message')->value(),
+            ]);
 
-            $response = $chadGptRequestService->request($chadGptRequest);
+            $response = $chadGptRequestService->request($chadGptRequestData);
 
             if (!$response->successful()) {
                 Log::error('ChadGPT: API connection failed', [
@@ -80,8 +80,8 @@ final class ChadGptController extends Controller
             try {
                 $command = new CreateChatConversationCommand(
                     user: Auth::user(),
-                    model: $chadGptRequest->getModel(),
-                    userMessage: $chadGptRequest->getUserMessage(),
+                    model: $chadGptRequestData->model,
+                    userMessage: $chadGptRequestData->userMessage,
                     response: $data['response'],
                     userWordsCount: $userWordsCount,
                 );

@@ -267,7 +267,7 @@ final class TournamentControllerTest extends TestCase
         $response->assertStatus(200);
         $groups = $response->viewData('groups');
         $this->assertCount(1, $groups);
-        $this->assertEquals('Adults Standard', $groups->first()->getName());
+        $this->assertEquals('Adults Standard', $groups->first()->name);
     }
 
     public function test_show_groups_can_be_filtered_by_number(): void
@@ -296,7 +296,7 @@ final class TournamentControllerTest extends TestCase
         $response->assertStatus(200);
         $groups = $response->viewData('groups');
         $this->assertCount(1, $groups);
-        $this->assertEquals(1, $groups->first()->getNumber());
+        $this->assertEquals(1, $groups->first()->number);
     }
 
     public function test_show_groups_can_be_sorted(): void
@@ -327,7 +327,7 @@ final class TournamentControllerTest extends TestCase
         $response->assertViewHas('sortBy', 'name');
         $response->assertViewHas('sortOrder', 'asc');
         $groups = $response->viewData('groups');
-        $this->assertEquals('Group A', $groups->first()->getName());
+        $this->assertEquals('Group A', $groups->first()->name);
     }
 
     public function test_show_groups_pagination_works(): void

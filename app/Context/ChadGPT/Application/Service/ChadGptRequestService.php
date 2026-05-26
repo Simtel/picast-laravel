@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\ChadGPT\Application\Service;
 
-use App\Context\ChadGPT\Application\Dto\ChadGptRequest;
+use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -17,18 +17,18 @@ class ChadGptRequestService
 
 
     /**
-     * @param ChadGptRequest $chadGptRequest
+     * @param ChadGptRequestData $chadGptRequestData
      * @return Response
      * @throws ConnectionException
      */
-    public function request(ChadGptRequest $chadGptRequest): Response
+    public function request(ChadGptRequestData $chadGptRequestData): Response
     {
         $requestData = [
-            'message' => $chadGptRequest->getUserMessage(),
+            'message' => $chadGptRequestData->userMessage,
             'api_key' => $this->getApiKEy()
         ];
 
-        $endpoint = config('chadgpt.url') . $chadGptRequest->getModel();
+        $endpoint = config('chadgpt.url') . $chadGptRequestData->model;
 
         /** @var Response $response */
         $response = Http::timeout(self::TIMEOUT)->post($endpoint, $requestData);

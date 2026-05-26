@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Tournaments\Application\QueryHandler;
 
-use App\Context\Tournaments\Application\Dto\TournamentListDto;
+use App\Context\Tournaments\Application\Data\TournamentListData;
 use App\Context\Tournaments\Application\Query\GetTournamentsQuery;
 use App\Context\Tournaments\Application\Query\GetTournamentsQueryResponse;
 use App\Context\Tournaments\Domain\Model\Tournament;
@@ -38,25 +38,25 @@ final class GetTournamentsQueryHandler
         // Пагинация
         $paginatedTournaments = $queryBuilder->paginate($query->perPage);
 
-        // Преобразование в DTO
-        $tournamentsDto = $paginatedTournaments->map(
-            static fn (Tournament $tournament): TournamentListDto =>
-            TournamentListDto::fromArray([
+        // Преобразование в Data объекты
+        $tournamentsData = $paginatedTournaments->map(
+            static fn (Tournament $tournament): TournamentListData =>
+            TournamentListData::from([
                 'id' => $tournament->id,
                 'title' => $tournament->title,
                 'link' => $tournament->link,
                 'date' => $tournament->date?->toDateString(),
-                'date_end' => $tournament->date_end?->toDateString(),
+                'dateEnd' => $tournament->date_end?->toDateString(),
                 'city' => $tournament->city,
                 'organizer' => $tournament->organizer,
                 'guid' => $tournament->guid,
-                'groups_count' => $tournament->groups()->count(),
+                'groupsCount' => $tournament->groups()->count(),
             ])
         );
 
-        // Создание новой LengthAwarePaginator с DTO
+        // Создание новой LengthAwarePaginator с Data объектами
         $tournamentsPaginator = new LengthAwarePaginator(
-            $tournamentsDto,
+            $tournamentsData,
             $paginatedTournaments->total(),
             $paginatedTournaments->perPage(),
             $paginatedTournaments->currentPage(),

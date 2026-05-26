@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Context\ChadGPT;
 
-use App\Context\ChadGPT\Application\Dto\ChadGptRequest;
+use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use Config;
 use Illuminate\Http\Client\ConnectionException;
@@ -25,7 +25,6 @@ class ChadGptRequestServiceTest extends TestCase
 
     public function testRequestSuccessfully(): void
     {
-
         $message = 'Test message';
         $model = 'gpt-4';
         $apiKey = 'test-api-key';
@@ -34,20 +33,19 @@ class ChadGptRequestServiceTest extends TestCase
         Config::set('chadgpt.api_key', $apiKey);
         Config::set('chadgpt.url', $baseUrl);
 
-        $chadGptRequest = $this->createMock(ChadGptRequest::class);
-        $chadGptRequest->method('getUserMessage')->willReturn($message);
-        $chadGptRequest->method('getModel')->willReturn($model);
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => $model,
+            'userMessage' => $message,
+        ]);
 
         Http::fake([
             $baseUrl . $model => Http::response(['result' => 'success'], 200)
         ]);
 
-        $response = $this->service->request($chadGptRequest);
-
+        $response = $this->service->request($chadGptRequestData);
 
         $this->assertEquals(200, $response->status());
         $this->assertEquals(['result' => 'success'], $response->json());
-
 
         Http::assertSent(static function ($request) use ($baseUrl, $model, $message, $apiKey) {
             return $request->url() === $baseUrl . $model
@@ -60,7 +58,6 @@ class ChadGptRequestServiceTest extends TestCase
 
     public function testRequestWithTimeout(): void
     {
-
         $apiKey = 'test-api-key';
         $baseUrl = 'https://api.chadgpt.com/';
         $model = 'gpt-4';
@@ -68,17 +65,16 @@ class ChadGptRequestServiceTest extends TestCase
         Config::set('chadgpt.api_key', $apiKey);
         Config::set('chadgpt.url', $baseUrl);
 
-        $chadGptRequest = $this->createMock(ChadGptRequest::class);
-        $chadGptRequest->method('getUserMessage')->willReturn('Test');
-        $chadGptRequest->method('getModel')->willReturn($model);
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => $model,
+            'userMessage' => 'Test',
+        ]);
 
         Http::fake([
             $baseUrl . $model => Http::response(['result' => 'success'], 200)
         ]);
 
-
-        $this->service->request($chadGptRequest);
-
+        $this->service->request($chadGptRequestData);
 
         Http::assertSent(static function ($request) {
             return true; // Проверяем, что запрос отправлен с таймаутом
@@ -87,7 +83,6 @@ class ChadGptRequestServiceTest extends TestCase
 
     public function testRequestThrowsConnectionException(): void
     {
-
         $apiKey = 'test-api-key';
         $baseUrl = 'https://api.chadgpt.com/';
         $model = 'gpt-4';
@@ -95,9 +90,10 @@ class ChadGptRequestServiceTest extends TestCase
         Config::set('chadgpt.api_key', $apiKey);
         Config::set('chadgpt.url', $baseUrl);
 
-        $chadGptRequest = $this->createMock(ChadGptRequest::class);
-        $chadGptRequest->method('getUserMessage')->willReturn('Test');
-        $chadGptRequest->method('getModel')->willReturn($model);
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => $model,
+            'userMessage' => 'Test',
+        ]);
 
         Http::fake([
             $baseUrl . $model => static function () {
@@ -105,83 +101,74 @@ class ChadGptRequestServiceTest extends TestCase
             }
         ]);
 
-
         $this->expectException(ConnectionException::class);
         $this->expectExceptionMessage('Connection failed');
 
-
-        $this->service->request($chadGptRequest);
+        $this->service->request($chadGptRequestData);
     }
 
     public function testGetApiKeyThrowsExceptionWhenNotConfigured(): void
     {
-
         Config::set('chadgpt.api_key', null);
         Config::set('chadgpt.url', 'https://api.chadgpt.com/');
 
-        $chadGptRequest = $this->createMock(ChadGptRequest::class);
-        $chadGptRequest->method('getUserMessage')->willReturn('Test');
-        $chadGptRequest->method('getModel')->willReturn('gpt-4');
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => 'gpt-4',
+            'userMessage' => 'Test',
+        ]);
 
         Log::shouldReceive('error')
             ->once()
             ->with('ChadGPT API key not configured');
 
-
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('ChadGPT API key not set');
 
-
-        $this->service->request($chadGptRequest);
+        $this->service->request($chadGptRequestData);
     }
 
     public function testGetApiKeyThrowsExceptionWhenNotString(): void
     {
-
         Config::set('chadgpt.api_key', 12345); // Не строка
         Config::set('chadgpt.url', 'https://api.chadgpt.com/');
 
-        $chadGptRequest = $this->createMock(ChadGptRequest::class);
-        $chadGptRequest->method('getUserMessage')->willReturn('Test');
-        $chadGptRequest->method('getModel')->willReturn('gpt-4');
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => 'gpt-4',
+            'userMessage' => 'Test',
+        ]);
 
         Log::shouldReceive('error')
             ->once()
             ->with('API ключ ChadGPT должен быть строкой');
 
-
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('ChadGPT API key must be a string');
 
-
-        $this->service->request($chadGptRequest);
+        $this->service->request($chadGptRequestData);
     }
 
     public function testGetApiKeyThrowsExceptionWhenEmptyString(): void
     {
-
         Config::set('chadgpt.api_key', '');
         Config::set('chadgpt.url', 'https://api.chadgpt.com/');
 
-        $chadGptRequest = $this->createMock(ChadGptRequest::class);
-        $chadGptRequest->method('getUserMessage')->willReturn('Test');
-        $chadGptRequest->method('getModel')->willReturn('gpt-4');
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => 'gpt-4',
+            'userMessage' => 'Test',
+        ]);
 
         Log::shouldReceive('error')
             ->once()
             ->with('ChadGPT API key not configured');
 
-
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('ChadGPT API key not set');
 
-
-        $this->service->request($chadGptRequest);
+        $this->service->request($chadGptRequestData);
     }
 
     public function testRequestBuildsCorrectEndpoint(): void
     {
-
         $baseUrl = 'https://api.chadgpt.com/v1/';
         $model = 'gpt-3.5-turbo';
         $expectedEndpoint = $baseUrl . $model;
@@ -189,17 +176,16 @@ class ChadGptRequestServiceTest extends TestCase
         Config::set('chadgpt.api_key', 'test-key');
         Config::set('chadgpt.url', $baseUrl);
 
-        $chadGptRequest = $this->createMock(ChadGptRequest::class);
-        $chadGptRequest->method('getUserMessage')->willReturn('Hello');
-        $chadGptRequest->method('getModel')->willReturn($model);
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => $model,
+            'userMessage' => 'Hello',
+        ]);
 
         Http::fake([
             $expectedEndpoint => Http::response(['data' => 'test'], 200)
         ]);
 
-
-        $this->service->request($chadGptRequest);
-
+        $this->service->request($chadGptRequestData);
 
         Http::assertSent(static function ($request) use ($expectedEndpoint) {
             return $request->url() === $expectedEndpoint;
@@ -208,22 +194,20 @@ class ChadGptRequestServiceTest extends TestCase
 
     public function testRequestSendsCorrectPayload(): void
     {
-
         $message = 'What is the weather?';
         $apiKey = 'secret-api-key-123';
 
         Config::set('chadgpt.api_key', $apiKey);
         Config::set('chadgpt.url', 'https://api.chadgpt.com/');
 
-        $chadGptRequest = $this->createMock(ChadGptRequest::class);
-        $chadGptRequest->method('getUserMessage')->willReturn($message);
-        $chadGptRequest->method('getModel')->willReturn('gpt-4');
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => 'gpt-4',
+            'userMessage' => $message,
+        ]);
 
         Http::fake();
 
-
-        $this->service->request($chadGptRequest);
-
+        $this->service->request($chadGptRequestData);
 
         Http::assertSent(static function ($request) use ($message, $apiKey) {
             $data = $request->data();

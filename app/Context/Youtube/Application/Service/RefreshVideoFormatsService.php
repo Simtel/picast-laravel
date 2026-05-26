@@ -35,15 +35,15 @@ class RefreshVideoFormatsService
         $video->status_id = $this->statusRepository->findByCode('new')->id;
         $video->save();
 
-        foreach ($formats as $formatDto) {
+        foreach ($formats as $formatData) {
             $format = new VideoFormats();
             $format->video_id = $video->id;
 
-            $format->format_id = $formatDto->getFormatId();
-            $format->format_note = $formatDto->getFormatNote();
-            $format->format_ext = $formatDto->getVideoExt();
-            $format->vcodec = $formatDto->getVCodec();
-            $format->resolution = $formatDto->getResolution();
+            $format->format_id = $formatData->formatId;
+            $format->format_note = $formatData->formatNote;
+            $format->format_ext = $formatData->videoExt;
+            $format->vcodec = $formatData->vCodec;
+            $format->resolution = $formatData->resolution;
             $format->save();
         }
     }

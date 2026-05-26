@@ -12,7 +12,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 final readonly class GetTournamentsQueryResponse
 {
     /**
-     * @param LengthAwarePaginator<int, \App\Context\Tournaments\Application\Dto\TournamentListDto> $tournaments
+     * @param LengthAwarePaginator<int, \App\Context\Tournaments\Application\Data\TournamentListData> $tournaments
      * @param string[] $cities Список уникальных городов
      * @param string|null $selectedCity Выбранный город
      */
