@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use OpenApi\Attributes as OA;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,43 +13,35 @@ use OpenApi\Attributes as OA;
 |
 */
 
-/**
- * @OA\Info(
- *     title="Picast Laravel API",
- *     version="1.0.0",
- *     description="API для управления доменами и YouTube видео",
- *     contact={
- *         "name": "API Support",
- *         "email": "support@picast.com"
- *     }
- * )
- * @OA\Server(
- *     url="http://localhost",
- *     description="Локальный сервер разработки"
- * )
- * @OA\SecurityScheme(
- *     securityScheme="sanctum",
- *     type="apiKey",
- *     in="header",
- *     name="Authorization",
- *     description="Bearer token для аутентификации"
- * )
- */
-
-
-use App\Context\Domains\Infrastructure\Controller\Api\DomainsController;
-use App\Context\Youtube\Infrastructure\Controller\ApiVideoController;
+use App\Context\ChadGPT\Infrastructure\Http\Controllers\Api\ChatsController;
+use App\Context\Domains\Infrastructure\Http\Controllers\Api\DomainsController;
+use App\Context\Tournaments\Infrastructure\Http\Controllers\Api\TournamentsController;
+use App\Context\Youtube\Infrastructure\Http\Controllers\Api\VideoController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::fallback(static function () {
     return response()->json(['message' => 'Page Not Found'], 404);
 });
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], static function () {
+    // Текущий пользователь
     Route::get('/user/current', static function () {
         return Auth::user();
     })->name('api.user.current');
 
-    Route::resource('domains', DomainsController::class)->names('api.domains');
+    // Домены
+    Route::apiResource('domains', DomainsController::class)->names('api.domains');
 
-    Route::resource('video', ApiVideoController::class)->names('api.videos');
+    // YouTube видео
+    Route::apiResource('videos', VideoController::class)->names('api.videos');
+
+    // Турниры (только чтение)
+    Route::get('tournaments', [TournamentsController::class, 'index'])->name('api.tournaments.index');
+    Route::get('tournaments/{id}', [TournamentsController::class, 'show'])->name('api.tournaments.show');
+
+    // ChadGPT чаты
+    Route::apiResource('chats', ChatsController::class)->only(['index']);
+    Route::post('/chats', [ChatsController::class, 'sendMessage'])->name('api.chats.send');
+    Route::delete('/chats', [ChatsController::class, 'clearHistory'])->name('api.chats.clear');
 });

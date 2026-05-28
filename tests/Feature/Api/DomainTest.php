@@ -84,30 +84,6 @@ final class DomainTest extends TestCase
         );
     }
 
-    public function test_domain_create_form(): void
-    {
-        $user = $this->getAdminUser();
-
-        $response = $this->get(route('api.domains.create', ), ['Authorization' => 'Bearer ' . $user->api_token]);
-        $response->assertStatus(403);
-        $response->assertJson(static fn (AssertableJson $json) => $json->where('message', 'Not action.'));
-    }
-
-    public function test_domain_edit_form(): void
-    {
-        $user = $this->getAdminUser();
-
-        Event::fake();
-        $domain = Domain::factory()->create(['user_id' => $user->getId()]);
-
-        $response = $this->get(
-            route('api.domains.edit', ['domain' => $domain]),
-            ['Authorization' => 'Bearer ' . $user->api_token]
-        );
-        $response->assertStatus(403);
-        $response->assertJson(static fn (AssertableJson $json) => $json->where('message', 'Not action.'));
-    }
-
     public function test_domain_store(): void
     {
         $user = $this->getAdminUser();
