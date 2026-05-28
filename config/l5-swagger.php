@@ -47,6 +47,7 @@ return [
                  */
                 'annotations' => [
                     base_path('app'),
+                    base_path('app/Console/swagger/openapi.php'),
                 ],
             ],
         ],
