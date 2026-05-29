@@ -1,32 +1,127 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Picast Laravel API",
-        "description": "API для управления доменами и YouTube видео",
+        "title": "Picast API",
+        "description": "Picast Laravel API Documentation",
         "contact": {
-            "name": "API Support",
-            "email": "support@picast.com"
+            "email": "support@picast.local"
         },
         "version": "1.0.0"
     },
     "servers": [
         {
-            "url": "http://localhost",
-            "description": "Локальный сервер разработки"
+            "url": "/",
+            "description": "Local API Server"
         }
     ],
     "paths": {
+        "/api/v1/chats": {
+            "get": {
+                "tags": [
+                    "ChadGPT"
+                ],
+                "summary": "Получить историю чатов пользователя",
+                "operationId": "50ebea88a7127ab895dae733e99705ba",
+                "responses": {
+                    "200": {
+                        "description": "Список чатов пользователя",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ChatConversation"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "ChadGPT"
+                ],
+                "summary": "Отправить сообщение в ChadGPT",
+                "operationId": "b1c39c0cb3d03ac1990771c0889ad88e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "message"
+                                ],
+                                "properties": {
+                                    "message": {
+                                        "description": "Текст сообщения",
+                                        "type": "string",
+                                        "example": "Привет!"
+                                    },
+                                    "model": {
+                                        "description": "Модель ИИ",
+                                        "type": "string",
+                                        "example": "gpt-4o-mini"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ответ от ChadGPT"
+                    },
+                    "422": {
+                        "description": "Ошибка валидации"
+                    },
+                    "500": {
+                        "description": "Ошибка сервера"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "ChadGPT"
+                ],
+                "summary": "Очистить историю чатов пользователя",
+                "operationId": "d3359fa69bfb18a55d4e72f1392bb1e3",
+                "responses": {
+                    "200": {
+                        "description": "История успешно очищена"
+                    },
+                    "500": {
+                        "description": "Ошибка сервера"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/domains": {
             "get": {
                 "tags": [
                     "Domains"
                 ],
-                "summary": "Get all user domains",
-                "description": "Show all user domains\n\nShow all user domains without whois history",
-                "operationId": "16df26494f7664a293dc215ab81741ce",
+                "summary": "Получить все домены пользователя",
+                "operationId": "246b06b056f83af5919a5b0e97076fde",
                 "responses": {
                     "200": {
-                        "description": "List of user domains",
+                        "description": "Список доменов пользователя",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -49,9 +144,8 @@
                 "tags": [
                     "Domains"
                 ],
-                "summary": "Create new domain",
-                "description": "Store new domain\n\nStore new domain for authenticated user",
-                "operationId": "00a8b9af9754e614f32f5cc29a4944b6",
+                "summary": "Создать новый домен",
+                "operationId": "2ed1632c8edf6481a9df2ef0bbfab933",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -62,7 +156,7 @@
                                 ],
                                 "properties": {
                                     "name": {
-                                        "description": "Domain name",
+                                        "description": "Имя домена",
                                         "type": "string",
                                         "example": "example.com"
                                     }
@@ -74,10 +168,10 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Domain created successfully"
+                        "description": "Домен успешно создан"
                     },
                     "422": {
-                        "description": "Validation error"
+                        "description": "Ошибка валидации"
                     }
                 },
                 "security": [
@@ -92,14 +186,13 @@
                 "tags": [
                     "Domains"
                 ],
-                "summary": "Get domain details",
-                "description": "Show once domain info\n\nShow once domain info with whois",
-                "operationId": "a6b80d711f984d4ba80bbeef0dba488b",
+                "summary": "Получить детали домена с WHOIS",
+                "operationId": "2ca40129fef0aa010ab7ada919ed880a",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Domain ID",
+                        "description": "ID домена",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -108,7 +201,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Domain details with whois",
+                        "description": "Информация о домене с историей WHOIS",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -118,7 +211,7 @@
                         }
                     },
                     "404": {
-                        "description": "Domain not found"
+                        "description": "Домен не найден"
                     }
                 },
                 "security": [
@@ -131,14 +224,13 @@
                 "tags": [
                     "Domains"
                 ],
-                "summary": "Update domain WHOIS info",
-                "description": "Update domain WHOIS info\n\nUpdate domain WHOIS information and expiration date",
-                "operationId": "d14ff0419c757eeeba3b8b6b7bb202cc",
+                "summary": "Обновить WHOIS информацию домена",
+                "operationId": "cbe6b7847ea7426fbb5deb8246135601",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Domain ID",
+                        "description": "ID домена",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -147,10 +239,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "WHOIS info updated successfully"
+                        "description": "WHOIS информация успешно обновлена"
                     },
                     "404": {
-                        "description": "Domain not found"
+                        "description": "Домен не найден"
                     }
                 },
                 "security": [
@@ -163,14 +255,13 @@
                 "tags": [
                     "Domains"
                 ],
-                "summary": "Delete domain",
-                "description": "Delete domain\n\nDelete domain and associated WHOIS history",
-                "operationId": "8b38cc69f63d6d243271870316f67a39",
+                "summary": "Удалить домен",
+                "operationId": "27103e40379f98e3c0fa4b3896de3d08",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Domain ID",
+                        "description": "ID домена",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -179,10 +270,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Domain deleted successfully"
+                        "description": "Домен успешно удален"
                     },
                     "404": {
-                        "description": "Domain not found"
+                        "description": "Домен не найден"
                     }
                 },
                 "security": [
@@ -192,28 +283,108 @@
                 ]
             }
         },
-        "/api/v1/domains/{id}/edit": {
-            "put": {
+        "/api/v1/tournaments": {
+            "get": {
                 "tags": [
-                    "Domains"
+                    "Tournaments"
                 ],
-                "summary": "Edit domain (not implemented)",
-                "description": "Edit domain (not implemented)",
-                "operationId": "141e90e0ec36375951b5e2f3fffe38d5",
+                "summary": "Получить список турниров",
+                "operationId": "0c47609789b96539d78b8ac16f6a04f5",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "Фильтр по городу",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Сортировка",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Направление сортировки",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список турниров",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Tournament"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/tournaments/{id}": {
+            "get": {
+                "tags": [
+                    "Tournaments"
+                ],
+                "summary": "Получить детали турнира",
+                "operationId": "97b39f83f57812123f209544e9e63c42",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Domain ID",
+                        "description": "ID турнира",
                         "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Поиск по группам",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "number",
+                        "in": "query",
+                        "description": "Номер группы",
                         "schema": {
                             "type": "integer"
                         }
                     }
                 ],
                 "responses": {
-                    "403": {
-                        "description": "Not implemented"
+                    "200": {
+                        "description": "Информация о турнире с группами",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TournamentDetail"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Турнир не найден"
                     }
                 },
                 "security": [
@@ -223,17 +394,16 @@
                 ]
             }
         },
-        "/api/v1/video": {
+        "/api/v1/videos": {
             "get": {
                 "tags": [
                     "Videos"
                 ],
-                "summary": "Get all user videos",
-                "description": "Show all user videos",
-                "operationId": "3617199c60e8e5941ceaae14849b7972",
+                "summary": "Получить все видео пользователя",
+                "operationId": "6141f695a9e7cb980059e7ba3801b4f9",
                 "responses": {
                     "200": {
-                        "description": "List of user videos",
+                        "description": "Список видео пользователя",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -256,12 +426,34 @@
                 "tags": [
                     "Videos"
                 ],
-                "summary": "Create new video (not implemented)",
-                "description": "Store new video (not implemented)",
-                "operationId": "ce41898c1552e509cf7889dfdfef37f1",
+                "summary": "Добавить видео в очередь на скачивание",
+                "operationId": "5791c1a8e9e23ee230c819fe473da734",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "url"
+                                ],
+                                "properties": {
+                                    "url": {
+                                        "description": "URL YouTube видео",
+                                        "type": "string",
+                                        "example": "https://youtube.com/watch?v=VIDEO_ID"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "403": {
-                        "description": "Not implemented"
+                    "200": {
+                        "description": "Видео добавлено в очередь"
+                    },
+                    "422": {
+                        "description": "Ошибка валидации"
                     }
                 },
                 "security": [
@@ -271,19 +463,18 @@
                 ]
             }
         },
-        "/api/v1/video/{id}": {
+        "/api/v1/videos/{id}": {
             "get": {
                 "tags": [
                     "Videos"
                 ],
-                "summary": "Get video details",
-                "description": "Show video details",
-                "operationId": "51b10b984a21907cbb798171b0820583",
+                "summary": "Получить детали видео",
+                "operationId": "2272189305466cacacad580fc9240ae1",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Video ID",
+                        "description": "ID видео",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -292,7 +483,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Video details",
+                        "description": "Информация о видео",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -302,7 +493,7 @@
                         }
                     },
                     "404": {
-                        "description": "Video not found"
+                        "description": "Видео не найдено"
                     }
                 },
                 "security": [
@@ -315,14 +506,13 @@
                 "tags": [
                     "Videos"
                 ],
-                "summary": "Update video (not implemented)",
-                "description": "Update video (not implemented)",
-                "operationId": "2a106bb3cd7d4e60cc0eb9d9752c22aa",
+                "summary": "Обновить информацию о видео",
+                "operationId": "ee575bcb50c25bdd4b6853edd84c938f",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Video ID",
+                        "description": "ID видео",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -330,8 +520,11 @@
                     }
                 ],
                 "responses": {
-                    "403": {
-                        "description": "Not implemented"
+                    "200": {
+                        "description": "Видео обновлено"
+                    },
+                    "404": {
+                        "description": "Видео не найдено"
                     }
                 },
                 "security": [
@@ -344,14 +537,13 @@
                 "tags": [
                     "Videos"
                 ],
-                "summary": "Delete video (not implemented)",
-                "description": "Delete video (not implemented)",
-                "operationId": "d3a7ba5c150c501c0e484982db126ccd",
+                "summary": "Удалить видео",
+                "operationId": "6f433ab2f3461cb7a62c60dfbfca877c",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Video ID",
+                        "description": "ID видео",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -359,8 +551,64 @@
                     }
                 ],
                 "responses": {
-                    "403": {
-                        "description": "Not implemented"
+                    "200": {
+                        "description": "Видео удалено"
+                    },
+                    "404": {
+                        "description": "Видео не найдено"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/videos/{id}/queue-download": {
+            "post": {
+                "tags": [
+                    "Videos"
+                ],
+                "summary": "Добавить видео в очередь скачивания",
+                "operationId": "c758b81bdbe5c4669996be031d3fd82a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID видео",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "format_id"
+                                ],
+                                "properties": {
+                                    "format_id": {
+                                        "description": "ID формата видео",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Добавлено в очередь"
+                    },
+                    "422": {
+                        "description": "Ошибка валидации"
                     }
                 },
                 "security": [
@@ -373,6 +621,45 @@
     },
     "components": {
         "schemas": {
+            "ChatConversation": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "model": {
+                        "type": "string",
+                        "example": "gpt-4o-mini"
+                    },
+                    "user_message": {
+                        "type": "string",
+                        "example": "Привет!"
+                    },
+                    "ai_response": {
+                        "type": "string",
+                        "example": "Привет! Чем могу помочь?"
+                    },
+                    "used_words_count": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-10-11T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-10-11T10:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
             "DomainResource": {
                 "description": "Domain resource with WHOIS info",
                 "properties": {
@@ -395,6 +682,102 @@
                         "type": "array",
                         "items": {
                             "type": "string"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Tournament": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Турнир по шахматам"
+                    },
+                    "link": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://example.com/tournament/1"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-06-01"
+                    },
+                    "date_end": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-06-07"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Москва"
+                    },
+                    "organizer": {
+                        "type": "string",
+                        "example": "Шахматный клуб"
+                    },
+                    "guid": {
+                        "type": "string",
+                        "example": "abc123"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-05-01T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-05-01T10:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "TournamentDetail": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Турнир по шахматам"
+                    },
+                    "link": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://example.com/tournament/1"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-06-01"
+                    },
+                    "date_end": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-06-07"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Москва"
+                    },
+                    "organizer": {
+                        "type": "string",
+                        "example": "Шахматный клуб"
+                    },
+                    "guid": {
+                        "type": "string",
+                        "example": "abc123"
+                    },
+                    "groups": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
                         }
                     }
                 },
@@ -452,17 +835,17 @@
                 },
                 "type": "object"
             }
-        },
-        "securitySchemes": {
-            "sanctum": {
-                "type": "apiKey",
-                "description": "Bearer token для аутентификации",
-                "name": "Authorization",
-                "in": "header"
-            }
         }
     },
     "tags": [
+        {
+            "name": "ChadGPT",
+            "description": "API для взаимодействия с чат-ботом ChadGPT"
+        },
+        {
+            "name": "Tournaments",
+            "description": "API для управления турнирами"
+        },
         {
             "name": "Domains",
             "description": "Domains"

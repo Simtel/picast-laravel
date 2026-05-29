@@ -10,20 +10,16 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use OpenApi\Attributes as OA;
 
-/**
- * @OA\Info(
- *      version="1.0.0",
- *      title="Picast API",
- *      description="Picast Laravel API Documentation",
- *      @OA\Contact(
- *          email="support@picast.local"
- *      )
- * )
- * @OA\Server(
- *      url="/",
- *      description="Local API Server"
- * )
- */
+#[OA\Info(
+    version: "1.0.0",
+    title: "Picast API",
+    description: "Picast Laravel API Documentation",
+    contact: new OA\Contact(email: "support@picast.local")
+)]
+#[OA\Server(
+    url: "/",
+    description: "Local API Server"
+)]
 class Controller extends BaseController
 {
     use AuthorizesRequests;

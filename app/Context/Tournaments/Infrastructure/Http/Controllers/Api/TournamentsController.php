@@ -14,12 +14,41 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use OpenApi\Attributes as OA;
 
-/**
- * @OA\Tag(
- *     name="Tournaments",
- *     description="API для управления турнирами"
- * )
- */
+#[OA\Tag(
+    name: "Tournaments",
+    description: "API для управления турнирами"
+)]
+#[OA\Schema(
+    schema: "Tournament",
+    type: "object",
+    properties: [
+        new OA\Property(property: "id", type: "integer", example: 1),
+        new OA\Property(property: "title", type: "string", example: "Турнир по шахматам"),
+        new OA\Property(property: "link", type: "string", format: "uri", example: "https://example.com/tournament/1"),
+        new OA\Property(property: "date", type: "string", format: "date", example: "2026-06-01"),
+        new OA\Property(property: "date_end", type: "string", format: "date", example: "2026-06-07"),
+        new OA\Property(property: "city", type: "string", example: "Москва"),
+        new OA\Property(property: "organizer", type: "string", example: "Шахматный клуб"),
+        new OA\Property(property: "guid", type: "string", example: "abc123"),
+        new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2026-05-01T10:00:00Z"),
+        new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2026-05-01T10:00:00Z"),
+    ]
+)]
+#[OA\Schema(
+    schema: "TournamentDetail",
+    type: "object",
+    properties: [
+        new OA\Property(property: "id", type: "integer", example: 1),
+        new OA\Property(property: "title", type: "string", example: "Турнир по шахматам"),
+        new OA\Property(property: "link", type: "string", format: "uri", example: "https://example.com/tournament/1"),
+        new OA\Property(property: "date", type: "string", format: "date", example: "2026-06-01"),
+        new OA\Property(property: "date_end", type: "string", format: "date", example: "2026-06-07"),
+        new OA\Property(property: "city", type: "string", example: "Москва"),
+        new OA\Property(property: "organizer", type: "string", example: "Шахматный клуб"),
+        new OA\Property(property: "guid", type: "string", example: "abc123"),
+        new OA\Property(property: "groups", type: "array", items: new OA\Items(type: "object")),
+    ]
+)]
 final class TournamentsController extends Controller
 {
     public function __construct(

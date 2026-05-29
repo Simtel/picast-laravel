@@ -18,12 +18,24 @@ use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OA;
 use Throwable;
 
-/**
- * @OA\Tag(
- *     name="ChadGPT",
- *     description="API для взаимодействия с чат-ботом ChadGPT"
- * )
- */
+#[OA\Tag(
+    name: "ChadGPT",
+    description: "API для взаимодействия с чат-ботом ChadGPT"
+)]
+#[OA\Schema(
+    schema: "ChatConversation",
+    type: "object",
+    properties: [
+        new OA\Property(property: "id", type: "integer", example: 1),
+        new OA\Property(property: "user_id", type: "integer", example: 1),
+        new OA\Property(property: "model", type: "string", example: "gpt-4o-mini"),
+        new OA\Property(property: "user_message", type: "string", example: "Привет!"),
+        new OA\Property(property: "ai_response", type: "string", example: "Привет! Чем могу помочь?"),
+        new OA\Property(property: "used_words_count", type: "integer", example: 5),
+        new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2025-10-11T10:00:00Z"),
+        new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-10-11T10:00:00Z"),
+    ]
+)]
 final class ChatsController extends Controller
 {
     #[OA\Get(
