@@ -24,7 +24,6 @@ use Throwable;
 )]
 #[OA\Schema(
     schema: "ChatConversation",
-    type: "object",
     properties: [
         new OA\Property(property: "id", type: "integer", example: 1),
         new OA\Property(property: "user_id", type: "integer", example: 1),
@@ -34,7 +33,8 @@ use Throwable;
         new OA\Property(property: "used_words_count", type: "integer", example: 5),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2025-10-11T10:00:00Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-10-11T10:00:00Z"),
-    ]
+    ],
+    type: "object"
 )]
 final class ChatsController extends Controller
 {
@@ -70,7 +70,6 @@ final class ChatsController extends Controller
         path: '/api/v1/chats',
         summary: 'Отправить сообщение в ChadGPT',
         security: [['sanctum' => []]],
-        tags: ['ChadGPT'],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -81,6 +80,7 @@ final class ChatsController extends Controller
                 ]
             )
         ),
+        tags: ['ChadGPT'],
         responses: [
             new OA\Response(response: 200, description: 'Ответ от ChadGPT'),
             new OA\Response(response: 422, description: 'Ошибка валидации'),

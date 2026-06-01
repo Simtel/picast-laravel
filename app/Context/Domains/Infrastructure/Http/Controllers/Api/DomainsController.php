@@ -87,7 +87,6 @@ final class DomainsController extends Controller
         path: '/api/v1/domains',
         summary: 'Создать новый домен',
         security: [['sanctum' => []]],
-        tags: ['Domains'],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -97,6 +96,7 @@ final class DomainsController extends Controller
                 ]
             )
         ),
+        tags: ['Domains'],
         responses: [
             new OA\Response(response: 200, description: 'Домен успешно создан'),
             new OA\Response(response: 422, description: 'Ошибка валидации')

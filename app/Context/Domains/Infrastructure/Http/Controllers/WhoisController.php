@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Context\Domains\Infrastructure\Controller;
+namespace App\Context\Domains\Infrastructure\Http\Controllers;
 
 use App\Context\Domains\Domain\Model\Domain;
-use App\Context\Domains\Infrastructure\Request\DeleteOldWhois;
 use App\Context\Domains\Infrastructure\Facades\WhoisService;
+use App\Context\Domains\Infrastructure\Request\DeleteOldWhois;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Context\Tournaments\Infrastructure\Controllers;
+namespace App\Context\Tournaments\Infrastructure\Http\Controllers;
 
 use App\Context\Tournaments\Application\Query\GetTournamentDetailQuery;
 use App\Context\Tournaments\Application\Query\GetTournamentsQuery;

@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Context\ChadGPT\Infrastructure\Controller;
+namespace App\Context\ChadGPT\Infrastructure\Http\Controllers;
 
-use App\Context\Common\Infrastructure\CommandBus;
 use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use App\Context\ChadGPT\Domain\ChatModels;
@@ -12,6 +11,7 @@ use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\ChadGPT\Infrastructure\Repository\StatWordsUsedRepository;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
+use App\Context\Common\Infrastructure\CommandBus;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;

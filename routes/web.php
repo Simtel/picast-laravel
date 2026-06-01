@@ -13,10 +13,10 @@ declare(strict_types=1);
 |
 */
 
-use App\Context\ChadGPT\Infrastructure\Controller\ChadGptController;
-use App\Context\Domains\Infrastructure\Controller\DomainsController;
-use App\Context\Domains\Infrastructure\Controller\WhoisController;
-use App\Context\Tournaments\Infrastructure\Controllers\TournamentController;
+use App\Context\ChadGPT\Infrastructure\Http\Controllers\ChadGptController;
+use App\Context\Domains\Infrastructure\Http\Controllers\DomainsController;
+use App\Context\Domains\Infrastructure\Http\Controllers\WhoisController;
+use App\Context\Tournaments\Infrastructure\Http\Controllers\TournamentController;
 use App\Context\User\Infrastructure\Controller\ImagesController;
 use App\Context\User\Infrastructure\Controller\IndexController;
 use App\Context\User\Infrastructure\Controller\InviteController;

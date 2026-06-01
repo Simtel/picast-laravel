@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Tournaments\Application\Query;
 
-use App\Context\Tournaments\Infrastructure\Controllers\TournamentController;
+use App\Context\Tournaments\Infrastructure\Http\Controllers\TournamentController;
 
 /**
  * Query для получения списка турниров с фильтрацией и сортировкой.

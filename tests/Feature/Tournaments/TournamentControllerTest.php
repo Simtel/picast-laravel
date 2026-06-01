@@ -6,7 +6,7 @@ namespace Tests\Feature\Tournaments;
 
 use App\Context\Tournaments\Domain\Model\Tournament;
 use App\Context\Tournaments\Domain\Model\TournamentGroup;
-use App\Context\Tournaments\Infrastructure\Controllers\TournamentController;
+use App\Context\Tournaments\Infrastructure\Http\Controllers\TournamentController;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Tests\TestCase;

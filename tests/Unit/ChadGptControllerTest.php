@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Context\ChadGPT\Infrastructure\Controller\ChadGptController;
+use App\Context\ChadGPT\Infrastructure\Http\Controllers\ChadGptController;
 use Tests\TestCase;
 
 final class ChadGptControllerTest extends TestCase

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Context\Domains\Infrastructure\Controller;
+namespace App\Context\Domains\Infrastructure\Http\Controllers;
 
 use App\Context\Common\Infrastructure\CommandBus;
 use App\Context\Domains\Application\Contract\WhoisUpdater;
