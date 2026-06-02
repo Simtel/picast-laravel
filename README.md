@@ -1,10 +1,13 @@
 # Picast Laravel - Domain & YouTube Management System
 
-Picast Laravel is a comprehensive web application built with Laravel framework, designed for managing domains with WHOIS tracking, YouTube video processing, and role-based user access control. The application follows Domain-Driven Design (DDD) principles with a clean separation between business logic and technical implementation.
+Picast Laravel is a comprehensive web application built with Laravel framework, designed for managing domains with WHOIS
+tracking, YouTube video processing, and role-based user access control. The application follows Domain-Driven Design (
+DDD) principles with a clean separation between business logic and technical implementation.
 
 ## 🚀 Features
 
 ### Core Functionality
+
 - **🌐 Domain Management**: Complete CRUD operations for domain tracking with automated WHOIS updates
 - **👥 User Role & Permission System**: Flexible role-based access control using Spatie Laravel Permission
 - **📧 User Invitation System**: Secure user onboarding via invite codes
@@ -12,8 +15,11 @@ Picast Laravel is a comprehensive web application built with Laravel framework, 
 - **🎥 YouTube Video Processing**: Download and manage YouTube videos with queue processing
 - **📱 Telegram Notifications**: Custom notification channel for important alerts
 - **🔗 REST API**: Comprehensive API for external integrations and automation
+- **🤖 ChadGPT Integration**: Chat bot system with conversation history and word statistics
+- **🏆 Tournament Management**: Tournament and group management system
 
 ### Development & Quality Assurance
+
 - **🐳 Containerized Development**: Full Docker environment for consistent development
 - **🔍 Static Analysis**: PHPStan at maximum level with Larastan for Laravel-specific analysis
 - **✨ Code Quality**: Laravel Pint for PSR-12 code formatting
@@ -24,6 +30,7 @@ Picast Laravel is a comprehensive web application built with Laravel framework, 
 ## 🛠️ Technology Stack
 
 ### Backend Technologies
+
 - **Framework**: Laravel 12.x
 - **PHP**: 8.4+ (Latest stable version)
 - **Database**: MySQL 8.3
@@ -32,6 +39,7 @@ Picast Laravel is a comprehensive web application built with Laravel framework, 
 - **Authentication**: Laravel Sanctum for API tokens
 
 ### Frontend Technologies
+
 - **Build Tool**: Vite 7.0+
 - **CSS Framework**: Tailwind CSS 4.0
 - **JavaScript**: Axios for HTTP requests
@@ -40,6 +48,7 @@ Picast Laravel is a comprehensive web application built with Laravel framework, 
 ### Key Dependencies
 
 #### PHP Packages
+
 - `spatie/laravel-permission` - Role and permission management
 - `io-developer/php-whois` - WHOIS data retrieval
 - `norkunas/youtube-dl-php` - YouTube video downloading
@@ -50,12 +59,14 @@ Picast Laravel is a comprehensive web application built with Laravel framework, 
 - `knuckleswtf/scribe` - API documentation generator
 
 #### Development Tools
+
 - `larastan/larastan` - PHPStan for Laravel
 - `laravel/pint` - Code style fixer
 - `barryvdh/laravel-debugbar` - Debug toolbar
 - `fakerphp/faker` - Test data generation
 
 ### Infrastructure & DevOps
+
 - **Containerization**: Docker & Docker Compose
 - **Web Server**: Nginx 1.17
 - **Process Manager**: Supervisor for queue workers
@@ -76,15 +87,22 @@ app/Context/
 ├── User/             # User management context
 │   ├── Domain/       # User-related models
 │   └── Infrastructure/ # User controllers and services
-└── Youtube/          # YouTube processing context
-    ├── Domain/       # Video models and entities
-    ├── Application/  # Video processing services
-    └── Infrastructure/ # Video controllers and jobs
+├── Youtube/          # YouTube processing context
+│   ├── Domain/       # Video models and entities
+│   ├── Application/  # Video processing services
+│   └── Infrastructure/ # Video controllers and jobs
+├── ChadGPT/          # Chat bot context
+│   ├── Domain/       # Conversation and statistics models
+│   └── Infrastructure/ # Chat controllers and services
+└── Tournaments/      # Tournament management context
+    ├── Domain/       # Tournament models and entities
+    └── Infrastructure/ # Tournament controllers and services
 ```
 
 ## 🐳 Local Development Setup
 
 ### Prerequisites
+
 - Docker & Docker Compose
 - Make (for convenience commands)
 - Git
@@ -116,7 +134,7 @@ app/Context/
    ```bash
    cp .env.example .env
    ```
-   
+
    Edit `.env` file with your configuration:
    ```env
    DB_CONNECTION=mysql
@@ -131,9 +149,9 @@ app/Context/
    ```
 
 6. **Create databases**:
-   - Access Adminer at [http://localhost:8080](http://localhost:8080)
-   - Login with: Server: `db`, Username: `root`, Password: `example`
-   - Create databases: `picast` and `picast_test`
+    - Access Adminer at [http://localhost:8080](http://localhost:8080)
+    - Login with: Server: `db`, Username: `root`, Password: `example`
+    - Create databases: `picast` and `picast_test`
 
 7. **Run database migrations**:
    ```bash
@@ -155,12 +173,13 @@ app/Context/
 
 Once started, the following services will be available:
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| Application | [http://localhost](http://localhost) | Main application |
-| Adminer | [http://localhost:8080](http://localhost:8080) | Database administration |
-| MailHog | [http://localhost:8025](http://localhost:8025) | Email testing interface |
-| API Documentation | [http://localhost/api/documentation](http://localhost/docs) | Interactive API docs |
+| Service           | URL                                                         | Description             |
+|-------------------|-------------------------------------------------------------|-------------------------|
+| Application       | [http://localhost](http://localhost)                        | Main application        |
+| Adminer           | [http://localhost:8080](http://localhost:8080)              | Database administration |
+| MailHog           | [http://localhost:8025](http://localhost:8025)              | Email testing interface |
+| API Documentation | [http://localhost/docs](http://localhost/docs)              | Interactive API docs    |
+| API Documentation | [http://localhost/api/documentation](http://localhost/api/documentation) | Interactive API docs    |
 
 ### Available Make Commands
 
@@ -185,12 +204,15 @@ make worker            # Start queue worker
 The application provides a comprehensive REST API for automation and external integrations.
 
 ### Base URL
+
 ```
 https://your-domain.com/api/v1
 ```
 
 ### Authentication
+
 API uses token-based authentication. Include the token in the Authorization header:
+
 ```
 Authorization: Bearer YOUR_API_TOKEN
 ```
@@ -198,11 +220,13 @@ Authorization: Bearer YOUR_API_TOKEN
 ### Core Endpoints
 
 #### User Management
+
 ```http
 GET    /api/v1/user/current    # Get current authenticated user
 ```
 
 #### Domain Management
+
 ```http
 GET    /api/v1/domains         # List all user domains
 POST   /api/v1/domains         # Create new domain
@@ -212,6 +236,7 @@ DELETE /api/v1/domains/{id}    # Delete domain
 ```
 
 #### YouTube Video Management
+
 ```http
 GET    /api/v1/video           # List user videos
 POST   /api/v1/video           # Queue video for download
@@ -223,6 +248,7 @@ DELETE /api/v1/video/{id}      # Delete video
 ### Request Examples
 
 #### Create Domain
+
 ```bash
 curl -X POST https://your-domain.com/api/v1/domains \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -231,6 +257,7 @@ curl -X POST https://your-domain.com/api/v1/domains \
 ```
 
 #### Queue YouTube Video
+
 ```bash
 curl -X POST https://your-domain.com/api/v1/video \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -239,6 +266,7 @@ curl -X POST https://your-domain.com/api/v1/video \
 ```
 
 ### Response Format
+
 All API responses follow a consistent JSON format:
 
 ```json
@@ -259,6 +287,7 @@ All API responses follow a consistent JSON format:
 ```
 
 ### Error Handling
+
 API errors return appropriate HTTP status codes with detailed error messages:
 
 ```json
@@ -271,13 +300,16 @@ API errors return appropriate HTTP status codes with detailed error messages:
 ```
 
 ### Interactive Documentation
+
 For detailed API documentation with interactive examples, visit:
+
 - **Local**: [http://localhost/docs](http://localhost/docs)
 - **OpenAPI Spec**: [http://localhost/docs/openapi.yaml](http://localhost/docs/openapi.yaml)
 
 ## 🧪 Testing
 
 ### Running Tests
+
 ```bash
 # Run all tests
 make test
@@ -290,6 +322,7 @@ docker exec -it picast_php php artisan test --filter DomainTest
 ```
 
 ### Test Structure
+
 - **Feature Tests**: `/tests/Feature/` - Integration tests for full workflows
 - **Unit Tests**: `/tests/Unit/` - Isolated unit tests for specific components
 - **API Tests**: `/tests/Feature/Api/` - API endpoint tests
@@ -297,6 +330,7 @@ docker exec -it picast_php php artisan test --filter DomainTest
 ## 🔧 Code Quality
 
 ### Static Analysis
+
 ```bash
 # Run PHPStan analysis
 make phpstan
@@ -306,7 +340,9 @@ make pint
 ```
 
 ### Pre-commit Hooks
+
 Set up Git hooks for automatic code quality checks:
+
 ```bash
 make set-githooks
 ```
@@ -314,6 +350,7 @@ make set-githooks
 ## 📦 Deployment
 
 ### Production Requirements
+
 - PHP 8.3+
 - MySQL 8.0+
 - Nginx or Apache
@@ -321,6 +358,7 @@ make set-githooks
 - SSL certificate for HTTPS
 
 ### Environment Configuration
+
 Key environment variables for production:
 
 ```env
@@ -348,6 +386,7 @@ MEMCACHED_HOST=127.0.0.1
 ```
 
 ### Deployment Steps
+
 1. Clone repository to production server
 2. Install PHP dependencies: `composer install --no-dev --optimize-autoloader`
 3. Configure environment variables
@@ -376,6 +415,7 @@ This project is licensed under the MIT License.
 ## 🆘 Support
 
 For issues and questions:
+
 - Create an issue on GitHub
 - Check the [API documentation](http://localhost/docs) for API-related questions
 - Review test files for usage examples
