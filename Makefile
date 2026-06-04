@@ -55,3 +55,12 @@ scribe-generate: ##Generate API documentation
 
 composer-install: ##Install composer packages
 	docker exec -it picast_php sh -c "composer install"
+
+npm-install: ##Install npm packages
+	docker exec -it picast_php sh -c "npm install"
+
+npm-build: ##Build frontend assets with Vite
+	docker exec -it picast_php sh -c "npm run build"
+
+npm-dev: ##Run Vite development server
+	docker exec -it picast_php sh -c "npm run dev"

@@ -3,8 +3,9 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
-        "dev": "vite"
+        "build": "vite build && node copy-static-assets.js",
+        "dev": "vite",
+        "copy-static": "node copy-static-assets.js"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
@@ -18,6 +19,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^7.1.0",
         "bootstrap": "^5.3.8",
+        "jquery": "^4.0.0",
         "marked": "^17.0.1"
     }
 }
