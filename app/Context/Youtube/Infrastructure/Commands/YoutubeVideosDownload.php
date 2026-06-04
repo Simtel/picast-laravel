@@ -13,6 +13,7 @@ use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Console\Isolatable;
 use Illuminate\Support\Facades\Storage;
+use Log;
 use Symfony\Component\Console\Helper\ProgressBar;
 use YoutubeDl\Entity\VideoCollection;
 use YoutubeDl\Options;
@@ -40,7 +41,6 @@ final class YoutubeVideosDownload extends Command implements Isolatable
 
     /**
      * @return void
-     * @throws Exception
      */
     public function handle(): void
     {
@@ -50,55 +50,88 @@ final class YoutubeVideosDownload extends Command implements Isolatable
             $this->error('Команда уже выполняется!');
             return;
         }
-        $videosQueue = VideoDownloadQueue::all();
-        if (count($videosQueue) > 0) {
-            $this->output->writeln('В очереди на загрузку: ' . count($videosQueue));
-        }
 
-        foreach ($videosQueue as $queue) {
-            $video = $queue->video;
-            if ($video->getUrl() === '') {
-                continue;
-            }
-            $format = $queue->format;
-
-            $this->output->writeln('Обработка видео:' . $video->getUrl());
-
-            $progressBar = $this->getProgressBar();
-
-            $this->youtubeDl->onProgress(
-                static function (
-                    ?string $progressTarget,
-                    string $percentage,
-                    string $size,
-                    ?string $speed,
-                    ?string $eta,
-                    ?string $totalTime
-                ) use ($progressBar): void {
-                    $percentNumber = (int)rtrim($percentage, '%');
-                    $progressBar->setProgress($percentNumber);
-                    $progressBar->setPlaceholderFormatter('size', static function ($value) use ($size) {
-                        return $size;
-                    });
-                    $progressBar->setPlaceholderFormatter('speed', static function ($value) use ($speed) {
-                        return $speed ?? '';
-                    });
+        try {
+            VideoDownloadQueue::chunk(100, function ($videosQueue) {
+                if (count($videosQueue) > 0) {
+                    $this->output->writeln('В очереди на загрузку: ' . count($videosQueue));
                 }
-            );
 
-            $collection = $this->youtubeDl->download(
-                Options::create()
-                    ->downloadPath(Storage::disk('local')->path('public/videos'))
-                    ->output($video->getVideoId() . '.%(ext)s')
-                    ->url($video->getUrl())
-                    ->format((string)$format->format_id)
-            );
+                foreach ($videosQueue as $queue) {
+                    if ($queue->video === null || $queue->format === null) {
+                        Log::warning('YoutubeVideosDownload: очередь без видео или формата', [
+                            'queue_id' => $queue->id,
+                        ]);
+                        $queue->delete();
+                        continue;
+                    }
 
-            $this->getVideos($collection, $video, $format);
-            $queue->delete();
+                    try {
+                        $this->processQueueItem($queue);
+                    } catch (\Throwable $e) {
+                        Log::error('YoutubeVideosDownload: ошибка скачивания', [
+                            'queue_id' => $queue->id,
+                            'video_id' => $queue->video->id,
+                            'url' => $queue->video->getUrl(),
+                            'error' => $e->getMessage(),
+                        ]);
+                        $this->output->error('Ошибка: ' . $e->getMessage());
+                    }
+                }
+            });
+        } finally {
+            $lock->release();
         }
-        $lock->release();
+
         $this->output->writeln('Закончили скачивание');
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function processQueueItem(VideoDownloadQueue $queue): void
+    {
+        $video = $queue->video;
+        if ($video->getUrl() === '') {
+            $queue->delete();
+            return;
+        }
+        $format = $queue->format;
+
+        $this->output->writeln('Обработка видео:' . $video->getUrl());
+
+        $progressBar = $this->getProgressBar();
+
+        $this->youtubeDl->onProgress(
+            static function (
+                ?string $progressTarget,
+                string $percentage,
+                string $size,
+                ?string $speed,
+                ?string $eta,
+                ?string $totalTime
+            ) use ($progressBar): void {
+                $percentNumber = (int)rtrim($percentage, '%');
+                $progressBar->setProgress($percentNumber);
+                $progressBar->setPlaceholderFormatter('size', static function ($value) use ($size) {
+                    return $size;
+                });
+                $progressBar->setPlaceholderFormatter('speed', static function ($value) use ($speed) {
+                    return $speed ?? '';
+                });
+            }
+        );
+
+        $collection = $this->youtubeDl->download(
+            Options::create()
+                ->downloadPath(Storage::disk('local')->path('public/videos'))
+                ->output($video->getVideoId() . '.%(ext)s')
+                ->url($video->getUrl())
+                ->format((string)$format->format_id)
+        );
+
+        $this->getVideos($collection, $video, $format);
+        $queue->delete();
     }
 
     /**

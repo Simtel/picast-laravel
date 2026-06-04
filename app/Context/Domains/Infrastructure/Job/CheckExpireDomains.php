@@ -8,10 +8,10 @@ use App\Context\Domains\Domain\Model\Domain;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Log;
 
 class CheckExpireDomains implements ShouldQueue
 {
@@ -45,21 +45,23 @@ class CheckExpireDomains implements ShouldQueue
     public function handle(): void
     {
         $now = Carbon::now();
-        foreach ($this->getDomains() as $domain) {
-            $expire_at = new Carbon($domain->expire_at);
-            $days = (int)abs($expire_at->diffInDays($now));
+        Domain::chunk(100, function ($domains) use ($now) {
+            foreach ($domains as $domain) {
+                try {
+                    $expire_at = new Carbon($domain->expire_at);
+                    $days = (int)abs($expire_at->diffInDays($now));
 
-            if (in_array($days, $this->days, true)) {
-                SendDomainExpireNotify::dispatch($domain);
+                    if (in_array($days, $this->days, true)) {
+                        SendDomainExpireNotify::dispatch($domain);
+                    }
+                } catch (\Throwable $e) {
+                    Log::error('CheckExpireDomains: ошибка обработки домена', [
+                        'domain_id' => $domain->id,
+                        'domain_name' => $domain->name,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
             }
-        }
-    }
-
-    /**
-     * @return Collection<int, Domain>
-     */
-    protected function getDomains(): Collection
-    {
-        return Domain::all();
+        });
     }
 }

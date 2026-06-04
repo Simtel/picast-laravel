@@ -1,1 +1,0 @@
-window.axios=require("axios");window.axios.defaults.headers.common["X-Requested-With"]="XMLHttpRequest";window.$=window.jQuery=require("jquery");require("bootstrap");window.marked=require("marked");window.Vue=require("vue");Vue.component("example-component",require("./components/ExampleComponent.vue"));new Vue({el:"#app"});

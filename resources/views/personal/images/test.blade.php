@@ -60,7 +60,9 @@
 @endsection
 
 @push('styles')
-    <link rel="stylesheet" href="/css/gallery.css">
+    @if(file_exists(public_path('css/gallery.css')))
+        <link rel="stylesheet" href="{{ asset('css/gallery.css') }}">
+    @endif
     <style>
         /* Дополнительные стили для тестирования */
         .gallery-item img {
@@ -80,5 +82,7 @@
 @endpush
 
 @push('scripts')
-    <script src="/js/gallery.js"></script>
+    @if(file_exists(public_path('js/gallery.js')))
+        <script src="{{ asset('js/gallery.js') }}"></script>
+    @endif
 @endpush

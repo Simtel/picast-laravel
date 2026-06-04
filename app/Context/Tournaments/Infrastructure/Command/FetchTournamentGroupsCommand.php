@@ -7,6 +7,7 @@ namespace App\Context\Tournaments\Infrastructure\Command;
 use App\Context\Tournaments\Domain\Model\Tournament;
 use App\Context\Tournaments\Domain\Model\TournamentGroup;
 use Carbon\Carbon;
+use DB;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Log;
@@ -99,15 +100,17 @@ class FetchTournamentGroupsCommand extends Command
      */
     private function saveGroups(Tournament $tournament, array $groups): void
     {
-        TournamentGroup::where('tournament_id', $tournament->getId())->delete();
+        DB::transaction(function () use ($tournament, $groups) {
+            TournamentGroup::where('tournament_id', $tournament->getId())->delete();
 
-        foreach ($groups as $group) {
-            TournamentGroup::create([
-                'tournament_id' => $tournament->getId(),
-                'number' => $group->getNumber(),
-                'name' => $group->getName(),
-                'registrations' => $group->getRegistrations(),
-            ]);
-        }
+            foreach ($groups as $group) {
+                TournamentGroup::create([
+                    'tournament_id' => $tournament->getId(),
+                    'number' => $group->getNumber(),
+                    'name' => $group->getName(),
+                    'registrations' => $group->getRegistrations(),
+                ]);
+            }
+        });
     }
 }

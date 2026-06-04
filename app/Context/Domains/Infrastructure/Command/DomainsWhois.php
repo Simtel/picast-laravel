@@ -7,6 +7,7 @@ namespace App\Context\Domains\Infrastructure\Command;
 use App\Context\Domains\Application\Contract\WhoisUpdater;
 use App\Context\Domains\Domain\Model\Domain;
 use Illuminate\Console\Command;
+use Log;
 
 final class DomainsWhois extends Command
 {
@@ -42,11 +43,21 @@ final class DomainsWhois extends Command
      */
     public function handle(): void
     {
-        $domains = Domain::all();
-        foreach ($domains as $domain) {
-            $this->output->writeln('Обработка домена:' . $domain->name);
-            $this->whoisUpdater->update($domain);
-        }
+        Domain::chunk(100, function ($domains) {
+            foreach ($domains as $domain) {
+                try {
+                    $this->output->writeln('Обработка домена:' . $domain->name);
+                    $this->whoisUpdater->update($domain);
+                } catch (\Throwable $e) {
+                    Log::error('DomainsWhois: ошибка обновления WHOIS', [
+                        'domain_id' => $domain->id,
+                        'domain_name' => $domain->name,
+                        'error' => $e->getMessage(),
+                    ]);
+                    $this->output->error('Ошибка для ' . $domain->name . ': ' . $e->getMessage());
+                }
+            }
+        });
         $this->output->success('Закончили обновление');
     }
 }
