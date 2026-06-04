@@ -15,8 +15,8 @@ use Illuminate\Support\Carbon;
  * @property int $format_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Context\Youtube\Domain\Model\VideoFormats $format
- * @property-read \App\Context\Youtube\Domain\Model\Video $video
+ * @property-read \App\Context\Youtube\Domain\Model\VideoFormats|null $format
+ * @property-read \App\Context\Youtube\Domain\Model\Video|null $video
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|VideoDownloadQueue query()

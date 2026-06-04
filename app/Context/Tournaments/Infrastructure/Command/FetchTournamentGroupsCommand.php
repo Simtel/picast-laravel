@@ -100,7 +100,7 @@ class FetchTournamentGroupsCommand extends Command
      */
     private function saveGroups(Tournament $tournament, array $groups): void
     {
-        DB::transaction(function () use ($tournament, $groups) {
+        DB::transaction(static function () use ($tournament, $groups) {
             TournamentGroup::where('tournament_id', $tournament->getId())->delete();
 
             foreach ($groups as $group) {
