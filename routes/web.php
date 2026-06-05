@@ -30,7 +30,7 @@ Route::get('/', static function () {
     if (Auth::check()) {
         return redirect()->route('personal');
     }
-    return view('auth.login');
+    return view('landing');
 })->name('home');
 
 
