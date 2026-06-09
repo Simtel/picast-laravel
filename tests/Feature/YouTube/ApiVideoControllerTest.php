@@ -15,11 +15,12 @@ final class ApiVideoControllerTest extends TestCase
     {
         Event::fake();
 
-        $user = $this->createUserWithPermissions(['api_token' => 123], ['edit youtube']);
+        $user = $this->createUserWithPermissions([], ['edit youtube']);
+        $token = $user->createToken('test')->plainTextToken;
 
         $video = Video::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->get(route('api.videos.index', ), ['Authorization' => 'Bearer ' . $user->api_token]);
+        $response = $this->get(route('api.videos.index'), ['Authorization' => 'Bearer ' . $token]);
 
         $response->assertStatus(200);
 
@@ -42,13 +43,14 @@ final class ApiVideoControllerTest extends TestCase
     {
         Event::fake();
 
-        $user = $this->createUserWithPermissions(['api_token' => 123], ['edit youtube']);
+        $user = $this->createUserWithPermissions([], ['edit youtube']);
+        $token = $user->createToken('test')->plainTextToken;
 
         $video = Video::factory()->create(['user_id' => $user->id]);
 
         $response = $this->get(
             route('api.videos.show', ['video' => $video]),
-            ['Authorization' => 'Bearer ' . $user->api_token]
+            ['Authorization' => 'Bearer ' . $token]
         );
 
         $response->assertStatus(200);

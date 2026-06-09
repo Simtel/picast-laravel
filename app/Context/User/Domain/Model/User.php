@@ -18,6 +18,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -28,7 +29,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $birth_date
  * @property string $password
- * @property string|null $api_token
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -79,6 +79,7 @@ final class User extends Authenticatable
 
     /** @use HasFactory<UserFactory> */
     use HasFactory;
+    use HasApiTokens;
     use SoftDeletes;
     use HasRoles;
 
@@ -151,11 +152,6 @@ final class User extends Authenticatable
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getApiToken(): ?string
-    {
-        return $this->api_token;
     }
 
     public function getBirthDate(): ?\Illuminate\Support\Carbon

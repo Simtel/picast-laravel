@@ -77,23 +77,47 @@
 
         {{-- Правая колонка --}}
         <div class="col-md-6">
-            {{-- API Токен --}}
+            {{-- API Токены --}}
             <div class="card">
                 <div class="card-header d-flex align-items-center gap-2">
                     <i class="fa fa-key text-primary"></i>
-                    <span>API Токен</span>
+                    <span>API Токены</span>
                 </div>
-                {{ Html::form()->route('settings.token')->open() }}
                 <div class="card-body">
-                    <div class="mb-3">
-                        {{ Html::label('Токен', 'token')->class('form-label fw-semibold') }}
-                        {{ Html::text('password', $token)->class('form-control')->attribute('readonly') }}
-                    </div>
+                    @if ($tokens->isNotEmpty())
+                        <div class="table-responsive mb-3">
+                            <table class="table table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Имя</th>
+                                        <th>Создан</th>
+                                        <th>Использован</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($tokens as $tok)
+                                        <tr>
+                                            <td>{{ $tok->name }}</td>
+                                            <td>{{ $tok->created_at?->format('d.m.Y H:i') }}</td>
+                                            <td>{{ $tok->last_used_at?->format('d.m.Y H:i') ?? '—' }}</td>
+                                            <td class="text-end">
+                                                {{ Html::form()->route('settings.token.delete', ['id' => $tok->id])->attribute('method', 'DELETE')->open() }}
+                                                    {{ Html::submit('<i class="fa fa-trash"></i>')->class('btn btn-sm btn-outline-danger') }}
+                                                {{ Html::form()->close() }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="text-muted">Нет активных токенов.</p>
+                    @endif
+                    {{ Html::form()->route('settings.token')->open() }}
+                        {{ Html::submit('Создать новый токен')->class('btn btn-primary') }}
+                    {{ Html::form()->close() }}
                 </div>
-                <div class="card-footer bg-transparent d-flex justify-content-end">
-                    {{ Html::submit('Получить новый токен')->class('btn btn-primary') }}
-                </div>
-                {{ Html::form()->close() }}
             </div>
         </div>
     </div>

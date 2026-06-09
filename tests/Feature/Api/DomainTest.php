@@ -29,12 +29,13 @@ final class DomainTest extends TestCase
     public function test_domains_list(): void
     {
         $user = $this->getAdminUser();
+        $token = $user->createToken('test')->plainTextToken;
 
         Event::fake();
         $domain1 = Domain::factory()->create(['user_id' => $user->getId()]);
         $domain2 = Domain::factory()->create(['user_id' => $user->getId()]);
 
-        $response = $this->get(route('api.domains.index'), ['Authorization' => 'Bearer ' . $user->api_token]);
+        $response = $this->get(route('api.domains.index'), ['Authorization' => 'Bearer ' . $token]);
         $response->assertOk();
 
         $response->assertJson(
@@ -60,13 +61,14 @@ final class DomainTest extends TestCase
     public function test_domain_show(): void
     {
         $user = $this->getAdminUser();
+        $token = $user->createToken('test')->plainTextToken;
 
         Event::fake();
         $domain = Domain::factory()->create(['user_id' => $user->getId()]);
 
         $response = $this->get(
             route('api.domains.show', ['domain' => $domain]),
-            ['Authorization' => 'Bearer ' . $user->api_token]
+            ['Authorization' => 'Bearer ' . $token]
         );
         $response->assertOk();
 
@@ -87,13 +89,14 @@ final class DomainTest extends TestCase
     public function test_domain_store(): void
     {
         $user = $this->getAdminUser();
+        $token = $user->createToken('test')->plainTextToken;
 
         Event::fake();
 
         $response = $this->post(
             route('api.domains.store'),
             ['name' => 'prosf.ru'],
-            ['Authorization' => 'Bearer ' . $user->api_token]
+            ['Authorization' => 'Bearer ' . $token]
         );
         $response->assertOk();
         $this->assertDatabaseCount(Domain::class, 1);
@@ -103,6 +106,7 @@ final class DomainTest extends TestCase
     public function test_domain_update(): void
     {
         $user = $this->getAdminUser();
+        $token = $user->createToken('test')->plainTextToken;
         Event::fake();
 
         $domain = Domain::factory()->create(['user_id' => $user->getId()]);
@@ -122,7 +126,7 @@ final class DomainTest extends TestCase
                 ['domain' => $domain],
             ),
             ['domain' => $domain],
-            ['Authorization' => 'Bearer ' . $user->api_token]
+            ['Authorization' => 'Bearer ' . $token]
         );
         $response->assertOk();
         $this->assertDatabaseCount(Domain::class, 1);
@@ -134,13 +138,14 @@ final class DomainTest extends TestCase
     public function test_domain_delete(): void
     {
         $user = $this->getAdminUser();
+        $token = $user->createToken('test')->plainTextToken;
         Event::fake();
 
         $domain = Domain::factory()->create(['user_id' => $user->getId()]);
 
         $this->assertDatabaseCount(Domain::class, 1);
 
-        $response = $this->delete(route('api.domains.destroy', ['domain' => $domain]), [], ['Authorization' => 'Bearer ' . $user->api_token]);
+        $response = $this->delete(route('api.domains.destroy', ['domain' => $domain]), [], ['Authorization' => 'Bearer ' . $token]);
         $response->assertOk();
 
         $this->assertDatabaseCount(Domain::class, 0);

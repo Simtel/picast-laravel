@@ -22,6 +22,7 @@
     "laravel-lang/lang": "^15.0",
     "laravel/framework": "^13.0",
     "laravel/legacy-factories": "^1.1",
+    "laravel/sanctum": "^4.3",
     "laravel/tinker": "^3.0",
     "laravel/ui": "^4.0",
     "league/flysystem-aws-s3-v3": "^3.0",

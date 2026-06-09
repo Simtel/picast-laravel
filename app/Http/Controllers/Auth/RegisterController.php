@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 final class RegisterController extends Controller
 {
@@ -75,7 +74,6 @@ final class RegisterController extends Controller
             'name'      => $data['name'],
             'email'     => $data['email'],
             'password'  => bcrypt($data['password']),
-            'api_token' => Str::random(60),
         ]);
         return $user;
     }

@@ -70,7 +70,7 @@ final class Handler extends ExceptionHandler
 
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->wantsJson()) {
+        if ($request->expectsJson()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
         return parent::unauthenticated($request, $exception);

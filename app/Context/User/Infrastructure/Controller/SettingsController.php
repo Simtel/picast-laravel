@@ -27,8 +27,8 @@ final class SettingsController extends Controller
     public function index(Request $request): Factory|View|Application
     {
         $user = $request->user();
-        $token = $user?->api_token;
-        return view('personal.settings', ['token' => $token, 'user' => $user]);
+        $tokens = $user->tokens ?? collect();
+        return view('personal.settings', ['tokens' => $tokens, 'user' => $user]);
     }
 
     /**
@@ -41,11 +41,22 @@ final class SettingsController extends Controller
             return redirect()->route('login');
         }
 
-        $request->user()->forceFill([
-            'api_token' => Str::random(60),
-        ])->save();
+        $token = $request->user()->createToken('api-token');
 
-        return redirect()->route('settings');
+        return redirect()->route('settings')
+            ->with('success', 'Токен создан: <code>' . e($token->plainTextToken) . '</code> — скопируйте его сейчас, он больше не будет показан.');
+    }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function deleteToken(int $id, Request $request): RedirectResponse
+    {
+        $request->user()?->tokens()->where('id', $id)->delete();
+
+        return redirect()->route('settings')->with('success', 'Токен удалён.');
     }
 
     /**

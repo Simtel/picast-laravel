@@ -17,7 +17,7 @@ final class SettingsControllerTest extends TestCase
         $response = $this->get(route('settings'));
         $response->assertStatus(200);
         $response->assertViewIs('personal.settings');
-        $response->assertSee('API Токен');
+        $response->assertSee('API Токены');
         $response->assertSee('Личная информация');
     }
 
@@ -27,11 +27,11 @@ final class SettingsControllerTest extends TestCase
 
         /** @var User $user */
         $user = $this->getAuthUser();
-        self::assertNull($user->getApiToken());
+        self::assertSame(0, $user->tokens()->count());
         $response = $this->post(route('settings.token'));
         $response->assertStatus(302);
         $response->assertRedirect(route('settings'));
-        self::assertNotNull($user->getApiToken());
+        self::assertSame(1, $user->tokens()->count());
     }
 
     public function test_personal_change_password(): void

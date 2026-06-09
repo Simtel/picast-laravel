@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api;
 
-use App\Context\User\Domain\Model\User;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
@@ -27,10 +26,13 @@ final class UserTest extends TestCase
      */
     public function test_user_current(): void
     {
+        $user = $this->getAdminUser();
+        $token = $user->createToken('test')->plainTextToken;
+
         $response = $this->get(
             route('api.user.current'),
             [
-                'Authorization' => 'Bearer '.User::find(1)?->api_token
+                'Authorization' => 'Bearer ' . $token
             ]
         );
         $response->assertOk();
