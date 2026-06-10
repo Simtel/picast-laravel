@@ -7,12 +7,13 @@ namespace Tests\Feature\Domain;
 use App\Context\Domains\Domain\Event\DomainCreated;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Infrastructure\Job\CheckExpireDomains;
-use App\Context\Domains\Infrastructure\Mail\ExpireDomainNotify;
+use App\Context\Domains\Infrastructure\Job\SendDomainExpireNotify;
 use App\Context\Domains\Infrastructure\Notification\DomainDeleted;
 use Exception;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -26,23 +27,23 @@ final class DomainsTest extends TestCase
     public function test_create_job_domain_expire_notify(): void
     {
         Event::fake();
-        Mail::fake();
+        Bus::fake();
+        Cache::flush();
+
         $user = $this->getAdminUser();
         $domain = new Domain();
         $domain->id = 1;
         $domain->name = 'prosf.ru';
         $domain->user_id = $user->getId();
-        $domain->expire_at = Carbon::now()->addDays(8);
+        $domain->expire_at = Carbon::now()->startOfDay()->addDays(7);
         $domain->save();
 
-        $checkJob = $this->partialMock(CheckExpireDomains::class);
-
+        $checkJob = new CheckExpireDomains();
         $checkJob->handle();
 
-        Mail::assertSent(ExpireDomainNotify::class, static function ($mail) use ($user) {
-            return $mail->hasTo($user->email);
+        Bus::assertDispatched(SendDomainExpireNotify::class, static function (SendDomainExpireNotify $job) use ($domain) {
+            return $job->uniqueId() === $domain->id;
         });
-
     }
 
     /**

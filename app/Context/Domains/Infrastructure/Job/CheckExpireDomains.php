@@ -44,11 +44,11 @@ class CheckExpireDomains implements ShouldQueue
      */
     public function handle(): void
     {
-        $now = Carbon::now();
+        $now = Carbon::now()->startOfDay();
         Domain::chunk(100, function ($domains) use ($now) {
             foreach ($domains as $domain) {
                 try {
-                    $expire_at = new Carbon($domain->expire_at);
+                    $expire_at = (new Carbon($domain->expire_at))->startOfDay();
                     $days = (int)abs($expire_at->diffInDays($now));
 
                     if (in_array($days, $this->days, true)) {
