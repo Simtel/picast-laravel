@@ -56,7 +56,7 @@ RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_lin
 RUN chmod a+rx /usr/local/bin/youtube-dl
 
 # Clean
-RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
+RUN rm -rf /var/cache/apk/* /tmp/* /var/tmp/* /var/cache/*
 RUN deluser www-data 2>/dev/null || true && \
     delgroup www-data 2>/dev/null || true && \
     addgroup -g 1000 www-data && \

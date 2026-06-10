@@ -125,8 +125,6 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
-
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
     /*
@@ -240,6 +238,4 @@ return [
         'WhoisService' => WhoisService::class,
     ],
 
-    'DEFAULT_USER_EMAIL' => env('DEFAULT_USER_EMAIL'),
-    'SELECTEL_PUBLIC' => env('SELECTEL_PUBLIC'),
 ];

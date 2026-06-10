@@ -8,10 +8,6 @@ const jsDir = join(publicDir, 'js');
 const webfontsDir = join(publicDir, 'webfonts');
 const nodeModulesFontawesome = './node_modules/@fortawesome/fontawesome-free/webfonts';
 
-// Файлы для копирования (если они есть в public/)
-const cssFilesToKeep = ['dashboard.css', 'sort-arrows.css', 'gallery.css', 'auth.css'];
-const jsFilesToKeep = ['gallery.js', 'axios.min.js'];
-
 async function copyStaticAssets() {
     console.log('Копирование статических CSS/JS файлов...');
 
