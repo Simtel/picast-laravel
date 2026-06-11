@@ -40,9 +40,7 @@ final class UsersController extends Controller
             'birth_date' => $request->date('birth_date')?->format('Y-m-d'),
         ]);
 
-        $user->syncRoles($request->all('roles'));
-
-        $user->save();
+        $user->syncRoles($request->validated('roles', []));
 
         return redirect()->route('user.edit', [$user])->with('success', 'Пользователь успешно обновлен!');
     }

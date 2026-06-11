@@ -8,7 +8,6 @@ use App\Context\Common\Domain\Models\InviteCode;
 use App\Context\User\Infrastructure\Mail\InviteUserNotify;
 use App\Context\User\Infrastructure\Request\InviteRequest;
 use App\Http\Controllers\Controller;
-use Auth;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -44,7 +43,7 @@ final class InviteController extends Controller
     {
         $code = InviteCode::create(
             [
-                'created_by' => Auth::id(),
+                'created_by' => $request->user()->id,
                 'code'       => str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT)
             ]
         );

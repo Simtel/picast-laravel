@@ -69,7 +69,7 @@ class ChadGPTControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Chat history cleared successfully'
+                'message' => 'История чатов успешно очищена'
             ]);
 
         $this->assertEquals(0, ChadGptConversation::where('user_id', $this->user->id)->count());
@@ -106,7 +106,7 @@ class ChadGPTControllerTest extends TestCase
         $response->assertStatus(500)
             ->assertJson([
                 'success' => false,
-                'error' => 'Failed to clear chat history'
+                'error' => 'Не удалось очистить историю чатов'
             ]);
 
         $this->assertEquals(2, ChadGptConversation::where('user_id', $this->user->id)->count());

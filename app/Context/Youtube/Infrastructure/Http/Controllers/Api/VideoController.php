@@ -9,10 +9,14 @@ use App\Context\Youtube\Domain\Model\VideoDownloadQueue;
 use App\Context\Youtube\Domain\Model\VideoFormats;
 use App\Context\Youtube\Domain\Resource\VideoFullResource;
 use App\Context\Youtube\Domain\Resource\VideoResource;
+use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
+use App\Context\Youtube\Infrastructure\Request\QueueDownloadRequest;
+use App\Context\Youtube\Infrastructure\Request\StoreVideoRequest;
+use App\Context\Youtube\Infrastructure\Request\UpdateVideoRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Auth;
 use OpenApi\Attributes as OA;
 
 /**
@@ -23,8 +27,9 @@ use OpenApi\Attributes as OA;
  */
 final class VideoController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        private readonly YouTubeVideoStatusRepository $statusRepository,
+    ) {
         $this->authorizeResource(Video::class, 'video');
     }
 
@@ -44,9 +49,9 @@ final class VideoController extends Controller
             )
         ]
     )]
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $videos = Video::whereUserId(Auth()->id())->get();
+        $videos = Video::whereUserId($request->user()->id)->get();
 
         return VideoResource::collection($videos);
     }
@@ -98,21 +103,13 @@ final class VideoController extends Controller
             new OA\Response(response: 422, description: 'Ошибка валидации')
         ]
     )]
-    public function store(\Illuminate\Http\Request $request): JsonResponse
+    public function store(StoreVideoRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'url' => 'required|url',
-        ]);
-
-        /** @var array{url: string} $validated */
-
-        // Получаем репозиторий статуса
-        $statusRepository = app(\App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository::class);
-        $status = $statusRepository->findByCode('new');
+        $status = $this->statusRepository->findByCode('new');
 
         $video = Video::create([
-            'url' => $validated['url'],
-            'user_id' => Auth::id(),
+            'url' => $request->validated('url'),
+            'user_id' => $request->user()->id,
             'status_id' => $status->id,
         ]);
 
@@ -141,14 +138,9 @@ final class VideoController extends Controller
             new OA\Response(response: 404, description: 'Видео не найдено')
         ]
     )]
-    public function update(\Illuminate\Http\Request $request, Video $video): JsonResponse
+    public function update(UpdateVideoRequest $request, Video $video): JsonResponse
     {
-        $validated = $request->validate([
-            'title' => 'sometimes|string',
-            'description' => 'sometimes|string',
-        ]);
-
-        $video->update($validated);
+        $video->update($request->validated());
 
         return response()->json([
             'success' => true,
@@ -184,17 +176,11 @@ final class VideoController extends Controller
             new OA\Response(response: 422, description: 'Ошибка валидации')
         ]
     )]
-    public function queueDownload(\Illuminate\Http\Request $request, Video $video): JsonResponse
+    public function queueDownload(QueueDownloadRequest $request, Video $video): JsonResponse
     {
-        $validated = $request->validate([
-            'format_id' => 'required|integer|exists:video_formats,id',
-        ]);
-
-        /** @var array{format_id: int} $validated */
-
         // Проверяем, что формат принадлежит видео
         $format = VideoFormats::where([
-            'id' => $validated['format_id'],
+            'id' => $request->validated('format_id'),
             'video_id' => $video->id,
         ])->firstOrFail();
 

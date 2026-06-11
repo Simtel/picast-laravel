@@ -11,7 +11,6 @@ use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Domain\Model\Whois;
 use App\Context\Domains\Infrastructure\Request\DomainRequest;
 use App\Http\Controllers\Controller;
-use Auth;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -36,7 +35,7 @@ final class DomainsController extends Controller
     public function index(Request $request): View|Factory|Application
     {
         $query = new ListDomainsQuery(
-            user: Auth::user(),
+            user: $request->user(),
             search: $request->filled('search') ? $request->search : null,
             sortBy: $request->get('sort', 'name'),
             sortDirection: $request->get('direction', 'asc'),
@@ -74,7 +73,7 @@ final class DomainsController extends Controller
         Domain::create(
             [
                 'name' => $request->get('name'),
-                'user_id' => Auth::id()
+                'user_id' => $request->user()->id
             ]
         );
         return redirect()->route('domains.index');

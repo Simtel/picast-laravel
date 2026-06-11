@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
-use Request;
+use Illuminate\Http\Request;
 
 final class LoginController extends Controller
 {
@@ -45,11 +44,11 @@ final class LoginController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|RedirectResponse
+     * @return RedirectResponse
      */
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
-        Auth::logout();
-        return redirect('/');
+        \Auth::logout();
+        return redirect()->route('home');
     }
 }

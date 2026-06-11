@@ -6,22 +6,24 @@ namespace App\Context\User\Infrastructure\Controller;
 
 use App\Context\User\Domain\Model\User;
 use App\Http\Controllers\Controller;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 final class IndexController extends Controller
 {
+    private const int PER_PAGE = 15;
+
     /**
      * Главная страница личного кабинета
      * @return Application|Factory|View|RedirectResponse
      */
-    public function index(): View|Factory|RedirectResponse|Application
+    public function index(Request $request): View|Factory|RedirectResponse|Application
     {
-        if (Auth::user() !== null && Auth::user()->hasRole('admin')) {
-            $users = $this->getUsersWithSearchAndSort();
+        if ($request->user() !== null && $request->user()->hasRole('admin')) {
+            $users = $this->getUsersWithSearchAndSort($request);
             return view('personal.index', ['users' => $users]);
         }
 
@@ -32,11 +34,11 @@ final class IndexController extends Controller
      * Получение пользователей с поиском и сортировкой
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<int, \App\Context\User\Domain\Model\User>
      */
-    private function getUsersWithSearchAndSort(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    private function getUsersWithSearchAndSort(Request $request): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        $search = strval(request('search') ?? '');
-        $sortColumn = strval(request('sort') ?? 'created_at');
-        $sortDirection = strval(request('direction') ?? 'desc');
+        $search = strval($request->query('search', ''));
+        $sortColumn = strval($request->query('sort', 'created_at'));
+        $sortDirection = strval($request->query('direction', 'desc'));
 
         $query = User::query();
 
@@ -54,6 +56,6 @@ final class IndexController extends Controller
             $query->orderBy($sortColumn, $sortDirection);
         }
 
-        return $query->paginate(15);
+        return $query->paginate(self::PER_PAGE);
     }
 }

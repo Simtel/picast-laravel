@@ -6,7 +6,6 @@ namespace App\Context\User\Infrastructure\Controller;
 
 use App\Context\Common\Domain\Models\Images;
 use App\Http\Controllers\Controller;
-use File;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -14,9 +13,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
-use Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 final class ImagesController extends Controller
 {
@@ -30,16 +28,14 @@ final class ImagesController extends Controller
 
     /**
      * @return Factory|View|Application
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
-    public function index(): Factory|View|Application
+    public function index(Request $request): Factory|View|Application
     {
-        $userId = Auth()->id();
+        $userId = $request->user()->id;
         $imagesQuery = Images::whereUserId($userId)
             ->orderBy('created_at', 'desc');
 
-        $filter = request()->get('filter');
+        $filter = $request->get('filter');
         if ($filter === 'recent') {
             $imagesQuery->where('created_at', '>=', now()->subWeek());
         } elseif ($filter === 'large') {
@@ -47,7 +43,7 @@ final class ImagesController extends Controller
         }
 
 
-        $search = request()->string('search');
+        $search = $request->string('search');
         if ($search->isNotEmpty()) {
             $imagesQuery->where('filename', 'like', "%{$search}%");
         }
@@ -79,7 +75,7 @@ final class ImagesController extends Controller
             Storage::disk('s3')->put($directory.'/'. $imageName, File::get($file->path()));
             Images::create(
                 [
-                    'user_id' => Auth()->id(),
+                    'user_id' => $request->user()->id,
                     'filename' => $imageName,
                     'directory' => $directory,
                     'thumb' => '',

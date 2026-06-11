@@ -7,7 +7,6 @@ namespace App\Context\Youtube\Infrastructure\Controller;
 use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;
 use App\Context\Youtube\Domain\Model\Video;
 use App\Context\Youtube\Domain\Model\VideoDownloadQueue;
-use App\Context\Youtube\Domain\Model\VideoFormats;
 use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
 use App\Context\Youtube\Infrastructure\Request\YouTubeUrlRequest;
 use App\Http\Controllers\Controller;
@@ -17,7 +16,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 final class YouTubeVideoController extends Controller
 {
@@ -33,9 +31,9 @@ final class YouTubeVideoController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index(): View|Factory|Application
+    public function index(Request $request): View|Factory|Application
     {
-        $videos = Video::whereUserId(Auth()->id())->paginate(15);
+        $videos = Video::whereUserId($request->user()->id)->paginate(15);
         return view('personal.youtube_videos.index', ['videos' => $videos]);
     }
 
@@ -58,7 +56,7 @@ final class YouTubeVideoController extends Controller
         Video::create(
             [
                 'url' => $request->get('url'),
-                'user_id' => Auth::id(),
+                'user_id' => $request->user()->id,
                 'status_id' => $this->statusRepository->findByCode('new')->id,
             ]
         );
@@ -84,16 +82,16 @@ final class YouTubeVideoController extends Controller
 
     public function queueDownload(Video $video, Request $request): RedirectResponse
     {
-        /** @var VideoFormats $format */
-        $format = VideoFormats::where(
-            [
-                'id' => $request->integer('video_formats'),
-                'video_id' => $video->id
-            ]
-        )->first();
+        /** @var array{video_formats: int} $validated */
+        $validated = $request->validate([
+            'video_formats' => 'required|integer',
+        ]);
 
+        VideoDownloadQueue::create([
+            'video_id' => $video->id,
+            'format_id' => $validated['video_formats'],
+        ]);
 
-        VideoDownloadQueue::create(['video_id' => $video->id, 'format_id' => $format->getId()]);
         return redirect()->route('youtube.index');
     }
 }

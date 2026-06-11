@@ -9,6 +9,7 @@ use App\Context\User\Domain\Model\User;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 final class RegisterController extends Controller
@@ -68,13 +69,15 @@ final class RegisterController extends Controller
      */
     protected function create(array $data): User
     {
-        InviteCode::where('code', $data['code'])->delete();
-        /** @var User $user */
-        $user = User::create([
-            'name'      => $data['name'],
-            'email'     => $data['email'],
-            'password'  => bcrypt($data['password']),
-        ]);
-        return $user;
+        return DB::transaction(static function () use ($data): User {
+            InviteCode::where('code', $data['code'])->delete();
+            /** @var User $user */
+            $user = User::create([
+                'name'      => $data['name'],
+                'email'     => $data['email'],
+                'password'  => bcrypt($data['password']),
+            ]);
+            return $user;
+        });
     }
 }

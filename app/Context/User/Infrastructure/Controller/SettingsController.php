@@ -7,7 +7,6 @@ namespace App\Context\User\Infrastructure\Controller;
 use App\Context\User\Infrastructure\Request\ChangePasswordRequest;
 use App\Context\User\Infrastructure\Request\UpdateProfileRequest;
 use App\Http\Controllers\Controller;
-use Auth;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -65,7 +64,7 @@ final class SettingsController extends Controller
      */
     public function password(ChangePasswordRequest $request): RedirectResponse
     {
-        $user = Auth::user();
+        $user = $request->user();
         if ($user === null) {
             throw new BadRequestException('Not found user');
         }
@@ -84,7 +83,7 @@ final class SettingsController extends Controller
      */
     public function updateProfile(UpdateProfileRequest $request): RedirectResponse
     {
-        $user = Auth::user();
+        $user = $request->user();
         if ($user === null) {
             throw new BadRequestException('Пользователь не найден');
         }

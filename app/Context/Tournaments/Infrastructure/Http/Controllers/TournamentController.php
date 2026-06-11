@@ -9,6 +9,7 @@ use App\Context\Tournaments\Application\Query\GetTournamentsQuery;
 use App\Context\Tournaments\Application\QueryHandler\GetTournamentDetailQueryHandler;
 use App\Context\Tournaments\Application\QueryHandler\GetTournamentsQueryHandler;
 use App\Context\Tournaments\Domain\Model\Tournament;
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ use Illuminate\View\View;
  * Контроллер для управления турнирами.
  * Использует CQRS паттерн через Query Handlers.
  */
-final class TournamentController
+final class TournamentController extends Controller
 {
     public const int GROUPS_PER_PAGE = 25;
 

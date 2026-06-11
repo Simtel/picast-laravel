@@ -5,28 +5,27 @@ declare(strict_types=1);
 namespace App\Context\ChadGPT\Infrastructure\Http\Controllers;
 
 use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
-use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
+use App\Context\ChadGPT\Application\Service\SendChatMessageService;
 use App\Context\ChadGPT\Domain\ChatModels;
-use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\ChadGPT\Infrastructure\Repository\StatWordsUsedRepository;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
-use App\Context\Common\Infrastructure\CommandBus;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
 final class ChadGptController extends Controller
 {
     public function index(
+        Request $request,
         ConversationRepository $conversationRepository,
         StatWordsUsedRepository $statWordsUsedRepository
     ): View {
-        $user = Auth::user();
+        $user = $request->user();
         $wordStats = $statWordsUsedRepository->findByUser($user);
 
         return view('personal.chadgpt.index', [
@@ -39,8 +38,7 @@ final class ChadGptController extends Controller
 
     public function sendMessage(
         SendMessageRequest $request,
-        CommandBus $commandBus,
-        ChadGptRequestService $chadGptRequestService
+        SendChatMessageService $sendChatMessageService,
     ): JsonResponse {
         Log::info('ChadGPT: sending message', ['request' => $request->all()]);
 
@@ -50,53 +48,19 @@ final class ChadGptController extends Controller
                 'userMessage' => $request->string('message')->value(),
             ]);
 
-            $response = $chadGptRequestService->request($chadGptRequestData);
+            $result = $sendChatMessageService->sendMessage($chadGptRequestData, $request->user());
 
-            if (!$response->successful()) {
-                Log::error('ChadGPT: API connection failed', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
-
+            if (!$result['success']) {
                 return response()->json(
-                    ['error' => 'Failed to connect to ChadGPT API'],
-                    Response::HTTP_INTERNAL_SERVER_ERROR
-                );
-            }
-            /** @var array{is_success: ?bool, response: string, used_words_count: int, error_message: ?string} $data */
-            $data = $response->json();
-
-            if (!($data['is_success'] ?? false)) {
-                Log::error('ChadGPT: API error response', $data);
-
-                return response()->json(
-                    ['error' => $data['error_message'] ?? 'Unknown API error'],
+                    ['error' => $result['error']],
                     Response::HTTP_BAD_REQUEST
                 );
             }
 
-            $userWordsCount = $data['used_words_count'];
-
-            try {
-                $command = new CreateChatConversationCommand(
-                    user: Auth::user(),
-                    model: $chadGptRequestData->model,
-                    userMessage: $chadGptRequestData->userMessage,
-                    response: $data['response'],
-                    userWordsCount: $userWordsCount,
-                );
-                $commandBus->execute($command);
-            } catch (Throwable $e) {
-                Log::error('ChadGPT: failed to save conversation', [
-                    'error' => $e->getMessage(),
-                    'user_id' => Auth::id(),
-                ]);
-            }
-
             return response()->json([
                 'success' => true,
-                'response' => $data['response'],
-                'used_words_count' => $userWordsCount,
+                'response' => $result['response'],
+                'used_words_count' => $result['used_words_count'],
             ]);
         } catch (Throwable $e) {
             Log::error('ChadGPT: request exception', [
@@ -105,31 +69,29 @@ final class ChadGptController extends Controller
             ]);
 
             return response()->json(
-                ['error' => 'An error occurred while communicating with ChadGPT API'],
+                ['error' => 'Произошла ошибка при общении с ChadGPT'],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
 
-    public function clearHistory(ConversationRepository $conversationRepository): JsonResponse
-    {
-        try {
-            $conversationRepository->deleteByUser(Auth::user());
+    public function clearHistory(
+        Request $request,
+        ConversationRepository $conversationRepository,
+        SendChatMessageService $sendChatMessageService,
+    ): JsonResponse {
+        $result = $sendChatMessageService->clearHistory($request->user(), $conversationRepository);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Chat history cleared successfully',
-            ]);
-        } catch (Throwable $e) {
-            Log::error('ChadGPT: не удалось очистить историю', [
-                'error' => $e->getMessage(),
-                'user_id' => Auth::id(),
-            ]);
-
+        if (!$result['success']) {
             return response()->json([
                 'success' => false,
-                'error' => 'Failed to clear chat history',
+                'error' => $result['error'],
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'История чатов успешно очищена',
+        ]);
     }
 }

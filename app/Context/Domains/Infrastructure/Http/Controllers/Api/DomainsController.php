@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Infrastructure\Http\Controllers\Api;
 
+use App\Context\Domains\Application\Contract\WhoisUpdater;
 use App\Context\Domains\Domain\Model\Domain;
-use App\Context\Domains\Domain\Model\Whois as WhoisModel;
 use App\Context\Domains\Domain\Resource\DomainResource;
-use App\Context\Domains\Infrastructure\Facades\Whois;
 use App\Context\Domains\Infrastructure\Request\DomainRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Iodev\Whois\Exceptions\ConnectionException;
-use Iodev\Whois\Exceptions\ServerMismatchException;
-use Iodev\Whois\Exceptions\WhoisException;
 use OpenApi\Attributes as OA;
 
 /**
@@ -27,8 +22,9 @@ use OpenApi\Attributes as OA;
  */
 final class DomainsController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        private readonly WhoisUpdater $whoisUpdater,
+    ) {
         $this->authorizeResource(Domain::class, 'domain');
     }
 
@@ -48,9 +44,9 @@ final class DomainsController extends Controller
             )
         ]
     )]
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $domains = Domain::whereUserId(Auth()->id())->get();
+        $domains = Domain::whereUserId($request->user()->id)->get();
 
         return DomainResource::collection($domains);
     }
@@ -106,7 +102,7 @@ final class DomainsController extends Controller
     {
         Domain::create([
             'name' => $request->get('name'),
-            'user_id' => Auth::id(),
+            'user_id' => $request->user()->id,
         ]);
 
         return response()->json(['success' => true]);
@@ -134,17 +130,10 @@ final class DomainsController extends Controller
     public function update(Domain $domain): JsonResponse
     {
         try {
-            $whois = Whois::loadDomainInfo($domain->name);
-            WhoisModel::create([
-                'domain_id' => $domain->id,
-                'text' => $whois->getResponse()->text,
-            ]);
-            $domain->expire_at = Carbon::createFromTimestamp($whois->expirationDate);
-            $domain->updated_at = Carbon::now();
-            $domain->save();
+            $this->whoisUpdater->update($domain);
 
             return response()->json(['success' => true]);
-        } catch (ConnectionException|ServerMismatchException|WhoisException $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Ошибка при получении WHOIS информации: ' . $e->getMessage(),

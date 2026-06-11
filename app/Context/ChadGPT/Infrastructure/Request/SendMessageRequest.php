@@ -11,7 +11,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
-class SendMessageRequest extends FormRequest
+final class SendMessageRequest extends FormRequest
 {
     public function authorize(): bool
     {
