@@ -45,7 +45,7 @@
 |-----------|-----------------------------|------------|
 | `db`      | MySQL 8.3.0                 | 3306:3306  |
 | `php`     | Custom PHP 8.5-fpm-alpine   | —          |
-| `nginx`   | nginx:1.17                  | 80:80      |
+| `nginx`   | nginx:stable-alpine         | 80:80      |
 | `adminer` | Adminer (DB management)     | 8080:8080  |
 | `memcached` | memcached:latest          | —          |
 | `mailhog` | MailHog (email testing)     | 1025, 8025 |

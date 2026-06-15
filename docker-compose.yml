@@ -37,7 +37,7 @@ services:
 
   nginx:
     container_name: picast_nginx
-    image: 'nginx:1.17'
+    image: 'nginx:stable-alpine'
     ports:
       - '80:80'
     volumes:
