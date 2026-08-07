@@ -6,6 +6,7 @@ namespace App\Context\ChadGPT\Application\Service;
 
 use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
 use App\Context\ChadGPT\Domain\Command\CreateChatConversationCommand;
+use App\Context\ChadGPT\Domain\Model\ChadGptConversation;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\Common\Infrastructure\CommandBus;
 use App\Context\User\Domain\Model\User;
@@ -14,9 +15,12 @@ use Throwable;
 
 final class SendChatMessageService
 {
+    private const int HISTORY_CONVERSATIONS_LIMIT = 10;
+
     public function __construct(
         private readonly CommandBus $commandBus,
         private readonly ChadGptRequestService $chadGptRequestService,
+        private readonly ConversationRepository $conversationRepository,
     ) {
     }
 
@@ -27,6 +31,8 @@ final class SendChatMessageService
      */
     public function sendMessage(ChadGptRequestData $data, User $user): array
     {
+        $data = $this->withHistory($data, $user);
+
         $response = $this->chadGptRequestService->request($data);
 
         if (!$response->successful()) {
@@ -108,5 +114,40 @@ final class SendChatMessageService
                 'error' => 'Не удалось очистить историю чатов',
             ];
         }
+    }
+
+    private function withHistory(ChadGptRequestData $data, User $user): ChadGptRequestData
+    {
+        if ($data->history !== null) {
+            return $data;
+        }
+
+        return new ChadGptRequestData(
+            model: $data->model,
+            userMessage: $data->userMessage,
+            temperature: $data->temperature,
+            maxTokens: $data->maxTokens,
+            history: $this->buildHistory($user),
+            images: $data->images,
+        );
+    }
+
+    /**
+     * @return array<int, array{role: string, content: string}>
+     */
+    private function buildHistory(User $user): array
+    {
+        return $this->conversationRepository
+            ->findBuUser($user)
+            ->reverse()
+            ->take(self::HISTORY_CONVERSATIONS_LIMIT)
+            ->flatMap(static function (ChadGptConversation $conversation): array {
+                return [
+                    ['role' => 'user', 'content' => $conversation->user_message],
+                    ['role' => 'assistant', 'content' => $conversation->ai_response],
+                ];
+            })
+            ->values()
+            ->all();
     }
 }
