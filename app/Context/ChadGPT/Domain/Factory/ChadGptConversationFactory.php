@@ -26,7 +26,7 @@ class ChadGptConversationFactory extends Factory
             'model' => $this->faker->randomElement(ChatModels::values()),
             'user_message' => $this->faker->sentence,
             'ai_response' => $this->faker->paragraph,
-            'used_words_count' => $this->faker->numberBetween(10, 100),
+            'used_tokens_count' => $this->faker->numberBetween(10, 100),
         ];
     }
 }

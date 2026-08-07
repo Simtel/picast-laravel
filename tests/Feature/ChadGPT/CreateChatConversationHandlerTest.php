@@ -37,7 +37,7 @@ class CreateChatConversationHandlerTest extends TestCase
         $command->shouldReceive('getModel')->andReturn('gpt-4');
         $command->shouldReceive('getUserMessage')->andReturn('Hello AI');
         $command->shouldReceive('getResponse')->andReturn('Hello Human');
-        $command->shouldReceive('getUserWordsCount')->andReturn(2);
+        $command->shouldReceive('getUserTokensCount')->andReturn(2);
 
         $this->handler->handle($command);
 
@@ -49,6 +49,6 @@ class CreateChatConversationHandlerTest extends TestCase
         $this->assertEquals('gpt-4', $conversation->model);
 
         $wordStat = ChadGptConversationWordStat::first();
-        $this->assertEquals(2, $wordStat->words_used);
+        $this->assertEquals(2, $wordStat->tokens_used);
     }
 }

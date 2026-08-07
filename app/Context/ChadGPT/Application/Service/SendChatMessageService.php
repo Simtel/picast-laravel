@@ -10,6 +10,7 @@ use App\Context\ChadGPT\Domain\Model\ChadGptConversation;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\Common\Infrastructure\CommandBus;
 use App\Context\User\Domain\Model\User;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -27,7 +28,7 @@ final class SendChatMessageService
     /**
      * @param ChadGptRequestData $data
      * @param User $user
-     * @return array{success: bool, response: string, used_words_count: int, error: string|null}
+     * @return array{success: bool, response: string, used_tokens_count: int, error: string|null}
      */
     public function sendMessage(ChadGptRequestData $data, User $user): array
     {
@@ -36,7 +37,7 @@ final class SendChatMessageService
         $response = $this->chadGptRequestService->request($data);
 
         if (!$response->successful()) {
-            Log::error('ChadGPT: API connection failed', [
+            Log::error('ChadGPT: API request failed', [
                 'status' => $response->status(),
                 'body' => $response->body(),
             ]);
@@ -44,34 +45,24 @@ final class SendChatMessageService
             return [
                 'success' => false,
                 'response' => '',
-                'used_words_count' => 0,
-                'error' => 'Не удалось подключиться к ChadGPT API',
+                'used_tokens_count' => 0,
+                'error' => $this->extractErrorMessage($response),
             ];
         }
 
-        /** @var array{is_success: ?bool, response: string, used_words_count: int, error_message: ?string} $responseData */
+        /** @var array{choices?: array<int, array{message?: array{content?: string}}>, usage?: array{total_tokens?: int}} $responseData */
         $responseData = $response->json();
 
-        if (!($responseData['is_success'] ?? false)) {
-            Log::error('ChadGPT: API error response', $responseData);
-
-            return [
-                'success' => false,
-                'response' => '',
-                'used_words_count' => 0,
-                'error' => $responseData['error_message'] ?? 'Неизвестная ошибка API',
-            ];
-        }
-
-        $userWordsCount = $responseData['used_words_count'];
+        $aiResponse = $responseData['choices'][0]['message']['content'] ?? '';
+        $usedTokensCount = $responseData['usage']['total_tokens'] ?? 0;
 
         try {
             $command = new CreateChatConversationCommand(
                 user: $user,
                 model: $data->model,
                 userMessage: $data->userMessage,
-                response: $responseData['response'],
-                userWordsCount: $userWordsCount,
+                response: $aiResponse,
+                userTokensCount: $usedTokensCount,
             );
             $this->commandBus->execute($command);
         } catch (Throwable $e) {
@@ -83,8 +74,8 @@ final class SendChatMessageService
 
         return [
             'success' => true,
-            'response' => $responseData['response'],
-            'used_words_count' => $userWordsCount,
+            'response' => $aiResponse,
+            'used_tokens_count' => $usedTokensCount,
             'error' => null,
         ];
     }
@@ -149,5 +140,21 @@ final class SendChatMessageService
             })
             ->values()
             ->all();
+    }
+
+    /**
+     * @param Response $response
+     * @return string
+     */
+    private function extractErrorMessage(Response $response): string
+    {
+        /** @var array{error?: array{message?: string}} $responseData */
+        $responseData = $response->json();
+
+        if (isset($responseData['error']['message'])) {
+            return $responseData['error']['message'];
+        }
+
+        return 'Не удалось подключиться к ChadGPT API';
     }
 }

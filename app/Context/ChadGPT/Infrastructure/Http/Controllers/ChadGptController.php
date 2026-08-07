@@ -23,7 +23,7 @@ final class ChadGptController extends Controller
     public function index(
         Request $request,
         ConversationRepository $conversationRepository,
-        StatWordsUsedRepository $statWordsUsedRepository
+        StatWordsUsedRepository $statWordsUsedRepository,
     ): View {
         $user = $request->user();
         $wordStats = $statWordsUsedRepository->findByUser($user);
@@ -32,7 +32,7 @@ final class ChadGptController extends Controller
             'models' => ChatModels::cases(),
             'conversations' => $conversationRepository->findBuUser($user),
             'word_stats' => $wordStats,
-            'word_stats_sum' => $wordStats->sum(static fn ($stat) => $stat->getWordsUsed()),
+            'word_stats_sum' => $wordStats->sum(static fn ($stat) => $stat->getTokensUsed()),
         ]);
     }
 
@@ -44,8 +44,11 @@ final class ChadGptController extends Controller
 
         try {
             $chadGptRequestData = ChadGptRequestData::from([
-                'model' => $request->input('model', 'gpt-4o-mini'),
+                'model' => $request->input('model', ChatModels::default()->value),
                 'userMessage' => $request->string('message')->value(),
+                'temperature' => $request->filled('temperature') ? $request->float('temperature') : null,
+                'maxTokens' => $request->filled('max_tokens') ? $request->integer('max_tokens') : null,
+                'images' => $request->input('images'),
             ]);
 
             $result = $sendChatMessageService->sendMessage($chadGptRequestData, $request->user());
@@ -60,7 +63,7 @@ final class ChadGptController extends Controller
             return response()->json([
                 'success' => true,
                 'response' => $result['response'],
-                'used_words_count' => $result['used_words_count'],
+                'used_tokens_count' => $result['used_tokens_count'],
             ]);
         } catch (Throwable $e) {
             Log::error('ChadGPT: request exception', [

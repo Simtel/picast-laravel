@@ -45,12 +45,12 @@
                     </div>
                     <div class="card-body">
                         <div id="usageStats">
-                            <p>Использовано слов: </p>
+                            <p>Использовано токенов: </p>
 
                             @foreach($word_stats as $word_stat)
-                                {{$word_stat->getStatDate()->format('m-Y')}}: {{$word_stat->getWordsUsed()}}
+                                {{$word_stat->getStatDate()->format('m-Y')}}: {{$word_stat->getTokensUsed()}}
                             @endforeach
-                            <p>Всего использовано: <span id="wordsCount">{{$word_stats_sum}}</span></p>
+                            <p>Всего использовано: <span id="tokensCount">{{$word_stats_sum}}</span></p>
                         </div>
                     </div>
                 </div>
@@ -164,9 +164,9 @@
             const messageInput = document.getElementById('messageInput');
             const modelSelect = document.getElementById('modelSelect');
             const chatHistory = document.getElementById('chatHistory');
-            const wordsCount = document.getElementById('wordsCount');
+            const tokensCount = document.getElementById('tokensCount');
 
-            let totalWords = parseInt(wordsCount.textContent);
+            let totalTokens = parseInt(tokensCount.textContent);
 
             // Check if CSRF token is available
             const csrfToken = document.querySelector('meta[name="csrf-token"]');
@@ -220,9 +220,9 @@
                             // Add AI response to chat with Markdown rendering
                             addMessageToChat('ChadGPT', data.response, 'ai-message', true);
 
-                            // Update word count
-                            totalWords += data.used_words_count || 0;
-                            wordsCount.textContent = totalWords;
+                            // Update token count
+                            totalTokens += data.used_tokens_count || 0;
+                            tokensCount.textContent = totalTokens;
                         } else {
                             addMessageToChat('Ошибка', JSON.stringify(data.errors) || 'Произошла неизвестная ошибка', 'error-message');
                         }
@@ -261,8 +261,8 @@
                         if (data.success) {
                             // Clear chat display
                             chatHistory.innerHTML = '<div class="alert alert-info">Ваш разговор с ChadGPT появится здесь.</div>';
-                            // Reset word count if exists
-                            if (wordsCount) wordsCount.textContent = '0';
+                            // Reset token count if exists
+                            if (tokensCount) tokensCount.textContent = '0';
                             // Show success message
                             alert('История чата успешно очищена');
                         } else {

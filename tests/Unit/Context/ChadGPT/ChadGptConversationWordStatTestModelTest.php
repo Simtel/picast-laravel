@@ -17,7 +17,7 @@ class ChadGptConversationWordStatTestModelTest extends TestCase
 
         $stat = new ChadGptConversationWordStat([
             'user_id' => $user->id,
-            'words_used' => 150,
+            'tokens_used' => 150,
             'stat_date' => '2023-10-15',
         ]);
 
@@ -26,7 +26,7 @@ class ChadGptConversationWordStatTestModelTest extends TestCase
         $this->assertDatabaseHas('chadgpt_conversations_word_stat', [
             'id' => $stat->id,
             'user_id' => $user->id,
-            'words_used' => 150,
+            'tokens_used' => 150,
             'stat_date' => '2023-10-15',
         ]);
     }
@@ -37,7 +37,7 @@ class ChadGptConversationWordStatTestModelTest extends TestCase
 
         $stat = ChadGptConversationWordStat::create([
             'user_id' => $user->id,
-            'words_used' => 100,
+            'tokens_used' => 100,
             'stat_date' => Carbon::today(),
         ]);
 
@@ -49,7 +49,7 @@ class ChadGptConversationWordStatTestModelTest extends TestCase
     {
         $fillable = [
             'user_id',
-            'words_used',
+            'tokens_used',
             'stat_date',
         ];
 
@@ -60,7 +60,7 @@ class ChadGptConversationWordStatTestModelTest extends TestCase
     {
         $casts = [
             'user_id' => 'integer',
-            'words_used' => 'integer',
+            'tokens_used' => 'integer',
             'stat_date' => 'date',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
@@ -81,13 +81,13 @@ class ChadGptConversationWordStatTestModelTest extends TestCase
 
         $stat = ChadGptConversationWordStat::create([
             'user_id' => $user->id,
-            'words_used' => 200,
+            'tokens_used' => 200,
             'stat_date' => Carbon::today(),
         ]);
 
         $this->assertEquals($stat->id, $stat->getId());
         $this->assertEquals($user->id, $stat->getUserId());
-        $this->assertEquals(200, $stat->getWordsUsed());
+        $this->assertEquals(200, $stat->getTokensUsed());
         $this->assertInstanceOf(Carbon::class, $stat->getCreatedAt());
         $this->assertInstanceOf(Carbon::class, $stat->getUpdatedAt());
         $this->assertInstanceOf(User::class, $stat->getUser());

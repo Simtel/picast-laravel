@@ -35,7 +35,7 @@ class ChadGPTControllerTest extends TestCase
     public function test_index_returns_view(): void
     {
         ChadGptConversationWordStat::create(
-            ['user_id' => $this->user->id, 'stat_date' => Carbon::now()->firstOfMonth(), 'words_used' => 100]
+            ['user_id' => $this->user->id, 'stat_date' => Carbon::now()->firstOfMonth(), 'tokens_used' => 100]
         );
 
         ChadGptConversation::factory()->create(['user_id' => $this->user->id]);
@@ -46,6 +46,7 @@ class ChadGPTControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewIs('personal.chadgpt.index');
         $response->assertViewHas('conversations');
+        $response->assertViewHas('word_stats');
     }
 
     public function test_clear_history_removes_all_user_conversations(): void
@@ -133,12 +134,14 @@ class ChadGPTControllerTest extends TestCase
         $response = Mockery::mock(Response::class);
         $response->shouldReceive('successful')->andReturn(true);
         $response->shouldReceive('json')->andReturn([
-            'is_success' => true,
-            'response' => $responseText,
-            'used_words_count' => $usedWordsCount,
-            'used_tokens_count' => 20,
-            'error_code' => null,
-            'error_message' => null,
+            'choices' => [
+                ['message' => ['content' => $responseText]],
+            ],
+            'usage' => [
+                'prompt_tokens' => 30,
+                'completion_tokens' => 70,
+                'total_tokens' => 100,
+            ],
         ]);
 
 
@@ -146,16 +149,22 @@ class ChadGPTControllerTest extends TestCase
 
         app()->instance(ChadGptRequestService::class, $service);
 
-        $this->postJson(route('chadgpt.send-message'), [
+        $response = $this->postJson(route('chadgpt.send-message'), [
             'message' => $responseText,
-            'model' => ChatModels::GPT_4O_MINI
+            'model' => ChatModels::GPT_5_6_TERRA
         ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'response' => $responseText,
+                'used_tokens_count' => 100,
+            ]);
     }
 
     public function test_send_message_error_save(): void
     {
         $responseText = 'Тестовый запрос';
-        $usedWordsCount = 100;
         $this->actingAs($this->user);
 
         $bus = $this->getMockBuilder(CommandBus::class)
@@ -172,12 +181,12 @@ class ChadGPTControllerTest extends TestCase
         $responseChad = Mockery::mock(Response::class);
         $responseChad->shouldReceive('successful')->andReturn(true);
         $responseChad->shouldReceive('json')->andReturn([
-            'is_success' => true,
-            'response' => $responseText,
-            'used_words_count' => $usedWordsCount,
-            'used_tokens_count' => 20,
-            'error_code' => null,
-            'error_message' => null,
+            'choices' => [
+                ['message' => ['content' => $responseText]],
+            ],
+            'usage' => [
+                'total_tokens' => 100,
+            ],
         ]);
 
 
@@ -190,7 +199,7 @@ class ChadGPTControllerTest extends TestCase
 
         $response = $this->postJson(route('chadgpt.send-message'), [
             'message' => $responseText,
-            'model' => ChatModels::GPT_4O_MINI
+            'model' => ChatModels::GPT_5_6_TERRA
         ]);
 
         $response->assertStatus(200);
@@ -199,7 +208,6 @@ class ChadGPTControllerTest extends TestCase
     public function test_send_message_error_error_api_response(): void
     {
         $responseText = 'Тестовый запрос';
-        $usedWordsCount = 100;
         $this->actingAs($this->user);
 
         $bus = $this->getMockBuilder(CommandBus::class)
@@ -215,13 +223,13 @@ class ChadGPTControllerTest extends TestCase
 
         $responseChad = Mockery::mock(Response::class);
         $responseChad->shouldReceive('successful')->andReturn(false);
+        $responseChad->shouldReceive('status')->andReturn(429);
+        $responseChad->shouldReceive('body')->andReturn('{"error":{"message":"insufficient_quota"}}');
         $responseChad->shouldReceive('json')->andReturn([
-            'is_success' => false,
-            'response' => $responseText,
-            'used_words_count' => $usedWordsCount,
-            'used_tokens_count' => 20,
-            'error_code' => null,
-            'error_message' => null,
+            'error' => [
+                'message' => 'insufficient_quota',
+                'type' => 'invalid_request_error',
+            ],
         ]);
 
 
@@ -234,16 +242,18 @@ class ChadGPTControllerTest extends TestCase
 
         $response = $this->postJson(route('chadgpt.send-message'), [
             'message' => $responseText,
-            'model' => ChatModels::GPT_4O_MINI
+            'model' => ChatModels::GPT_5_6_TERRA
         ]);
 
-        $response->assertStatus(500);
+        $response->assertStatus(400)
+            ->assertJson([
+                'error' => 'insufficient_quota',
+            ]);
     }
 
     public function test_send_message_validation_failed(): void
     {
         $responseText = str_repeat('a', 1001);
-        $usedWordsCount = 100;
         $this->actingAs($this->user);
 
         $bus = $this->getMockBuilder(CommandBus::class)
@@ -267,7 +277,7 @@ class ChadGPTControllerTest extends TestCase
 
         $response = $this->postJson(route('chadgpt.send-message'), [
             'message' => $responseText,
-            'model' => ChatModels::GPT_4O_MINI
+            'model' => ChatModels::GPT_5_6_TERRA
         ]);
 
         $response->assertStatus(422);

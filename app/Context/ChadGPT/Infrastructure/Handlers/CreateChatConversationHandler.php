@@ -23,7 +23,7 @@ class CreateChatConversationHandler implements CommandHandlerInterface
             'model' => $command->getModel(),
             'user_message' => $command->getUserMessage(),
             'ai_response' => $command->getResponse(),
-            'used_words_count' => $command->getUserWordsCount()
+            'used_tokens_count' => $command->getUserTokensCount()
         ]);
 
         $statDate = now()->startOfMonth();
@@ -32,7 +32,7 @@ class CreateChatConversationHandler implements CommandHandlerInterface
             'stat_date' => $statDate
         ]);
 
-        $wordStat->words_used += $command->getUserWordsCount();
+        $wordStat->tokens_used += $command->getUserTokensCount();
         $wordStat->save();
 
         return null;

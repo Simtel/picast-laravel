@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property int $user_id
- * @property int $words_used
+ * @property int $tokens_used
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User $user
@@ -23,7 +23,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversationWordStat whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversationWordStat whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversationWordStat whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversationWordStat whereWordsUsed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversationWordStat whereTokensUsed($value)
  * @property Carbon $stat_date
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversationWordStat whereStatDate($value)
  * @mixin \Eloquent
@@ -34,13 +34,13 @@ class ChadGptConversationWordStat extends Model
 
     protected $fillable = [
         'user_id',
-        'words_used',
+        'tokens_used',
         'stat_date',
     ];
 
     protected $casts = [
         'user_id' => 'integer',
-        'words_used' => 'integer',
+        'tokens_used' => 'integer',
         'stat_date' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -64,9 +64,9 @@ class ChadGptConversationWordStat extends Model
         return $this->user_id;
     }
 
-    public function getWordsUsed(): int
+    public function getTokensUsed(): int
     {
-        return $this->words_used;
+        return $this->tokens_used;
     }
 
     public function getCreatedAt(): ?Carbon

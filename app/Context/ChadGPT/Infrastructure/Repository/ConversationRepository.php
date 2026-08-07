@@ -18,6 +18,7 @@ class ConversationRepository
     {
         return ChadGptConversation::whereUserId($user->getId())
             ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->limit(50)
             ->get();
     }

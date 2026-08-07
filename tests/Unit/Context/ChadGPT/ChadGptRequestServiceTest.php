@@ -8,6 +8,7 @@ use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use Config;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Log;
 use RuntimeException;
@@ -15,6 +16,8 @@ use Tests\TestCase;
 
 class ChadGptRequestServiceTest extends TestCase
 {
+    private const string ENDPOINT = 'https://api.chadgpt.com/chat/completions';
+
     private ChadGptRequestService $service;
 
     protected function setUp(): void
@@ -26,12 +29,11 @@ class ChadGptRequestServiceTest extends TestCase
     public function testRequestSuccessfully(): void
     {
         $message = 'Test message';
-        $model = 'gpt-4';
+        $model = 'gpt-5.6-terra';
         $apiKey = 'test-api-key';
-        $baseUrl = 'https://api.chadgpt.com/';
 
         Config::set('chadgpt.api_key', $apiKey);
-        Config::set('chadgpt.url', $baseUrl);
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
 
         $chadGptRequestData = ChadGptRequestData::from([
             'model' => $model,
@@ -39,64 +41,40 @@ class ChadGptRequestServiceTest extends TestCase
         ]);
 
         Http::fake([
-            $baseUrl . $model => Http::response(['result' => 'success'], 200)
+            self::ENDPOINT => Http::response(['choices' => [['message' => ['content' => 'success']]]], 200)
         ]);
 
         $response = $this->service->request($chadGptRequestData);
 
         $this->assertEquals(200, $response->status());
-        $this->assertEquals(['result' => 'success'], $response->json());
+        $this->assertEquals(['choices' => [['message' => ['content' => 'success']]]], $response->json());
 
-        Http::assertSent(static function ($request) use ($baseUrl, $model, $message, $apiKey) {
-            return $request->url() === $baseUrl . $model
-                //@phpstan-ignore-next-line
-                && $request['message'] === $message
-                //@phpstan-ignore-next-line
-                && $request['api_key'] === $apiKey;
-        });
-    }
+        Http::assertSent(static function (Request $request) use ($model, $message, $apiKey) {
+            $data = $request->data();
 
-    public function testRequestWithTimeout(): void
-    {
-        $apiKey = 'test-api-key';
-        $baseUrl = 'https://api.chadgpt.com/';
-        $model = 'gpt-4';
-
-        Config::set('chadgpt.api_key', $apiKey);
-        Config::set('chadgpt.url', $baseUrl);
-
-        $chadGptRequestData = ChadGptRequestData::from([
-            'model' => $model,
-            'userMessage' => 'Test',
-        ]);
-
-        Http::fake([
-            $baseUrl . $model => Http::response(['result' => 'success'], 200)
-        ]);
-
-        $this->service->request($chadGptRequestData);
-
-        Http::assertSent(static function ($request) {
-            return true; // Проверяем, что запрос отправлен с таймаутом
+            return $request->url() === self::ENDPOINT
+                && $request->hasHeader('Authorization', 'Bearer ' . $apiKey)
+                && $data['model'] === $model
+                && $data['messages'] === [
+                    ['role' => 'user', 'content' => $message],
+                ];
         });
     }
 
     public function testRequestThrowsConnectionException(): void
     {
         $apiKey = 'test-api-key';
-        $baseUrl = 'https://api.chadgpt.com/';
-        $model = 'gpt-4';
 
         Config::set('chadgpt.api_key', $apiKey);
-        Config::set('chadgpt.url', $baseUrl);
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
 
         $chadGptRequestData = ChadGptRequestData::from([
-            'model' => $model,
+            'model' => 'gpt-5.6-terra',
             'userMessage' => 'Test',
         ]);
 
         Http::fake([
-            $baseUrl . $model => static function () {
+            self::ENDPOINT => static function () {
                 throw new ConnectionException('Connection failed');
             }
         ]);
@@ -113,7 +91,7 @@ class ChadGptRequestServiceTest extends TestCase
         Config::set('chadgpt.url', 'https://api.chadgpt.com/');
 
         $chadGptRequestData = ChadGptRequestData::from([
-            'model' => 'gpt-4',
+            'model' => 'gpt-5.6-terra',
             'userMessage' => 'Test',
         ]);
 
@@ -129,11 +107,11 @@ class ChadGptRequestServiceTest extends TestCase
 
     public function testGetApiKeyThrowsExceptionWhenNotString(): void
     {
-        Config::set('chadgpt.api_key', 12345); // Не строка
+        Config::set('chadgpt.api_key', 12345);
         Config::set('chadgpt.url', 'https://api.chadgpt.com/');
 
         $chadGptRequestData = ChadGptRequestData::from([
-            'model' => 'gpt-4',
+            'model' => 'gpt-5.6-terra',
             'userMessage' => 'Test',
         ]);
 
@@ -153,7 +131,7 @@ class ChadGptRequestServiceTest extends TestCase
         Config::set('chadgpt.url', 'https://api.chadgpt.com/');
 
         $chadGptRequestData = ChadGptRequestData::from([
-            'model' => 'gpt-4',
+            'model' => 'gpt-5.6-terra',
             'userMessage' => 'Test',
         ]);
 
@@ -169,52 +147,132 @@ class ChadGptRequestServiceTest extends TestCase
 
     public function testRequestBuildsCorrectEndpoint(): void
     {
-        $baseUrl = 'https://api.chadgpt.com/v1/';
-        $model = 'gpt-3.5-turbo';
-        $expectedEndpoint = $baseUrl . $model;
-
         Config::set('chadgpt.api_key', 'test-key');
-        Config::set('chadgpt.url', $baseUrl);
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/v1/');
 
         $chadGptRequestData = ChadGptRequestData::from([
-            'model' => $model,
+            'model' => 'gpt-5.6-terra',
             'userMessage' => 'Hello',
         ]);
 
         Http::fake([
-            $expectedEndpoint => Http::response(['data' => 'test'], 200)
+            'https://api.chadgpt.com/v1/chat/completions' => Http::response(['data' => 'test'], 200)
         ]);
 
         $this->service->request($chadGptRequestData);
 
-        Http::assertSent(static function ($request) use ($expectedEndpoint) {
-            return $request->url() === $expectedEndpoint;
+        Http::assertSent(static function (Request $request) {
+            return $request->url() === 'https://api.chadgpt.com/v1/chat/completions';
         });
     }
 
-    public function testRequestSendsCorrectPayload(): void
+    public function testRequestSendsMessagesWithHistory(): void
     {
         $message = 'What is the weather?';
-        $apiKey = 'secret-api-key-123';
 
-        Config::set('chadgpt.api_key', $apiKey);
+        Config::set('chadgpt.api_key', 'secret-api-key-123');
         Config::set('chadgpt.url', 'https://api.chadgpt.com/');
 
         $chadGptRequestData = ChadGptRequestData::from([
-            'model' => 'gpt-4',
+            'model' => 'gpt-5.6-terra',
             'userMessage' => $message,
+            'history' => [
+                ['role' => 'user', 'content' => 'Previous question'],
+                ['role' => 'assistant', 'content' => 'Previous answer'],
+            ],
         ]);
 
         Http::fake();
 
         $this->service->request($chadGptRequestData);
 
-        Http::assertSent(static function ($request) use ($message, $apiKey) {
+        Http::assertSent(static function (Request $request) use ($message) {
             $data = $request->data();
-            //@phpstan-ignore-next-line
-            return $data['message'] === $message
-                //@phpstan-ignore-next-line
-                && $data['api_key'] === $apiKey;
+
+            return $data['model'] === 'gpt-5.6-terra'
+                && $data['messages'] === [
+                    ['role' => 'user', 'content' => 'Previous question'],
+                    ['role' => 'assistant', 'content' => 'Previous answer'],
+                    ['role' => 'user', 'content' => $message],
+                ];
+        });
+    }
+
+    public function testRequestSendsOptionalParams(): void
+    {
+        Config::set('chadgpt.api_key', 'secret-api-key-123');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => 'gpt-5.6-terra',
+            'userMessage' => 'Hello',
+            'temperature' => 0.7,
+            'maxTokens' => 500,
+        ]);
+
+        Http::fake();
+
+        $this->service->request($chadGptRequestData);
+
+        Http::assertSent(static function (Request $request) {
+            $data = $request->data();
+
+            return $data['temperature'] === 0.7
+                && $data['max_tokens'] === 500
+                && $data['model'] === 'gpt-5.6-terra';
+        });
+    }
+
+    public function testRequestSendsImagesAsContentParts(): void
+    {
+        Config::set('chadgpt.api_key', 'secret-api-key-123');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => 'gpt-5.6-terra',
+            'userMessage' => 'Опиши, что на изображении.',
+            'images' => ['https://example.com/image.jpg'],
+        ]);
+
+        Http::fake();
+
+        $this->service->request($chadGptRequestData);
+
+        Http::assertSent(static function (Request $request) {
+            $data = $request->data();
+
+            return $data['messages'] === [
+                [
+                    'role' => 'user',
+                    'content' => [
+                        ['type' => 'text', 'text' => 'Опиши, что на изображении.'],
+                        ['type' => 'image_url', 'image_url' => ['url' => 'https://example.com/image.jpg']],
+                    ],
+                ],
+            ];
+        });
+    }
+
+    public function testRequestDoesNotSendNullOptionalParams(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        $chadGptRequestData = ChadGptRequestData::from([
+            'model' => 'gpt-5.6-terra',
+            'userMessage' => 'Hello',
+        ]);
+
+        Http::fake();
+
+        $this->service->request($chadGptRequestData);
+
+        Http::assertSent(static function (Request $request) {
+            $data = $request->data();
+
+            return !array_key_exists('temperature', $data)
+                && !array_key_exists('max_tokens', $data)
+                && isset($data['messages']);
         });
     }
 }

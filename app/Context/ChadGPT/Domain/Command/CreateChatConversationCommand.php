@@ -14,7 +14,7 @@ class CreateChatConversationCommand implements CommandInterface
         private readonly string $model,
         private readonly string $userMessage,
         private readonly string $response,
-        private readonly int $userWordsCount,
+        private readonly int $userTokensCount,
     ) {
     }
 
@@ -38,9 +38,9 @@ class CreateChatConversationCommand implements CommandInterface
         return $this->response;
     }
 
-    public function getUserWordsCount(): int
+    public function getUserTokensCount(): int
     {
-        return $this->userWordsCount;
+        return $this->userTokensCount;
     }
 
 

@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $model
  * @property string $user_message
  * @property string $ai_response
- * @property int $used_words_count
+ * @property int $used_tokens_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read User $user
@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversation whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversation whereModel($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversation whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversation whereUsedWordsCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversation whereUsedTokensCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversation whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChadGptConversation whereUserMessage($value)
  * @method static \App\Context\ChadGPT\Domain\Factory\ChadGptConversationFactory factory($count = null, $state = [])
@@ -48,12 +48,12 @@ class ChadGptConversation extends Model
         'model',
         'user_message',
         'ai_response',
-        'used_words_count',
+        'used_tokens_count',
     ];
 
 
     protected $casts = [
-        'used_words_count' => 'integer',
+        'used_tokens_count' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

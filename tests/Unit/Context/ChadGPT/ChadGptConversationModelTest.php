@@ -20,7 +20,7 @@ class ChadGptConversationModelTest extends TestCase
             'model' => $conversation->model,
             'user_message' => $conversation->user_message,
             'ai_response' => $conversation->ai_response,
-            'used_words_count' => $conversation->used_words_count,
+            'used_tokens_count' => $conversation->used_tokens_count,
         ]);
     }
 
@@ -40,7 +40,7 @@ class ChadGptConversationModelTest extends TestCase
             'model',
             'user_message',
             'ai_response',
-            'used_words_count',
+            'used_tokens_count',
         ];
 
         $this->assertEquals($fillable, (new ChadGptConversation())->getFillable());
@@ -49,7 +49,7 @@ class ChadGptConversationModelTest extends TestCase
     public function test_casts(): void
     {
         $casts = [
-            'used_words_count' => 'integer',
+            'used_tokens_count' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
             'id' => 'int'

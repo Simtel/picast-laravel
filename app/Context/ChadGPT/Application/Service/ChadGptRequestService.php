@@ -15,6 +15,8 @@ class ChadGptRequestService
 {
     private const int TIMEOUT = 60;
 
+    private const string CHAT_COMPLETIONS_ENDPOINT = 'chat/completions';
+
 
     /**
      * @param ChadGptRequestData $chadGptRequestData
@@ -24,13 +26,9 @@ class ChadGptRequestService
     public function request(ChadGptRequestData $chadGptRequestData): Response
     {
         $requestData = [
-            'message' => $chadGptRequestData->userMessage,
-            'api_key' => $this->getApiKey(),
+            'model' => $chadGptRequestData->model,
+            'messages' => $this->buildMessages($chadGptRequestData),
         ];
-
-        if ($chadGptRequestData->history !== null) {
-            $requestData['history'] = $chadGptRequestData->history;
-        }
 
         if ($chadGptRequestData->temperature !== null) {
             $requestData['temperature'] = $chadGptRequestData->temperature;
@@ -40,79 +38,62 @@ class ChadGptRequestService
             $requestData['max_tokens'] = $chadGptRequestData->maxTokens;
         }
 
-        if ($chadGptRequestData->images !== null) {
-            $requestData['images'] = $chadGptRequestData->images;
-        }
-
-        $endpoint = config('chadgpt.url') . $chadGptRequestData->model;
+        /** @var string $baseUrl */
+        $baseUrl = config('chadgpt.url');
+        $endpoint = rtrim($baseUrl, '/') . '/' . self::CHAT_COMPLETIONS_ENDPOINT;
 
         /** @var Response $response */
-        $response = Http::timeout(self::TIMEOUT)->post($endpoint, $requestData);
+        $response = Http::timeout(self::TIMEOUT)
+            ->withToken($this->getApiKey(), 'Bearer')
+            ->post($endpoint, $requestData);
+
         return $response;
     }
 
     /**
-     * @return array{
-     *     is_success: bool,
-     *     used_words: int,
-     *     total_words: int,
-     *     remaining_words: int,
-     *     reserved_words: int,
-     *     error_code: string|null,
-     *     error_message: string|null,
-     * }
+     * @param ChadGptRequestData $chadGptRequestData
+     * @return array<int, array{role: string, content: string|array<int, array{type: string, text?: string, image_url?: array{url: string}}>}>
      */
-    public function getWordsBalance(): array
+    private function buildMessages(ChadGptRequestData $chadGptRequestData): array
     {
-        $endpoint = config('chadgpt.url') . 'words';
+        $messages = [];
 
-        $response = Http::timeout(self::TIMEOUT)->post($endpoint, [
-            'api_key' => $this->getApiKey(),
-        ]);
-
-        if (!$response->successful()) {
-            Log::error('ChadGPT: words balance request failed', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-            ]);
-
-            return [
-                'is_success' => false,
-                'used_words' => 0,
-                'total_words' => 0,
-                'remaining_words' => 0,
-                'reserved_words' => 0,
-                'error_code' => null,
-                'error_message' => 'Не удалось получить информацию о балансе искр',
-            ];
+        if ($chadGptRequestData->history !== null) {
+            foreach ($chadGptRequestData->history as $message) {
+                $messages[] = $message;
+            }
         }
 
-        /** @var array<string, mixed> $responseData */
-        $responseData = $response->json();
-
-        if (!($responseData['is_success'] ?? false)) {
-            Log::error('ChadGPT: words balance API error', $responseData);
-
-            return [
-                'is_success' => false,
-                'used_words' => 0,
-                'total_words' => 0,
-                'remaining_words' => 0,
-                'reserved_words' => 0,
-                'error_code' => isset($responseData['error_code']) ? strval($responseData['error_code']) : null,
-                'error_message' => isset($responseData['error_message']) ? strval($responseData['error_message']) : 'Неизвестная ошибка API',
-            ];
-        }
-
-        return [
-            'is_success' => true,
-            'used_words' => intval($responseData['used_words'] ?? 0),
-            'total_words' => intval($responseData['total_words'] ?? 0),
-            'remaining_words' => intval($responseData['remaining_words'] ?? 0),
-            'reserved_words' => intval($responseData['reserved_words'] ?? 0),
-            'error_code' => null,
-            'error_message' => null,
+        $messages[] = [
+            'role' => 'user',
+            'content' => $this->buildUserContent($chadGptRequestData),
         ];
+
+        return $messages;
+    }
+
+    /**
+     * @param ChadGptRequestData $chadGptRequestData
+     * @return string|array<int, array{type: string, text?: string, image_url?: array{url: string}}>
+     */
+    private function buildUserContent(ChadGptRequestData $chadGptRequestData): string|array
+    {
+        if ($chadGptRequestData->images === null || $chadGptRequestData->images === []) {
+            return $chadGptRequestData->userMessage;
+        }
+
+        $content = [
+            ['type' => 'text', 'text' => $chadGptRequestData->userMessage],
+        ];
+
+        foreach ($chadGptRequestData->images as $image) {
+            $content[] = [
+                'type' => 'image_url',
+                'image_url' => ['url' => $image],
+            ];
+        }
+
+        return $content;
     }
 
     private function getApiKey(): string

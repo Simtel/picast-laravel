@@ -26,6 +26,10 @@ final class SendMessageRequest extends FormRequest
         return [
             'message' => 'required|string|max:1000',
             'model' => 'nullable|string|in:' . implode(',', ChatModels::values()),
+            'temperature' => 'nullable|numeric|between:0,2',
+            'max_tokens' => 'nullable|integer|min:1',
+            'images' => 'nullable|array|max:5',
+            'images.*' => 'nullable|string',
         ];
     }
 

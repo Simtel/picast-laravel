@@ -6,6 +6,7 @@ namespace App\Context\ChadGPT\Infrastructure\Http\Controllers\Api;
 
 use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
 use App\Context\ChadGPT\Application\Service\SendChatMessageService;
+use App\Context\ChadGPT\Domain\ChatModels;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\ChadGPT\Infrastructure\Repository\StatWordsUsedRepository;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
@@ -26,10 +27,10 @@ use Throwable;
     properties: [
         new OA\Property(property: "id", type: "integer", example: 1),
         new OA\Property(property: "user_id", type: "integer", example: 1),
-        new OA\Property(property: "model", type: "string", example: "gpt-4o-mini"),
+        new OA\Property(property: "model", type: "string", example: "gpt-5.6-terra"),
         new OA\Property(property: "user_message", type: "string", example: "Привет!"),
         new OA\Property(property: "ai_response", type: "string", example: "Привет! Чем могу помочь?"),
-        new OA\Property(property: "used_words_count", type: "integer", example: 5),
+        new OA\Property(property: "used_tokens_count", type: "integer", example: 120),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2025-10-11T10:00:00Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-10-11T10:00:00Z"),
     ],
@@ -61,7 +62,7 @@ final class ChatsController extends Controller
         return response()->json([
             'conversations' => $conversationRepository->findBuUser($user),
             'word_stats' => $wordStats,
-            'word_stats_sum' => $wordStats->sum(static fn ($stat) => $stat->getWordsUsed()),
+            'word_stats_sum' => $wordStats->sum(static fn ($stat) => $stat->getTokensUsed()),
         ]);
     }
 
@@ -75,7 +76,7 @@ final class ChatsController extends Controller
                 required: ['message'],
                 properties: [
                     new OA\Property(property: 'message', description: 'Текст сообщения', type: 'string', example: 'Привет!'),
-                    new OA\Property(property: 'model', description: 'Модель ИИ', type: 'string', example: 'gpt-4o-mini'),
+                    new OA\Property(property: 'model', description: 'Модель ИИ', type: 'string', example: 'gpt-5.6-terra'),
                 ]
             )
         ),
@@ -94,8 +95,11 @@ final class ChatsController extends Controller
 
         try {
             $chadGptRequestData = ChadGptRequestData::from([
-                'model' => $request->input('model', 'gpt-4o-mini'),
+                'model' => $request->input('model', ChatModels::default()->value),
                 'userMessage' => $request->string('message')->value(),
+                'temperature' => $request->filled('temperature') ? $request->float('temperature') : null,
+                'maxTokens' => $request->filled('max_tokens') ? $request->integer('max_tokens') : null,
+                'images' => $request->input('images'),
             ]);
 
             $result = $sendChatMessageService->sendMessage($chadGptRequestData, $request->user());
@@ -110,7 +114,7 @@ final class ChatsController extends Controller
             return response()->json([
                 'success' => true,
                 'response' => $result['response'],
-                'used_words_count' => $result['used_words_count'],
+                'used_tokens_count' => $result['used_tokens_count'],
             ]);
         } catch (Throwable $e) {
             Log::error('ChadGPT: request exception', [
