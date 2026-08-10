@@ -4,118 +4,118 @@
 @section('content')
     <div class="main-content-header">
         <h1 class="h2">Чат ChadGPT</h1>
+        <div class="d-flex align-items-center">
+            <span class="text-muted mr-3">
+                Использовано: <span id="tokensCount">{{ $word_stats_sum }}</span> токенов
+            </span>
+            <button id="clearChatBtn" class="btn btn-outline-danger btn-sm">Очистить чат</button>
+        </div>
     </div>
 
-    <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Чат с ИИ моделями</h5>
+    <div class="card chat-card">
+        <div class="chat-body" id="chatHistory">
+            @if($conversations->count() > 0)
+                @foreach($conversations->reverse() as $conversation)
+                    <div class="chat-message user-message">
+                        <div class="message-label">Вы ({{ $conversation->model }})</div>
+                        <div class="message-text">{{ $conversation->user_message }}</div>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="modelSelect">Выберите модель:</label>
-                            <select class="form-control" id="modelSelect">
-                                @foreach($models as $model)
-                                    <option
-                                            value="{{ $model->value }}"
-                                            {{ $model->isDefault() ? 'selected' : '' }}
-                                    >
-                                        {{ $model->label() }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="messageInput">Ваше сообщение:</label>
-                            <textarea class="form-control" id="messageInput" rows="4"
-                                      placeholder="Введите ваше сообщение здесь..."></textarea>
-                        </div>
-
-                        <button id="sendMessageBtn" class="btn btn-primary">Отправить сообщение</button>
-                        <button id="clearChatBtn" class="btn btn-secondary ml-2">Очистить чат</button>
+                    <div class="chat-message ai-message">
+                        <div class="message-label">ChadGPT</div>
+                        <div class="ai-message-content">{!! \Illuminate\Mail\Markdown::parse($conversation->ai_response) !!}</div>
                     </div>
-                </div>
+                @endforeach
+            @else
+                <div class="alert alert-info chat-empty">Ваш разговор с ChadGPT появится здесь.</div>
+            @endif
+        </div>
+
+        <div class="chat-footer">
+            <div class="model-row">
+                <label class="mr-2 mb-0" for="modelSelect">Модель:</label>
+                <select class="form-control form-control-sm chat-model-select" id="modelSelect">
+                    @foreach($models as $model)
+                        <option
+                                value="{{ $model->value }}"
+                                {{ $model->isDefault() ? 'selected' : '' }}
+                        >
+                            {{ $model->label() }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Статистика использования</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="usageStats">
-                            <p>Использовано токенов: </p>
-
-                            @foreach($word_stats as $word_stat)
-                                {{$word_stat->getStatDate()->format('m-Y')}}: {{$word_stat->getTokensUsed()}}
-                            @endforeach
-                            <p>Всего использовано: <span id="tokensCount">{{$word_stats_sum}}</span></p>
-                        </div>
-                    </div>
-                </div>
+            <div class="form-row d-flex">
+                <input
+                    type="text"
+                    class="form-control chat-input"
+                    id="messageInput"
+                    placeholder="Введите ваше сообщение..."
+                    autocomplete="off"
+                >
+                <button id="sendMessageBtn" class="btn btn-primary ml-2">
+                    <i class="fa fa-paper-plane mr-1"></i>Отправить
+                </button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h5>История чата</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="chatHistory" class="chat-history">
-                            @if($conversations->count() > 0)
-                                @foreach($conversations->reverse() as $conversation)
-                                    <div class="user-message">
-                                        <div class="message-label">Вы ({{ $conversation->model }}):</div>
-                                        <div>{{ $conversation->user_message }}</div>
-                                    </div>
-                                    <div class="ai-message">
-                                        <div class="message-label">ChadGPT:</div>
-                                        <div class="ai-message-content">{!! \Illuminate\Mail\Markdown::parse($conversation->ai_response) !!}</div>
-                                    </div>
-                                @endforeach
-                            @else
-                                <div class="alert alert-info">Ваш разговор с ChadGPT появится здесь.</div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+    </div>
 
     <style>
-        .chat-history {
-            max-height: 800px;
+        .chat-card {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 210px);
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        .chat-body {
+            flex: 1 1 auto;
             overflow-y: auto;
+            padding: 20px;
+        }
+
+        .chat-footer {
+            flex-shrink: 0;
+            padding: 12px 15px;
+            border-top: 1px solid #e2e8f0;
+            background: #fff;
+        }
+
+        .chat-footer .model-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .chat-model-select {
+            max-width: 260px;
+        }
+
+        .chat-message {
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .chat-message .message-label {
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .chat-message .message-text {
+            white-space: pre-wrap;
+            word-break: break-word;
         }
 
         .user-message {
             background-color: #e3f2fd;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
+            align-self: flex-end;
         }
 
         .ai-message {
             background-color: #f5f5f5;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .message-label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .error-message {
-            background-color: #ffebee;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            color: #c62828;
         }
 
         /* Markdown styling */
@@ -125,12 +125,18 @@
             border-radius: 4px;
             padding: 10px;
             overflow-x: auto;
+            white-space: pre-wrap;
         }
 
         .ai-message-content code {
             background-color: #f4f4f4;
             padding: 2px 4px;
             border-radius: 3px;
+        }
+
+        .ai-message-content pre code {
+            background: transparent;
+            padding: 0;
         }
 
         .ai-message-content blockquote {
@@ -155,160 +161,200 @@
         .ai-message-content th {
             background-color: #f5f5f5;
         }
+
+        .error-message {
+            background-color: #ffebee;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            color: #c62828;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .typing-indicator {
+            color: #6c757d;
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .chat-card {
+                height: calc(100vh - 180px);
+            }
+        }
     </style>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const sendMessageBtn = document.getElementById('sendMessageBtn');
-            const clearChatBtn = document.getElementById('clearChatBtn');
-            const messageInput = document.getElementById('messageInput');
-            const modelSelect = document.getElementById('modelSelect');
-            const chatHistory = document.getElementById('chatHistory');
-            const tokensCount = document.getElementById('tokensCount');
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const sendMessageBtn = document.getElementById('sendMessageBtn');
+                const clearChatBtn = document.getElementById('clearChatBtn');
+                const messageInput = document.getElementById('messageInput');
+                const modelSelect = document.getElementById('modelSelect');
+                const chatHistory = document.getElementById('chatHistory');
+                const tokensCount = document.getElementById('tokensCount');
 
-            let totalTokens = parseInt(tokensCount.textContent);
+                let totalTokens = parseInt(tokensCount.textContent) || 0;
 
-            // Check if CSRF token is available
-            const csrfToken = document.querySelector('meta[name="csrf-token"]');
-            if (!csrfToken) {
-                console.error('CSRF token not found');
-                addMessageToChat('Система', 'Ошибка: CSRF токен не найден. Пожалуйста, обновите страницу.', 'error-message');
-                return;
-            }
-
-            sendMessageBtn.addEventListener('click', function () {
-                const message = messageInput.value.trim();
-                const model = modelSelect.value;
-
-                if (!message) {
-                    alert('Пожалуйста, введите сообщение');
+                const csrfToken = document.querySelector('meta[name="csrf-token"]');
+                if (!csrfToken) {
+                    console.error('CSRF token not found');
+                    addMessageToChat('Система', 'Ошибка: CSRF токен не найден. Пожалуйста, обновите страницу.', 'error-message');
                     return;
                 }
 
-                // Add user message to chat
-                addMessageToChat('Вы (' + model + ')', message, 'user-message');
+                // Scroll to bottom on load
+                scrollToBottom();
 
-                // Disable button and show loading
-                sendMessageBtn.disabled = true;
-                sendMessageBtn.textContent = 'Отправка...';
+                const sendMessage = function () {
+                    const message = messageInput.value.trim();
+                    const model = modelSelect.value;
 
-                // Send request to our backend
-                const url = '{{ route("chadgpt.send-message") }}';
-                console.log('Sending request to:', url);
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken.getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        model: model
-                    })
-                })
-                    .then(response => {
-                        console.log('Response status:', response.status);
-                        if (!response.ok && response.status !== 422) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Response data:', data);
-                        if (data.success) {
-                            // Add AI response to chat with Markdown rendering
-                            addMessageToChat('ChadGPT', data.response, 'ai-message', true);
-
-                            // Update token count
-                            totalTokens += data.used_tokens_count || 0;
-                            tokensCount.textContent = totalTokens;
-                        } else {
-                            addMessageToChat('Ошибка', JSON.stringify(data.errors) || 'Произошла неизвестная ошибка', 'error-message');
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.error('Fetch error:', error);
-                        addMessageToChat('Ошибка', 'Не удалось связаться с сервером: ' + error.message, 'error-message');
-                    })
-                    .finally(() => {
-                        // Re-enable button
-                        sendMessageBtn.disabled = false;
-                        sendMessageBtn.textContent = 'Отправить сообщение';
-                        messageInput.value = '';
-                    });
-            });
-
-            clearChatBtn.addEventListener('click', function () {
-                if (!confirm('Вы уверены, что хотите очистить всю историю чата?')) {
-                    return;
-                }
-
-                // Disable button during request
-                clearChatBtn.disabled = true;
-                clearChatBtn.textContent = 'Очистка...';
-
-                fetch('{{ route("chadgpt.clear-history") }}', {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken.getAttribute('content'),
-                        'Content-Type': 'application/json'
+                    if (!message) {
+                        messageInput.focus();
+                        return;
                     }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Clear chat display
-                            chatHistory.innerHTML = '<div class="alert alert-info">Ваш разговор с ChadGPT появится здесь.</div>';
-                            // Reset token count if exists
-                            if (tokensCount) tokensCount.textContent = '0';
-                            // Show success message
-                            alert('История чата успешно очищена');
-                        } else {
-                            throw new Error(data.error || 'Неизвестная ошибка');
+
+                    // Add user message to chat
+                    addMessageToChat('Вы (' + model + ')', message, 'user-message');
+
+                    // Disable button and show loading
+                    sendMessageBtn.disabled = true;
+                    sendMessageBtn.innerHTML = 'Отправка...';
+
+                    addTypingIndicator();
+
+                    const url = '{{ route("chadgpt.send-message") }}';
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken.getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            model: model
+                        })
+                    })
+                        .then(response => {
+                            if (!response.ok && response.status !== 422) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                addMessageToChat('ChadGPT', data.response, 'ai-message', true);
+                                totalTokens += data.used_tokens_count || 0;
+                                tokensCount.textContent = totalTokens;
+                            } else {
+                                addMessageToChat('Ошибка', JSON.stringify(data.errors) || 'Произошла неизвестная ошибка', 'error-message');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                            addMessageToChat('Ошибка', 'Не удалось связаться с сервером: ' + error.message, 'error-message');
+                        })
+                        .finally(() => {
+                            sendMessageBtn.disabled = false;
+                            sendMessageBtn.innerHTML = '<i class="fa fa-paper-plane mr-1"></i>Отправить';
+                            messageInput.value = '';
+                            messageInput.focus();
+                        });
+                };
+
+                sendMessageBtn.addEventListener('click', sendMessage);
+
+                messageInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+
+                clearChatBtn.addEventListener('click', function () {
+                    if (!confirm('Вы уверены, что хотите очистить всю историю чата?')) {
+                        return;
+                    }
+
+                    clearChatBtn.disabled = true;
+                    clearChatBtn.textContent = 'Очистка...';
+
+                    fetch('{{ route("chadgpt.clear-history") }}', {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken.getAttribute('content'),
+                            'Content-Type': 'application/json'
                         }
                     })
-                    .catch(error => {
-                        console.error('Clear history error:', error);
-                        alert('Не удалось очистить историю чата: ' + error.message);
-                    })
-                    .finally(() => {
-                        // Re-enable button
-                        clearChatBtn.disabled = false;
-                        clearChatBtn.textContent = 'Очистить чат';
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                chatHistory.innerHTML = '<div class="alert alert-info chat-empty">Ваш разговор с ChadGPT появится здесь.</div>';
+                                tokensCount.textContent = '0';
+                                totalTokens = 0;
+                            } else {
+                                throw new Error(data.error || 'Неизвестная ошибка');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Clear history error:', error);
+                            alert('Не удалось очистить историю чата: ' + error.message);
+                        })
+                        .finally(() => {
+                            clearChatBtn.disabled = false;
+                            clearChatBtn.textContent = 'Очистить чат';
+                        });
+                });
+
+                function scrollToBottom() {
+                    chatHistory.scrollTop = chatHistory.scrollHeight;
+                }
+
+                function addMessageToChat(sender, message, cssClass, isMarkdown = false) {
+                    const infoAlert = chatHistory.querySelector('.chat-empty');
+                    if (infoAlert) {
+                        infoAlert.remove();
+                    }
+
+                    const typingIndicator = chatHistory.querySelector('.typing-indicator');
+                    if (typingIndicator) {
+                        typingIndicator.remove();
+                    }
+
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = cssClass;
+
+                    if (isMarkdown) {
+                        messageDiv.innerHTML = `
+                            <div class="message-label">${sender}</div>
+                            <div class="ai-message-content">${marked.parse(message)}</div>
+                        `;
+                    } else {
+                        const textDiv = document.createElement('div');
+                        textDiv.className = 'message-text';
+                        textDiv.textContent = message;
+                        const label = document.createElement('div');
+                        label.className = 'message-label';
+                        label.textContent = sender;
+                        messageDiv.appendChild(label);
+                        messageDiv.appendChild(textDiv);
+                    }
+
+                    chatHistory.appendChild(messageDiv);
+                    scrollToBottom();
+                }
+
+                function addTypingIndicator() {
+                    const typingIndicator = document.createElement('div');
+                    typingIndicator.className = 'typing-indicator';
+                    typingIndicator.textContent = 'ChadGPT печатает...';
+                    chatHistory.appendChild(typingIndicator);
+                    scrollToBottom();
+                }
             });
-
-            function addMessageToChat(sender, message, cssClass, isMarkdown = false) {
-                // Remove the initial info message if it exists
-                const infoAlert = chatHistory.querySelector('.alert-info');
-                if (infoAlert) {
-                    infoAlert.remove();
-                }
-
-                const messageDiv = document.createElement('div');
-                messageDiv.className = cssClass;
-
-                if (isMarkdown) {
-                    // Render Markdown for AI messages
-                    messageDiv.innerHTML = `
-                        <div class="message-label">${sender}:</div>
-                        <div class="ai-message-content">${marked.parse(message)}</div>
-                    `;
-                } else {
-                    // Plain text for user messages and errors
-                    messageDiv.innerHTML = `
-                        <div class="message-label">${sender}:</div>
-                        <div>${message}</div>
-                    `;
-                }
-
-                chatHistory.appendChild(messageDiv);
-
-                // Scroll to bottom
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            }
-        });
-    </script>
+        </script>
+    @endpush
 @endsection
