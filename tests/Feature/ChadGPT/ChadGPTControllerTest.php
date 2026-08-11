@@ -6,7 +6,6 @@ namespace Tests\Feature\ChadGPT;
 
 use App\Context\Common\Infrastructure\CommandBus;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
-use App\Context\ChadGPT\Domain\ChatModels;
 use App\Context\ChadGPT\Domain\Model\ChadGptConversation;
 use App\Context\ChadGPT\Domain\Model\ChadGptConversationWordStat;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
@@ -39,6 +38,10 @@ class ChadGPTControllerTest extends TestCase
         );
 
         ChadGptConversation::factory()->create(['user_id' => $this->user->id]);
+
+        $service = Mockery::mock(ChadGptRequestService::class);
+        $service->shouldReceive('getModels')->once()->andReturn([]);
+        app()->instance(ChadGptRequestService::class, $service);
 
         $this->actingAs($this->user);
         $response = $this->get(route('chadgpt.index'));
@@ -130,6 +133,7 @@ class ChadGPTControllerTest extends TestCase
         $service = $this->getMockBuilder(ChadGptRequestService::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $service->method('getModelIds')->willReturn(['gpt-5.6-terra']);
 
         $response = Mockery::mock(Response::class);
         $response->shouldReceive('successful')->andReturn(true);
@@ -151,7 +155,7 @@ class ChadGPTControllerTest extends TestCase
 
         $response = $this->postJson(route('chadgpt.send-message'), [
             'message' => $responseText,
-            'model' => ChatModels::GPT_5_6_TERRA
+            'model' => 'gpt-5.6-terra'
         ]);
 
         $response->assertStatus(200)
@@ -177,6 +181,7 @@ class ChadGPTControllerTest extends TestCase
         $service = $this->getMockBuilder(ChadGptRequestService::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $service->method('getModelIds')->willReturn(['gpt-5.6-terra']);
 
         $responseChad = Mockery::mock(Response::class);
         $responseChad->shouldReceive('successful')->andReturn(true);
@@ -199,7 +204,7 @@ class ChadGPTControllerTest extends TestCase
 
         $response = $this->postJson(route('chadgpt.send-message'), [
             'message' => $responseText,
-            'model' => ChatModels::GPT_5_6_TERRA
+            'model' => 'gpt-5.6-terra'
         ]);
 
         $response->assertStatus(200);
@@ -220,6 +225,7 @@ class ChadGPTControllerTest extends TestCase
         $service = $this->getMockBuilder(ChadGptRequestService::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $service->method('getModelIds')->willReturn(['gpt-5.6-terra']);
 
         $responseChad = Mockery::mock(Response::class);
         $responseChad->shouldReceive('successful')->andReturn(false);
@@ -242,7 +248,7 @@ class ChadGPTControllerTest extends TestCase
 
         $response = $this->postJson(route('chadgpt.send-message'), [
             'message' => $responseText,
-            'model' => ChatModels::GPT_5_6_TERRA
+            'model' => 'gpt-5.6-terra'
         ]);
 
         $response->assertStatus(400)
@@ -266,6 +272,7 @@ class ChadGPTControllerTest extends TestCase
         $service = $this->getMockBuilder(ChadGptRequestService::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $service->method('getModelIds')->willReturn(['gpt-5.6-terra']);
 
 
         $service->expects($this->never())->method('request');
@@ -277,7 +284,7 @@ class ChadGPTControllerTest extends TestCase
 
         $response = $this->postJson(route('chadgpt.send-message'), [
             'message' => $responseText,
-            'model' => ChatModels::GPT_5_6_TERRA
+            'model' => 'gpt-5.6-terra'
         ]);
 
         $response->assertStatus(422);

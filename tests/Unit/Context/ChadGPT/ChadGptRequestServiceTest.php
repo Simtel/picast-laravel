@@ -9,6 +9,7 @@ use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use Config;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Log;
 use RuntimeException;
@@ -23,6 +24,7 @@ class ChadGptRequestServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Cache::flush();
         $this->service = new ChadGptRequestService();
     }
 
@@ -274,5 +276,101 @@ class ChadGptRequestServiceTest extends TestCase
                 && !array_key_exists('max_tokens', $data)
                 && isset($data['messages']);
         });
+    }
+
+    public function testGetModelsFetchesAndParsesModels(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([
+                'object' => 'list',
+                'data' => [
+                    ['id' => 'gpt-5.6-terra', 'object' => 'model', 'is_old_model' => false],
+                    ['id' => 'claude-5-sonnet', 'object' => 'model', 'is_old_model' => false],
+                    ['id' => 'gpt-4.1', 'object' => 'model', 'is_old_model' => true],
+                    ['id' => 'text-embedding-3-small', 'object' => 'model', 'is_old_model' => false],
+                    ['id' => 'gpt-4o-mini-transcribe', 'object' => 'model', 'is_old_model' => false],
+                ],
+            ], 200),
+        ]);
+
+        $models = $this->service->getModels();
+
+        $this->assertCount(2, $models);
+        $this->assertSame('gpt-5.6-terra', $models[0]->id);
+        $this->assertSame('GPT 5.6 Terra', $models[0]->label);
+        $this->assertTrue($models[0]->isDefault);
+        $this->assertSame('claude-5-sonnet', $models[1]->id);
+        $this->assertFalse($models[1]->isDefault);
+
+        Http::assertSent(static function (Request $request) {
+            return $request->url() === 'https://api.chadgpt.com/models'
+                && $request->hasHeader('Authorization', 'Bearer test-api-key');
+        });
+    }
+
+    public function testGetModelsReturnsEmptyOnApiFailure(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([], 500),
+        ]);
+
+        $this->assertSame([], $this->service->getModels());
+    }
+
+    public function testGetModelsReturnsEmptyOnConnectionError(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => static function () {
+                throw new ConnectionException('Connection failed');
+            },
+        ]);
+
+        $this->assertSame([], $this->service->getModels());
+    }
+
+    public function testGetDefaultModelIdFallsBackToConfiguredDefault(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+        Config::set('chadgpt.default_model', 'gpt-5-mini');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([
+                'object' => 'list',
+                'data' => [
+                    ['id' => 'claude-5-sonnet', 'object' => 'model', 'is_old_model' => false],
+                ],
+            ], 200),
+        ]);
+
+        $this->assertSame('claude-5-sonnet', $this->service->getDefaultModelId());
+    }
+
+    public function testGetDefaultModelIdReturnsDefaultWhenAvailable(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+        Config::set('chadgpt.default_model', 'gpt-5.6-terra');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([
+                'object' => 'list',
+                'data' => [
+                    ['id' => 'gpt-5.6-terra', 'object' => 'model', 'is_old_model' => false],
+                    ['id' => 'claude-5-sonnet', 'object' => 'model', 'is_old_model' => false],
+                ],
+            ], 200),
+        ]);
+
+        $this->assertSame('gpt-5.6-terra', $this->service->getDefaultModelId());
     }
 }

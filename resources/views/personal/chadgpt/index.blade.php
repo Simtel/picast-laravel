@@ -34,14 +34,16 @@
             <div class="model-row">
                 <label class="mr-2 mb-0" for="modelSelect">Модель:</label>
                 <select class="form-control form-control-sm chat-model-select" id="modelSelect">
-                    @foreach($models as $model)
+                    @forelse($models as $model)
                         <option
-                                value="{{ $model->value }}"
-                                {{ $model->isDefault() ? 'selected' : '' }}
+                                value="{{ $model->id }}"
+                                {{ $model->isDefault ? 'selected' : '' }}
                         >
-                            {{ $model->label() }}
+                            {{ $model->label }}
                         </option>
-                    @endforeach
+                    @empty
+                        <option value="" disabled>Модели недоступны</option>
+                    @endforelse
                 </select>
             </div>
             <div class="form-row d-flex">

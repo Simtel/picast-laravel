@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Context\ChadGPT\Infrastructure\Http\Controllers;
 
 use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
+use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use App\Context\ChadGPT\Application\Service\SendChatMessageService;
-use App\Context\ChadGPT\Domain\ChatModels;
 use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
 use App\Context\ChadGPT\Infrastructure\Repository\StatWordsUsedRepository;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
@@ -22,6 +22,7 @@ final class ChadGptController extends Controller
 {
     public function index(
         Request $request,
+        ChadGptRequestService $chadGptRequestService,
         ConversationRepository $conversationRepository,
         StatWordsUsedRepository $statWordsUsedRepository,
     ): View {
@@ -29,7 +30,7 @@ final class ChadGptController extends Controller
         $wordStats = $statWordsUsedRepository->findByUser($user);
 
         return view('personal.chadgpt.index', [
-            'models' => ChatModels::cases(),
+            'models' => $chadGptRequestService->getModels(),
             'conversations' => $conversationRepository->findBuUser($user),
             'word_stats' => $wordStats,
             'word_stats_sum' => $wordStats->sum(static fn ($stat) => $stat->getTokensUsed()),
@@ -38,13 +39,16 @@ final class ChadGptController extends Controller
 
     public function sendMessage(
         SendMessageRequest $request,
+        ChadGptRequestService $chadGptRequestService,
         SendChatMessageService $sendChatMessageService,
     ): JsonResponse {
         Log::info('ChadGPT: sending message', ['request' => $request->all()]);
 
         try {
             $chadGptRequestData = ChadGptRequestData::from([
-                'model' => $request->input('model', ChatModels::default()->value),
+                'model' => $request->filled('model')
+                    ? $request->input('model')
+                    : $chadGptRequestService->getDefaultModelId(),
                 'userMessage' => $request->string('message')->value(),
                 'temperature' => $request->filled('temperature') ? $request->float('temperature') : null,
                 'maxTokens' => $request->filled('max_tokens') ? $request->integer('max_tokens') : null,
