@@ -33,7 +33,40 @@
         <div class="chat-footer">
             <div class="model-row">
                 <label class="mr-2 mb-0" for="modelSelect">Модель:</label>
-                <select class="form-control form-control-sm chat-model-select" id="modelSelect">
+                <div class="model-search">
+                    <div class="model-search-select" id="modelSearchSelect" role="button" tabindex="0">
+                        <span id="modelSearchCurrent">
+    @php
+        $selectedModel = collect($models)->firstWhere('isDefault') ?? collect($models)->first();
+    @endphp
+    {{ $selectedModel?->label ?? 'Модели недоступны' }}
+</span>
+                        <i class="fa fa-chevron-down"></i>
+                    </div>
+                    <div class="model-search-dropdown d-none" id="modelSearchDropdown">
+                        <input
+                            type="text"
+                            class="form-control form-control-sm model-search-input"
+                            id="modelSearchInput"
+                            placeholder="Поиск модели..."
+                            autocomplete="off"
+                        >
+                        <ul class="model-search-list" id="modelSearchList">
+                            @forelse($models as $model)
+                                <li
+                                    class="model-search-item {{ $model->isDefault ? 'active' : '' }}"
+                                    data-value="{{ $model->id }}"
+                                    data-label="{{ $model->label }}"
+                                >
+                                    {{ $model->label }}
+                                </li>
+                            @empty
+                                <li class="model-search-empty">Модели недоступны</li>
+                            @endforelse
+                        </ul>
+                    </div>
+                </div>
+                <select class="form-control form-control-sm chat-model-select d-none" id="modelSelect">
                     @forelse($models as $model)
                         <option
                                 value="{{ $model->id }}"
@@ -91,6 +124,81 @@
 
         .chat-model-select {
             max-width: 260px;
+        }
+
+        .model-search {
+            position: relative;
+            max-width: 260px;
+            width: 100%;
+        }
+
+        .model-search-select {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .model-search-select:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #86b7fe;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .model-search-dropdown {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            margin-bottom: 0.25rem;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 0.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .model-search-input {
+            border: none;
+            border-bottom: 1px solid #ced4da;
+            border-radius: 0;
+            box-shadow: none !important;
+        }
+
+        .model-search-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .model-search-item {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        .model-search-item:hover,
+        .model-search-item.active {
+            background-color: #e9ecef;
+        }
+
+        .model-search-empty {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            color: #6c757d;
         }
 
         .chat-message {
@@ -194,6 +302,11 @@
                 const clearChatBtn = document.getElementById('clearChatBtn');
                 const messageInput = document.getElementById('messageInput');
                 const modelSelect = document.getElementById('modelSelect');
+                const modelSearchSelect = document.getElementById('modelSearchSelect');
+                const modelSearchCurrent = document.getElementById('modelSearchCurrent');
+                const modelSearchDropdown = document.getElementById('modelSearchDropdown');
+                const modelSearchInput = document.getElementById('modelSearchInput');
+                const modelSearchList = document.getElementById('modelSearchList');
                 const chatHistory = document.getElementById('chatHistory');
                 const tokensCount = document.getElementById('tokensCount');
 
@@ -208,6 +321,81 @@
 
                 // Scroll to bottom on load
                 scrollToBottom();
+
+                const modelItems = Array.from(
+                    modelSearchList.querySelectorAll('.model-search-item')
+                );
+
+                const closeModelSearch = function () {
+                    modelSearchDropdown.classList.add('d-none');
+                    if (modelSearchInput.value) {
+                        modelSearchInput.value = '';
+                        filterModelItems('');
+                    }
+                };
+
+                const filterModelItems = function (query) {
+                    const q = query.trim().toLowerCase();
+                    modelItems.forEach(item => {
+                        const label = item.getAttribute('data-label').toLowerCase();
+                        item.style.display = (!q || label.includes(q)) ? '' : 'none';
+                    });
+                    const visible = modelItems.some(item => item.style.display !== 'none');
+                    const empty = modelSearchList.querySelector('.model-search-empty');
+                    if (empty) {
+                        empty.style.display = visible ? 'none' : '';
+                    }
+                };
+
+                const setModelSelection = function (value, label) {
+                    modelSelect.value = value;
+                    modelSearchCurrent.textContent = label;
+                    modelItems.forEach(item => {
+                        item.classList.toggle(
+                            'active',
+                            item.getAttribute('data-value') === String(value)
+                        );
+                    });
+                };
+
+                modelSearchSelect.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    modelSearchDropdown.classList.toggle('d-none');
+                    if (!modelSearchDropdown.classList.contains('d-none')) {
+                        modelSearchInput.focus();
+                    } else {
+                        closeModelSearch();
+                    }
+                });
+
+                modelSearchSelect.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        modelSearchSelect.click();
+                    }
+                });
+
+                modelSearchInput.addEventListener('input', function () {
+                    filterModelItems(this.value);
+                });
+
+                modelSearchList.addEventListener('click', function (e) {
+                    const item = e.target.closest('.model-search-item');
+                    if (!item || !item.hasAttribute('data-value')) {
+                        return;
+                    }
+                    setModelSelection(
+                        item.getAttribute('data-value'),
+                        item.getAttribute('data-label')
+                    );
+                    closeModelSearch();
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!e.target.closest('.model-search')) {
+                        closeModelSearch();
+                    }
+                });
 
                 const sendMessage = function () {
                     const message = messageInput.value.trim();
