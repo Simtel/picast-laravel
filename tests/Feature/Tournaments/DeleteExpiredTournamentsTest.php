@@ -7,10 +7,16 @@ namespace Tests\Feature\Tournaments;
 use App\Context\Tournaments\Domain\Model\Tournament;
 use App\Context\Tournaments\Domain\Model\TournamentGroup;
 use App\Context\Tournaments\Infrastructure\Job\DeleteExpiredTournaments;
+use App\Context\Tournaments\Infrastructure\Service\ExpiredTournamentsCleaner;
 use Tests\TestCase;
 
 final class DeleteExpiredTournamentsTest extends TestCase
 {
+    private function runDeleteJob(): void
+    {
+        app(DeleteExpiredTournaments::class)->handle(app(ExpiredTournamentsCleaner::class));
+    }
+
     private function createWithDate(?string $date, ?string $dateEnd, string $guid, bool $withGroup = true): Tournament
     {
         /** @var Tournament $tournament */
@@ -38,7 +44,7 @@ final class DeleteExpiredTournamentsTest extends TestCase
     {
         $past = $this->createWithDate(now()->subDays(10)->toDateString(), now()->subDays(8)->toDateString(), 'past-guid');
 
-        (new DeleteExpiredTournaments())->handle();
+        $this->runDeleteJob();
 
         $this->assertDatabaseMissing('tournaments', ['id' => $past->getId()]);
         $this->assertDatabaseMissing('tournament_groups', ['tournament_id' => $past->getId()]);
@@ -48,7 +54,7 @@ final class DeleteExpiredTournamentsTest extends TestCase
     {
         $past = $this->createWithDate(now()->subDays(10)->toDateString(), null, 'past-no-end-guid');
 
-        (new DeleteExpiredTournaments())->handle();
+        $this->runDeleteJob();
 
         $this->assertDatabaseMissing('tournaments', ['id' => $past->getId()]);
     }
@@ -57,8 +63,22 @@ final class DeleteExpiredTournamentsTest extends TestCase
     {
         $future = $this->createWithDate(now()->addDays(10)->toDateString(), now()->addDays(12)->toDateString(), 'future-guid');
 
-        (new DeleteExpiredTournaments())->handle();
+        $this->runDeleteJob();
 
+        $this->assertDatabaseHas('tournaments', ['id' => $future->getId()]);
+    }
+
+    public function test_clean_command_deletes_expired_tournaments(): void
+    {
+        $past = $this->createWithDate(now()->subDays(10)->toDateString(), now()->subDays(8)->toDateString(), 'past-guid');
+        $future = $this->createWithDate(now()->addDays(10)->toDateString(), now()->addDays(12)->toDateString(), 'future-guid');
+
+        $this->artisan('tournaments:clean')
+            ->expectsOutputToContain('Deleted 1 tournaments and 1 groups')
+            ->assertExitCode(0);
+
+        $this->assertDatabaseMissing('tournaments', ['id' => $past->getId()]);
+        $this->assertDatabaseMissing('tournament_groups', ['tournament_id' => $past->getId()]);
         $this->assertDatabaseHas('tournaments', ['id' => $future->getId()]);
     }
 }
