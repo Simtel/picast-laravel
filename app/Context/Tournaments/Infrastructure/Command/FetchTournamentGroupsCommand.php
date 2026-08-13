@@ -70,7 +70,7 @@ class FetchTournamentGroupsCommand extends Command
     {
         $query = Tournament::query();
         $query->whereDate('date', '>', Carbon::now());
-        $query->orderBy('name');
+        $query->orderBy('title');
         $tournaments = $query->get();
         $query->doesntHave('groups');
         $this->info(sprintf('Getted %d tournaments from database', $tournaments->count()));

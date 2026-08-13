@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Context\Domains\Infrastructure\Job\CheckExpireDomains;
+use App\Context\Tournaments\Infrastructure\Job\DeleteExpiredTournaments;
 use Artisan;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -31,6 +32,7 @@ final class Kernel extends ConsoleKernel
         $schedule->command('domains:whois')->daily();
         // $schedule->command('youtube:download')->everyMinute();
         $schedule->job(new CheckExpireDomains())->daily();
+        $schedule->job(new DeleteExpiredTournaments())->daily();
         $schedule->command('tournaments:fetch')->daily()->then(
             static function () {
                 Artisan::call('tournaments:groups:fetch', ["tournament" => 0]);
