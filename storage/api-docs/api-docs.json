@@ -66,7 +66,7 @@
                                     "model": {
                                         "description": "Модель ИИ",
                                         "type": "string",
-                                        "example": "gpt-4o-mini"
+                                        "example": "gpt-5.6-terra"
                                     }
                                 },
                                 "type": "object"
@@ -633,7 +633,7 @@
                     },
                     "model": {
                         "type": "string",
-                        "example": "gpt-4o-mini"
+                        "example": "gpt-5.6-terra"
                     },
                     "user_message": {
                         "type": "string",
@@ -643,9 +643,9 @@
                         "type": "string",
                         "example": "Привет! Чем могу помочь?"
                     },
-                    "used_words_count": {
+                    "used_tokens_count": {
                         "type": "integer",
-                        "example": 5
+                        "example": 120
                     },
                     "created_at": {
                         "type": "string",

@@ -236,6 +236,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Spatie\Html\Facades\Html::class,
         'WhoisService' => WhoisService::class,
+        'Str' => Illuminate\Support\Str::class,
     ],
 
 ];
