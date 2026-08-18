@@ -94,6 +94,30 @@ final class TournamentControllerTest extends TestCase
         $response->assertViewHas('sortOrder', 'desc');
     }
 
+    public function test_tournaments_list_can_be_filtered_by_city(): void
+    {
+        $this->loginAdmin();
+
+        Tournament::factory()->create([
+            'title' => 'Moscow Cup',
+            'city' => 'Москва',
+            'date' => Carbon::now()->addWeek(),
+        ]);
+        Tournament::factory()->create([
+            'title' => 'Kazan Cup',
+            'city' => 'Казань',
+            'date' => Carbon::now()->addWeek(),
+        ]);
+
+        $response = $this->get(route('tournaments.index', ['city' => 'Казань']));
+
+        $response->assertStatus(200);
+        $response->assertViewHas('selectedCity', 'Казань');
+        $tournaments = $response->viewData('tournaments');
+        $this->assertContains('Kazan Cup', $tournaments->pluck('title')->toArray());
+        $this->assertNotContains('Moscow Cup', $tournaments->pluck('title')->toArray());
+    }
+
     public function test_tournaments_list_pagination_works(): void
     {
         $this->loginAdmin();

@@ -10,7 +10,6 @@ use App\Context\Tournaments\Application\QueryHandler\GetTournamentDetailQueryHan
 use App\Context\Tournaments\Application\QueryHandler\GetTournamentsQueryHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use OpenApi\Attributes as OA;
 
@@ -78,14 +77,13 @@ final class TournamentsController extends Controller
             )
         ]
     )]
-    public function index(\Illuminate\Http\Request $request): AnonymousResourceCollection
+    public function index(\Illuminate\Http\Request $request): JsonResponse
     {
         $query = GetTournamentsQuery::fromRequest($request->query());
         $response = $this->tournamentsQueryHandler->handle($query);
 
-        $collection = AnonymousResourceCollection::collection($response->tournaments);
-
-        return $collection->additional([
+        return response()->json([
+            'tournaments' => $response->tournaments,
             'cities' => $response->cities,
             'selectedCity' => $response->selectedCity,
         ]);
