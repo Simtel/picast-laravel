@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Context\ChadGPT;
 
+use App\Context\ChadGPT\Application\Data\ChadGptModel;
 use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use Config;
@@ -372,5 +373,182 @@ class ChadGptRequestServiceTest extends TestCase
         ]);
 
         $this->assertSame('gpt-5.6-terra', $this->service->getDefaultModelId());
+    }
+
+    public function testGetDefaultModelIdReturnsConfiguredDefaultWhenNoModels(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+        Config::set('chadgpt.default_model', 'gpt-5-mini');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([
+                'object' => 'list',
+                'data' => [],
+            ], 200),
+        ]);
+
+        $this->assertSame('gpt-5-mini', $this->service->getDefaultModelId());
+    }
+
+    public function testGetDefaultModelIdFallsBackToHardcodedDefault(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+        Config::set('chadgpt.default_model', '');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([
+                'object' => 'list',
+                'data' => [],
+            ], 200),
+        ]);
+
+        $this->assertSame('gpt-5.6-terra', $this->service->getDefaultModelId());
+    }
+
+    public function testGetModelIdsReturnsIdsFromModels(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([
+                'object' => 'list',
+                'data' => [
+                    ['id' => 'gpt-5.6-terra', 'object' => 'model', 'is_old_model' => false],
+                    ['id' => 'claude-5-sonnet', 'object' => 'model', 'is_old_model' => false],
+                ],
+            ], 200),
+        ]);
+
+        $this->assertSame(['gpt-5.6-terra', 'claude-5-sonnet'], $this->service->getModelIds());
+    }
+
+    public function testGetModelsReturnsCachedModelsWithoutApiCall(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        $cachedModels = [
+            new ChadGptModel(id: 'gpt-5.6-terra', label: 'GPT 5.6 Terra', isDefault: true),
+            new ChadGptModel(id: 'claude-5-sonnet', label: 'Claude 5 Sonnet', isDefault: false),
+        ];
+
+        Cache::put('chadgpt.models', $cachedModels, now()->addMinutes(10));
+
+        Http::fake();
+
+        $models = $this->service->getModels();
+
+        $this->assertCount(2, $models);
+        $this->assertSame('gpt-5.6-terra', $models[0]->id);
+        $this->assertSame('claude-5-sonnet', $models[1]->id);
+
+        Http::assertNothingSent();
+    }
+
+    public function testGetModelsFiltersInvalidEntriesFromCache(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        Cache::put('chadgpt.models', [
+            new ChadGptModel(id: 'gpt-5.6-terra', label: 'GPT 5.6 Terra'),
+            'not-a-model',
+            123,
+        ], now()->addMinutes(10));
+
+        Http::fake();
+
+        $models = $this->service->getModels();
+
+        $this->assertCount(1, $models);
+        $this->assertSame('gpt-5.6-terra', $models[0]->id);
+    }
+
+    public function testGetModelsStoresEmptyArrayInCacheOnFailure(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([], 500),
+        ]);
+
+        $this->assertSame([], $this->service->getModels());
+
+        $cached = Cache::get('chadgpt.models');
+        $this->assertIsArray($cached);
+        $this->assertSame([], $cached);
+    }
+
+    public function testGetModelsSkipsModelsWithMissingOrEmptyId(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([
+                'object' => 'list',
+                'data' => [
+                    ['object' => 'model', 'is_old_model' => false],
+                    ['id' => '', 'object' => 'model', 'is_old_model' => false],
+                    ['id' => 'valid-model', 'object' => 'model', 'is_old_model' => false],
+                ],
+            ], 200),
+        ]);
+
+        $models = $this->service->getModels();
+
+        $this->assertCount(1, $models);
+        $this->assertSame('valid-model', $models[0]->id);
+    }
+
+    public function testGetModelsBuildsLabelsForKnownVendors(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([
+                'object' => 'list',
+                'data' => [
+                    ['id' => 'gemini-2.5-flash', 'object' => 'model', 'is_old_model' => false],
+                    ['id' => 'claude-5-sonnet', 'object' => 'model', 'is_old_model' => false],
+                    ['id' => 'deepseek-v3', 'object' => 'model', 'is_old_model' => false],
+                    ['id' => 'unknown-model', 'object' => 'model', 'is_old_model' => false],
+                ],
+            ], 200),
+        ]);
+
+        $models = $this->service->getModels();
+
+        $this->assertSame('Gemini 2.5 Flash', $models[0]->label);
+        $this->assertSame('Claude 5 Sonnet', $models[1]->label);
+        $this->assertSame('DeepSeek V3', $models[2]->label);
+        $this->assertSame('Unknown Model', $models[3]->label);
+    }
+
+    public function testGetModelsUsesConfiguredCacheTtl(): void
+    {
+        Config::set('chadgpt.api_key', 'test-api-key');
+        Config::set('chadgpt.url', 'https://api.chadgpt.com/');
+        Config::set('chadgpt.models_cache_ttl', 3600);
+
+        Http::fake([
+            'https://api.chadgpt.com/models' => Http::response([
+                'object' => 'list',
+                'data' => [
+                    ['id' => 'gpt-5.6-terra', 'object' => 'model', 'is_old_model' => false],
+                ],
+            ], 200),
+        ]);
+
+        $this->service->getModels();
+
+        $cacheKey = Cache::get('chadgpt.models');
+        $this->assertIsArray($cacheKey);
+        $this->assertCount(1, $cacheKey);
     }
 }

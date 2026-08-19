@@ -294,4 +294,133 @@ class ChadGPTControllerTest extends TestCase
             ]
         ]);
     }
+
+    public function test_send_message_uses_default_model_when_model_not_provided(): void
+    {
+        $responseText = 'Ответ';
+        $this->actingAs($this->user);
+
+        $bus = $this->getMockBuilder(CommandBus::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $bus->expects($this->once())->method('execute');
+
+        app()->instance(CommandBus::class, $bus);
+
+        $service = $this->getMockBuilder(ChadGptRequestService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $service->method('getModelIds')->willReturn(['gpt-5.6-terra']);
+        $service->method('getDefaultModelId')->willReturn('gpt-5.6-terra');
+
+        $responseChad = Mockery::mock(Response::class);
+        $responseChad->shouldReceive('successful')->andReturn(true);
+        $responseChad->shouldReceive('json')->andReturn([
+            'choices' => [
+                ['message' => ['content' => $responseText]],
+            ],
+            'usage' => [
+                'total_tokens' => 10,
+            ],
+        ]);
+
+        $service->expects($this->once())->method('request')->willReturn($responseChad);
+
+        app()->instance(ChadGptRequestService::class, $service);
+
+        Log::shouldReceive('info')->once();
+
+        $response = $this->postJson(route('chadgpt.send-message'), [
+            'message' => 'Привет',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'response' => $responseText,
+                'used_tokens_count' => 10,
+            ]);
+    }
+
+    public function test_send_message_passes_optional_params(): void
+    {
+        $responseText = 'Ответ';
+        $this->actingAs($this->user);
+
+        $bus = $this->getMockBuilder(CommandBus::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $bus->expects($this->once())->method('execute');
+
+        app()->instance(CommandBus::class, $bus);
+
+        $service = $this->getMockBuilder(ChadGptRequestService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $service->method('getModelIds')->willReturn(['gpt-5.6-terra']);
+
+        $responseChad = Mockery::mock(Response::class);
+        $responseChad->shouldReceive('successful')->andReturn(true);
+        $responseChad->shouldReceive('json')->andReturn([
+            'choices' => [
+                ['message' => ['content' => $responseText]],
+            ],
+            'usage' => [
+                'total_tokens' => 10,
+            ],
+        ]);
+
+        $service->expects($this->once())->method('request')->willReturn($responseChad);
+
+        app()->instance(ChadGptRequestService::class, $service);
+
+        Log::shouldReceive('info')->once();
+
+        $response = $this->postJson(route('chadgpt.send-message'), [
+            'message' => 'Привет',
+            'model' => 'gpt-5.6-terra',
+            'temperature' => 0.7,
+            'max_tokens' => 100,
+            'images' => ['https://example.com/img.jpg'],
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'response' => $responseText,
+            ]);
+    }
+
+    public function test_send_message_returns_internal_error_on_exception(): void
+    {
+        $this->actingAs($this->user);
+
+        $bus = $this->getMockBuilder(CommandBus::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $bus->expects($this->never())->method('execute');
+
+        app()->instance(CommandBus::class, $bus);
+
+        $service = $this->getMockBuilder(ChadGptRequestService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $service->method('getModelIds')->willReturn(['gpt-5.6-terra']);
+        $service->method('request')->willThrowException(new \RuntimeException('Connection failed'));
+
+        app()->instance(ChadGptRequestService::class, $service);
+
+        Log::shouldReceive('info')->once();
+        Log::shouldReceive('error')->once();
+
+        $response = $this->postJson(route('chadgpt.send-message'), [
+            'message' => 'Привет',
+            'model' => 'gpt-5.6-terra'
+        ]);
+
+        $response->assertStatus(500)
+            ->assertJson([
+                'error' => 'Произошла ошибка при общении с ChadGPT',
+            ]);
+    }
 }
