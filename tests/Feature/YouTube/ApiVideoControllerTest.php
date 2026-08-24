@@ -71,4 +71,65 @@ final class ApiVideoControllerTest extends TestCase
             )
         );
     }
+
+    public function test_user_can_create_video(): void
+    {
+        Event::fake();
+
+        $user = $this->createUserWithPermissions([], ['edit youtube']);
+        $token = $user->createToken('test')->plainTextToken;
+
+        $response = $this->post(
+            route('api.videos.store'),
+            ['url' => 'https://www.youtube.com/watch?v=BRCsU4D852M'],
+            ['Authorization' => 'Bearer ' . $token]
+        );
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas(
+            Video::class,
+            ['url' => 'https://www.youtube.com/watch?v=BRCsU4D852M', 'user_id' => $user->id]
+        );
+        $this->assertDatabaseCount(Video::class, 1);
+    }
+
+    public function test_user_can_update_video(): void
+    {
+        Event::fake();
+
+        $user = $this->createUserWithPermissions([], ['edit youtube']);
+        $token = $user->createToken('test')->plainTextToken;
+
+        $video = Video::factory()->create(['user_id' => $user->id]);
+
+        $response = $this->put(
+            route('api.videos.update', ['video' => $video]),
+            ['title' => 'Новый заголовок'],
+            ['Authorization' => 'Bearer ' . $token]
+        );
+
+        $response->assertStatus(200);
+    }
+
+    public function test_user_can_delete_video(): void
+    {
+        Event::fake();
+
+        $user = $this->createUserWithPermissions([], ['edit youtube']);
+        $token = $user->createToken('test')->plainTextToken;
+
+        $video = Video::factory()->create(['user_id' => $user->id]);
+
+        $this->assertDatabaseCount(Video::class, 1);
+
+        $response = $this->delete(
+            route('api.videos.destroy', ['video' => $video]),
+            [],
+            ['Authorization' => 'Bearer ' . $token]
+        );
+
+        $response->assertStatus(200);
+        $this->assertDatabaseCount(Video::class, 0);
+    }
 }

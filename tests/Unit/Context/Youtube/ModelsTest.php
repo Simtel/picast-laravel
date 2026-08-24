@@ -92,4 +92,25 @@ final class ModelsTest extends TestCase
         $file->size = '';
         self::assertEquals('', $file->getSize());
     }
+
+    public function test_delete_file_when_missing_in_s3(): void
+    {
+        Event::fake();
+        Storage::fake('s3');
+
+        $video = Video::factory()->create();
+        $format = VideoFormats::factory()->create(['video_id' => $video->getId()]);
+        $file = VideoFile::factory()->create([
+            'video_id' => $video->getId(),
+            'format_id' => $format->getId(),
+            'file_link' => 'missing.mp4',
+        ]);
+
+        Storage::shouldReceive('disk')->with('s3')->andReturnSelf();
+        Storage::shouldReceive('exists')->with('videos/missing.mp4')->andReturn(false);
+
+        $file->deleteFile();
+
+        self::assertDatabaseCount(VideoFile::class, 1);
+    }
 }
