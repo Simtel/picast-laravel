@@ -13,7 +13,7 @@ final class Authenticate extends Middleware
     /**
      * The guard names used by the middleware.
      *
-     * @var list<string>
+     * @var array<int|string, string>
      */
     private array $guards = [];
 
