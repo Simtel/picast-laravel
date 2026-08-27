@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -27,6 +28,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property int $id
  * @property string $name
  * @property string $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property \Illuminate\Support\Carbon|null $birth_date
  * @property string $password
  * @property string|null $remember_token
@@ -73,7 +75,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutTeam($teams)
  * @mixin Eloquent
  */
-final class User extends Authenticatable
+final class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -86,6 +88,7 @@ final class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'email_verified_at',
         'birth_date',
         'password',
     ];
@@ -107,6 +110,7 @@ final class User extends Authenticatable
      */
     protected $casts = [
         'birth_date' => 'date',
+        'email_verified_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
 

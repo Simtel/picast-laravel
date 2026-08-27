@@ -7,6 +7,7 @@ namespace Tests\Feature\Auth;
 use App\Context\Common\Domain\Models\InviteCode;
 use App\Context\User\Domain\Model\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Notification;
 use Tests\Feature\MakesRequestsFromPage;
 use Tests\TestCase;
 
@@ -174,6 +175,8 @@ final class RegisterTest extends TestCase
 
     public function testUserCanRegisterWithInviteCode(): void
     {
+        Notification::fake();
+
         $admin = $this->getAdminUser();
         /** @var InviteCode $inviteCode */
         $inviteCode = InviteCode::create(['code' => '12345', 'created_by' => $admin->getId()]);

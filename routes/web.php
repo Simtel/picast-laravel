@@ -25,7 +25,7 @@ use App\Context\User\Infrastructure\Controller\UsersController;
 use App\Context\Youtube\Infrastructure\Controller\YouTubeVideoController;
 use App\Http\Controllers\Auth\LoginController;
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 Route::get('/', static function () {
     if (Auth::check()) {
         return redirect()->route('personal');
