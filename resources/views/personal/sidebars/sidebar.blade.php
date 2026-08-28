@@ -67,6 +67,13 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{request()->routeIs('barcode.*') ? 'active' : ''}}"
+                   href="{{route('barcode.index')}}">
+                    <i class="fa fa-qrcode nav-icon"></i>
+                    <span>Штрих-коды</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{request()->routeIs('settings') ? 'active' : ''}}"
                    href="{{route('settings')}}">
                     <i class="fa fa-cog nav-icon"></i>
