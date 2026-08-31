@@ -95,4 +95,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
     Route::get('/tournaments/{id}', [TournamentController::class, 'show'])->name('tournaments.show');
 
     Route::get('/barcode', [BarcodeController::class, 'index'])->name('barcode.index');
+    Route::get('/barcode/generate', [BarcodeController::class, 'generate'])->name('barcode.generate');
 });
