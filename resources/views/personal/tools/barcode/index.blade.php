@@ -13,7 +13,7 @@
                     <i class="fa fa-qrcode text-primary"></i>
                     <span>Параметры</span>
                 </div>
-                {{ Html::form('GET', route('barcode.index'))->open() }}
+                {{ Html::form('GET', route('tools.barcode.index'))->open() }}
                 <div class="card-body">
                     @if ($errorMessage)
                         <div class="alert alert-danger d-flex align-items-start gap-2">
@@ -85,7 +85,7 @@
             const typeSelect = document.getElementById('type');
             const textInput = document.getElementById('text');
             const refreshButton = document.getElementById('barcode-refresh');
-            const generateUrl = @json(route('barcode.generate'));
+            const generateUrl = @json(route('tools.barcode.generate'));
 
             function generate() {
                 if (!typeSelect || !textInput) {

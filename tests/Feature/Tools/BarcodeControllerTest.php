@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Common;
+namespace Tests\Feature\Tools;
 
 use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -10,21 +10,32 @@ use Tests\TestCase;
 
 final class BarcodeControllerTest extends TestCase
 {
+    public function test_tools_index_page(): void
+    {
+        $this->loginAdmin();
+
+        $response = $this->get(route('tools.index'));
+
+        $response->assertStatus(200);
+        $response->assertViewIs('personal.tools.index');
+        $response->assertSee('Инструменты');
+    }
+
     public function test_barcode_index_page(): void
     {
         $this->loginAdmin();
 
-        $response = $this->get(route('barcode.index'));
+        $response = $this->get(route('tools.barcode.index'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('personal.barcode.index');
+        $response->assertViewIs('personal.tools.barcode.index');
         $response->assertSee('Генератор штрих-кодов');
         $response->assertSee('Сгенерировать');
     }
 
     public function test_barcode_generate_requires_auth(): void
     {
-        $this->get(route('barcode.generate', ['type' => 'code128']))->assertRedirect(route('login'));
+        $this->get(route('tools.barcode.generate', ['type' => 'code128']))->assertRedirect(route('login'));
     }
 
     #[DataProvider('typeProvider')]
@@ -32,7 +43,7 @@ final class BarcodeControllerTest extends TestCase
     {
         $this->loginAdmin();
 
-        $response = $this->get(route('barcode.generate', ['type' => $type]));
+        $response = $this->get(route('tools.barcode.generate', ['type' => $type]));
 
         $response->assertStatus(200);
         $response->assertJson(static fn (AssertableJson $json): AssertableJson => $json
@@ -44,7 +55,7 @@ final class BarcodeControllerTest extends TestCase
     {
         $this->loginAdmin();
 
-        $this->get(route('barcode.generate', ['type' => 'unknown']))->assertStatus(422);
+        $this->get(route('tools.barcode.generate', ['type' => 'unknown']))->assertStatus(422);
     }
 
     /**

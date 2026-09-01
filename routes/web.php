@@ -16,8 +16,9 @@ declare(strict_types=1);
 use App\Context\ChadGPT\Infrastructure\Http\Controllers\ChadGptController;
 use App\Context\Domains\Infrastructure\Http\Controllers\DomainsController;
 use App\Context\Domains\Infrastructure\Http\Controllers\WhoisController;
+use App\Context\Tools\Infrastructure\Http\Controllers\BarcodeController;
+use App\Context\Tools\Infrastructure\Http\Controllers\ToolsController;
 use App\Context\Tournaments\Infrastructure\Http\Controllers\TournamentController;
-use App\Context\User\Infrastructure\Controller\BarcodeController;
 use App\Context\User\Infrastructure\Controller\ImagesController;
 use App\Context\User\Infrastructure\Controller\IndexController;
 use App\Context\User\Infrastructure\Controller\InviteController;
@@ -94,6 +95,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
     Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournaments.index');
     Route::get('/tournaments/{id}', [TournamentController::class, 'show'])->name('tournaments.show');
 
-    Route::get('/barcode', [BarcodeController::class, 'index'])->name('barcode.index');
-    Route::get('/barcode/generate', [BarcodeController::class, 'generate'])->name('barcode.generate');
+    Route::group(['prefix' => 'tools'], static function () {
+        Route::get('/', [ToolsController::class, 'index'])->name('tools.index');
+        Route::group(['prefix' => 'barcode'], static function () {
+            Route::get('/', [BarcodeController::class, 'index'])->name('tools.barcode.index');
+            Route::get('/generate', [BarcodeController::class, 'generate'])->name('tools.barcode.generate');
+        });
+    });
 });

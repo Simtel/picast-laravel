@@ -93,6 +93,23 @@
     color: #a5b4fc;
 }
 
+.sidebar .sidebar-submenu {
+    gap: 0;
+    padding: 0 0.75rem 0 1.5rem;
+    margin-bottom: 0.25rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    margin-left: 1rem;
+}
+
+.sidebar .sidebar-submenu .nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.sidebar .sidebar-submenu .nav-link:hover {
+    transform: none;
+}
+
 .sidebar-footer {
     padding: 1rem 1.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);

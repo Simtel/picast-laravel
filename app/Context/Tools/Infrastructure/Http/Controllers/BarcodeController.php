@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Context\User\Infrastructure\Controller;
+namespace App\Context\Tools\Infrastructure\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
@@ -108,7 +108,7 @@ final class BarcodeController extends Controller
             }
         }
 
-        return view('personal.barcode.index', [
+        return view('personal.tools.barcode.index', [
             'types' => collect(self::TYPES),
             'selectedType' => $selectedType,
             'text' => $text,

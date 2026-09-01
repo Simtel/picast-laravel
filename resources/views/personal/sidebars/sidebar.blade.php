@@ -67,11 +67,20 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{request()->routeIs('barcode.*') ? 'active' : ''}}"
-                   href="{{route('barcode.index')}}">
-                    <i class="fa fa-qrcode nav-icon"></i>
-                    <span>Штрих-коды</span>
+                <a class="nav-link {{request()->routeIs('tools.index') ? 'active' : ''}}"
+                   href="{{route('tools.index')}}">
+                    <i class="fa fa-toolbox nav-icon"></i>
+                    <span>Инструменты</span>
                 </a>
+                <ul class="nav flex-column sidebar-submenu">
+                    <li class="nav-item">
+                        <a class="nav-link {{request()->routeIs('tools.barcode.*') ? 'active' : ''}}"
+                           href="{{route('tools.barcode.index')}}">
+                            <i class="fa fa-qrcode nav-icon"></i>
+                            <span>Штрих-коды</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{request()->routeIs('settings') ? 'active' : ''}}"
