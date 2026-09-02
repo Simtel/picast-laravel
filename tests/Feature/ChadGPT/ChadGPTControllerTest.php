@@ -14,6 +14,8 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Carbon;
 use Log;
 use Mockery;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ChadGPTControllerTest extends TestCase
@@ -25,6 +27,9 @@ class ChadGPTControllerTest extends TestCase
         parent::setUp();
         /** @var User $user */
         $user = User::factory()->create();
+        $role = Role::create(['name' => 'chadgpt-user']);
+        $role->givePermissionTo(Permission::findOrCreate('view chadgpt'));
+        $user->assignRole($role);
         $this->user = $user;
     }
 

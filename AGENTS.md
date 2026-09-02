@@ -190,9 +190,10 @@ $bus->register(ListDomainsQuery::class, ListDomainsQueryHandler::class);
 
 #### User
 - **Model:** `User` (extends `Authenticatable`, uses `HasRoles`, `SoftDeletes`, `Notifiable`)
-- **Web routes:** `/personal/settings`, `/personal/invite`, `/personal/user/edit/{user}`
+- **Web routes:** `/personal/settings`, `/personal/invite`, `/personal/user/edit/{user}`, `/personal/roles` (role & section management, permission: `edit user`)
 - **API:** `GET /api/v1/user/current`
 - **Related:** `Images` gallery under `/personal/images` (permission: `edit images`)
+- **Role-based section access:** each site section maps to a permission; catalog in `config/sections.php`, helpers `sections_list()`/`section_permission()` in `bootstrap/functions.php`, managed via `RoleController` (`personal.roles.*`)
 
 #### Common (shared)
 - **Models:** `Images`, `InviteCode`
