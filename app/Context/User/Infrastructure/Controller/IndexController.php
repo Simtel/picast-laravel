@@ -22,7 +22,7 @@ final class IndexController extends Controller
      */
     public function index(Request $request): View|Factory|RedirectResponse|Application
     {
-        if ($request->user() !== null && $request->user()->hasRole('admin')) {
+        if ($request->user() !== null && $request->user()->hasPermissionTo('view dashboard')) {
             $users = $this->getUsersWithSearchAndSort($request);
             return view('personal.index', ['users' => $users]);
         }

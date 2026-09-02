@@ -43,11 +43,11 @@ Route::get('logout', [LoginController::class, 'logout']);
 Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static function () {
     Route::get('/', [IndexController::class, 'index'])->name('personal');
 
-    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
-    Route::post('/settings/password', [SettingsController::class, 'password'])->name('settings.password');
-    Route::post('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile');
-    Route::post('/settings/token', [SettingsController::class, 'token'])->name('settings.token');
-    Route::delete('/settings/token/{id}', [SettingsController::class, 'deleteToken'])->name('settings.token.delete');
+    Route::get('/settings', [SettingsController::class, 'index'])->middleware('permission:view settings')->name('settings');
+    Route::post('/settings/password', [SettingsController::class, 'password'])->middleware('permission:view settings')->name('settings.password');
+    Route::post('/settings/profile', [SettingsController::class, 'updateProfile'])->middleware('permission:view settings')->name('settings.profile');
+    Route::post('/settings/token', [SettingsController::class, 'token'])->middleware('permission:view settings')->name('settings.token');
+    Route::delete('/settings/token/{id}', [SettingsController::class, 'deleteToken'])->middleware('permission:view settings')->name('settings.token.delete');
 
     Route::get('/invite', [InviteController::class, 'index'])->name('invite');
     Route::post('/invite', [InviteController::class, 'invite'])->name('invite.user');
@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         Route::get('/edit/{user}', [UsersController::class, 'edit'])->name('user.edit');
         Route::post('/edit/{user}', [UsersController::class, 'update'])->name('user.update');
     });
+
 
     Route::group(['prefix' => 'images', 'middleware' => ['can:edit images']], static function () {
         Route::get('/', [ImagesController::class, 'index'])->name('images.index');
@@ -86,16 +87,18 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
     )->name('domains.delete_old_whois');
 
     // ChadGPT feature
-    Route::group(['prefix' => 'chadgpt'], static function () {
+    Route::group(['prefix' => 'chadgpt', 'middleware' => ['permission:view chadgpt']], static function () {
         Route::get('/', [ChadGptController::class, 'index'])->name('chadgpt.index');
         Route::post('/send-message', [ChadGptController::class, 'sendMessage'])->name('chadgpt.send-message');
         Route::delete('/clear-history', [ChadGptController::class, 'clearHistory'])->name('chadgpt.clear-history');
     });
 
-    Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournaments.index');
-    Route::get('/tournaments/{id}', [TournamentController::class, 'show'])->name('tournaments.show');
+    Route::group(['middleware' => ['permission:view tournaments']], static function () {
+        Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournaments.index');
+        Route::get('/tournaments/{id}', [TournamentController::class, 'show'])->name('tournaments.show');
+    });
 
-    Route::group(['prefix' => 'tools'], static function () {
+    Route::group(['prefix' => 'tools', 'middleware' => ['permission:view tools']], static function () {
         Route::get('/', [ToolsController::class, 'index'])->name('tools.index');
         Route::group(['prefix' => 'barcode'], static function () {
             Route::get('/', [BarcodeController::class, 'index'])->name('tools.barcode.index');
