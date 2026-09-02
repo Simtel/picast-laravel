@@ -446,3 +446,16 @@ Queue workers run via Supervisor (config at `.docker/supervisor/conf/laravel-wor
 | `bootstrap/functions.php`     | Custom helper functions (currently minimal) |
 | `copy-static-assets.js`       | Copies Font Awesome webfonts to public dir after Vite build |
 | `.hooks/pre-commit`           | Git hook: runs PHPStan in Docker, blocks on errors |
+
+## Documentation
+
+| Document | Path | Description |
+|----------|------|-------------|
+| README | README.md | Project landing page |
+| Getting Started | docs/getting-started.md | Installation, services, Make targets |
+| Architecture | docs/architecture.md | DDD contexts and project structure |
+| API Reference | docs/api.md | Endpoints, authentication, examples |
+| Configuration | docs/configuration.md | Environment variables and config files |
+| Testing | docs/testing.md | Running the test suite |
+| Deployment | docs/deployment.md | Production setup and CI/CD |
+| Contributing | docs/contributing.md | Code style and quality gates |
