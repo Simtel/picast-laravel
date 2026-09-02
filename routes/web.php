@@ -22,6 +22,7 @@ use App\Context\Tournaments\Infrastructure\Http\Controllers\TournamentController
 use App\Context\User\Infrastructure\Controller\ImagesController;
 use App\Context\User\Infrastructure\Controller\IndexController;
 use App\Context\User\Infrastructure\Controller\InviteController;
+use App\Context\User\Infrastructure\Controller\RoleController;
 use App\Context\User\Infrastructure\Controller\SettingsController;
 use App\Context\User\Infrastructure\Controller\UsersController;
 use App\Context\Youtube\Infrastructure\Controller\YouTubeVideoController;
@@ -57,6 +58,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         Route::post('/edit/{user}', [UsersController::class, 'update'])->name('user.update');
     });
 
+    Route::resource('roles', RoleController::class)->except(['show']);
 
     Route::group(['prefix' => 'images', 'middleware' => ['can:edit images']], static function () {
         Route::get('/', [ImagesController::class, 'index'])->name('images.index');
