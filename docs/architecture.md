@@ -73,6 +73,26 @@ Queue worker runs via Supervisor and processes the `database` driver.
 - **Web** (`routes/web.php`) — session auth under `auth` middleware; `/personal/*` section for authenticated users
 - **API** (`routes/api.php`) — prefix `/api/v1`, `auth:api` (Sanctum token) middleware, JSON 404 fallback
 
+## Role-based Section Access
+
+Every section of the personal area is mapped to a Spatie permission:
+
+| Section | Permission | Managed via |
+|---------|------------|-------------|
+| Dashboard («Участники») | `view dashboard` | `/personal/roles` |
+| Domains | `domains` | `/personal/roles` |
+| Images | `edit images` | `/personal/roles` |
+| YouTube Videos | `edit youtube` | `/personal/roles` |
+| ChadGPT Chat | `view chadgpt` | `/personal/roles` |
+| Tournaments | `view tournaments` | `/personal/roles` |
+| Tools | `view tools` | `/personal/roles` |
+| Settings | `view settings` | `/personal/roles` |
+
+- The catalog lives in `config/sections.php` and is consumed by the sidebar (`sidebar.blade.php`), the role editor and helper functions in `bootstrap/functions.php` (`sections_list()`, `section_permission()`).
+- A section is visible in the menu and reachable via its route only if the user's role holds the corresponding permission; otherwise the route returns `403`.
+- Admins manage roles and section access under `/personal/roles` (`RoleController`), which is guarded by the `edit user` permission. Default grants (roles `admin`/`member`) are applied in migration `2026_09_02_000000_add_section_permissions`.
+- The dashboard route is not hard-gated: `IndexController` shows the user list only when the current user has `view dashboard` and redirects to `domains.index` otherwise.
+
 ## See Also
 
 - [Getting Started](getting-started.md) — local environment setup

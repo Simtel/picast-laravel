@@ -12,7 +12,7 @@ final class SettingsControllerTest extends TestCase
 {
     public function test_personal_settings_page(): void
     {
-        $this->authUserWithPermissions([], []);
+        $this->authUserWithPermissions([], ['view settings']);
 
         $response = $this->get(route('settings'));
         $response->assertStatus(200);
@@ -23,7 +23,7 @@ final class SettingsControllerTest extends TestCase
 
     public function test_personal_update_token(): void
     {
-        $this->authUserWithPermissions([], []);
+        $this->authUserWithPermissions([], ['view settings']);
 
         /** @var User $user */
         $user = $this->getAuthUser();
@@ -38,7 +38,7 @@ final class SettingsControllerTest extends TestCase
     {
         $password = Hash::make('testPassword');
 
-        $this->authUserWithPermissions(['password' => $password], []);
+        $this->authUserWithPermissions(['password' => $password], ['view settings']);
 
         /** @var User $user */
         $user = $this->getAuthUser();
@@ -57,7 +57,7 @@ final class SettingsControllerTest extends TestCase
             'name' => 'Old Name',
             'email' => 'old@example.com',
             'birth_date' => '1990-01-01'
-        ], []);
+        ], ['view settings']);
 
         /** @var User $user */
         $user = $this->getAuthUser();
@@ -84,7 +84,7 @@ final class SettingsControllerTest extends TestCase
             'name' => 'Test User',
             'email' => 'test@example.com',
             'birth_date' => '1990-01-01'
-        ], []);
+        ], ['view settings']);
 
         /** @var User $user */
         $user = $this->getAuthUser();
@@ -105,7 +105,7 @@ final class SettingsControllerTest extends TestCase
 
     public function test_personal_update_profile_validation_errors(): void
     {
-        $this->authUserWithPermissions(['email' => 'existing@example.com'], []);
+        $this->authUserWithPermissions(['email' => 'existing@example.com'], ['view settings']);
 
         // Create another user with email that we'll try to use
         User::factory()->create(['email' => 'taken@example.com']);
@@ -122,7 +122,7 @@ final class SettingsControllerTest extends TestCase
 
     public function test_personal_update_profile_birth_date_future_validation(): void
     {
-        $this->authUserWithPermissions(['email' => 'test@example.com'], []);
+        $this->authUserWithPermissions(['email' => 'test@example.com'], ['view settings']);
 
         $futureDate = now()->addYear()->format('Y-m-d');
 
