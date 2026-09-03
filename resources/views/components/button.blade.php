@@ -1,4 +1,4 @@
-@props(['route', 'method' => 'POST', 'class' => 'btn-primary', 'text', 'icon' => null, 'title' => null])
+@props(['route', 'method' => 'POST', 'class' => 'btn-primary', 'text', 'icon' => null, 'title' => null, 'confirm' => null])
 
 <form action="{{ $route }}" method="POST" class="pull-right">
     @csrf
@@ -7,7 +7,8 @@
     @endif
     <button type="submit" 
             class="btn {{ $class }} btn-sm" 
-            @if($title) title="{{ $title }}" @endif>
+            @if($title) title="{{ $title }}" @endif
+            @if($confirm) data-confirm="{{ $confirm }}" @endif>
         @if($icon)
             <i class="fa-solid fa-{{ $icon }}"></i>
         @else

@@ -11,6 +11,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -34,17 +35,44 @@ final class RoleController extends Controller
     }
 
     /**
-     * Список ролей.
+     * Список ролей с поиском и сортировкой.
      *
      * @return Factory|View|Application
      */
-    public function index(): Factory|View|Application
+    public function index(Request $request): Factory|View|Application
     {
-        $roles = Role::withCount('users')->orderBy('name')->get();
+        $search = $request->string('search')->toString();
+        $sort = $request->string('sort', 'name')->toString();
+        $direction = $request->string('direction', 'asc')->toString();
 
-        Log::debug('[RoleController.index] список ролей, count={count}', ['count' => $roles->count()]);
+        $allowedSorts = ['name', 'users_count'];
+        if (!in_array($sort, $allowedSorts, true)) {
+            $sort = 'name';
+        }
+        if (!in_array($direction, ['asc', 'desc'], true)) {
+            $direction = 'asc';
+        }
 
-        return view('personal.roles.index', ['roles' => $roles]);
+        $query = Role::withCount('users');
+        if ($search !== '') {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $roles = $query->orderBy($sort, $direction)->get();
+
+        Log::debug('[RoleController.index] роли: search={search}, sort={sort}, direction={direction}, count={count}', [
+            'search' => $search,
+            'sort' => $sort,
+            'direction' => $direction,
+            'count' => $roles->count(),
+        ]);
+
+        return view('personal.roles.index', [
+            'roles' => $roles,
+            'search' => $search,
+            'currentSort' => $sort,
+            'currentDirection' => $direction,
+        ]);
     }
 
     /**
