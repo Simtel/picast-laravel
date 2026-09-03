@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Role;
 
+use App\Context\User\Domain\Model\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -122,5 +123,55 @@ final class RoleManagementTest extends TestCase
         $this->authUserWithPermissions([], []);
 
         $this->post(route('roles.store'), ['name' => 'x'])->assertStatus(403);
+    }
+
+    public function test_roles_index_searches_by_name(): void
+    {
+        $this->loginAdmin();
+
+        Role::create(['name' => 'manager', 'guard_name' => 'web']);
+        Role::create(['name' => 'operator', 'guard_name' => 'web']);
+
+        $response = $this->get(route('roles.index', ['search' => 'mana']));
+
+        $response->assertStatus(200);
+        $response->assertSee('manager');
+        $response->assertDontSee('operator');
+    }
+
+    public function test_roles_index_sorts_by_name_desc(): void
+    {
+        $this->loginAdmin();
+
+        Role::create(['name' => 'manager', 'guard_name' => 'web']);
+        Role::create(['name' => 'operator', 'guard_name' => 'web']);
+
+        $response = $this->get(route('roles.index', ['sort' => 'name', 'direction' => 'desc']));
+
+        $response->assertStatus(200);
+        $response->assertSeeInOrder(['operator', 'manager']);
+    }
+
+    public function test_roles_index_sorts_by_users_count_desc(): void
+    {
+        $this->loginAdmin();
+
+        $many = Role::create(['name' => 'manager', 'guard_name' => 'web']);
+        $few = Role::create(['name' => 'operator', 'guard_name' => 'web']);
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $user1->assignRole($many);
+        $user2->assignRole($many);
+
+        $response = $this->get(route('roles.index', ['sort' => 'users_count', 'direction' => 'desc']));
+
+        $response->assertStatus(200);
+
+        /** @var \Illuminate\Support\Collection<int, Role> $roles */
+        $roles = $response->viewData('roles');
+        $first = $roles->first();
+        self::assertNotNull($first);
+        self::assertSame($many->id, $first->id);
+        self::assertTrue($first->users_count >= $few->users_count);
     }
 }
