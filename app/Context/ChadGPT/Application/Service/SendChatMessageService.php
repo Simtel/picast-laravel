@@ -82,13 +82,12 @@ final class SendChatMessageService
 
     /**
      * @param User $user
-     * @param ConversationRepository $conversationRepository
      * @return array{success: bool, error: string|null}
      */
-    public function clearHistory(User $user, ConversationRepository $conversationRepository): array
+    public function clearHistory(User $user): array
     {
         try {
-            $conversationRepository->deleteByUser($user);
+            $this->conversationRepository->deleteByUser($user);
 
             return [
                 'success' => true,

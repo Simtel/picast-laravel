@@ -4,19 +4,12 @@ declare(strict_types=1);
 
 namespace App\Context\ChadGPT\Infrastructure\Http\Controllers\Api;
 
-use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
-use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
-use App\Context\ChadGPT\Application\Service\SendChatMessageService;
-use App\Context\ChadGPT\Infrastructure\Repository\ConversationRepository;
-use App\Context\ChadGPT\Infrastructure\Repository\StatWordsUsedRepository;
+use App\Context\ChadGPT\Application\Service\ChatService;
 use App\Context\ChadGPT\Infrastructure\Request\SendMessageRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OA;
-use Throwable;
 
 #[OA\Tag(
     name: "ChadGPT",
@@ -54,17 +47,9 @@ final class ChatsController extends Controller
             )
         ]
     )]
-    public function index(Request $request, ChadGptRequestService $chadGptRequestService, ConversationRepository $conversationRepository, StatWordsUsedRepository $statWordsUsedRepository): JsonResponse
+    public function index(Request $request, ChatService $chatService): JsonResponse
     {
-        $user = $request->user();
-        $wordStats = $statWordsUsedRepository->findByUser($user);
-
-        return response()->json([
-            'models' => $chadGptRequestService->getModels(),
-            'conversations' => $conversationRepository->findBuUser($user),
-            'word_stats' => $wordStats,
-            'word_stats_sum' => $wordStats->sum(static fn ($stat) => $stat->getTokensUsed()),
-        ]);
+        return response()->json($chatService->conversationData($request->user()));
     }
 
     #[OA\Post(
@@ -90,45 +75,11 @@ final class ChatsController extends Controller
     )]
     public function sendMessage(
         SendMessageRequest $request,
-        ChadGptRequestService $chadGptRequestService,
-        SendChatMessageService $sendChatMessageService,
+        ChatService $chatService,
     ): JsonResponse {
-        Log::info('ChadGPT: sending message', ['request' => $request->all()]);
+        $result = $chatService->sendMessage($request->user(), $request->toData());
 
-        try {
-            $chadGptRequestData = ChadGptRequestData::from([
-                'model' => $request->input('model', $chadGptRequestService->getDefaultModelId()),
-                'userMessage' => $request->string('message')->value(),
-                'temperature' => $request->filled('temperature') ? $request->float('temperature') : null,
-                'maxTokens' => $request->filled('max_tokens') ? $request->integer('max_tokens') : null,
-                'images' => $request->input('images'),
-            ]);
-
-            $result = $sendChatMessageService->sendMessage($chadGptRequestData, $request->user());
-
-            if (!$result['success']) {
-                return response()->json(
-                    ['error' => $result['error']],
-                    Response::HTTP_BAD_REQUEST
-                );
-            }
-
-            return response()->json([
-                'success' => true,
-                'response' => $result['response'],
-                'used_tokens_count' => $result['used_tokens_count'],
-            ]);
-        } catch (Throwable $e) {
-            Log::error('ChadGPT: request exception', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return response()->json(
-                ['error' => 'Произошла ошибка при общении с ChadGPT'],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+        return response()->json($result['body'], $result['status']);
     }
 
     #[OA\Delete(
@@ -143,21 +94,10 @@ final class ChatsController extends Controller
     )]
     public function clearHistory(
         Request $request,
-        ConversationRepository $conversationRepository,
-        SendChatMessageService $sendChatMessageService,
+        ChatService $chatService,
     ): JsonResponse {
-        $result = $sendChatMessageService->clearHistory($request->user(), $conversationRepository);
+        $result = $chatService->clearHistory($request->user());
 
-        if (!$result['success']) {
-            return response()->json([
-                'success' => false,
-                'error' => $result['error'],
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'История чатов успешно очищена',
-        ]);
+        return response()->json($result['body'], $result['status']);
     }
 }

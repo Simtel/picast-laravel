@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\ChadGPT\Infrastructure\Request;
 
+use App\Context\ChadGPT\Application\Data\ChadGptRequestData;
 use App\Context\ChadGPT\Application\Service\ChadGptRequestService;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -40,6 +41,21 @@ final class SendMessageRequest extends FormRequest
             'images' => 'nullable|array|max:5',
             'images.*' => 'nullable|string',
         ];
+    }
+
+    public function toData(): ChadGptRequestData
+    {
+        $chadGptRequestService = app(ChadGptRequestService::class);
+
+        return ChadGptRequestData::from([
+            'model' => $this->filled('model')
+                ? $this->input('model')
+                : $chadGptRequestService->getDefaultModelId(),
+            'userMessage' => $this->string('message')->value(),
+            'temperature' => $this->filled('temperature') ? $this->float('temperature') : null,
+            'maxTokens' => $this->filled('max_tokens') ? $this->integer('max_tokens') : null,
+            'images' => $this->input('images'),
+        ]);
     }
 
     protected function failedValidation(Validator $validator): void
