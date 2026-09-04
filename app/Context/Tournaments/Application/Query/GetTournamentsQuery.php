@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Tournaments\Application\Query;
 
-use App\Context\Tournaments\Infrastructure\Http\Controllers\TournamentController;
+use App\Context\Tournaments\Application\QueryHandler\GetTournamentDetailQueryHandler;
 
 /**
  * Query для получения списка турниров с фильтрацией и сортировкой.
@@ -22,7 +22,7 @@ final readonly class GetTournamentsQuery
         public string $sortBy = 'date',
         public string $sortOrder = 'asc',
         public int $page = 1,
-        public int $perPage = TournamentController::GROUPS_PER_PAGE,
+        public int $perPage = GetTournamentDetailQueryHandler::GROUPS_PER_PAGE,
     ) {
     }
 

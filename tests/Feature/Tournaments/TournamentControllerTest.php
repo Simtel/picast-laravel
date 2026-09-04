@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Tournaments;
 
+use App\Context\Tournaments\Application\QueryHandler\GetTournamentDetailQueryHandler;
 use App\Context\Tournaments\Domain\Model\Tournament;
 use App\Context\Tournaments\Domain\Model\TournamentGroup;
-use App\Context\Tournaments\Infrastructure\Http\Controllers\TournamentController;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Tests\TestCase;
@@ -359,7 +359,7 @@ final class TournamentControllerTest extends TestCase
         $this->loginAdmin();
 
         $tournament = Tournament::factory()->create();
-        for ($i = 1; $i <= TournamentController::GROUPS_PER_PAGE + 2; $i++) {
+        for ($i = 1; $i <= GetTournamentDetailQueryHandler::GROUPS_PER_PAGE + 2; $i++) {
             TournamentGroup::create([
                 'tournament_id' => $tournament->getId(),
                 'number' => $i,
@@ -373,7 +373,7 @@ final class TournamentControllerTest extends TestCase
         $response->assertStatus(200);
         $groups = $response->viewData('groups');
         $this->assertInstanceOf(LengthAwarePaginator::class, $groups);
-        $this->assertCount(TournamentController::GROUPS_PER_PAGE, $groups->items());
+        $this->assertCount(GetTournamentDetailQueryHandler::GROUPS_PER_PAGE, $groups->items());
         $this->assertTrue($groups->hasMorePages());
     }
 

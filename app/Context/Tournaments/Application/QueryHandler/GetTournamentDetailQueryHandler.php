@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Request;
  */
 final class GetTournamentDetailQueryHandler
 {
-    private const int GROUPS_PER_PAGE = 25;
+    public const int GROUPS_PER_PAGE = 25;
 
     /**
      * @param GetTournamentDetailQuery $query
