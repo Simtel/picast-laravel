@@ -48,4 +48,19 @@ final class UsersControllerTest extends TestCase
         $this->assertDatabaseCount($tableNames['model_has_roles'], 3);
         $this->assertDatabaseHas(User::class, ['email' => 'test@test1.com', 'birth_date' => '1990-01-15']);
     }
+
+    public function test_user_update_with_duplicate_email_validation_error(): void
+    {
+        $this->loginAdmin();
+        $target = $this->createUserWithPermissions([], ['']);
+        $other = User::factory()->create(['email' => 'occupied@example.com']);
+
+        $response = $this->post(route('user.update', ['user' => $target]), [
+            'name' => $target->getName(),
+            'email' => $other->email,
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors('email');
+    }
 }

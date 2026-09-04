@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Context\User\Infrastructure\Controller;
 
 use App\Context\User\Application\Query\UserListingQuery;
-use App\Context\User\Domain\Model\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;

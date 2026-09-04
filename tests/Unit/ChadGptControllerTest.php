@@ -14,7 +14,7 @@ final class ChadGptControllerTest extends TestCase
      */
     public function test_controller_can_be_instantiated(): void
     {
-        $controller = new ChadGptController();
+        $controller = $this->app->make(ChadGptController::class);
         $this->assertInstanceOf(ChadGptController::class, $controller);
     }
 }

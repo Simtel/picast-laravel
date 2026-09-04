@@ -42,14 +42,15 @@ final class DomainTest extends TestCase
         self::assertIsArray($data);
         self::assertCount(2, $data);
 
-        $ids = array_map(static fn (array $item): int => (int)$item['id'], $data);
+        /** @var array<int, array{id: int, name: string}> $data */
+        $ids = array_map(static fn (array $item): int => $item['id'], $data);
         sort($ids);
         self::assertSame(
             [$domain1->getId(), $domain2->getId()],
             array_values(array_unique($ids))
         );
 
-        $names = array_map(static fn (array $item): string => (string)$item['name'], $data);
+        $names = array_map(static fn (array $item): string => $item['name'], $data);
         self::assertContains($domain1->getName(), $names);
         self::assertContains($domain2->getName(), $names);
     }
