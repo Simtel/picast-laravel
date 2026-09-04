@@ -5,19 +5,24 @@ declare(strict_types=1);
 namespace App\Context\User\Infrastructure\Controller;
 
 use App\Context\Common\Domain\Models\Images;
+use App\Context\User\Application\Query\ImageListingQuery;
+use App\Context\User\Application\Service\ImageUploadService;
+use App\Context\User\Infrastructure\Request\Personal\Images\Store;
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 final class ImagesController extends Controller
 {
+    public function __construct(
+        private readonly ImageUploadService $imageUploadService,
+        private readonly ImageListingQuery $imageListingQuery,
+    ) {
+    }
+
     /**
      * @return Factory|View|Application
      */
@@ -31,61 +36,21 @@ final class ImagesController extends Controller
      */
     public function index(Request $request): Factory|View|Application
     {
-        $userId = $request->user()->id;
-        $imagesQuery = Images::whereUserId($userId)
-            ->orderBy('created_at', 'desc');
+        $images = $this->imageListingQuery->handle(
+            (int)$request->user()->id,
+            $request->query()
+        );
 
-        $filter = $request->get('filter');
-        if ($filter === 'recent') {
-            $imagesQuery->where('created_at', '>=', now()->subWeek());
-        } elseif ($filter === 'large') {
-            $imagesQuery->where('id', '>', 100);
-        }
-
-
-        $search = $request->string('search');
-        if ($search->isNotEmpty()) {
-            $imagesQuery->where('filename', 'like', "%{$search}%");
-        }
-
-        $images = $imagesQuery->paginate(20)->withQueryString();
-
-        return view('personal.images.index', [
-            'images' => $images,
-            'currentFilter' => $filter,
-            'currentSearch' => $search
-        ]);
+        return view('personal.images.index', ['images' => $images]);
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     * @throws FileNotFoundException
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(Store $request): RedirectResponse
     {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
         $file = $request->file('image');
-        if ($file instanceof UploadedFile) {
-            $imageName = time() . '.' . $file->extension();
-            $directory = 'images/'.date('m-Y');
-            Storage::disk('s3')->put($directory.'/'. $imageName, File::get($file->path()));
-            Images::create(
-                [
-                    'user_id' => $request->user()->id,
-                    'filename' => $imageName,
-                    'directory' => $directory,
-                    'thumb' => '',
-                    'width' => 0,
-                    'check' => 1,
-                    'disk'  => 's3'
-                ]
-            );
-        }
 
+        if ($file instanceof \Illuminate\Http\UploadedFile) {
+            $this->imageUploadService->upload($file, (int)$request->user()->id);
+        }
 
         return back()->with('success', 'You have successfully upload image.');
     }

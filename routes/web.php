@@ -48,7 +48,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
     Route::post('/settings/password', [SettingsController::class, 'password'])->middleware('permission:view settings')->name('settings.password');
     Route::post('/settings/profile', [SettingsController::class, 'updateProfile'])->middleware('permission:view settings')->name('settings.profile');
     Route::post('/settings/token', [SettingsController::class, 'token'])->middleware('permission:view settings')->name('settings.token');
-    Route::delete('/settings/token/{id}', [SettingsController::class, 'deleteToken'])->middleware('permission:view settings')->name('settings.token.delete');
+    Route::delete('/settings/token/{token}', [SettingsController::class, 'deleteToken'])->middleware('permission:view settings')->name('settings.token.delete');
 
     Route::get('/invite', [InviteController::class, 'index'])->name('invite');
     Route::post('/invite', [InviteController::class, 'invite'])->name('invite.user');

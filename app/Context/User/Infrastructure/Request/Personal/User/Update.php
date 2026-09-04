@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\User\Infrastructure\Request\Personal\User;
 
+use App\Context\User\Domain\Model\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
@@ -30,6 +31,9 @@ final class Update extends FormRequest
      */
     public function rules(): array
     {
+        $routeUser = $this->route('user');
+        $ignoreId = $routeUser instanceof User ? $routeUser->getId() : $routeUser;
+
         return [
             'name' => [
                 'required',
@@ -37,7 +41,8 @@ final class Update extends FormRequest
             ],
             'email' => [
                 'required',
-                'email'
+                'email',
+                Rule::unique('users', 'email')->ignore($ignoreId),
             ],
             'birth_date' => [
                 'nullable',
