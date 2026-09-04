@@ -42,7 +42,7 @@
                             {{ Html::form('POST',route('youtube.queue-download',['video' => $video]))->open()}}
                         @endif
 
-                        <select name="video_formats" id="video_formats" class="form-control">
+                        <select name="format_id" id="format_id" class="form-control">
                             <option>---</option>
                             @foreach($video->formats as $format)
                                 <option value="{{ $format->getId() }}">{{ $format->format_ext }} {{ $format->resolution }}

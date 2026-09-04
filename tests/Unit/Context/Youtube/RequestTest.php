@@ -40,7 +40,7 @@ final class RequestTest extends TestCase
 
         self::assertTrue($request->authorize());
         self::assertSame([
-            'format_id' => ['required', 'integer', 'exists:video_formats,id'],
+            'format_id' => ['required', 'integer', 'exists:youtube_videos_formats,id'],
         ], $request->rules());
     }
 

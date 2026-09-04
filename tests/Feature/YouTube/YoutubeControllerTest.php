@@ -187,10 +187,26 @@ final class YoutubeControllerTest extends TestCase
 
         $this->assertDatabaseHas(VideoFormats::class, ['video_id' => $video->getId(), 'id' => $format->getId()]);
         $this->assertDatabaseCount(VideoDownloadQueue::class, 0);
-        $response = $this->post(route('youtube.queue-download', ['video' => $video]), ['video_formats' => $format->getId()]);
+        $response = $this->post(route('youtube.queue-download', ['video' => $video]), ['format_id' => $format->getId()]);
         $response->assertStatus(302);
         $this->assertDatabaseCount(VideoDownloadQueue::class, 1);
         $this->assertDatabaseHas(VideoDownloadQueue::class, ['video_id' => $video->getId(), 'format_id' => $format->getId()]);
+    }
+
+    public function test_user_cannot_add_foreign_format_to_download_queue(): void
+    {
+        $user = $this->createUserWithPermissions([], ['edit youtube']);
+        $this->actingAs($user);
+        Event::fake();
+
+        $video = Video::factory()->create(['user_id' => $user->getId()]);
+        $otherVideo = Video::factory()->create(['user_id' => $user->getId()]);
+        $foreignFormat = VideoFormats::factory()->create(['video_id' => $otherVideo->getId()]);
+
+        $response = $this->post(route('youtube.queue-download', ['video' => $video]), ['format_id' => $foreignFormat->getId()]);
+
+        $response->assertStatus(404);
+        $this->assertDatabaseCount(VideoDownloadQueue::class, 0);
     }
 
     private function mockGetVideoInfo(string $videoId, string $title = 'Тестовый заголовок'): void

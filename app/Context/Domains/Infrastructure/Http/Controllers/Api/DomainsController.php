@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Infrastructure\Http\Controllers\Api;
 
-use App\Context\Domains\Application\Contract\WhoisUpdater;
+use App\Context\Common\Infrastructure\CommandBus;
+use App\Context\Domains\Application\Service\DomainService;
+use App\Context\Domains\Domain\Command\ListDomainsQuery;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Domain\Resource\DomainResource;
 use App\Context\Domains\Infrastructure\Request\DomainRequest;
@@ -23,7 +25,8 @@ use OpenApi\Attributes as OA;
 final class DomainsController extends Controller
 {
     public function __construct(
-        private readonly WhoisUpdater $whoisUpdater,
+        private readonly DomainService $domainService,
+        private readonly CommandBus $commandBus,
     ) {
         $this->authorizeResource(Domain::class, 'domain');
     }
@@ -46,7 +49,12 @@ final class DomainsController extends Controller
     )]
     public function index(Request $request): AnonymousResourceCollection
     {
-        $domains = Domain::whereUserId($request->user()->id)->get();
+        $query = new ListDomainsQuery(
+            user: $request->user(),
+            perPage: 100,
+        );
+
+        $domains = $this->commandBus->execute($query);
 
         return DomainResource::collection($domains);
     }
@@ -100,10 +108,7 @@ final class DomainsController extends Controller
     )]
     public function store(DomainRequest $request): JsonResponse
     {
-        Domain::create([
-            'name' => $request->get('name'),
-            'user_id' => $request->user()->id,
-        ]);
+        $this->domainService->create((int)$request->user()->id, $request->validated());
 
         return response()->json(['success' => true]);
     }
@@ -129,16 +134,9 @@ final class DomainsController extends Controller
     )]
     public function update(Domain $domain): JsonResponse
     {
-        try {
-            $this->whoisUpdater->update($domain);
+        $this->domainService->updateWhois($domain);
 
-            return response()->json(['success' => true]);
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ошибка при получении WHOIS информации: ' . $e->getMessage(),
-            ], 500);
-        }
+        return response()->json(['success' => true]);
     }
 
     #[OA\Delete(
@@ -162,7 +160,7 @@ final class DomainsController extends Controller
     )]
     public function destroy(Domain $domain): JsonResponse
     {
-        $domain->delete();
+        $this->domainService->delete($domain);
 
         return response()->json(['success' => true]);
     }

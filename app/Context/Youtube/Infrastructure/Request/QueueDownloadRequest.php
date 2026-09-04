@@ -19,7 +19,7 @@ final class QueueDownloadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'format_id' => ['required', 'integer', 'exists:video_formats,id'],
+            'format_id' => ['required', 'integer', 'exists:youtube_videos_formats,id'],
         ];
     }
 }

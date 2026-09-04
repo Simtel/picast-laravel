@@ -11,6 +11,8 @@ use App\Context\Domains\Application\Contract\WhoisService;
 use App\Context\Domains\Application\Contract\WhoisUpdater;
 use App\Context\Domains\Domain\Command\ListDomainsQuery;
 use App\Context\Domains\Infrastructure\Handlers\ListDomainsQueryHandler;
+use App\Context\User\Application\Contracts\Services\InviteUserService;
+use App\Context\User\Application\Service\InviteUserService as InviteUserServiceImplementation;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
@@ -25,6 +27,7 @@ final class AppServiceProvider extends ServiceProvider
     public array $singletons = [
         WhoisUpdater::class => \App\Context\Domains\Application\Service\WhoisUpdater::class,
         WhoisService::class => \App\Context\Domains\Application\Service\WhoisService::class,
+        InviteUserService::class => InviteUserServiceImplementation::class,
     ];
 
     /**

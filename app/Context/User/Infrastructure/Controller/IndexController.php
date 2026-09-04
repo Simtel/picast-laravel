@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\User\Infrastructure\Controller;
 
-use App\Context\User\Domain\Model\User;
+use App\Context\User\Application\Query\UserListingQuery;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -14,7 +14,10 @@ use Illuminate\Http\Request;
 
 final class IndexController extends Controller
 {
-    private const int PER_PAGE = 15;
+    public function __construct(
+        private readonly UserListingQuery $userListingQuery,
+    ) {
+    }
 
     /**
      * Главная страница личного кабинета
@@ -23,39 +26,10 @@ final class IndexController extends Controller
     public function index(Request $request): View|Factory|RedirectResponse|Application
     {
         if ($request->user() !== null && $request->user()->hasPermissionTo('view dashboard')) {
-            $users = $this->getUsersWithSearchAndSort($request);
+            $users = $this->userListingQuery->handle($request->query());
             return view('personal.index', ['users' => $users]);
         }
 
         return redirect()->route('domains.index');
-    }
-
-    /**
-     * Получение пользователей с поиском и сортировкой
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<int, \App\Context\User\Domain\Model\User>
-     */
-    private function getUsersWithSearchAndSort(Request $request): \Illuminate\Contracts\Pagination\LengthAwarePaginator
-    {
-        $search = strval($request->query('search', ''));
-        $sortColumn = strval($request->query('sort', 'created_at'));
-        $sortDirection = strval($request->query('direction', 'desc'));
-
-        $query = User::query();
-
-        // Поиск по имени и email
-        if (!empty($search)) {
-            $query->where(static function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        // Сортировка
-        $allowedColumns = ['name', 'email', 'created_at', 'birth_date'];
-        if (in_array($sortColumn, $allowedColumns)) {
-            $query->orderBy($sortColumn, $sortDirection);
-        }
-
-        return $query->paginate(self::PER_PAGE);
     }
 }

@@ -102,7 +102,7 @@
                                             <td>{{ $tok->created_at?->format('d.m.Y H:i') }}</td>
                                             <td>{{ $tok->last_used_at?->format('d.m.Y H:i') ?? '—' }}</td>
                                             <td class="text-end">
-                                                {{ Html::form()->route('settings.token.delete', ['id' => $tok->id])->attribute('method', 'DELETE')->open() }}
+                                                {{ Html::form()->route('settings.token.delete', ['token' => $tok->id])->attribute('method', 'DELETE')->open() }}
                                                     {{ Html::submit('<i class="fa fa-trash"></i>')->class('btn btn-sm btn-outline-danger') }}
                                                 {{ Html::form()->close() }}
                                             </td>

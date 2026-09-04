@@ -4,27 +4,21 @@ declare(strict_types=1);
 
 namespace App\Context\User\Infrastructure\Controller;
 
-use App\Context\Common\Domain\Models\InviteCode;
-use App\Context\User\Infrastructure\Mail\InviteUserNotify;
+use App\Context\User\Application\Contracts\Services\InviteUserService;
 use App\Context\User\Infrastructure\Request\InviteRequest;
 use App\Http\Controllers\Controller;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Mail;
 
 final class InviteController extends Controller
 {
-    /**
-     * InviteController constructor.
-     */
-    public function __construct()
-    {
+    public function __construct(
+        private readonly InviteUserService $inviteUserService,
+    ) {
         $this->middleware(['can:invite user']);
     }
-
 
     /**
      * @return Application|Factory|View
@@ -34,22 +28,14 @@ final class InviteController extends Controller
         return view('personal.invite');
     }
 
-    /**
-     * @param InviteRequest $request
-     * @return RedirectResponse
-     * @throws Exception
-     */
     public function invite(InviteRequest $request): RedirectResponse
     {
-        $code = InviteCode::create(
-            [
-                'created_by' => $request->user()->id,
-                'code'       => str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT)
-            ]
+        $this->inviteUserService->invite(
+            (int)$request->user()->id,
+            $request->string('name')->toString(),
+            $request->string('email')->toString(),
         );
-        Mail::to($request->get('email'))->send(
-            new InviteUserNotify($code->code, $request->string('name')->toString())
-        );
+
         return redirect()->route('personal');
     }
 }

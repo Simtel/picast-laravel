@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\User\Infrastructure\Controller;
 
+use App\Context\User\Application\Service\RoleService;
 use App\Context\User\Infrastructure\Request\Personal\Role\Store;
 use App\Context\User\Infrastructure\Request\Personal\Role\Update;
 use App\Http\Controllers\Controller;
@@ -13,24 +14,16 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\PermissionRegistrar;
 
 final class RoleController extends Controller
 {
     /**
-     * Роли, которые нельзя удалять.
-     *
-     * @var string[]
-     */
-    private const array PROTECTED_ROLES = ['admin'];
-
-    /**
      * RoleController constructor.
      */
-    public function __construct()
-    {
+    public function __construct(
+        private readonly RoleService $roleService,
+    ) {
         $this->middleware('can:edit user');
     }
 
@@ -93,19 +86,10 @@ final class RoleController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        $role = Role::create(['name' => $request->string('name')->toString(), 'guard_name' => 'web']);
-
-        $sections = $request->validated('sections', []);
-        $permissions = $this->permissionsForSections($sections);
-        if ($permissions !== []) {
-            $role->givePermissionTo($permissions);
-        }
-        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
-
-        Log::info('[RoleController.store] роль создана: {name}, разделов: {sections}', [
-            'name' => $role->name,
-            'sections' => $sections,
-        ]);
+        $role = $this->roleService->create(
+            $request->string('name')->toString(),
+            $request->validated('sections', [])
+        );
 
         return redirect()->route('roles.index')->with('success', 'Роль «' . $role->name . '» успешно создана!');
     }
@@ -135,17 +119,11 @@ final class RoleController extends Controller
      */
     public function update(Role $role, Update $request): RedirectResponse
     {
-        $role->name = $request->string('name')->toString();
-        $role->save();
-
-        $permissions = $this->permissionsForSections($request->validated('sections', []));
-        $role->syncPermissions($permissions);
-        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
-
-        Log::info('[RoleController.update] роль обновлена: {name}, разделов: {count}', [
-            'name' => $role->name,
-            'count' => count($permissions),
-        ]);
+        $this->roleService->update(
+            $role,
+            $request->string('name')->toString(),
+            $request->validated('sections', [])
+        );
 
         return redirect()->route('roles.edit', [$role])->with('success', 'Роль успешно обновлена!');
     }
@@ -158,49 +136,12 @@ final class RoleController extends Controller
      */
     public function destroy(Role $role): RedirectResponse
     {
-        if (in_array($role->name, self::PROTECTED_ROLES, true)) {
-            Log::warning('[RoleController.destroy] попытка удалить защищённую роль {name}', ['name' => $role->name]);
+        $result = $this->roleService->delete($role);
 
-            return redirect()->route('roles.index')->with('error', 'Роль «' . $role->name . '» нельзя удалить.');
+        if ($result !== true) {
+            return redirect()->route('roles.index')->with('error', $result);
         }
-
-        if ($role->users()->exists()) {
-            Log::warning('[RoleController.destroy] роль {name} назначена пользователям, удаление отклонено', [
-                'name' => $role->name,
-            ]);
-
-            return redirect()->route('roles.index')->with('error', 'Роль назначена пользователям и не может быть удалена.');
-        }
-
-        $role->delete();
-        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
-
-        Log::info('[RoleController.destroy] роль удалена: {name}', ['name' => $role->name]);
 
         return redirect()->route('roles.index')->with('success', 'Роль успешно удалена!');
-    }
-
-    /**
-     * Маппинг ключей разделов из каталога на их пермишены.
-     *
-     * @param  array<int, string>  $sectionKeys
-     * @return array<int, string>
-     */
-    private function permissionsForSections(array $sectionKeys): array
-    {
-        $permissions = [];
-        foreach ($sectionKeys as $key) {
-            $permission = section_permission($key);
-            if ($permission !== null) {
-                $permissions[] = $permission;
-            }
-        }
-
-        // Гарантируем существование пермишенов (могут быть новые, созданные не миграцией).
-        foreach ($permissions as $permissionName) {
-            Permission::findOrCreate($permissionName);
-        }
-
-        return array_values(array_unique($permissions));
     }
 }

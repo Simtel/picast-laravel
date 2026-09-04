@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Context\Youtube\Infrastructure\Controller;
 
+use App\Context\Youtube\Application\Query\VideoListingQuery;
 use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;
+use App\Context\Youtube\Application\Service\VideoActionService;
 use App\Context\Youtube\Domain\Model\Video;
-use App\Context\Youtube\Domain\Model\VideoDownloadQueue;
-use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
+use App\Context\Youtube\Infrastructure\Request\QueueDownloadRequest;
 use App\Context\Youtube\Infrastructure\Request\YouTubeUrlRequest;
 use App\Http\Controllers\Controller;
 use Exception;
@@ -20,7 +21,8 @@ use Illuminate\Http\Request;
 final class YouTubeVideoController extends Controller
 {
     public function __construct(
-        private readonly YouTubeVideoStatusRepository $statusRepository,
+        private readonly VideoActionService $videoActionService,
+        private readonly VideoListingQuery $videoListingQuery,
         private readonly RefreshVideoFormatsService $refreshVideoFormatsService
     ) {
         $this->authorizeResource(Video::class, 'video');
@@ -33,7 +35,7 @@ final class YouTubeVideoController extends Controller
      */
     public function index(Request $request): View|Factory|Application
     {
-        $videos = Video::whereUserId($request->user()->id)->paginate(15);
+        $videos = $this->videoListingQuery->listByUser((int)$request->user()->id, paginate: true);
         return view('personal.youtube_videos.index', ['videos' => $videos]);
     }
 
@@ -53,13 +55,7 @@ final class YouTubeVideoController extends Controller
      */
     public function store(YouTubeUrlRequest $request): Application|RedirectResponse
     {
-        Video::create(
-            [
-                'url' => $request->get('url'),
-                'user_id' => $request->user()->id,
-                'status_id' => $this->statusRepository->findByCode('new')->id,
-            ]
-        );
+        $this->videoActionService->create((int)$request->user()->id, $request->string('url')->toString());
 
         return redirect()->route('youtube.index');
     }
@@ -80,17 +76,9 @@ final class YouTubeVideoController extends Controller
         return redirect()->route('youtube.index');
     }
 
-    public function queueDownload(Video $video, Request $request): RedirectResponse
+    public function queueDownload(Video $video, QueueDownloadRequest $request): RedirectResponse
     {
-        /** @var array{video_formats: int} $validated */
-        $validated = $request->validate([
-            'video_formats' => 'required|integer',
-        ]);
-
-        VideoDownloadQueue::create([
-            'video_id' => $video->id,
-            'format_id' => $validated['video_formats'],
-        ]);
+        $this->videoActionService->queueDownload($video, $request->integer('format_id'));
 
         return redirect()->route('youtube.index');
     }

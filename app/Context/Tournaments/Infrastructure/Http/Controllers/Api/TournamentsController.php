@@ -117,14 +117,7 @@ final class TournamentsController extends Controller
     public function show(\Illuminate\Http\Request $request, int $id): JsonResponse
     {
         try {
-            $query = new GetTournamentDetailQuery(
-                id: $id,
-                search: $request->input('search', ''),
-                number: $request->integer('number', 0),
-                sortBy: $request->input('sort_by', 'number'),
-                sortOrder: $request->input('sort_order', 'asc'),
-                page: $request->integer('page', 1),
-            );
+            $query = GetTournamentDetailQuery::fromRequest($id, $request->query());
 
             $response = $this->tournamentDetailQueryHandler->handle($query);
 

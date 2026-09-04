@@ -26,4 +26,26 @@ final readonly class GetTournamentDetailQuery
         public int $page = 1,
     ) {
     }
+
+    /**
+     * @param int $id ID турнира из роута
+     * @param array{
+     *     search?: string|null,
+     *     number?: int|string,
+     *     sort_by?: string,
+     *     sort_order?: string,
+     *     page?: int|string
+     * } $params
+     */
+    public static function fromRequest(int $id, array $params): self
+    {
+        return new self(
+            id: $id,
+            search: $params['search'] ?? null,
+            number: (int)($params['number'] ?? 0),
+            sortBy: $params['sort_by'] ?? 'number',
+            sortOrder: $params['sort_order'] ?? 'asc',
+            page: (int)($params['page'] ?? 1),
+        );
+    }
 }

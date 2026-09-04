@@ -141,7 +141,9 @@ Each context follows a three-layer architecture:
 | Layer          | Directory              | Purpose                                                    |
 |---------------|------------------------|------------------------------------------------------------|
 | **Domain**     | `Domain/`              | Eloquent Models, Events, Factories, Observers, Resources, Exceptions, Commands/Queries |
-| **Application**| `Application/`         | Services, Policies, Contracts (interfaces), DTOs/Data objects, QueryHandlers |
+| **Application**| `Application/`         | Services, Policies, Contracts (interfaces), DTOs/Data objects, Queries (`Query/`), QueryHandlers |
+
+Controllers (web + API) are thin and delegate business logic to Application services/queries; see `docs/architecture.md` → "Thin Controllers & Shared Application Services".
 | **Infrastructure** | `Infrastructure/`  | HTTP Controllers (Web + API), Artisan Commands, Jobs, Mail, Notifications, Repositories, Request validators, Handlers, Facades, Event Listeners |
 
 ### Command Bus (CQRS-light)
@@ -159,6 +161,7 @@ $bus->register(ListDomainsQuery::class, ListDomainsQueryHandler::class);
 - **Models:** `ChadGptConversation`, `ChadGptConversationWordStat`
 - **Web routes:** `GET /personal/chadgpt`, `POST /personal/chadgpt/send-message`, `DELETE /personal/chadgpt/clear-history`
 - **API routes:** `GET/POST/DELETE /api/v1/chats`
+- **Services:** `ChatService` (shared web/API data, send-message & clear-history), `SendChatMessageService`, `ChadGptRequestService`
 - **Config:** `config/chadgpt.php` — API key & base URL for `ask.chadgpt.ru`
 
 #### Domains
@@ -170,6 +173,7 @@ $bus->register(ListDomainsQuery::class, ListDomainsQueryHandler::class);
 - **Scheduled:** `domains:whois` daily, `CheckExpireDomains` job daily
 - **Observers:** `DomainObserver`
 - **Contracts:** `WhoisService`, `WhoisUpdater` (interfaces in `Application/Contract/`)
+- **Services:** `DomainService` (shared web/API create/delete/WHOIS-refresh) + `WhoisService`/`WhoisUpdater` impls
 
 #### Youtube
 - **Models:** `Video`, `VideoFormats`, `VideoFile`, `VideoDownloadQueue`, `VideoStatus`
@@ -179,6 +183,7 @@ $bus->register(ListDomainsQuery::class, ListDomainsQueryHandler::class);
 - **Events/Listeners:** `YouTubeVideoCreated` → `YouTubeVideoCreateListener`
 - **Observers:** `YouTubeVideoObserver`
 - **Artisan commands:** `youtube:download` (in `Infrastructure/Commands/`)
+- **Services:** `VideoActionService` (shared create + queue-download w/ ownership check), `VideoListingQuery`, `GetVideoFormatsService`, `RefreshVideoFormatsService`
 - **Download tool:** yt-dlp binary at `/usr/local/bin/youtube-dl`
 
 #### Tournaments
@@ -193,7 +198,12 @@ $bus->register(ListDomainsQuery::class, ListDomainsQueryHandler::class);
 - **Web routes:** `/personal/settings`, `/personal/invite`, `/personal/user/edit/{user}`, `/personal/roles` (role & section management, permission: `edit user`)
 - **API:** `GET /api/v1/user/current`
 - **Related:** `Images` gallery under `/personal/images` (permission: `edit images`)
+- **Application services/queries:** `ImageUploadService`, `ImageListingQuery`, `InviteUserService`, `ProfileUpdateService`, `ApiTokenService`, `ChangePasswordService`, `UserListingQuery`, `RoleService`
 - **Role-based section access:** each site section maps to a permission; catalog in `config/sections.php`, helpers `sections_list()`/`section_permission()` in `bootstrap/functions.php`, managed via `RoleController` (`personal.roles.*`)
+
+#### Tools
+- **Web routes:** `/personal/tools`, `/personal/tools/barcode` (permission: `view tools`)
+- **Services:** `BarcodeService` (render + sample generators) under `Application/Service/`
 
 #### Common (shared)
 - **Models:** `Images`, `InviteCode`

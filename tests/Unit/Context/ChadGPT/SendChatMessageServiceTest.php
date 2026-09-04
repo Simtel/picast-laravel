@@ -380,7 +380,7 @@ class SendChatMessageServiceTest extends TestCase
             new ConversationRepository(),
         );
 
-        $result = $service->clearHistory($this->user, new ConversationRepository());
+        $result = $service->clearHistory($this->user);
 
         $this->assertTrue($result['success']);
         $this->assertNull($result['error']);
@@ -399,10 +399,10 @@ class SendChatMessageServiceTest extends TestCase
         $service = new SendChatMessageService(
             Mockery::mock(CommandBus::class),
             Mockery::mock(ChadGptRequestService::class),
-            Mockery::mock(ConversationRepository::class),
+            $repository,
         );
 
-        $result = $service->clearHistory($this->user, $repository);
+        $result = $service->clearHistory($this->user);
 
         $this->assertFalse($result['success']);
         $this->assertSame('Не удалось очистить историю чатов', $result['error']);

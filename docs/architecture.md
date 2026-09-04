@@ -44,6 +44,28 @@ $bus->register(CreateChatConversationCommand::class, CreateChatConversationHandl
 $bus->register(ListDomainsQuery::class, ListDomainsQueryHandler::class);
 ```
 
+## Thin Controllers & Shared Application Services
+
+Controllers (web and API) are thin: they handle HTTP (validation, route model binding, view/redirect/JSON) and delegate business logic to **services** and **listing queries** in the `Application/` layer. Where a web and an API controller expose the same action (e.g. Domains `store`/`destroy`, ChadGPT chat, YouTube video queueing), both delegate to one shared service so behaviour stays in one place.
+
+| Context     | Service / Query (in `Application/`)                    | Responsibility                                  |
+|-------------|--------------------------------------------------------|-------------------------------------------------|
+| User        | `Service\ImageUploadService`                           | S3-upload + `Images::create`                    |
+| User        | `Service\InviteUserService`                            | Code generation + invite mail                   |
+| User        | `Service\ProfileUpdateService`                         | Shared name/email/birth_date update             |
+| User        | `Service\ApiTokenService`                              | Create/delete Sanctum tokens                    |
+| User        | `Service\ChangePasswordService`                        | Hash + remember-token rotation                  |
+| User        | `Service\RoleService`                                  | Role CRUD, section permissions, guards          |
+| User        | `Query\ImageListingQuery` / `Query\UserListingQuery`   | Filtered, paginated listings                    |
+| Domains     | `Service\DomainService`                                | Domain create/delete, WHOIS refresh wrapper     |
+| Tournaments | `Query\GetTournamentDetailQuery::fromRequest()`        | Shared web/API detail-query construction        |
+| ChadGPT     | `Service\ChatService`                                  | Chat data, send message, clear history (web+API)|
+| Youtube     | `Service\VideoActionService`                           | Video create + queue download w/ ownership check|
+| Youtube     | `Query\VideoListingQuery`                              | Video listing (paginated web / plain API)       |
+| Tools       | `Service\BarcodeService`                               | Barcode render + sample-data generators         |
+
+Validation is enforced with `FormRequest` classes; domain lookups use repository/query objects or the `CommandBus` where one exists.
+
 ## Domain Events & Queue
 
 Cross-context work is decoupled with events + listeners, and long-running work goes through the queue:

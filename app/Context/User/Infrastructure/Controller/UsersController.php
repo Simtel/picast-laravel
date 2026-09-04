@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Context\User\Infrastructure\Controller;
 
 use App\Context\User\Domain\Model\User;
+use App\Context\User\Application\Service\ProfileUpdateService;
 use App\Context\User\Infrastructure\Request\Personal\User\Update;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
@@ -15,6 +16,11 @@ use Spatie\Permission\Models\Role;
 
 final class UsersController extends Controller
 {
+    public function __construct(
+        private readonly ProfileUpdateService $profileUpdateService,
+    ) {
+    }
+
     /**
      * @param  User  $user
      *
@@ -34,11 +40,7 @@ final class UsersController extends Controller
      */
     public function update(User $user, Update $request): RedirectResponse
     {
-        $user->update([
-            'name' => $request->string('name')->toString(),
-            'email' => $request->string('email')->toString(),
-            'birth_date' => $request->date('birth_date')?->format('Y-m-d'),
-        ]);
+        $this->profileUpdateService->update($user, $request->validated());
 
         $user->syncRoles($request->validated('roles', []));
 

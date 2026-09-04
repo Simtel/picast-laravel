@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Context\Domains\Infrastructure\Http\Controllers;
 
 use App\Context\Common\Infrastructure\CommandBus;
-use App\Context\Domains\Application\Contract\WhoisUpdater;
+use App\Context\Domains\Application\Service\DomainService;
 use App\Context\Domains\Domain\Command\ListDomainsQuery;
 use App\Context\Domains\Domain\Model\Domain;
 use App\Context\Domains\Domain\Model\Whois;
@@ -21,7 +21,7 @@ use Illuminate\Http\Request;
 final class DomainsController extends Controller
 {
     public function __construct(
-        private readonly WhoisUpdater $whoisUpdater,
+        private readonly DomainService $domainService,
     ) {
         $this->authorizeResource(Domain::class, 'domain');
     }
@@ -70,12 +70,8 @@ final class DomainsController extends Controller
      */
     public function store(DomainRequest $request): Application|RedirectResponse
     {
-        Domain::create(
-            [
-                'name' => $request->get('name'),
-                'user_id' => $request->user()->id
-            ]
-        );
+        $this->domainService->create((int)$request->user()->id, $request->validated());
+
         return redirect()->route('domains.index');
     }
 
@@ -115,7 +111,7 @@ final class DomainsController extends Controller
      */
     public function update(Domain $domain): RedirectResponse
     {
-        $this->whoisUpdater->update($domain);
+        $this->domainService->updateWhois($domain);
 
         return redirect()->route('domains.index');
     }
@@ -129,7 +125,8 @@ final class DomainsController extends Controller
      */
     public function destroy(Domain $domain): RedirectResponse
     {
-        $domain->delete();
+        $this->domainService->delete($domain);
+
         return redirect()->route('domains.index');
     }
 }

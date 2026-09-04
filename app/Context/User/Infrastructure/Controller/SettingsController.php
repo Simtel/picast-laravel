@@ -4,30 +4,42 @@ declare(strict_types=1);
 
 namespace App\Context\User\Infrastructure\Controller;
 
+use App\Context\User\Application\Service\ApiTokenService;
+use App\Context\User\Application\Service\ChangePasswordService;
+use App\Context\User\Application\Service\ProfileUpdateService;
+use App\Context\User\Domain\Model\User;
 use App\Context\User\Infrastructure\Request\ChangePasswordRequest;
 use App\Context\User\Infrastructure\Request\UpdateProfileRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Laravel\Sanctum\PersonalAccessToken;
 
 final class SettingsController extends Controller
 {
+    public function __construct(
+        private readonly ApiTokenService $apiTokenService,
+        private readonly ChangePasswordService $changePasswordService,
+        private readonly ProfileUpdateService $profileUpdateService,
+    ) {
+    }
+
     /**
      * @param Request $request
-     * @return Application|Factory|View
+     * @return Factory|View|Application
      */
     public function index(Request $request): Factory|View|Application
     {
+        /** @var User $user */
         $user = $request->user();
-        $tokens = $user->tokens ?? collect();
-        return view('personal.settings', ['tokens' => $tokens, 'user' => $user]);
+
+        return view('personal.settings', [
+            'tokens' => $user->tokens,
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -36,24 +48,24 @@ final class SettingsController extends Controller
      */
     public function token(Request $request): RedirectResponse
     {
-        if ($request->user() === null) {
-            return redirect()->route('login');
-        }
-
-        $token = $request->user()->createToken('api-token');
+        /** @var User $user */
+        $user = $request->user();
+        $plainTextToken = $this->apiTokenService->create($user);
 
         return redirect()->route('settings')
-            ->with('success', 'Токен создан: <code>' . e($token->plainTextToken) . '</code> — скопируйте его сейчас, он больше не будет показан.');
+            ->with('success', 'Токен создан: <code>' . e($plainTextToken) . '</code> — скопируйте его сейчас, он больше не будет показан.');
     }
 
     /**
-     * @param int $id
+     * @param PersonalAccessToken $token
      * @param Request $request
      * @return RedirectResponse
      */
-    public function deleteToken(int $id, Request $request): RedirectResponse
+    public function deleteToken(PersonalAccessToken $token, Request $request): RedirectResponse
     {
-        $request->user()?->tokens()->where('id', $id)->delete();
+        /** @var User $user */
+        $user = $request->user();
+        $this->apiTokenService->delete($user, $token->id);
 
         return redirect()->route('settings')->with('success', 'Токен удалён.');
     }
@@ -64,16 +76,10 @@ final class SettingsController extends Controller
      */
     public function password(ChangePasswordRequest $request): RedirectResponse
     {
+        /** @var User $user */
         $user = $request->user();
-        if ($user === null) {
-            throw new BadRequestException('Not found user');
-        }
-        $user->forceFill([
-            'password' => Hash::make($request->string('password')->toString())
-        ])->setRememberToken(Str::random(60));
-        $user->save();
+        $this->changePasswordService->change($user, $request->string('password')->toString());
 
-        event(new PasswordReset($user));
         return redirect()->route('settings')->with('success', 'Пароль успешно обновлен!');
     }
 
@@ -83,12 +89,9 @@ final class SettingsController extends Controller
      */
     public function updateProfile(UpdateProfileRequest $request): RedirectResponse
     {
+        /** @var User $user */
         $user = $request->user();
-        if ($user === null) {
-            throw new BadRequestException('Пользователь не найден');
-        }
-
-        $user->update([
+        $this->profileUpdateService->update($user, [
             'name' => $request->string('name')->toString(),
             'email' => $request->string('email')->toString(),
             'birth_date' => $request->date('birth_date')?->format('Y-m-d'),
