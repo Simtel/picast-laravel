@@ -84,7 +84,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
     });
 
     Route::post(
-        '/domain/{id}/delete-old-whois',
+        '/domain/{domain}/delete-old-whois',
         [WhoisController::class, 'deleteOldWhois']
     )->name('domains.delete_old_whois');
 

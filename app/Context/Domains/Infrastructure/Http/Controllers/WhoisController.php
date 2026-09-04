@@ -4,26 +4,39 @@ declare(strict_types=1);
 
 namespace App\Context\Domains\Infrastructure\Http\Controllers;
 
+use App\Context\Domains\Application\Contract\WhoisService;
 use App\Context\Domains\Domain\Model\Domain;
-use App\Context\Domains\Infrastructure\Facades\WhoisService;
 use App\Context\Domains\Infrastructure\Request\DeleteOldWhois;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 
 final class WhoisController extends Controller
 {
+    public function __construct(
+        private readonly WhoisService $whoisService,
+    ) {
+    }
+
     /**
-     * @param int $id
+     * @param Domain $domain
      * @param DeleteOldWhois $deleteOldWhois
      * @return RedirectResponse
      * @throws AuthorizationException
      */
-    public function deleteOldWhois(int $id, DeleteOldWhois $deleteOldWhois): RedirectResponse
+    public function deleteOldWhois(Domain $domain, DeleteOldWhois $deleteOldWhois): RedirectResponse
     {
-        $domain = Domain::findOrFail($id);
         $this->authorize('update', $domain);
-        WhoisService::deleteOldWhois($domain, $deleteOldWhois->string('delete_old_whois')->toString());
-        return redirect()->route('domains.show', ['domain' => $domain->id]);
+
+        $sub = $deleteOldWhois->string('delete_old_whois')->toString();
+        $this->whoisService->deleteOldWhois($domain, $sub);
+
+        Log::debug('[WhoisController.deleteOldWhois] очистка whois для домена', [
+            'domain' => $domain->getId(),
+            'sub' => $sub,
+        ]);
+
+        return redirect()->route('domains.show', ['domain' => $domain->getId()]);
     }
 }

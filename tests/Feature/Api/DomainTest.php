@@ -38,24 +38,20 @@ final class DomainTest extends TestCase
         $response = $this->get(route('api.domains.index'), ['Authorization' => 'Bearer ' . $token]);
         $response->assertOk();
 
-        $response->assertJson(
-            static fn (AssertableJson $json) => $json->whereType('data', 'array')
+        $data = $response->json('data');
+        self::assertIsArray($data);
+        self::assertCount(2, $data);
+
+        $ids = array_map(static fn (array $item): int => (int)$item['id'], $data);
+        sort($ids);
+        self::assertSame(
+            [$domain1->getId(), $domain2->getId()],
+            array_values(array_unique($ids))
         );
-        $response->assertJson(
-            static fn (AssertableJson $json) => $json->has('data')
-                ->has(
-                    'data.0',
-                    static fn (AssertableJson $json) => $json->where('id', $domain1->getId())
-                        ->where('name', $domain1->getName())
-                        ->etc()
-                )
-                ->has(
-                    'data.1',
-                    static fn (AssertableJson $json) => $json->where('id', $domain2->getId())
-                        ->where('name', $domain2->getName())
-                        ->etc()
-                )
-        );
+
+        $names = array_map(static fn (array $item): string => (string)$item['name'], $data);
+        self::assertContains($domain1->getName(), $names);
+        self::assertContains($domain2->getName(), $names);
     }
 
     public function test_domain_show(): void

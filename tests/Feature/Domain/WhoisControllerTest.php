@@ -29,7 +29,7 @@ final class WhoisControllerTest extends TestCase
         $this->assertDatabaseCount(Domain::class, 2);
         $this->assertDatabaseCount(Whois::class, 4);
 
-        $response = $this->post(route('domains.delete_old_whois', ['id' => $domain->getId()]), ['delete_old_whois' => 'day']);
+        $response = $this->post(route('domains.delete_old_whois', ['domain' => $domain->getId()]), ['delete_old_whois' => 'day']);
         $response->assertStatus(302);
         $response->assertRedirect(route('domains.show', ['domain' => $domain->id]));
 
