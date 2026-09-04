@@ -187,7 +187,7 @@ final class YoutubeControllerTest extends TestCase
 
         $this->assertDatabaseHas(VideoFormats::class, ['video_id' => $video->getId(), 'id' => $format->getId()]);
         $this->assertDatabaseCount(VideoDownloadQueue::class, 0);
-        $response = $this->post(route('youtube.queue-download', ['video' => $video]), ['video_formats' => $format->getId()]);
+        $response = $this->post(route('youtube.queue-download', ['video' => $video]), ['format_id' => $format->getId()]);
         $response->assertStatus(302);
         $this->assertDatabaseCount(VideoDownloadQueue::class, 1);
         $this->assertDatabaseHas(VideoDownloadQueue::class, ['video_id' => $video->getId(), 'format_id' => $format->getId()]);

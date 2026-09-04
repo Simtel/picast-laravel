@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Context\Youtube\Infrastructure\Http\Controllers\Api;
 
+use App\Context\Youtube\Application\Query\VideoListingQuery;
+use App\Context\Youtube\Application\Service\VideoActionService;
 use App\Context\Youtube\Domain\Model\Video;
-use App\Context\Youtube\Domain\Model\VideoDownloadQueue;
-use App\Context\Youtube\Domain\Model\VideoFormats;
 use App\Context\Youtube\Domain\Resource\VideoFullResource;
 use App\Context\Youtube\Domain\Resource\VideoResource;
-use App\Context\Youtube\Infrastructure\Repository\YouTubeVideoStatusRepository;
 use App\Context\Youtube\Infrastructure\Request\QueueDownloadRequest;
 use App\Context\Youtube\Infrastructure\Request\StoreVideoRequest;
 use App\Context\Youtube\Infrastructure\Request\UpdateVideoRequest;
@@ -28,7 +27,8 @@ use OpenApi\Attributes as OA;
 final class VideoController extends Controller
 {
     public function __construct(
-        private readonly YouTubeVideoStatusRepository $statusRepository,
+        private readonly VideoActionService $videoActionService,
+        private readonly VideoListingQuery $videoListingQuery,
     ) {
         $this->authorizeResource(Video::class, 'video');
     }
@@ -51,7 +51,7 @@ final class VideoController extends Controller
     )]
     public function index(Request $request): AnonymousResourceCollection
     {
-        $videos = Video::whereUserId($request->user()->id)->get();
+        $videos = $this->videoListingQuery->listByUser((int)$request->user()->id);
 
         return VideoResource::collection($videos);
     }
@@ -105,13 +105,7 @@ final class VideoController extends Controller
     )]
     public function store(StoreVideoRequest $request): JsonResponse
     {
-        $status = $this->statusRepository->findByCode('new');
-
-        $video = Video::create([
-            'url' => $request->validated('url'),
-            'user_id' => $request->user()->id,
-            'status_id' => $status->id,
-        ]);
+        $video = $this->videoActionService->create((int)$request->user()->id, $request->validated('url'));
 
         return response()->json([
             'success' => true,
@@ -178,16 +172,7 @@ final class VideoController extends Controller
     )]
     public function queueDownload(QueueDownloadRequest $request, Video $video): JsonResponse
     {
-        // Проверяем, что формат принадлежит видео
-        $format = VideoFormats::where([
-            'id' => $request->validated('format_id'),
-            'video_id' => $video->id,
-        ])->firstOrFail();
-
-        VideoDownloadQueue::create([
-            'video_id' => $video->id,
-            'format_id' => $format->id,
-        ]);
+        $this->videoActionService->queueDownload($video, $request->integer('format_id'));
 
         return response()->json([
             'success' => true,
