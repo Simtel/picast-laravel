@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Context\User\Infrastructure\Controller;
+namespace App\Context\User\Infrastructure\Http\Controllers;
 
 use App\Context\User\Application\Service\RoleService;
 use App\Context\User\Infrastructure\Request\Personal\Role\Store;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Context\Youtube\Infrastructure\Controller;
+namespace App\Context\Youtube\Infrastructure\Http\Controllers;
 
 use App\Context\Youtube\Application\Query\VideoListingQuery;
 use App\Context\Youtube\Application\Service\RefreshVideoFormatsService;
