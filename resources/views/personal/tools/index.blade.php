@@ -21,5 +21,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-clock text-primary"></i>
+                        <span class="fw-semibold">Конвертер времени</span>
+                    </div>
+                    <p class="text-muted mb-0">Конвертация Unix timestamp в дату и обратно: текущее время, ISO 8601, GMT, локальный часовой пояс, разница между датами.</p>
+                    <a href="{{ route('tools.timestamp.index') }}" class="btn btn-primary mt-auto">
+                        <i class="fa fa-arrow-right"></i> Открыть
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

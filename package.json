@@ -5,7 +5,8 @@
     "scripts": {
         "build": "vite build && node copy-static-assets.js",
         "dev": "vite",
-        "copy-static": "node copy-static-assets.js"
+        "copy-static": "node copy-static-assets.js",
+        "test": "vitest run"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
@@ -13,7 +14,8 @@
         "laravel-vite-plugin": "^2.0.0",
         "sass-embedded": "^1.97.1",
         "tailwindcss": "^4.0.0",
-        "vite": "^7.3.6"
+        "vite": "^7.3.6",
+        "vitest": "^4.1.11"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^7.1.0",

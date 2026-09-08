@@ -8,7 +8,8 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/assets/sass/app.scss',
-                'resources/assets/js/app.js'
+                'resources/assets/js/app.js',
+                'resources/assets/js/timestamp/timestamp-page.js'
             ],
             refresh: true,
         }),

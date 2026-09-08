@@ -202,8 +202,9 @@ $bus->register(ListDomainsQuery::class, ListDomainsQueryHandler::class);
 - **Role-based section access:** each site section maps to a permission; catalog in `config/sections.php`, helpers `sections_list()`/`section_permission()` in `bootstrap/functions.php`, managed via `RoleController` (`personal.roles.*`)
 
 #### Tools
-- **Web routes:** `/personal/tools`, `/personal/tools/barcode` (permission: `view tools`)
+- **Web routes:** `/personal/tools`, `/personal/tools/barcode`, `/personal/tools/timestamp` (permission: `view tools`)
 - **Services:** `BarcodeService` (render + sample generators) under `Application/Service/`
+- **Client-side tools:** timestamp converter is a thin controller (`TimestampController`) + pure JS module `resources/assets/js/timestamp/timestamp-converter.js` (Vitest-tested, entry `timestamp-page.js`, Vite input)
 
 #### Common (shared)
 - **Models:** `Images`, `InviteCode`
@@ -291,6 +292,7 @@ tests/
 make test                     # All tests
 php artisan test --env=github  # With GitHub CI env
 php artisan test --filter DomainTest  # Specific test
+npm run test                  # JS unit tests (Vitest, resources/assets/js/**/*.test.js)
 ```
 
 ### CI Testing

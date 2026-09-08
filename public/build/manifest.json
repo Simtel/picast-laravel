@@ -5,6 +5,12 @@
     "src": "resources/assets/js/app.js",
     "isEntry": true
   },
+  "resources/assets/js/timestamp/timestamp-page.js": {
+    "file": "assets/timestamp-page-YHmGUCkb.js",
+    "name": "timestamp-page",
+    "src": "resources/assets/js/timestamp/timestamp-page.js",
+    "isEntry": true
+  },
   "resources/assets/sass/app.scss": {
     "file": "assets/app-BbFzFajC.css",
     "src": "resources/assets/sass/app.scss",

@@ -26,7 +26,7 @@ tests/
 │   ├── Command/            # Artisan command tests
 │   ├── Common/             # Common feature tests
 │   ├── Domain/             # Domain feature tests
-│   ├── Tools/              # Tools (barcode) feature tests
+│   ├── Tools/              # Tools (barcode, timestamp converter) feature tests
 │   ├── Tournaments/        # Tournament feature tests
 │   └── YouTube/            # YouTube feature tests
 └── Unit/                   # Isolated unit tests
@@ -55,6 +55,19 @@ PHPUnit reads `.env.testing`. In CI (`.env.github`) the flow is:
 3. Run `php artisan migrate`
 4. Seed `YouTubeVideoStatusSeeder`
 5. Run `php artisan test --env=github`
+
+## JS Unit Tests
+
+Client-side logic that is extracted into dependency-free modules is unit-tested
+with **Vitest** (Node environment, forced `TZ=UTC` for deterministic date tests):
+
+```bash
+npm run test          # vitest run
+```
+
+Tests live next to their modules under `resources/assets/js/`
+(e.g. `timestamp/timestamp-converter.test.js`). They are not part of the PHPUnit
+suite or the CI `php artisan test` step.
 
 ## See Also
 
