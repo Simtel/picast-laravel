@@ -14,7 +14,7 @@ app/
 │   ├── ChadGPT/           # AI chat bot
 │   ├── Common/            # Shared domain models (Images, InviteCode) + commands
 │   ├── Domains/           # Domain WHOIS management
-│   ├── Tools/             # Utilities (barcode generator)
+│   ├── Tools/             # Utilities (barcode generator, timestamp converter)
 │   ├── Tournaments/       # Tournament listings
 │   ├── User/              # User profile & invitations
 │   └── Youtube/           # YouTube video processing
@@ -63,6 +63,12 @@ Controllers (web and API) are thin: they handle HTTP (validation, route model bi
 | Youtube     | `Service\VideoActionService`                           | Video create + queue download w/ ownership check|
 | Youtube     | `Query\VideoListingQuery`                              | Video listing (paginated web / plain API)       |
 | Tools       | `Service\BarcodeService`                               | Barcode render + sample-data generators         |
+
+Client-side utilities (no PHP service): the timestamp converter
+(`/personal/tools/timestamp`) is rendered by a thin controller
+(`TimestampController`) while all conversion logic lives in a dependency-free
+JS module `resources/assets/js/timestamp/timestamp-converter.js` (unit-tested
+with Vitest). Keeps one source of truth for browser-localised date handling.
 
 Validation is enforced with `FormRequest` classes; domain lookups use repository/query objects or the `CommandBus` where one exists.
 
