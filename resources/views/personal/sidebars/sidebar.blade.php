@@ -75,6 +75,13 @@
                                 <span>Штрих-коды</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{request()->routeIs('tools.timestamp.*') ? 'active' : ''}}"
+                               href="{{route('tools.timestamp.index')}}">
+                                <i class="fa fa-clock nav-icon"></i>
+                                <span>Конвертер времени</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endcan
