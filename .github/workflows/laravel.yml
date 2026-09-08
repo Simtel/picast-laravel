@@ -40,6 +40,15 @@ jobs:
           php-version: '8.5'
           extensions: gd
       - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install JS dependencies
+        run: npm ci
+      - name: Run JS tests
+        run: npm run test
       - name: Install dependencies
         run: composer install
       - name: Create database
