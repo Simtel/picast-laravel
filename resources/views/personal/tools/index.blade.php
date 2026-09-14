@@ -35,5 +35,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-shuffle text-primary"></i>
+                        <span class="fw-semibold">Генератор случайных строк</span>
+                    </div>
+                    <p class="text-muted mb-0">Генерация случайных строк из нужного набора символов: заглавные и строчные буквы, цифры, символы.</p>
+                    <a href="{{ route('tools.random-string.index') }}" class="btn btn-primary mt-auto">
+                        <i class="fa fa-arrow-right"></i> Открыть
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

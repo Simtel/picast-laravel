@@ -17,6 +17,7 @@ use App\Context\ChadGPT\Infrastructure\Http\Controllers\ChadGptController;
 use App\Context\Domains\Infrastructure\Http\Controllers\DomainsController;
 use App\Context\Domains\Infrastructure\Http\Controllers\WhoisController;
 use App\Context\Tools\Infrastructure\Http\Controllers\BarcodeController;
+use App\Context\Tools\Infrastructure\Http\Controllers\RandomStringController;
 use App\Context\Tools\Infrastructure\Http\Controllers\TimestampController;
 use App\Context\Tools\Infrastructure\Http\Controllers\ToolsController;
 use App\Context\Tournaments\Infrastructure\Http\Controllers\TournamentController;
@@ -109,6 +110,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         });
         Route::group(['prefix' => 'timestamp'], static function () {
             Route::get('/', [TimestampController::class, 'index'])->name('tools.timestamp.index');
+        });
+        Route::group(['prefix' => 'random-string'], static function () {
+            Route::get('/', [RandomStringController::class, 'index'])->name('tools.random-string.index');
         });
     });
 });
