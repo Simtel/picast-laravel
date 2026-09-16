@@ -82,6 +82,13 @@
                                 <span>Конвертер времени</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{request()->routeIs('tools.random-string.*') ? 'active' : ''}}"
+                               href="{{route('tools.random-string.index')}}">
+                                <i class="fa fa-shuffle nav-icon"></i>
+                                <span>Случайные строки</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endcan

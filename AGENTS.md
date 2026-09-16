@@ -202,8 +202,10 @@ $bus->register(ListDomainsQuery::class, ListDomainsQueryHandler::class);
 - **Role-based section access:** each site section maps to a permission; catalog in `config/sections.php`, helpers `sections_list()`/`section_permission()` in `bootstrap/functions.php`, managed via `RoleController` (`personal.roles.*`)
 
 #### Tools
-- **Web routes:** `/personal/tools`, `/personal/tools/barcode`, `/personal/tools/timestamp` (permission: `view tools`)
-- **Services:** `BarcodeService` (render + sample generators) under `Application/Service/`
+- **Web routes:** `/personal/tools` (permission: `view tools`) — index + three sub-tools: `/personal/tools/barcode`, `/personal/tools/timestamp`, `/personal/tools/random-string`
+- **Services:** `BarcodeService` (render + sample generators) and `RandomStringService` (configurable charset) under `Application/Service/`
+- **Controllers:** `ToolsController` (index), `BarcodeController` (render + sample via `GET /barcode/generate`), `TimestampController`, `RandomStringController` (thin, delegate to services)
+- **Requests:** `BarcodeGenerateRequest`, `RandomStringGenerateRequest` (FormRequest validation)
 - **Client-side tools:** timestamp converter is a thin controller (`TimestampController`) + pure JS module `resources/assets/js/timestamp/timestamp-converter.js` (Vitest-tested, entry `timestamp-page.js`, Vite input)
 
 #### Common (shared)
