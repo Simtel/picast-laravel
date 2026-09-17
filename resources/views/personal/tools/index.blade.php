@@ -49,5 +49,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-hashtag text-primary"></i>
+                        <span class="fw-semibold">Хэш-генератор</span>
+                    </div>
+                    <p class="text-muted mb-0">Вычисление хэша текстовой строки: MD5, SHA1, SHA256, SHA224, SHA512, SHA384, SHA3, RIPEMD160.</p>
+                    <a href="{{ route('tools.hash.index') }}" class="btn btn-primary mt-auto">
+                        <i class="fa fa-arrow-right"></i> Открыть
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

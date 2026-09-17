@@ -89,6 +89,13 @@
                                 <span>Случайные строки</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{request()->routeIs('tools.hash.*') ? 'active' : ''}}"
+                               href="{{route('tools.hash.index')}}">
+                                <i class="fa fa-hashtag nav-icon"></i>
+                                <span>Хэш-генератор</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endcan

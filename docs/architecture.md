@@ -14,7 +14,7 @@ app/
 │   ├── ChadGPT/           # AI chat bot
 │   ├── Common/            # Shared domain models (Images, InviteCode) + commands
 │   ├── Domains/           # Domain WHOIS management
-│   ├── Tools/             # Utilities (barcode generator, timestamp converter)
+│   ├── Tools/             # Utilities (barcode, timestamp converter, random string, hash)
 │   ├── Tournaments/       # Tournament listings
 │   ├── User/              # User profile & invitations
 │   └── Youtube/           # YouTube video processing
@@ -63,6 +63,7 @@ Controllers (web and API) are thin: they handle HTTP (validation, route model bi
 | Youtube     | `Service\VideoActionService`                           | Video create + queue download w/ ownership check|
 | Youtube     | `Query\VideoListingQuery`                              | Video listing (paginated web / plain API)       |
 | Tools       | `Service\BarcodeService`                               | Barcode render + sample-data generators         |
+| Tools       | `Service\HashService`                                  | Text hashing: MD5/SHA1/SHA224/SHA256/SHA384/SHA512/SHA3/RIPEMD160 |
 
 Client-side utilities (no PHP service): the timestamp converter
 (`/personal/tools/timestamp`) is rendered by a thin controller
