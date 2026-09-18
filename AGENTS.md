@@ -253,6 +253,7 @@ Run `make pint` to auto-fix. CI checks with `vendor/bin/pint --test`.
 - Properties are documented with `@property` PHPDoc tags for IDE support
 - Controllers, handlers, and commands use `final class`
 - Blade templates are under `resources/views/` with Russian-named directories (`personal/`, `auth/`, `mail/`)
+- Fixed option sets (e.g. tool version/label maps) are modeled as PHP Enums (with `label()`/`values()`), not `private const array`
 
 ---
 
