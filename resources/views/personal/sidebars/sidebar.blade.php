@@ -96,6 +96,13 @@
                                 <span>Хэш-генератор</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{request()->routeIs('tools.uuid.*') ? 'active' : ''}}"
+                               href="{{route('tools.uuid.index')}}">
+                                <i class="fa fa-fingerprint nav-icon"></i>
+                                <span>UUID-генератор</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endcan
