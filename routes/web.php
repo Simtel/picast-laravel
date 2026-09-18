@@ -21,6 +21,7 @@ use App\Context\Tools\Infrastructure\Http\Controllers\HashController;
 use App\Context\Tools\Infrastructure\Http\Controllers\RandomStringController;
 use App\Context\Tools\Infrastructure\Http\Controllers\TimestampController;
 use App\Context\Tools\Infrastructure\Http\Controllers\ToolsController;
+use App\Context\Tools\Infrastructure\Http\Controllers\UuidController;
 use App\Context\Tournaments\Infrastructure\Http\Controllers\TournamentController;
 use App\Context\User\Infrastructure\Http\Controllers\ImagesController;
 use App\Context\User\Infrastructure\Http\Controllers\IndexController;
@@ -117,6 +118,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         });
         Route::group(['prefix' => 'hash'], static function () {
             Route::get('/', [HashController::class, 'index'])->name('tools.hash.index');
+        });
+        Route::group(['prefix' => 'uuid'], static function () {
+            Route::get('/', [UuidController::class, 'index'])->name('tools.uuid.index');
         });
     });
 });

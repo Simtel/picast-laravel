@@ -11,7 +11,7 @@ Picast is a web application built on Laravel for managing domains with WHOIS mon
 - **Tournaments** — daily-synced tournament and group listings
 - **ChadGPT Chat** — AI conversations with history and word statistics
 - **Image Gallery** — responsive image management
-- **Tools** — developer utilities: barcode generator (Code 128, EAN-13 and more), timestamp converter, random string generator
+- **Tools** — developer utilities: barcode generator (Code 128, EAN-13 and more), timestamp converter, random string generator, UUID generator
 - **Users & Roles** — invite-based onboarding with Spatie permissions
 - **REST API** — `/api/v1` with Sanctum token auth for integrations
 - **Quality Gates** — PHPStan level max, Pint PSR-12, PHPUnit suite, GitHub Actions CI/CD
