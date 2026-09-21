@@ -202,11 +202,11 @@ $bus->register(ListDomainsQuery::class, ListDomainsQueryHandler::class);
 - **Role-based section access:** each site section maps to a permission; catalog in `config/sections.php`, helpers `sections_list()`/`section_permission()` in `bootstrap/functions.php`, managed via `RoleController` (`personal.roles.*`)
 
 #### Tools
-- **Web routes:** `/personal/tools` (permission: `view tools`) — index + three sub-tools: `/personal/tools/barcode`, `/personal/tools/timestamp`, `/personal/tools/random-string`
-- **Services:** `BarcodeService` (render + sample generators) and `RandomStringService` (configurable charset) under `Application/Service/`
-- **Controllers:** `ToolsController` (index), `BarcodeController` (render + sample via `GET /barcode/generate`), `TimestampController`, `RandomStringController` (thin, delegate to services)
-- **Requests:** `BarcodeGenerateRequest`, `RandomStringGenerateRequest` (FormRequest validation)
-- **Client-side tools:** timestamp converter is a thin controller (`TimestampController`) + pure JS module `resources/assets/js/timestamp/timestamp-converter.js` (Vitest-tested, entry `timestamp-page.js`, Vite input)
+- **Web routes:** `/personal/tools` (permission: `view tools`) — index + six sub-tools: `/personal/tools/barcode`, `/personal/tools/timestamp`, `/personal/tools/random-string`, `/personal/tools/hash`, `/personal/tools/uuid`, `/personal/tools/color`
+- **Services:** `BarcodeService` (render + sample generators), `RandomStringService` (configurable charset), `HashService` (MD5/SHA1/SHA224/SHA256/SHA384/SHA512/SHA3/RIPEMD160), `UuidService` (v1/v4/v6/v7, count) under `Application/Service/`
+- **Controllers:** `ToolsController` (index), `BarcodeController` (render + sample via `GET /barcode/generate`), `TimestampController` + `ColorController` (thin — all conversion logic lives client-side), `RandomStringController` + `HashController` + `UuidController` (thin, delegate to services)
+- **Requests:** `BarcodeGenerateRequest`, `RandomStringGenerateRequest`, `HashRequest`, `UuidGenerateRequest` (FormRequest validation)
+- **Client-side tools:** timestamp converter (`/personal/tools/timestamp`) and color converter (`/personal/tools/color`) are thin controllers + pure JS modules (`resources/assets/js/timestamp/timestamp-converter.js`, `resources/assets/js/color/color-converter.js`), Vitest-tested, with `*-page.js` Vite entries
 
 #### Common (shared)
 - **Models:** `Images`, `InviteCode`

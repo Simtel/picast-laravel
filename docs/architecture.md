@@ -14,7 +14,7 @@ app/
 │   ├── ChadGPT/           # AI chat bot
 │   ├── Common/            # Shared domain models (Images, InviteCode) + commands
 │   ├── Domains/           # Domain WHOIS management
-│   ├── Tools/             # Utilities (barcode generator, timestamp converter)
+│   ├── Tools/             # Utilities (barcode, timestamp, hash, uuid, color)
 │   ├── Tournaments/       # Tournament listings
 │   ├── User/              # User profile & invitations
 │   └── Youtube/           # YouTube video processing
@@ -67,10 +67,12 @@ Controllers (web and API) are thin: they handle HTTP (validation, route model bi
 | Tools       | `Service\HashService`                                  | Text hashing: MD5/SHA1/SHA224/SHA256/SHA384/SHA512/SHA3/RIPEMD160 |
 
 Client-side utilities (no PHP service): the timestamp converter
-(`/personal/tools/timestamp`) is rendered by a thin controller
-(`TimestampController`) while all conversion logic lives in a dependency-free
-JS module `resources/assets/js/timestamp/timestamp-converter.js` (unit-tested
-with Vitest). Keeps one source of truth for browser-localised date handling.
+(`/personal/tools/timestamp`) and the color converter (`/personal/tools/color`)
+are rendered by thin controllers (`TimestampController`, `ColorController`) while
+all conversion logic lives in dependency-free JS modules
+(`resources/assets/js/timestamp/timestamp-converter.js`,
+`resources/assets/js/color/color-converter.js`), unit-tested with Vitest. Keeps
+one source of truth for browser-localised date handling and for colour math.
 
 Validation is enforced with `FormRequest` classes; domain lookups use repository/query objects or the `CommandBus` where one exists.
 
