@@ -103,6 +103,13 @@
                                 <span>UUID-генератор</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{request()->routeIs('tools.color.*') ? 'active' : ''}}"
+                               href="{{route('tools.color.index')}}">
+                                <i class="fa fa-palette nav-icon"></i>
+                                <span>Конвертер цветов</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endcan
