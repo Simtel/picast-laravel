@@ -17,6 +17,7 @@ use App\Context\ChadGPT\Infrastructure\Http\Controllers\ChadGptController;
 use App\Context\Domains\Infrastructure\Http\Controllers\DomainsController;
 use App\Context\Domains\Infrastructure\Http\Controllers\WhoisController;
 use App\Context\Tools\Infrastructure\Http\Controllers\BarcodeController;
+use App\Context\Tools\Infrastructure\Http\Controllers\ColorController;
 use App\Context\Tools\Infrastructure\Http\Controllers\HashController;
 use App\Context\Tools\Infrastructure\Http\Controllers\RandomStringController;
 use App\Context\Tools\Infrastructure\Http\Controllers\TimestampController;
@@ -121,6 +122,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         });
         Route::group(['prefix' => 'uuid'], static function () {
             Route::get('/', [UuidController::class, 'index'])->name('tools.uuid.index');
+        });
+        Route::group(['prefix' => 'color'], static function () {
+            Route::get('/', [ColorController::class, 'index'])->name('tools.color.index');
         });
     });
 });
