@@ -19,6 +19,7 @@ use App\Context\Domains\Infrastructure\Http\Controllers\WhoisController;
 use App\Context\Tools\Infrastructure\Http\Controllers\BarcodeController;
 use App\Context\Tools\Infrastructure\Http\Controllers\ColorController;
 use App\Context\Tools\Infrastructure\Http\Controllers\HashController;
+use App\Context\Tools\Infrastructure\Http\Controllers\JsonDiffController;
 use App\Context\Tools\Infrastructure\Http\Controllers\RandomStringController;
 use App\Context\Tools\Infrastructure\Http\Controllers\TimestampController;
 use App\Context\Tools\Infrastructure\Http\Controllers\ToolsController;
@@ -125,6 +126,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         });
         Route::group(['prefix' => 'color'], static function () {
             Route::get('/', [ColorController::class, 'index'])->name('tools.color.index');
+        });
+        Route::group(['prefix' => 'json-diff'], static function () {
+            Route::get('/', [JsonDiffController::class, 'index'])->name('tools.json-diff.index');
         });
     });
 });
