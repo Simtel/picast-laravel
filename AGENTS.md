@@ -202,11 +202,11 @@ $bus->register(ListDomainsQuery::class, ListDomainsQueryHandler::class);
 - **Role-based section access:** each site section maps to a permission; catalog in `config/sections.php`, helpers `sections_list()`/`section_permission()` in `bootstrap/functions.php`, managed via `RoleController` (`personal.roles.*`)
 
 #### Tools
-- **Web routes:** `/personal/tools` (permission: `view tools`) — index + six sub-tools: `/personal/tools/barcode`, `/personal/tools/timestamp`, `/personal/tools/random-string`, `/personal/tools/hash`, `/personal/tools/uuid`, `/personal/tools/color`
+- **Web routes:** `/personal/tools` (permission: `view tools`) — index + seven sub-tools: `/personal/tools/barcode`, `/personal/tools/timestamp`, `/personal/tools/random-string`, `/personal/tools/hash`, `/personal/tools/uuid`, `/personal/tools/color`, `/personal/tools/json-diff`
 - **Services:** `BarcodeService` (render + sample generators), `RandomStringService` (configurable charset), `HashService` (MD5/SHA1/SHA224/SHA256/SHA384/SHA512/SHA3/RIPEMD160), `UuidService` (v1/v4/v6/v7, count) under `Application/Service/`
-- **Controllers:** `ToolsController` (index), `BarcodeController` (render + sample via `GET /barcode/generate`), `TimestampController` + `ColorController` (thin — all conversion logic lives client-side), `RandomStringController` + `HashController` + `UuidController` (thin, delegate to services)
+- **Controllers:** `ToolsController` (index), `BarcodeController` (render + sample via `GET /barcode/generate`), `TimestampController` + `ColorController` + `JsonDiffController` (thin — all conversion/diff logic lives client-side), `RandomStringController` + `HashController` + `UuidController` (thin, delegate to services)
 - **Requests:** `BarcodeGenerateRequest`, `RandomStringGenerateRequest`, `HashRequest`, `UuidGenerateRequest` (FormRequest validation)
-- **Client-side tools:** timestamp converter (`/personal/tools/timestamp`) and color converter (`/personal/tools/color`) are thin controllers + pure JS modules (`resources/assets/js/timestamp/timestamp-converter.js`, `resources/assets/js/color/color-converter.js`), Vitest-tested, with `*-page.js` Vite entries
+- **Client-side tools:** timestamp converter (`/personal/tools/timestamp`), color converter (`/personal/tools/color`) and JSON diff (`/personal/tools/json-diff`) are thin controllers + pure JS modules (`resources/assets/js/timestamp/timestamp-converter.js`, `resources/assets/js/color/color-converter.js`, `resources/assets/js/json-diff/json-diff.js`), Vitest-tested, with `*-page.js` Vite entries
 
 #### Common (shared)
 - **Models:** `Images`, `InviteCode`
