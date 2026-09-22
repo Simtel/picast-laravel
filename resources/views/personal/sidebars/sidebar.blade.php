@@ -110,6 +110,13 @@
                                 <span>Конвертер цветов</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{request()->routeIs('tools.json-diff.*') ? 'active' : ''}}"
+                               href="{{route('tools.json-diff.index')}}">
+                                <i class="fa fa-code-compare nav-icon"></i>
+                                <span>Сравнение JSON</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endcan

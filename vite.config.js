@@ -10,7 +10,8 @@ export default defineConfig({
                 'resources/assets/sass/app.scss',
                 'resources/assets/js/app.js',
                 'resources/assets/js/timestamp/timestamp-page.js',
-                'resources/assets/js/color/color-page.js'
+                'resources/assets/js/color/color-page.js',
+                'resources/assets/js/json-diff/json-diff-page.js'
             ],
             refresh: true,
         }),

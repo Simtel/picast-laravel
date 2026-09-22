@@ -91,5 +91,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-code-compare text-primary"></i>
+                        <span class="fw-semibold">Сравнение JSON</span>
+                    </div>
+                    <p class="text-muted mb-0">Сравнение двух JSON-объектов: добавленные, удалённые и изменённые значения по путям.</p>
+                    <a href="{{ route('tools.json-diff.index') }}" class="btn btn-primary mt-auto">
+                        <i class="fa fa-arrow-right"></i> Открыть
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
