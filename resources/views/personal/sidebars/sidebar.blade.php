@@ -2,7 +2,7 @@
     <div class="sidebar-header">
         <a href="/personal" class="sidebar-brand">
             <i class="fa fa-cube"></i>
-            <span>Picast</span>
+            <span>A&amp;S Tech</span>
         </a>
     </div>
     <div class="sidebar-sticky">

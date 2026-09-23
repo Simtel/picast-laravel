@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <label for="json-diff-a" class="visually-hidden">JSON A</label>
                     <textarea id="json-diff-a" class="form-control font-monospace" rows="12" spellcheck="false">{
-  "name": "Picast",
+  "name": "A&amp;S Tech",
   "version": 1,
   "tags": ["laravel", "php"],
   "user": {
@@ -38,7 +38,7 @@
                 <div class="card-body">
                     <label for="json-diff-b" class="visually-hidden">JSON B</label>
                     <textarea id="json-diff-b" class="form-control font-monospace" rows="12" spellcheck="false">{
-  "name": "Picast",
+  "name": "A&amp;S Tech",
   "version": 2,
   "tags": ["laravel", "php", "vue"],
   "user": {

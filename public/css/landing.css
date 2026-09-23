@@ -51,28 +51,54 @@
     text-decoration: none;
 }
 
-/* --- Fixed background: grid + glows --- */
+/* --- Fixed technology background: aurora + grid + particle canvas --- */
 .bg-layer {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background:
-        radial-gradient(900px 500px at 85% -5%, rgba(99, 102, 241, 0.20), transparent 60%),
-        radial-gradient(800px 500px at 5% 15%, rgba(34, 211, 238, 0.12), transparent 60%),
-        radial-gradient(900px 600px at 60% 100%, rgba(168, 85, 247, 0.12), transparent 60%),
-        var(--bg);
+    overflow: hidden;
+    background: var(--bg);
 }
 
-.bg-layer::after {
+/* Tech grid, fading out toward the edges */
+.bg-layer::before {
     content: '';
     position: absolute;
     inset: 0;
+    z-index: 2;
     background-image:
-        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
     background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, #000 35%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, #000 35%, transparent 100%);
+}
+
+/* Particle network canvas */
+.tech-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0.7;
+}
+
+/* Drifting aurora blobs */
+.bg-layer::after {
+    content: '';
+    position: absolute;
+    inset: -25%;
+    z-index: 1;
+    background:
+        radial-gradient(38% 38% at 20% 28%, rgba(99, 102, 241, 0.40), transparent 72%),
+        radial-gradient(34% 34% at 82% 18%, rgba(34, 211, 238, 0.32), transparent 72%),
+        radial-gradient(44% 44% at 68% 82%, rgba(168, 85, 247, 0.34), transparent 72%),
+        radial-gradient(30% 30% at 12% 85%, rgba(59, 130, 246, 0.28), transparent 72%);
+    filter: blur(60px);
+    will-change: transform;
+    animation: aurora 22s ease-in-out infinite alternate;
 }
 
 /* ============================================
@@ -786,6 +812,18 @@
     }
 }
 
+@keyframes aurora {
+    0% {
+        transform: translate3d(-4%, -3%, 0) scale(1);
+    }
+    50% {
+        transform: translate3d(3%, 4%, 0) scale(1.12);
+    }
+    100% {
+        transform: translate3d(6%, -2%, 0) scale(1.05);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .landing-page {
         scroll-behavior: auto;
@@ -793,7 +831,8 @@
     .hero-info,
     .hero-login,
     .stats-band,
-    .hero-badge .dot {
+    .hero-badge .dot,
+    .bg-layer::after {
         animation: none;
     }
     .feature-card,

@@ -26,7 +26,7 @@
         <button class="navbar-toggler d-lg-none collapsed toggle-sidebar" type="button">
             <i class="fa fa-bars"></i>
         </button>
-        <a class="navbar-brand mr-0 px-3" href="/personal">Picast</a>
+        <a class="navbar-brand mr-0 px-3" href="/personal">A&amp;S Tech</a>
 
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
