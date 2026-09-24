@@ -275,7 +275,7 @@
         <div class="features-container">
             <div class="section-header">
                 <span class="section-kicker">Developer Tools</span>
-                <h2>Семь инструментов — без установки</h2>
+                <h2>Восемь инструментов — без установки</h2>
                 <p>Готовые утилиты для повседневных задач разработчика и аналитика</p>
             </div>
 
@@ -287,6 +287,7 @@
                 <span class="tool-chip"><i class="fa-solid fa-fingerprint"></i> UUID</span>
                 <span class="tool-chip"><i class="fa-solid fa-palette"></i> Конвертер цветов</span>
                 <span class="tool-chip"><i class="fa-solid fa-code-compare"></i> Сравнение JSON</span>
+                <span class="tool-chip"><i class="fa-solid fa-align-left"></i> Сравнение текстов</span>
             </div>
         </div>
     </section>

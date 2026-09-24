@@ -26,7 +26,7 @@ tests/
 │   ├── Command/            # Artisan command tests
 │   ├── Common/             # Common feature tests
 │   ├── Domain/             # Domain feature tests
-│   ├── Tools/              # Tools (barcode, timestamp, random-string, hash, uuid, color, json-diff) feature tests
+│   ├── Tools/              # Tools (barcode, timestamp, random-string, hash, uuid, color, json-diff, text-diff) feature tests
 │   ├── Tournaments/        # Tournament feature tests
 │   └── YouTube/            # YouTube feature tests
 └── Unit/                   # Isolated unit tests

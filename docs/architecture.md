@@ -14,7 +14,7 @@ app/
 │   ├── ChadGPT/           # AI chat bot
 │   ├── Common/            # Shared domain models (Images, InviteCode) + commands
 │   ├── Domains/           # Domain WHOIS management
-│   ├── Tools/             # Utilities (barcode, timestamp, hash, uuid, color, json-diff)
+│   ├── Tools/             # Utilities (barcode, timestamp, hash, uuid, color, json-diff, text-diff)
 │   ├── Tournaments/       # Tournament listings
 │   ├── User/              # User profile & invitations
 │   └── Youtube/           # YouTube video processing
@@ -67,14 +67,16 @@ Controllers (web and API) are thin: they handle HTTP (validation, route model bi
 | Tools       | `Service\HashService`                                  | Text hashing: MD5/SHA1/SHA224/SHA256/SHA384/SHA512/SHA3/RIPEMD160 |
 
 Client-side utilities (no PHP service): the timestamp converter
-(`/personal/tools/timestamp`), the color converter (`/personal/tools/color`) and the
-JSON diff tool (`/personal/tools/json-diff`) are rendered by thin controllers
-(`TimestampController`, `ColorController`, `JsonDiffController`) while all
-conversion/diff logic lives in dependency-free JS modules
-(`resources/assets/js/timestamp/timestamp-converter.js`,
+(`/personal/tools/timestamp`), the color converter (`/personal/tools/color`), the
+JSON diff tool (`/personal/tools/json-diff`) and the text diff tool
+(`/personal/tools/text-diff`) are rendered by thin controllers
+(`TimestampController`, `ColorController`, `JsonDiffController`,
+`TextDiffController`) while all conversion/diff logic lives in dependency-free JS
+modules (`resources/assets/js/timestamp/timestamp-converter.js`,
 `resources/assets/js/color/color-converter.js`,
-`resources/assets/js/json-diff/json-diff.js`), unit-tested with Vitest. Keeps
-one source of truth for browser-localised date handling, colour math and JSON comparison.
+`resources/assets/js/json-diff/json-diff.js`,
+`resources/assets/js/text-diff/text-diff.js`), unit-tested with Vitest. Keeps
+one source of truth for browser-localised date handling, colour math and JSON/text comparison.
 
 Validation is enforced with `FormRequest` classes; domain lookups use repository/query objects or the `CommandBus` where one exists.
 

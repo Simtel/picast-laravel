@@ -117,6 +117,13 @@
                                 <span>Сравнение JSON</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{request()->routeIs('tools.text-diff.*') ? 'active' : ''}}"
+                               href="{{route('tools.text-diff.index')}}">
+                                <i class="fa fa-align-left nav-icon"></i>
+                                <span>Сравнение текстов</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endcan

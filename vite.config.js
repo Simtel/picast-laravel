@@ -11,7 +11,8 @@ export default defineConfig({
                 'resources/assets/js/app.js',
                 'resources/assets/js/timestamp/timestamp-page.js',
                 'resources/assets/js/color/color-page.js',
-                'resources/assets/js/json-diff/json-diff-page.js'
+                'resources/assets/js/json-diff/json-diff-page.js',
+                'resources/assets/js/text-diff/text-diff-page.js'
             ],
             refresh: true,
         }),

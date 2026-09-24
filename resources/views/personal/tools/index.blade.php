@@ -105,5 +105,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-align-left text-primary"></i>
+                        <span class="fw-semibold">Сравнение текстов</span>
+                    </div>
+                    <p class="text-muted mb-0">Построчное сравнение двух текстов: добавленные, удалённые и совпадающие строки с нумерацией.</p>
+                    <a href="{{ route('tools.text-diff.index') }}" class="btn btn-primary mt-auto">
+                        <i class="fa fa-arrow-right"></i> Открыть
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

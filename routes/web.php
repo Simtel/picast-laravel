@@ -21,6 +21,7 @@ use App\Context\Tools\Infrastructure\Http\Controllers\ColorController;
 use App\Context\Tools\Infrastructure\Http\Controllers\HashController;
 use App\Context\Tools\Infrastructure\Http\Controllers\JsonDiffController;
 use App\Context\Tools\Infrastructure\Http\Controllers\RandomStringController;
+use App\Context\Tools\Infrastructure\Http\Controllers\TextDiffController;
 use App\Context\Tools\Infrastructure\Http\Controllers\TimestampController;
 use App\Context\Tools\Infrastructure\Http\Controllers\ToolsController;
 use App\Context\Tools\Infrastructure\Http\Controllers\UuidController;
@@ -129,6 +130,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], routes: static fu
         });
         Route::group(['prefix' => 'json-diff'], static function () {
             Route::get('/', [JsonDiffController::class, 'index'])->name('tools.json-diff.index');
+        });
+        Route::group(['prefix' => 'text-diff'], static function () {
+            Route::get('/', [TextDiffController::class, 'index'])->name('tools.text-diff.index');
         });
     });
 });
