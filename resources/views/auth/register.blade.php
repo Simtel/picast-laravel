@@ -1,101 +1,124 @@
 @extends('layouts.app_auth')
 
+@section('title', 'Регистрация — A&S Tech')
+@section('shell-class', 'auth-shell--wide')
+
 @section('content')
+    <div class="login-card">
+        <div class="login-glow" aria-hidden="true"></div>
 
-    <div class="text-center">
-        <div class="container">
-            <h1>Регистрация</h1>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
+        <h2>Регистрация</h2>
+        <p class="login-subtitle">Создайте аккаунт A&amp;S Tech</p>
 
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            </div>
+        @endif
 
-                        <div class="panel-body">
-                            <form class="form-horizontal" method="POST" action="{{ route('register') }}">
-                                {{ csrf_field() }}
+        <form method="POST" action="{{ route('register') }}">
+            {{ csrf_field() }}
 
-                                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                    <label for="name" class="col-md-12 control-label">Имя</label>
+            <div class="field">
+                <label for="name" class="form-label">Имя</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-user"></i>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        class="form-control @error('name') is-invalid @enderror"
+                        placeholder="Ваше имя"
+                        value="{{ old('name') }}"
+                        required
+                        autofocus
+                    >
+                </div>
+                @error('name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-                                    <div class="col-md-12">
-                                        <input id="name" type="text" class="form-control" name="name"
-                                               value="{{ old('name') }}" required autofocus>
+            <div class="field">
+                <label for="email" class="form-label">Email</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control @error('email') is-invalid @enderror"
+                        placeholder="you@example.com"
+                        value="{{ old('email') }}"
+                        required
+                    >
+                </div>
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-                                        @if ($errors->has('name'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                        @endif
-                                    </div>
-                                </div>
+            <div class="field">
+                <label for="password" class="form-label">Пароль</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-lock"></i>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control @error('password') is-invalid @enderror"
+                        placeholder="Минимум 6 символов"
+                        required
+                    >
+                </div>
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-                                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                    <label for="email" class="col-md-12 control-label">E-Mail</label>
-
-                                    <div class="col-md-12">
-                                        <input id="email" type="email" class="form-control" name="email"
-                                               value="{{ old('email') }}" required>
-
-                                        @if ($errors->has('email'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                    <label for="password" class="col-md-12 control-label">Пароль</label>
-
-                                    <div class="col-md-12">
-                                        <input id="password" type="password" class="form-control" name="password"
-                                               required>
-
-                                        @if ($errors->has('password'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="password-confirm" class="col-md-12 control-label">Подтвердите
-                                        пароль</label>
-
-                                    <div class="col-md-12">
-                                        <input id="password-confirm" type="password" class="form-control"
-                                               name="password_confirmation" required>
-                                    </div>
-                                </div>
-
-                                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                    <label for="code" class="col-md-12 control-label">Код</label>
-
-                                    <div class="col-md-12">
-                                        <input id="code" type="text" class="form-control" name="code"
-                                               value="{{ old('code') }}" required autofocus>
-
-                                        @if ($errors->has('code'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('code') }}</strong>
-                                    </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="col-md-12 ">
-                                        <button type="submit" class="btn btn-primary">
-                                            Регистрация
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+            <div class="field">
+                <label for="password-confirm" class="form-label">Подтвердите пароль</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-lock"></i>
+                    <input
+                        type="password"
+                        id="password-confirm"
+                        name="password_confirmation"
+                        class="form-control"
+                        placeholder="Повторите пароль"
+                        required
+                    >
                 </div>
             </div>
+
+            <div class="field">
+                <label for="code" class="form-label">Код приглашения</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-key"></i>
+                    <input
+                        type="text"
+                        id="code"
+                        name="code"
+                        class="form-control @error('code') is-invalid @enderror"
+                        placeholder="6-значный код"
+                        value="{{ old('code') }}"
+                        required
+                    >
+                </div>
+                @error('code')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn-login">
+                <i class="fa-solid fa-user-plus"></i> Зарегистрироваться
+            </button>
+        </form>
+
+        <div class="auth-links">
+            <span>Уже есть аккаунт? <a href="{{ route('login') }}">Войти</a></span>
         </div>
     </div>
 @endsection

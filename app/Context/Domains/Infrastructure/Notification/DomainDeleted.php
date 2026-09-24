@@ -39,9 +39,8 @@ final class DomainDeleted extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->line($this->domain->name . ' был удален из системы.')
-            ->action('Личный кабинет', url('/'))
-            ->line('Спасибо что пользуетесь нашим сервисом!');
+            ->subject('Домен удалён из A&S Tech')
+            ->view('mail.notifications.domain_deleted', ['domain' => $this->domain]);
     }
 
     public function toTelegram(object $notifiable): TelegramMessage

@@ -20,7 +20,9 @@ final class DomainNotifyTest extends TestCase
         $notify = new DomainDeleted($domain);
         self::assertEquals([], $notify->toArray(new \stdClass()));
         $mail = $notify->toMail(new \stdClass());
-        self::assertContains($domain->getName() . ' был удален из системы.', $mail->introLines);
+        self::assertSame('mail.notifications.domain_deleted', $mail->view);
+        self::assertStringContainsString($domain->getName(), $mail->render());
+        self::assertStringContainsString('был удалён из системы', $mail->render());
         $telegram = $notify->toTelegram(new \stdClass());
         self::assertEquals('Домен ' . $domain->getName() . ' был удален из системы.', $telegram->getMessage());
     }
@@ -34,6 +36,8 @@ final class DomainNotifyTest extends TestCase
         $notify = new DomainCreated($domain);
         self::assertEquals([], $notify->toArray(new \stdClass()));
         $mail = $notify->toMail(new \stdClass());
-        self::assertContains($domain->getName() . ' был добавлен в систему.', $mail->introLines);
+        self::assertSame('mail.notifications.domain_created', $mail->view);
+        self::assertStringContainsString($domain->getName(), $mail->render());
+        self::assertStringContainsString('был добавлен в систему', $mail->render());
     }
 }

@@ -13,8 +13,12 @@ use App\Context\Domains\Domain\Command\ListDomainsQuery;
 use App\Context\Domains\Infrastructure\Handlers\ListDomainsQueryHandler;
 use App\Context\User\Application\Contracts\Services\InviteUserService;
 use App\Context\User\Application\Service\InviteUserService as InviteUserServiceImplementation;
+use App\Context\User\Domain\Model\User;
 use GuzzleHttp\Client;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Application;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Iodev\Whois\Factory;
@@ -38,6 +42,28 @@ final class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
+
+        ResetPassword::toMailUsing(static function (User $notifiable, string $token): MailMessage {
+            return (new MailMessage())
+                ->subject('Сброс пароля — A&S Tech')
+                ->view('mail.notifications.reset_password', [
+                    'user' => $notifiable,
+                    'url' => url(route('password.reset', [
+                        'token' => $token,
+                        'email' => $notifiable->getEmailForPasswordReset(),
+                    ], false)),
+                    'expire' => config('auth.passwords.' . config('auth.defaults.passwords') . '.expire'),
+                ]);
+        });
+
+        VerifyEmail::toMailUsing(static function (User $notifiable, string $url): MailMessage {
+            return (new MailMessage())
+                ->subject('Подтверждение email — A&S Tech')
+                ->view('mail.notifications.verify_email', [
+                    'user' => $notifiable,
+                    'url' => $url,
+                ]);
+        });
     }
 
     /**

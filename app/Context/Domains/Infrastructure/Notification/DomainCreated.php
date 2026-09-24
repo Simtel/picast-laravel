@@ -38,9 +38,8 @@ final class DomainCreated extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->line($this->domain->name . ' был добавлен в систему.')
-            ->action('Личный кабинет', url('/'))
-            ->line('Спасибо что пользуетесь нашим сервисом!');
+            ->subject('Домен добавлен в A&S Tech')
+            ->view('mail.notifications.domain_created', ['domain' => $this->domain]);
     }
 
     /**
