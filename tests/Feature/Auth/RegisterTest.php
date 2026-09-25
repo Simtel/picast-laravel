@@ -193,5 +193,8 @@ final class RegisterTest extends TestCase
         $response->assertRedirect(route('personal'));
         $this->assertDatabaseCount(User::class, 2);
         $this->assertDatabaseHas(User::class, ['email' => 'john@example.com']);
+
+        $user = User::where('email', 'john@example.com')->firstOrFail();
+        $this->assertTrue($user->hasRole('member'));
     }
 }

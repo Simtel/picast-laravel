@@ -91,7 +91,7 @@
                     <td>{{ $user->birth_date ? $user->birth_date->format('d.m.Y') : 'Не указана' }}</td>
                     <td>
                         @foreach($user->roles as $role)
-                            <span class="badge">{{$role->name}}</span>
+                            <span class="badge text-bg-light border">{{$role->name}}</span>
                         @endforeach
                     </td>
                     <td>
