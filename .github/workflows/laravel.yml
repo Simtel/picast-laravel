@@ -75,7 +75,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.SSH_KEY }}
-          script: cd ${{ secrets.PUBLISH_DIR }} && pwd && whereis php && /opt/php84/bin/php -v
+          script: cd ${{ secrets.PUBLISH_DIR }} && pwd && whereis php && /opt/php85/bin/php -v
 
       - name: Pull
         uses: appleboy/ssh-action@master
